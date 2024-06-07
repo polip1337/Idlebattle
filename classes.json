@@ -1,39 +1,17 @@
 {
-  "Mage": {
-    "skills": [
-      {
-        "name": "Fireball",
-        "damage": 30,
-        "manaCost": 20
-      },
-      {
-        "name": "Frost Nova",
-        "damage": 20,
-        "manaCost": 15
-      }
-    ],
-    "stats": {
-      "strength": 5,
-      "speed": 8,
-      "dexterity": 6,
-      "vitality": 10,
-      "magicPower": 15,
-      "mana": 50,
-      "manaRegen": 5,
-      "magicControl": 12
-    }
-  },
   "Warrior": {
     "skills": [
       {
         "name": "Slash",
         "damage": 25,
-        "manaCost": 0
+        "manaCost": 0,
+        "effect": null
       },
       {
         "name": "Cleave",
         "damage": 35,
-        "manaCost": 0
+        "manaCost": 0,
+        "effect": null
       }
     ],
     "stats": {
@@ -47,27 +25,55 @@
       "magicControl": 5
     }
   },
+  "Mage": {
+    "skills": [
+      {
+        "name": "Fireball",
+        "damage": 30,
+        "manaCost": 10,
+        "effect": null
+      },
+      {
+        "name": "Frostbolt",
+        "damage": 20,
+        "manaCost": 8,
+        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "icon": "icons/frostbolt.png" }
+      }
+    ],
+    "stats": {
+      "strength": 5,
+      "speed": 8,
+      "dexterity": 10,
+      "vitality": 10,
+      "magicPower": 20,
+      "mana": 30,
+      "manaRegen": 5,
+      "magicControl": 15
+    }
+  },
   "Rogue": {
     "skills": [
       {
         "name": "Backstab",
         "damage": 40,
-        "manaCost": 0
+        "manaCost": 5,
+        "effect": { "type": "buff", "stat": "criticalChance", "value": 10, "duration": 2, "icon": "icons/backstab.png" }
       },
       {
-        "name": "Poison Strike",
-        "damage": 20,
-        "manaCost": 0
+        "name": "Poison",
+        "damage": 15,
+        "manaCost": 5,
+        "effect": { "type": "debuff", "stat": "health", "value": -5, "duration": 3, "icon": "icons/poison.png" }
       }
     ],
     "stats": {
       "strength": 10,
-      "speed": 15,
-      "dexterity": 20,
-      "vitality": 15,
+      "speed": 12,
+      "dexterity": 15,
+      "vitality": 10,
       "magicPower": 5,
-      "mana": 0,
-      "manaRegen": 0,
+      "mana": 10,
+      "manaRegen": 2,
       "magicControl": 5
     }
   },
@@ -75,23 +81,25 @@
     "skills": [
       {
         "name": "Heal",
-        "damage": -30,
-        "manaCost": 20
+        "damage": 0,
+        "manaCost": 15,
+        "effect": { "type": "heal", "stat": "health", "value": 25, "icon": "icons/heal.png" }
       },
       {
-        "name": "Revive",
-        "damage": -50,
-        "manaCost": 40
+        "name": "Regenerate",
+        "damage": 0,
+        "manaCost": 10,
+        "effect": { "type": "buff", "stat": "health", "value": 5, "duration": 3, "icon": "icons/regenerate.png" }
       }
     ],
     "stats": {
       "strength": 5,
-      "speed": 5,
+      "speed": 8,
       "dexterity": 10,
-      "vitality": 15,
-      "magicPower": 10,
-      "mana": 50,
-      "manaRegen": 10,
+      "vitality": 10,
+      "magicPower": 15,
+      "mana": 30,
+      "manaRegen": 5,
       "magicControl": 10
     }
   }

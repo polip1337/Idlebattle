@@ -1,4 +1,5 @@
 import { startBattle, createRandomMembers } from './Battle.js';
+import { updateHealthElement, updateManaElement, renderBuffsAndDebuffs,updateAttackBar,updateStatus } from './RenderMember.js';
 
 
 class Member {
@@ -26,7 +27,10 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         this.dragStartHandler = this.dragStartHandler.bind(this);
         this.dragOverHandler = this.dragOverHandler.bind(this);
         this.dropHandler = this.dropHandler.bind(this);
-
+        this.buffsElement = document.createElement('div');
+        this.buffsElement.className = 'buffs';
+        this.debuffsElement = document.createElement('div');
+        this.debuffsElement.className = 'debuffs';
 
     }
 
@@ -37,12 +41,13 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         this.status = document.querySelector(`#${this.memberId} .status`);
         this.statsDisplay = document.querySelector(`#${this.memberId} .stats`);
         this.element = document.querySelector(`#${this.memberId}`);
+        this.element.appendChild(this.buffsElement);
+        this.element.appendChild(this.debuffsElement);
         this.updateHealth();
         this.updateMana();
         this.updateAttackBar();
          this.updateStatsDisplay();
              this.makeDraggable();
-
         }
     makeDraggable() {
         this.element.setAttribute('draggable', 'true');
@@ -98,29 +103,7 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         // Check if both member and target belong to the same team
         return parentOfMember === parentOfTarget;
     }
-    updateHealth() {
-        const percentage = (this.currentHealth / (this.stats.vitality * 10)) * 100;
-        this.healthBar.style.width = `${percentage}%`;
-        this.healthBar.textContent = `HP: ${this.currentHealth}/${this.stats.vitality * 10}`;
-    }
 
-    updateMana() {
-        const percentage = (this.currentMana / this.stats.mana) * 100;
-        this.manaBar.style.width = `${percentage}%`;
-        this.manaBar.textContent = `Mana: ${this.currentMana}/${this.stats.mana}`;
-    }
-
-    updateAttackBar() {
-        this.attackBar.style.width = `${this.attackCharge}%`;
-        this.attackBar.textContent = `Charging...`;
-    }
-
-    updateStatus(message) {
-        this.status.textContent = `Status: ${message}`;
-        if(message == "Defeated"){
-            clearInterval(this.chargeInterval);
-       }
-    }
 
     updateStatsDisplay() {
         this.statsDisplay.innerHTML = `
@@ -135,6 +118,22 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
             Mana Regen: ${this.stats.manaRegen}<br>
             Magic Control: ${this.stats.magicControl}
         `;
+    }
+    renderBuffsAndDebuffs() {
+        this.buffsElement.innerHTML = '';
+        this.debuffsElement.innerHTML = '';
+        for (const buff of this.buffs) {
+            const buffIcon = document.createElement('div');
+            buffIcon.className = 'buff';
+            buffIcon.style.backgroundImage = `url(${buff.icon})`;
+            this.buffsElement.appendChild(buffIcon);
+        }
+        for (const debuff of this.debuffs) {
+            const debuffIcon = document.createElement('div');
+            debuffIcon.className = 'debuff';
+            debuffIcon.style.backgroundImage = `url(${debuff.icon})`;
+            this.debuffsElement.appendChild(debuffIcon);
+        }
     }
 
     chargeAttack() {
@@ -151,6 +150,15 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
             }, 50);
 
     }
+    addBuffOrDebuff(effect, target) {
+        if (effect.type === 'buff') {
+            target.buffs.push({ effect });
+        } else if (effect.type === 'debuff') {
+            target.debuffs.push({ effect });
+        }
+        this.renderBuffsAndDebuffs();
+    }
+
 
 
     performAttack(target) {
@@ -161,18 +169,9 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
             // If the skill has a mana cost, check if there's enough mana to use it
             if (this.currentMana >= skill.manaCost) {
 
-
-
-
-
-                    // Apply buffs and debuffs
-                    if (skill.buff) {
-                        this.applyBuff(skill.buff);
+                    if (skill.effect) {
+                        this.addBuffOrDebuff(skill.effect, target);
                     }
-                    if (skill.debuff) {
-                        target.applyDebuff(skill.debuff);
-                    }
-
                     // Deduct mana cost
                     this.currentMana -= skill.manaCost;
                     this.updateMana();
@@ -231,6 +230,7 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         this.updateMana();
         this.updateStatus(`Leveled Up to ${this.level}`);
         this.updateStatsDisplay();
+
     }
     applyBuff(buff) {
         this.buffs.push(buff);
@@ -254,13 +254,17 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
             debuff.duration--;
         }
         this.debuffs = this.debuffs.filter(debuff => debuff.duration > 0);
+
+        this.renderBuffsAndDebuffs();
+
     }
 
     applyEffect(effect) {
-        for (const [stat, value] of Object.entries(effect.stats)) {
+        for (const [stat, value] of Object.entries(effect)) {
             this.stats[stat] += value;
         }
     }
+
 }
 
 export default Member;

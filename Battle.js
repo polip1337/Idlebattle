@@ -18,6 +18,7 @@ function startBattle(team1, team2) {
         team1.members.forEach(team1Member => {
             if (team1Member.currentHealth > 0 ){
                 team1Member.regenMana();
+                team1Member.updateBuffsAndDebuffs();
             }else if(team1Member.status.innerHTML != "Status: Defeated" ){
                 handleDeath(team1Member,team2);
             }
@@ -27,11 +28,11 @@ function startBattle(team1, team2) {
         team2.members.forEach(team2Member => {
             if (team2Member.currentHealth > 0){
                 team2Member.regenMana();
+                team2Member.updateBuffsAndDebuffs();
             }else if(team2Member.status.innerHTML != "Status: Defeated"){
                  handleDeath(team2Member,team1);
              }
         });
-
         // Check for battle end conditions
         const team1Alive = team1.members.some(member => member.currentHealth > 0);
         const team2Alive = team2.members.some(member => member.currentHealth > 0);
@@ -45,6 +46,8 @@ function startBattle(team1, team2) {
                 team2.members.forEach(member => member.updateStatus('Defeated'));
             }
         }
+        console.log(new Date().toLocaleTimeString());
+
     }, 1000); // Adjust the interval as needed
 }
 function createRandomMembers(prefix, classes,team, opposingTeam) {
