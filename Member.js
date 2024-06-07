@@ -111,40 +111,60 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
                     clearInterval(this.chargeInterval);
                     this.attackCharge = 0;
                     updateAttackBar(this);
-                    this.performAttack(this.opposingTeam.getFirstAliveMember());
+                    const skill = this.selectSkill();
+                    const target = this.selectTarget(skill);
+                    this.performAttack(target,skill);
                 }
                 updateAttackBar(this);
             }, 50);
 
     }
 
+    selectSkill(){
+       // Filter out skills that are affordable
+         const affordableSkills = this.skills.filter(skill => skill.manaCost <= this.currentMana);
 
-    performAttack(target) {
-            // Choose a random skill
-            const skillIndex = Math.floor(Math.random() * this.skills.length);
-            const skill = this.skills[skillIndex];
+         // If there are no affordable skills, return null
+         if (affordableSkills.length === 0) {
+           return null;
+         }
+
+         // Randomly choose one of the affordable skills
+         const randomIndex = Math.floor(Math.random() * affordableSkills.length);
+         return affordableSkills[randomIndex];
+    }
+
+    selectTarget(skill){
+        if(skill.effect){
+            if(skill.effect.type =='buff'){
+                    return this.team.getFirstAliveMember();
+            }
+        }
+
+            return this.opposingTeam.getFirstAliveMember();
+
+    }
+
+    performAttack(target, skill) {
             var damage = 0;
-            // If the skill has a mana cost, check if there's enough mana to use it
-            if (this.currentMana >= skill.manaCost) {
-
-                    if (skill.effect) {
-                        new EffectClass(target ,skill.effect);
-                    }
-                    // Deduct mana cost
-                    this.currentMana -= skill.manaCost;
-                    updateMana(this);
-                    updateStatus(this, `Used ${skill.name} on ${target.name}`);
-                    damage = skill.damage;
+            if(skill == null){
+            damage = this.stats.strength * 2;
+            updateStatus(this,'Not enough mana for skills');
             } else {
-                updateStatus(this,'Not enough mana to use this skill');
-                damage = this.stats.strength * 2;
+                if (skill.effect) {
+                    new EffectClass(target ,skill.effect);
+                }
+                this.currentMana -= skill.manaCost;
+                updateMana(this);
+                updateStatus(this, `Used ${skill.name} on ${target.name}`);
+
+                damage = skill.damage;
             }
             // Apply damage to the target
             target.currentHealth -= damage;
             updateHealth(target);
             // Start charging next attack
             this.chargeAttack();
-
     }
 
     useSkill(opponent) {

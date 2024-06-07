@@ -23,11 +23,18 @@ class EffectClass {
    this.updateTooltip(); // Update tooltip initially
   }
   applyEffect() {
-    this.target.stats[this.effect.stat] += this.effect.value; // Apply the effect on the member's stat
+      if(this.effect.stat == 'health'){
+        this.target.currentHealth = Math.min(this.target.currentHealth + this.effect.value, this.target.stats.vitality*10);
+      }else{
+        this.target.stats[this.effect.stat] += this.effect.value; // Apply the effect on the member's stat
+      }
     // Update member display or perform other actions as needed
   }
 
   revertEffect() {
+    if(this.effect.stat == 'health'){
+    return;
+    }
     this.target.stats[this.effect.stat] -= this.effect.value; // Revert the effect on the member's stat
     // Update member display or perform other actions as needed
   }
