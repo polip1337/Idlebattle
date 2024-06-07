@@ -1,5 +1,6 @@
 import { startBattle, createRandomMembers } from './Battle.js';
-import { updateHealthElement, updateManaElement, renderBuffsAndDebuffs,updateAttackBar,updateStatus } from './RenderMember.js';
+import { updateHealth, updateMana, renderBuffsAndDebuffs,updateAttackBar,updateStatus,updateStatsDisplay } from './RenderMember.js';
+import { isPaused } from './Main.js';
 
 
 class Member {
@@ -35,18 +36,15 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
     }
 
     initializeDOMElements() {
-        this.healthBar = document.querySelector(`#${this.memberId} .health-bar`);
-        this.manaBar = document.querySelector(`#${this.memberId} .mana-bar`);
-        this.attackBar = document.querySelector(`#${this.memberId} .attack-bar`);
-        this.status = document.querySelector(`#${this.memberId} .status`);
         this.statsDisplay = document.querySelector(`#${this.memberId} .stats`);
+        this.status = document.querySelector(`#${this.memberId} .status`);
         this.element = document.querySelector(`#${this.memberId}`);
         this.element.appendChild(this.buffsElement);
         this.element.appendChild(this.debuffsElement);
-        this.updateHealth();
-        this.updateMana();
-        this.updateAttackBar();
-         this.updateStatsDisplay();
+        updateHealth(this);
+        updateMana(this);
+        updateAttackBar(this);
+        updateStatsDisplay(this);
              this.makeDraggable();
         }
     makeDraggable() {
@@ -104,49 +102,19 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         return parentOfMember === parentOfTarget;
     }
 
-
-    updateStatsDisplay() {
-        this.statsDisplay.innerHTML = `
-            Class: ${this.classType}<br>
-            Level: ${this.level}<br>
-            Strength: ${this.stats.strength}<br>
-            Speed: ${this.stats.speed}<br>
-            Dexterity: ${this.stats.dexterity}<br>
-            Vitality: ${this.stats.vitality}<br>
-            Magic Power: ${this.stats.magicPower}<br>
-            Mana: ${this.currentMana}/${this.stats.mana}<br>
-            Mana Regen: ${this.stats.manaRegen}<br>
-            Magic Control: ${this.stats.magicControl}
-        `;
-    }
-    renderBuffsAndDebuffs() {
-        this.buffsElement.innerHTML = '';
-        this.debuffsElement.innerHTML = '';
-        for (const buff of this.buffs) {
-            const buffIcon = document.createElement('div');
-            buffIcon.className = 'buff';
-            buffIcon.style.backgroundImage = `url(${buff.icon})`;
-            this.buffsElement.appendChild(buffIcon);
-        }
-        for (const debuff of this.debuffs) {
-            const debuffIcon = document.createElement('div');
-            debuffIcon.className = 'debuff';
-            debuffIcon.style.backgroundImage = `url(${debuff.icon})`;
-            this.debuffsElement.appendChild(debuffIcon);
-        }
-    }
-
     chargeAttack() {
             if(this.currentHealth >0)
             this.chargeInterval = setInterval(() => {
+                if (isPaused) return;
+
                 this.attackCharge += this.stats.speed / 10;
                 if (this.attackCharge >= 100) {
                     clearInterval(this.chargeInterval);
                     this.attackCharge = 0;
-                    this.updateAttackBar();
+                    updateAttackBar(this);
                     this.performAttack(this.opposingTeam.getFirstAliveMember());
                 }
-                this.updateAttackBar();
+                updateAttackBar(this);
             }, 50);
 
     }
@@ -156,7 +124,7 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         } else if (effect.type === 'debuff') {
             target.debuffs.push({ effect });
         }
-        this.renderBuffsAndDebuffs();
+        renderBuffsAndDebuffs(target,effect);
     }
 
 
@@ -174,16 +142,16 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
                     }
                     // Deduct mana cost
                     this.currentMana -= skill.manaCost;
-                    this.updateMana();
-                    this.updateStatus(`Used ${skill.name} on ${target.name}`);
+                    updateMana(this);
+                    updateStatus(this, `Used ${skill.name} on ${target.name}`);
                     damage = skill.damage;
             } else {
-                this.updateStatus('Not enough mana to use this skill');
+                updateStatus(this,'Not enough mana to use this skill');
                 damage = this.stats.strength * 2;
             }
             // Apply damage to the target
             target.currentHealth -= damage;
-            target.updateHealth();
+            updateHealth(target);
             // Start charging next attack
             this.chargeAttack();
 
@@ -192,17 +160,17 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
     useSkill(opponent) {
         const damage = this.stats.magicPower * 3;
         opponent.currentHealth = Math.max(0, opponent.currentHealth - damage);
-        opponent.updateHealth();
+        updateHealth(opponent);
         this.currentMana -= 10;
-        this.updateMana();
-        this.updateStatus('Using Skill');
-        opponent.updateStatus('Defending');
+        updateMana(this);
+        updateStatus(this,'Using Skill');
+        opponent.updateStatus(this,'Defending');
     }
 
     regenMana() {
         this.currentMana = Math.min(this.stats.mana, this.currentMana + this.stats.manaRegen);
-        this.updateMana();
-        this.updateStatsDisplay();
+        updateMana(this);
+        updateStatsDisplay(this);
     }
 
     gainExperience(exp) {
@@ -210,7 +178,7 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         if (this.experience >= this.level * 100) {
             this.levelUp();
         }
-        this.updateStatsDisplay();
+        updateStatsDisplay(this);
     }
 
     levelUp() {
@@ -226,10 +194,10 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         this.stats.magicControl += 2;
         this.currentHealth = this.stats.vitality * 10;
         this.currentMana = this.stats.mana;
-        this.updateHealth();
-        this.updateMana();
-        this.updateStatus(`Leveled Up to ${this.level}`);
-        this.updateStatsDisplay();
+        updateHealth(this);
+        updateMana(this);
+        updateStatus(this,`Leveled Up to ${this.level}`);
+        updateStatsDisplay(this.element);
 
     }
     applyBuff(buff) {
@@ -255,7 +223,7 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         }
         this.debuffs = this.debuffs.filter(debuff => debuff.duration > 0);
 
-        this.renderBuffsAndDebuffs();
+        renderBuffsAndDebuffs(this);
 
     }
 

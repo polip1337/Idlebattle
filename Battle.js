@@ -1,5 +1,8 @@
 import Member from './Member.js';
 import Team from './Team.js';
+import { isPaused } from './Main.js';
+
+import { updateHealth, updateMana, renderBuffsAndDebuffs,updateAttackBar,updateStatus,updateStatsDisplay } from './RenderMember.js';
 
 function startBattle(team1, team2) {
     team1.members.forEach(team1Member => {
@@ -15,10 +18,12 @@ function startBattle(team1, team2) {
     });
 
     const battleInterval = setInterval(() => {
+        if (isPaused) return;
+
         team1.members.forEach(team1Member => {
             if (team1Member.currentHealth > 0 ){
                 team1Member.regenMana();
-                team1Member.updateBuffsAndDebuffs();
+                //team1Member.updateBuffsAndDebuffs();
             }else if(team1Member.status.innerHTML != "Status: Defeated" ){
                 handleDeath(team1Member,team2);
             }
@@ -28,7 +33,7 @@ function startBattle(team1, team2) {
         team2.members.forEach(team2Member => {
             if (team2Member.currentHealth > 0){
                 team2Member.regenMana();
-                team2Member.updateBuffsAndDebuffs();
+               //team2Member.updateBuffsAndDebuffs();
             }else if(team2Member.status.innerHTML != "Status: Defeated"){
                  handleDeath(team2Member,team1);
              }
@@ -60,8 +65,8 @@ function createRandomMembers(prefix, classes,team, opposingTeam) {
 function handleDeath(target, opposingTeam)
     {
          target.currentHealth = 0;
-         target.updateHealth();
-         target.updateStatus('Defeated');
+         updateHealth(target);
+         updateStatus(target,'Defeated');
 
          opposingTeam.members.forEach(team2Member => {
              if (team2Member.currentHealth > 0) {

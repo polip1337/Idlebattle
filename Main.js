@@ -4,7 +4,20 @@ import Team from './Team.js';
 document.addEventListener('DOMContentLoaded', () => {
     fetchClassesAndInitializeTeams();
 });
+export let isPaused = false;
 
+// Function to toggle the pause state
+function togglePause() {
+    isPaused = !isPaused;
+    console.log(isPaused ? "Battle Paused" : "Battle Resumed");
+}
+
+// Event listener for the spacebar to toggle pause
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space') {
+        togglePause();
+    }
+});
 function fetchClassesAndInitializeTeams() {
     fetch('classes.json')
         .then(response => response.json())
