@@ -1,0 +1,109 @@
+/* Container for the entire team */
+.team {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+/* Container for each member */
+.member {
+    border: 1px solid #000;
+    padding: 10px;
+    margin: 10px;
+    width: 150px;
+    background-color: #f4f4f4;
+    text-align: center;
+    position: relative;
+}
+
+/* Health bar */
+.health-bar {
+    background-color: red;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* Mana bar */
+.mana-bar {
+    background-color: blue;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* Attack charge bar */
+.attack-bar {
+    background-color: green;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* Container for buffs */
+.buffs {
+    margin: 5px 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Container for debuffs */
+.debuffs {
+    margin: 5px 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Buff icon */
+.buff {
+    display: inline-block;
+    margin: 2px;
+    padding: 2px;
+    border: 1px solid green;
+    background-color: #e0ffe0;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+}
+
+/* Debuff icon */
+.debuff {
+    display: inline-block;
+    margin: 2px;
+    padding: 2px;
+    border: 1px solid red;
+    background-color: #ffe0e0;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+}
+
+/* Name and class type */
+.name {
+    font-weight: bold;
+}
+
+/* Status message */
+.status {
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Stats display */
+.stats {
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: left;
+}
+
+/* Divider between teams */
+.team-divider {
+    border-top: 2px solid #000;
+    margin: 20px 0;
+}

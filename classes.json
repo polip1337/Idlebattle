@@ -1,0 +1,98 @@
+{
+  "Mage": {
+    "skills": [
+      {
+        "name": "Fireball",
+        "damage": 30,
+        "manaCost": 20
+      },
+      {
+        "name": "Frost Nova",
+        "damage": 20,
+        "manaCost": 15
+      }
+    ],
+    "stats": {
+      "strength": 5,
+      "speed": 8,
+      "dexterity": 6,
+      "vitality": 10,
+      "magicPower": 15,
+      "mana": 50,
+      "manaRegen": 5,
+      "magicControl": 12
+    }
+  },
+  "Warrior": {
+    "skills": [
+      {
+        "name": "Slash",
+        "damage": 25,
+        "manaCost": 0
+      },
+      {
+        "name": "Cleave",
+        "damage": 35,
+        "manaCost": 0
+      }
+    ],
+    "stats": {
+      "strength": 15,
+      "speed": 6,
+      "dexterity": 8,
+      "vitality": 20,
+      "magicPower": 5,
+      "mana": 0,
+      "manaRegen": 0,
+      "magicControl": 5
+    }
+  },
+  "Rogue": {
+    "skills": [
+      {
+        "name": "Backstab",
+        "damage": 40,
+        "manaCost": 0
+      },
+      {
+        "name": "Poison Strike",
+        "damage": 20,
+        "manaCost": 0
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 15,
+      "dexterity": 20,
+      "vitality": 15,
+      "magicPower": 5,
+      "mana": 0,
+      "manaRegen": 0,
+      "magicControl": 5
+    }
+  },
+  "Healer": {
+    "skills": [
+      {
+        "name": "Heal",
+        "damage": -30,
+        "manaCost": 20
+      },
+      {
+        "name": "Revive",
+        "damage": -50,
+        "manaCost": 40
+      }
+    ],
+    "stats": {
+      "strength": 5,
+      "speed": 5,
+      "dexterity": 10,
+      "vitality": 15,
+      "magicPower": 10,
+      "mana": 50,
+      "manaRegen": 10,
+      "magicControl": 10
+    }
+  }
+}
