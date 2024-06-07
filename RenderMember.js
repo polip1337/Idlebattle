@@ -45,26 +45,3 @@ export function  updateStatsDisplay(member) {
             Magic Control: ${member.stats.magicControl}
         `;
     }
-
-
-export function renderBuffsAndDebuffs(member,effect) {
-    const buffsElement = document.querySelector(`#${member.memberId} .buffs`);
-    buffsElement.innerHTML = '';
-    for (const buff of member.buffs) {
-        const buffIcon = document.createElement('div');
-        buffIcon.className = 'buff';
-        buffIcon.style.backgroundImage = `url(${buff.icon})`;
-       // buffIcon.setAttribute('title', `${effect.type}: ${effect.stat}`); // Tooltip
-
-        buffsElement.appendChild(buffIcon);
-
-    }
-    const debuffsElement = document.querySelector(`#${member.memberId} .debuffs`);
-    debuffsElement.innerHTML = '';
-    for (const debuff of member.debuffs) {
-        const debuffIcon = document.createElement('div');
-        debuffIcon.className = 'debuff';
-        debuffIcon.style.backgroundImage = `url(${debuff.icon})`;
-        debuffsElement.appendChild(debuffIcon);
-    }
-}

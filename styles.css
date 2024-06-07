@@ -11,6 +11,8 @@
     padding: 10px;
     margin: 10px;
     width: 150px;
+    height: 400px; /* Set a fixed height for each member */
+
     background-color: #f4f4f4;
     text-align: center;
     position: relative;
@@ -41,15 +43,7 @@
 }
 
 /* Container for buffs */
-.buffs {
-    margin: 5px 0;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-/* Container for debuffs */
-.debuffs {
+.effects {
     margin: 5px 0;
     display: flex;
     justify-content: center;
@@ -106,4 +100,23 @@
 .team-divider {
     border-top: 2px solid #000;
     margin: 20px 0;
+}
+.tooltip {
+  bottom: 100%; /* Position tooltip above buff */
+  left: 50%; /* Center tooltip horizontally */
+  transform: translateX(-50%); /* Center tooltip horizontally */
+  background-color: rgba(0, 0, 0, 0.8); /* Tooltip background color */
+  color: white; /* Tooltip text color */
+  padding: 5px; /* Padding for tooltip */
+  border-radius: 5px; /* Border radius for tooltip */
+  display: none; /* Hide tooltip by default */
+  width: 100px
+}
+
+.buff:hover .tooltip {
+  display: block; /* Display tooltip on hover */
+}
+
+.debuff:hover .tooltip {
+  display: block; /* Display tooltip on hover */
 }

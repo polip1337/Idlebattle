@@ -1,6 +1,7 @@
 import { startBattle, createRandomMembers } from './Battle.js';
-import { updateHealth, updateMana, renderBuffsAndDebuffs,updateAttackBar,updateStatus,updateStatsDisplay } from './RenderMember.js';
+import { updateHealth, updateMana, updateAttackBar,updateStatus,updateStatsDisplay } from './RenderMember.js';
 import { isPaused } from './Main.js';
+import EffectClass from './EffectClass.js';
 
 
 class Member {
@@ -23,15 +24,13 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         this.attackBar = null;
         this.status = null;
         this.statsDisplay = null;
-        this.buffs = []; // Array to store active buffs
-        this.debuffs = []; // Array to store active debuffs
+        this.effects = []; // Array to store active effects
         this.dragStartHandler = this.dragStartHandler.bind(this);
         this.dragOverHandler = this.dragOverHandler.bind(this);
         this.dropHandler = this.dropHandler.bind(this);
-        this.buffsElement = document.createElement('div');
-        this.buffsElement.className = 'buffs';
-        this.debuffsElement = document.createElement('div');
-        this.debuffsElement.className = 'debuffs';
+        this.effectsElement = document.createElement('div');
+        this.effectsElement.className = 'effects';
+
 
     }
 
@@ -39,8 +38,8 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         this.statsDisplay = document.querySelector(`#${this.memberId} .stats`);
         this.status = document.querySelector(`#${this.memberId} .status`);
         this.element = document.querySelector(`#${this.memberId}`);
-        this.element.appendChild(this.buffsElement);
-        this.element.appendChild(this.debuffsElement);
+        this.element.appendChild(this.effectsElement);
+
         updateHealth(this);
         updateMana(this);
         updateAttackBar(this);
@@ -118,15 +117,6 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
             }, 50);
 
     }
-    addBuffOrDebuff(effect, target) {
-        if (effect.type === 'buff') {
-            target.buffs.push({ effect });
-        } else if (effect.type === 'debuff') {
-            target.debuffs.push({ effect });
-        }
-        renderBuffsAndDebuffs(target,effect);
-    }
-
 
 
     performAttack(target) {
@@ -138,7 +128,7 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
             if (this.currentMana >= skill.manaCost) {
 
                     if (skill.effect) {
-                        this.addBuffOrDebuff(skill.effect, target);
+                        new EffectClass(target ,skill.effect);
                     }
                     // Deduct mana cost
                     this.currentMana -= skill.manaCost;
@@ -200,38 +190,8 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         updateStatsDisplay(this.element);
 
     }
-    applyBuff(buff) {
-        this.buffs.push(buff);
-    }
 
-    applyDebuff(debuff) {
-        this.debuffs.push(debuff);
-    }
 
-    updateBuffsAndDebuffs() {
-        // Update buffs
-        for (const buff of this.buffs) {
-            this.applyEffect(buff);
-            buff.duration--;
-        }
-        this.buffs = this.buffs.filter(buff => buff.duration > 0);
-
-        // Update debuffs
-        for (const debuff of this.debuffs) {
-            this.applyEffect(debuff);
-            debuff.duration--;
-        }
-        this.debuffs = this.debuffs.filter(debuff => debuff.duration > 0);
-
-        renderBuffsAndDebuffs(this);
-
-    }
-
-    applyEffect(effect) {
-        for (const [stat, value] of Object.entries(effect)) {
-            this.stats[stat] += value;
-        }
-    }
 
 }
 
