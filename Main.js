@@ -18,6 +18,7 @@ document.addEventListener('keydown', (event) => {
         togglePause();
     }
 });
+
 function fetchClassesAndInitializeTeams() {
     fetch('classes.json')
         .then(response => response.json())

@@ -9,7 +9,13 @@
     </style>
 </head>
 <body>
-<div id="battlefield">
+<div id="tabs">
+    <button class="tablinks" onclick="openTab(event, 'battlefield')">Battle</button>
+    <button class="tablinks" onclick="openTab(event, 'hero')">Hero</button>
+    <button class="tablinks" onclick="openTab(event, 'library')">Library</button>
+    <button class="tablinks" onclick="openTab(event, 'options')">Options</button>
+</div>
+<div id="battlefield" class="tabcontent">
     <div id="team1" class="team">
     </div>
     <div class="team-divider"></div>
@@ -17,15 +23,276 @@
     <div id="team2" class="team">
     </div>
     <button id="start-button">Start Battle</button>
+    <div id="iconContainer">
+        <div class="iconRow upperRow">
+            <div class="iconGroup">
+                <div class="icon"></div>
+                <div class="icon"></div>
+                <div class="icon"></div>
+                <div class="icon"></div>
+            </div>
+            <div class="iconGroup">
+                <div class="icon"></div>
+                <div class="icon"></div>
+                <div class="icon"></div>
+                <div class="icon"></div>
+            </div>
+            <div class="iconGroup">
+                <div class="icon"></div>
+                <div class="icon"></div>
+                <div class="icon"></div>
+                <div class="icon"></div>
+            </div>
+        </div>
+
+        <!-- Lower row of icons -->
+        <div class="iconRow lowerRow">
+            <div class="iconGroup">
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+            </div>
+            <div class="iconGroup">
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+            </div>
+            <div class="iconGroup">
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+                <div class="icon">
+                    <input type="checkbox" class="checkBox">
+                </div>
+            </div>
+    </div>
+</div>
+</div>
+<div id="heroContent" class="tabContent">
+    <div id="heroInfoRow">
+        <div id="heroPortraitAndPaperDoll">
+            <div id="heroPortrait">
+                <img src="media/portrait.jpg" alt="Hero Portrait" />
+            </div>
+            <div id="paperDoll">
+                <div class="slot" id="cloakSlot">Cloak</div>
+                <div class="slot" id="helmetSlot">Helmet</div>
+                <div class="slot" id="amuletSlot">Amulet</div>
+                <div class="slot" id="weaponSlot">Weapon</div>
+                <div class="slot" id="chestArmorSlot">Chest Armor</div>
+                <div class="slot" id="shieldSlot">Shield</div>
+                <div class="slot" id="legArmorSlot">Leg Armor</div>
+                <div class="slot" id="glovesSlot">Gloves</div>
+                <div class="slot" id="bootsSlot">Boots</div>
+                <div class="slot" id="ringSlot">Ring</div>
+            </div>
+        </div>
+        <div id="heroDetails">
+            <div id="heroClassesAndStats">
+                <div id="inventory">
+                    <h2>Inventory</h2>
+                    <div class="iconGrid">
+                        <!-- Inventory icons -->
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div>
+                    </div>
+                </div>
+                <div id="heroClasses">
+
+                    <!-- Add more classes as needed -->
+                </div>
+                <div id="heroStats">
+                    <h2>Classes</h2>
+                    <p>Warrior</p>
+                    <p>Mage</p>
+                    <p>Healer</p>
+                    <h2>Statistics</h2>
+                    <p>Strength: <span id="heroStrength">15</span></p>
+                    <p>Speed: <span id="heroSpeed">6</span></p>
+                    <p>Dexterity: <span id="heroDexterity">8</span></p>
+                    <p>Vitality: <span id="heroVitality">20</span></p>
+                    <p>Magic Power: <span id="heroMagicPower">5</span></p>
+                    <p>Mana: <span id="heroMana">0</span></p>
+                    <p>Mana Regen: <span id="heroManaRegen">0</span></p>
+                    <p>Magic Control: <span id="heroMagicControl">5</span></p>
+                </div>
+                    <div id="heroSkills">
+                    <h2>Active Skills</h2>
+                    <div id="activeSkills">
+                        <!-- Space for 10 active skills in a 5x2 grid -->
+                        <div class="skill">
+                            <p>Slash</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Fireball</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Fireball</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Fireball</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Fireball</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Fireball</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <!-- Add more skills as needed -->
+                        <!-- Repeat for 10 skills -->
+                    </div>
+                    <h2>Passive Skills</h2>
+                    <div id="passiveSkills">
+                        <!-- Space for 10 passive skills in a 5x2 grid -->
+                        <div class="skill">
+                            <p>Toughness</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Meditation</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Toughness</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Meditation</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Toughness</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Meditation</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Toughness</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Meditation</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Toughness</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <p>Meditation</p>
+                            <div class="progressBar">
+                                <div class="progress" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <!-- Add more skills as needed -->
+                        <!-- Repeat for 10 skills -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
 
+<div id="library" class="tabcontent">
+    <h2>Library Section</h2>
+    <!-- Content for library section -->
+</div>
+
+<div id="options" class="tabcontent">
+    <h2>Options Section</h2>
+    <!-- Content for options section -->
+</div>
+
+
 <script src="Member.js" type="module" ></script>
-<script src="EffectClass.js.js" type="module"></script>
+<script src="EffectClass.js" type="module"></script>
 <script src="RenderMember.js" type="module" ></script>
 <script src="Team.js" type="module"></script>
 <script src="Battle.js" type="module"></script>
 <script src="Main.js" type="module"></script>
+<script src="navigation.js" ></script>
 </body>
 </html>

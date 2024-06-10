@@ -1,6 +1,7 @@
 import Member from './Member.js';
 import Team from './Team.js';
 import { isPaused } from './Main.js';
+import EffectClass from './EffectClass.js';
 
 import { updateHealth, updateMana, updateAttackBar,updateStatus,updateStatsDisplay } from './RenderMember.js';
 

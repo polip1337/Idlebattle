@@ -120,3 +120,269 @@
 .debuff:hover .tooltip {
   display: block; /* Display tooltip on hover */
 }
+
+.tabcontent {
+  display: none;
+}
+
+.tabcontent.active {
+  display: block;
+}
+
+/* Add styling for tabs */
+#tabs {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.tablinks {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.tablinks:hover {
+  background-color: #ddd;
+}
+.iconRow {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.upperRow {
+  transform: scale(0.85); /* Make upper row 15% smaller */
+}
+
+/* Add styling for icons */
+.icon {
+  width: 50px;
+  height: 50px;
+  background-color: #ccc; /* Placeholder background color */
+  /* Add more styling as needed */
+}
+
+.checkBox {
+  width: 20px;
+  height: 20px;
+  background-color: #00ff00; /* Green color for checkmark icon */
+  /* Add more styling as needed */
+}
+.iconGroup {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+#heroContent {
+  background-color: #3a3a3a;
+  padding: 20px;
+  border: 2px solid #555;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#heroInfoRow {
+  display: flex;
+  background-color: #4a4a4a;
+  padding: 20px;
+  border: 2px solid #666;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#heroPortrait {
+  flex: 0 0 150px;
+  margin-right: 20px;
+}
+
+
+#heroDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+#heroClassesAndStats {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  background-color: #5a5a5a;
+  padding: 5px;
+  border: 2px solid #777;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+#heroClasses {
+  flex: 1;
+}
+
+#heroStats {
+  flex: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 10px;
+  justify-content: center;
+}
+
+.skill {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center skill names */
+  gap: 5px;
+  margin: 5px 0; /* Increase space between skills */
+  width: calc(100% / 5) - 20px);
+  background-color: #444;
+  border: 2px solid #777;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.progressBar {
+  width: 100%;
+  background-color: #777;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 10px;
+  background-color: #00ff00;
+}
+
+#heroSkills {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #5a5a5a;
+  padding: 5px;
+  border: 2px solid #777;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+#activeSkills, #passiveSkills {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 10px; /* Increase gap between skills */
+}
+
+#inventory {
+  margin-top: 20px;
+
+}
+
+#inventory h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.iconGrid {
+  display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(2, auto);
+      gap: 10px; /* Increase gap between skills */
+}
+
+.inventorySlot {
+  width: 50px;
+  height: 50px;
+  background-color: #606060;
+  border: 2px solid #888;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.inventorySlot:hover {
+  background-color: #777;
+}
+#heroClassesAndStats h2 {
+  margin-top: 0;
+  border-bottom: 1px solid #777;
+  padding-bottom: 5px;
+}
+#heroSkills h2 {
+  margin-top: 0;
+  border-bottom: 1px solid #777;
+  padding-bottom: 5px;
+}
+#heroStats h2 {
+  grid-column: span 4;
+  margin: 0;
+  padding-bottom: 5px;
+}
+
+ #heroPortrait img {
+   width: 150px;
+   height: 150px;
+   border: 2px solid #777;
+   border-radius: 10px;
+   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+ }
+
+ #paperDoll {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   grid-template-rows: repeat(4, 1fr);
+   gap: 10px;
+   padding: 10px;
+   background-color: #444;
+   border: 2px solid #777;
+   border-radius: 10px;
+   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+ }
+
+ .slot {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 60px;
+   height: 60px;
+   background-color: #555;
+   border: 2px solid #777;
+   border-radius: 5px;
+   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+   text-align: center;
+   color: #fff;
+   font-size: 12px;
+ }
+
+ #helmetSlot { grid-area: 1 / 2 / 2 / 3; }
+ #cloakSlot { grid-area: 1 / 3 / 2 / 4; }
+ #amuletSlot { grid-area: 1 / 1 / 2 / 2; }
+ #weaponSlot { grid-area: 2 / 1 / 3 / 2; }
+ #chestArmorSlot { grid-area: 2 / 2 / 3 / 3; }
+ #shieldSlot { grid-area: 2 / 3 / 3 / 4; }
+ #legArmorSlot { grid-area: 3 / 2 / 4 / 3; }
+ #glovesSlot { grid-area: 4 / 1 / 4 / 2; }
+ #bootsSlot { grid-area: 4 / 2 / 4 / 4; }
+ #ringSlot { grid-area: 4 / 3 / 5 / 3; }
+
+ .slot:hover {
+   background-color: #666;
+ }
+
+ .statGrid {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 10px;
+ }
+#heroPortraitAndPaperDoll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding:5px;
+}

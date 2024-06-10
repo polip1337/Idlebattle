@@ -24,6 +24,21 @@ constructor(name, classType, stats,skills, memberId, team,opposingTeam) {
         this.attackBar = null;
         this.status = null;
         this.statsDisplay = null;
+        this.blind = null;
+        this.charm = null;
+        this.clone = null;
+        this.confused = null;
+        //Cursed?
+        this.disarmed = null;
+        this.entrap = null;
+        this.fear = null;
+        this.hexproof = null;
+        this.invisible = null;
+        this.lifesteal = null;
+        this.marked = null;
+        this.reflect = null;
+        this.silence = null;
+        this.sleep = null;
         this.effects = []; // Array to store active effects
         this.dragStartHandler = this.dragStartHandler.bind(this);
         this.dragOverHandler = this.dragOverHandler.bind(this);
