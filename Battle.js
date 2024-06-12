@@ -2,8 +2,9 @@ import Member from './Member.js';
 import Team from './Team.js';
 import { isPaused } from './Main.js';
 import EffectClass from './EffectClass.js';
+import Hero from './Hero.js';
 
-import { updateHealth, updateMana, updateAttackBar,updateStatus,updateStatsDisplay } from './RenderMember.js';
+import { updateHealth, updateMana, updateAttackBar,updateStatus } from './Render.js';
 
 function startBattle(team1, team2) {
     team1.members.forEach(team1Member => {
@@ -54,11 +55,19 @@ function startBattle(team1, team2) {
 
     }, 1000); // Adjust the interval as needed
 }
-function createRandomMembers(prefix, classes,team, opposingTeam) {
+function createRandomMembers(prefix, classes,team, opposingTeam,size) {
+    const classKeys = Object.keys(classes);
+    return Array.from({ length: size }, (_, i) => {
+        const randomClass = classKeys[Math.floor(Math.random() * classKeys.length)];
+        return new Member(`${prefix}-Member${i + 1}`, randomClass, classes[randomClass], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam);
+    });
+}
+
+function createHero(prefix, classes,team, opposingTeam) {
     const classKeys = Object.keys(classes);
     return Array.from({ length: 1 }, (_, i) => {
         const randomClass = classKeys[Math.floor(Math.random() * classKeys.length)];
-        return new Member(`${prefix}-Member${i + 1}`, randomClass, classes[randomClass].stats, classes[randomClass].skills, `${prefix.toLowerCase()}-member${i}`, team,opposingTeam);
+        return new Hero(`${prefix}-Member${i + 1}`, 'Novice', classes['Novice'], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam);
     });
 }
 function handleDeath(target, opposingTeam)
@@ -73,4 +82,4 @@ function handleDeath(target, opposingTeam)
              }
          });
      }
-export { startBattle, createRandomMembers };
+export { startBattle, createRandomMembers,createHero };

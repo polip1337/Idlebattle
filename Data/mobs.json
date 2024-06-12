@@ -1,6 +1,7 @@
 {
 
   "Warrior": {
+    "portrait": "Media/Mantis/FireMage.jpg",
     "skills": [
       {
         "name": "Slash",
@@ -96,6 +97,7 @@
   },
 
   "Healer": {
+    "portrait": "Media/Mantis/FireMage.jpg",
     "skills": [
       {
         "name": "Heal",
@@ -192,6 +194,7 @@
 
 
   "Mage": {
+    "portrait": "Media/Mantis/FireMage.jpg",
     "skills": [
       {
         "name": "Fireball",
@@ -288,6 +291,7 @@
 
 
 "Rogue": {
+  "portrait": "Media/Mantis/FireMage.jpg",
     "skills": [
       {
         "name": "Quick Strike",

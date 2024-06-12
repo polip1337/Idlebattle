@@ -11,37 +11,42 @@
 <body>
 <div id="tabs">
     <button class="tablinks" onclick="openTab(event, 'battlefield')">Battle</button>
-    <button class="tablinks" onclick="openTab(event, 'hero')">Hero</button>
+    <button id="heroTab" class="tablinks" onclick="openTab(event, 'heroContent')">Hero</button>
+    <button class="tablinks" onclick="openTab(event, 'map')">Map</button>
     <button class="tablinks" onclick="openTab(event, 'library')">Library</button>
     <button class="tablinks" onclick="openTab(event, 'options')">Options</button>
 </div>
-<div id="battlefield" class="tabcontent">
+<div id="battlefield" class="tabcontent active">
+<!--    <img src ="Media/bg2.jpg" class="background-image">-->
     <div id="team1" class="team">
     </div>
     <div class="team-divider"></div>
 
     <div id="team2" class="team">
     </div>
+    </img>
     <button id="start-button">Start Battle</button>
     <div id="iconContainer">
         <div class="iconRow upperRow">
             <div class="iconGroup">
-                <div class="icon"></div>
-                <div class="icon"></div>
-                <div class="icon"></div>
-                <div class="icon"></div>
+                <div  class="icon">
+                    <img id="skill1" src ="default.png">
+                </div>
+                <div id="skill2" class="icon"></div>
+                <div id="skill3" class="icon"></div>
+                <div id="skill4" class="icon"></div>
             </div>
             <div class="iconGroup">
-                <div class="icon"></div>
-                <div class="icon"></div>
-                <div class="icon"></div>
-                <div class="icon"></div>
+                <div id="skill5" class="icon"></div>
+                <div id="skill6" class="icon"></div>
+                <div id="skill7" class="icon"></div>
+                <div id="skill8" class="icon"></div>
             </div>
             <div class="iconGroup">
-                <div class="icon"></div>
-                <div class="icon"></div>
-                <div class="icon"></div>
-                <div class="icon"></div>
+                <div id="skill9" class="icon"></div>
+                <div id="skill10" class="icon"></div>
+                <div id="skill11" class="icon"></div>
+                <div id="skill12" class="icon"></div>
             </div>
         </div>
 
@@ -90,13 +95,13 @@
                 </div>
             </div>
     </div>
+    </div>
 </div>
-</div>
-<div id="heroContent" class="tabContent">
+<div id="heroContent" class="tabcontent">
     <div id="heroInfoRow">
         <div id="heroPortraitAndPaperDoll">
             <div id="heroPortrait">
-                <img src="media/portrait.jpg" alt="Hero Portrait" />
+                <img src="Media/portrait.jpg" alt="Hero Portrait" />
             </div>
             <div id="paperDoll">
                 <div class="slot" id="cloakSlot">Cloak</div>
@@ -275,10 +280,307 @@
 
 </div>
 
+<div id="map" class="tabcontent">
+    <h2>Map Section</h2>
+    <ul id="hexGrid">
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+        <li class="hex">
+            <div class="hexIn">
+                <a class="hexLink" href="#">
+                    <img src="Media/Mantis/FireMage.jpg" alt="" />
+                    <h1>This is a title</h1>
+                    <p>Some sample text about the article this hexagon leads to</p>
+                </a>
+            </div>
+        </li>
+    </ul>
+
+
+</div>
 
 <div id="library" class="tabcontent">
-    <h2>Library Section</h2>
-    <!-- Content for library section -->
+    <div class="library-container">
+        <div class="topic-list">
+            <ul id="topics">
+                <li data-topic="topic1">Topic 1</li>
+                <li data-topic="topic2">Topic 2</li>
+                <li>
+                    <span class="expandable" onclick="toggleSubtopics(this)">Topic 3</span>
+                    <ul class="subtopics">
+                        <li data-topic="subtopic3-1">Subtopic 3.1</li>
+                        <li data-topic="subtopic3-2">Subtopic 3.2</li>
+                    </ul>
+                </li>
+                <li data-topic="topic4">Topic 4</li>
+            </ul>
+        </div>
+        <div class="content-area">
+            <div id="content">
+                <h2>Welcome to the Library</h2>
+                <p>Select a topic to view its content.</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="options" class="tabcontent">
@@ -286,13 +588,14 @@
     <!-- Content for options section -->
 </div>
 
+<script src="Hero.js" type="module" ></script>
 
 <script src="Member.js" type="module" ></script>
 <script src="EffectClass.js" type="module"></script>
-<script src="RenderMember.js" type="module" ></script>
+<script src="Render.js" type="module" ></script>
 <script src="Team.js" type="module"></script>
 <script src="Battle.js" type="module"></script>
 <script src="Main.js" type="module"></script>
-<script src="navigation.js" ></script>
+<script src="navigation.js"  ></script>
 </body>
 </html>

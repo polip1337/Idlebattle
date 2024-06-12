@@ -6,8 +6,7 @@ import {
     updateMana,
     updateAttackBar,
     updateStatus,
-    updateStatsDisplay
-} from './RenderMember.js';
+} from './Render.js';
 
 class EffectClass {
     constructor(target, effect) {
@@ -157,7 +156,6 @@ class EffectClass {
             default:
                 console.log(`${this.effectType} effect not implemented yet.`);
         }
-        updateStatsDisplay(this.member);
         this.member.updateHealth();
         this.updateTooltip();
     }
@@ -173,7 +171,6 @@ class EffectClass {
         this.originalValue = this.member.stats[stat];
         this.member.stats[stat] -= this.member.stats[stat] * (value / 100);
 
-        updateStatsDisplay(this.member);
         this.updateTooltip();
     }
     reduceStatsByFlatValue(stat, value) {

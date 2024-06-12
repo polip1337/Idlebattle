@@ -1,10 +1,17 @@
-import { startBattle, createRandomMembers } from './Battle.js';
+import { startBattle, createRandomMembers,createHero } from './Battle.js';
 import Team from './Team.js';
+import Hero from './Hero.js';
+import { updateStatsDisplay, updateSkillBar,loadSkills} from './Render.js';
+
+document.getElementById("heroTab").addEventListener("click", switchToHeroTab);
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchClassesAndInitializeTeams();
 });
 export let isPaused = false;
+export let team1;
+export let hero;
+
 
 // Function to toggle the pause state
 function togglePause() {
@@ -20,42 +27,51 @@ document.addEventListener('keydown', (event) => {
 });
 
 function fetchClassesAndInitializeTeams() {
-    fetch('classes.json')
+    fetch('Data/classes.json')
         .then(response => response.json())
         .then(classes => {
-            var team1 = new Team('Team1', 'team1-members');
-            var team2 = new Team('Team2', 'team2-members');
+            team1 = new Team('Team1', 'team1-members');
 
-            const team1Members = createRandomMembers('team1', classes,team1,team2);
-            const team2Members = createRandomMembers('team2', classes,team2,team1);
-
+            const team1Members = createHero('team1', classes,team1,team2,1);
+            hero = team1Members[0];
             initializeTeamMembers(team1Members,'team1')
-            initializeTeamMembers(team2Members,'team2')
 
             team1.addMembers(team1Members);
-            team2.addMembers(team2Members);
-
-
-
-
+            updateSkillBar(team1Members[0]);
             document.getElementById('start-button').addEventListener('click', () => startBattle(team1,team2));
         });
+     fetch('Data/mobs.json')
+            .then(response => response.json())
+            .then(classes => {
+                var team2 = new Team('Team2', 'team2-members');
+                const team2Members = createRandomMembers('team2', classes,team2,team1,4);
+
+                initializeTeamMembers(team2Members,'team2')
+                team2.addMembers(team2Members);
+            });
+
+
 }
+
 
 function initializeTeamMembers(members, containerId) {
     const container = document.getElementById(containerId);
     members.forEach(member => {
         container.innerHTML += `
             <div class="member" id="${member.memberId}">
+                <img src="${member.class.portrait}" alt="Portrait" class="memberPortrait">
                 <div class="health-bar"></div>
                 <div class="mana-bar"></div>
                 <div class="attack-bar"></div>
                 <div class="status">Status: Ready</div>
-                <div class="stats"></div>
             </div>
         `;
     });
     members.forEach(member => {
         member.initializeDOMElements(); // Call initializeDOMElements after team members are added to the DOM
     });
+}
+function switchToHeroTab() {
+  updateStatsDisplay(team1.members[0]);
+  loadSkills(team1.members[0]);
 }

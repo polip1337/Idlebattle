@@ -1,0 +1,320 @@
+{
+
+  "Novice": {
+    "portrait": "Media/portrait.jpg",
+    "skills": [
+
+      {
+        "name": "Slash",
+        "type": "active",
+        "damage": 10,
+        "damageType": "slash",
+        "manaCost": 0,
+        "effect": null,
+        "description": "A quick slash with a sword.",
+        "damageType": "physical",
+        "icon": "Media/Skills/Barbarian/slash.png",
+        "targetingModes": ["First", "Lowest HP"]
+
+      },
+      {
+        "name": "Cleave",
+        "type": "active",
+        "damageType": "slash",
+        "damage": 15,
+        "manaCost": 0,
+        "effect": null,
+        "description": "A powerful cleave that hits all enemies.",
+        "targetingModes": ["First", "Lowest HP"]
+      },
+      {
+        "name": "Shield Bash",
+        "type": "active",
+        "damageType": "blunt",
+        "damage": 5,
+        "manaCost": 5,
+        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Stun", "description": "Reduces target's speed by 2 for 3 turns." },
+        "description": "Bashes the enemy with a shield, potentially stunning them.",
+        "targetingModes": ["First", "Lowest HP"]
+      },
+      {
+        "name": "Battle Cry",
+        "type": "active",
+        "damageType": "none",
+        "damage": 0,
+        "manaCost": 10,
+        "effect": { "type": "buff", "stat": "strength", "value": 5, "duration": 3, "name": "Strength Buff", "description": "Increases strength by 5 for 3 turns." },
+        "description": "A fierce cry that increases the warrior's strength.",
+        "targetingModes": ["First", "Lowest HP"]
+      },
+      {
+        "name": "Defensive Stance",
+        "type": "active",
+        "damageType": "none",
+        "damage": 0,
+        "manaCost": 10,
+        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Defense Buff", "description": "Increases vitality by 5 for 3 turns." },
+        "description": "A defensive stance that increases vitality.",
+        "targetingModes": ["First", "Lowest HP"]
+      },
+      {
+        "name": "Berserk",
+        "type": "active",
+        "damageType": "none",
+        "damage": 20,
+        "manaCost": 20,
+        "effect": { "type": "debuff", "stat": "vitality", "value": -5, "duration": 3, "name": "Reckless", "description": "Decreases vitality by 5 for 3 turns." },
+        "description": "A powerful attack that decreases the warrior's vitality.",
+        "targetingModes": ["First", "Lowest HP"]
+      },
+      {
+        "name": "Taunt",
+        "type": "active",
+        "damageType": "none",
+        "damage": 0,
+        "manaCost": 5,
+        "effect": { "type": "debuff", "stat": "strength", "value": -2, "duration": 3, "name": "Weaken", "description": "Reduces target's strength by 2 for 3 turns." },
+        "description": "Taunts the enemy, reducing their strength.",
+        "targetingModes": ["First", "Lowest HP"]
+      },
+      {
+        "name": "Whirlwind",
+        "type": "active",
+        "damageType": "slash",
+        "damage": 10,
+        "manaCost": 15,
+        "effect": null,
+        "description": "A spinning attack that hits all enemies.",
+        "targetingModes": ["First", "Lowest HP"]
+      },
+      {
+        "name": "Charge",
+        "type": "active",
+        "damageType": "slash",
+        "damage": 15,
+        "manaCost": 10,
+        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Slow", "description": "Reduces target's speed by 2 for 3 turns." },
+        "description": "Charges at the enemy, reducing their speed.",
+        "targetingModes": ["First", "Lowest HP"]
+      },
+      {
+        "name": "Last Stand",
+        "type": "active",
+        "damageType": "slash",
+        "damage": 25,
+        "manaCost": 20,
+        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Desperation", "description": "Increases vitality by 5 for 3 turns." },
+        "description": "A powerful attack that increases vitality in desperation.",
+        "targetingModes": ["First", "Lowest HP"]
+      }
+    ],
+    "stats": {
+      "strength": 15,
+      "speed": 6,
+      "dexterity": 8,
+      "vitality": 20,
+      "magicPower": 5,
+      "mana": 30,
+      "manaRegen": 2,
+      "magicControl": 5
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 4,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "magicControl": 1
+    }
+  },
+  "FireMage": {
+    "skills": [
+      {
+        "name": "Slash",
+        "damage": 10,
+        "manaCost": 0,
+        "effect": null,
+        "description": "A quick slash with a sword."
+      },
+      {
+        "name": "Cleave",
+        "damage": 15,
+        "manaCost": 0,
+        "effect": null,
+        "description": "A powerful cleave that hits all enemies."
+      },
+      {
+        "name": "Shield Bash",
+        "damage": 5,
+        "manaCost": 5,
+        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Stun", "description": "Reduces target's speed by 2 for 3 turns." },
+        "description": "Bashes the enemy with a shield, potentially stunning them."
+      },
+      {
+        "name": "Battle Cry",
+        "damage": 0,
+        "manaCost": 10,
+        "effect": { "type": "buff", "stat": "strength", "value": 5, "duration": 3, "name": "Strength Buff", "description": "Increases strength by 5 for 3 turns." },
+        "description": "A fierce cry that increases the warrior's strength."
+      },
+      {
+        "name": "Defensive Stance",
+        "damage": 0,
+        "manaCost": 10,
+        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Defense Buff", "description": "Increases vitality by 5 for 3 turns." },
+        "description": "A defensive stance that increases vitality."
+      },
+      {
+        "name": "Berserk",
+        "damage": 20,
+        "manaCost": 20,
+        "effect": { "type": "debuff", "stat": "vitality", "value": -5, "duration": 3, "name": "Reckless", "description": "Decreases vitality by 5 for 3 turns." },
+        "description": "A powerful attack that decreases the warrior's vitality."
+      },
+      {
+        "name": "Taunt",
+        "damage": 0,
+        "manaCost": 5,
+        "effect": { "type": "debuff", "stat": "strength", "value": -2, "duration": 3, "name": "Weaken", "description": "Reduces target's strength by 2 for 3 turns." },
+        "description": "Taunts the enemy, reducing their strength."
+      },
+      {
+        "name": "Whirlwind",
+        "damage": 10,
+        "manaCost": 15,
+        "effect": null,
+        "description": "A spinning attack that hits all enemies."
+      },
+      {
+        "name": "Charge",
+        "damage": 15,
+        "manaCost": 10,
+        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Slow", "description": "Reduces target's speed by 2 for 3 turns." },
+        "description": "Charges at the enemy, reducing their speed."
+      },
+      {
+        "name": "Last Stand",
+        "damage": 25,
+        "manaCost": 20,
+        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Desperation", "description": "Increases vitality by 5 for 3 turns." },
+        "description": "A powerful attack that increases vitality in desperation."
+      }
+    ],
+    "stats": {
+      "strength": 15,
+      "speed": 6,
+      "dexterity": 8,
+      "vitality": 20,
+      "magicPower": 5,
+      "mana": 30,
+      "manaRegen": 2,
+      "magicControl": 5
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 4,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "magicControl": 1
+    }
+  },
+  "HolyMage": {
+    "skills": [
+      {
+        "name": "Slash",
+        "damage": 10,
+        "manaCost": 0,
+        "effect": null,
+        "description": "A quick slash with a sword."
+      },
+      {
+        "name": "Cleave",
+        "damage": 15,
+        "manaCost": 0,
+        "effect": null,
+        "description": "A powerful cleave that hits all enemies."
+      },
+      {
+        "name": "Shield Bash",
+        "damage": 5,
+        "manaCost": 5,
+        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Stun", "description": "Reduces target's speed by 2 for 3 turns." },
+        "description": "Bashes the enemy with a shield, potentially stunning them."
+      },
+      {
+        "name": "Battle Cry",
+        "damage": 0,
+        "manaCost": 10,
+        "effect": { "type": "buff", "stat": "strength", "value": 5, "duration": 3, "name": "Strength Buff", "description": "Increases strength by 5 for 3 turns." },
+        "description": "A fierce cry that increases the warrior's strength."
+      },
+      {
+        "name": "Defensive Stance",
+        "damage": 0,
+        "manaCost": 10,
+        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Defense Buff", "description": "Increases vitality by 5 for 3 turns." },
+        "description": "A defensive stance that increases vitality."
+      },
+      {
+        "name": "Berserk",
+        "damage": 20,
+        "manaCost": 20,
+        "effect": { "type": "debuff", "stat": "vitality", "value": -5, "duration": 3, "name": "Reckless", "description": "Decreases vitality by 5 for 3 turns." },
+        "description": "A powerful attack that decreases the warrior's vitality."
+      },
+      {
+        "name": "Taunt",
+        "damage": 0,
+        "manaCost": 5,
+        "effect": { "type": "debuff", "stat": "strength", "value": -2, "duration": 3, "name": "Weaken", "description": "Reduces target's strength by 2 for 3 turns." },
+        "description": "Taunts the enemy, reducing their strength."
+      },
+      {
+        "name": "Whirlwind",
+        "damage": 10,
+        "manaCost": 15,
+        "effect": null,
+        "description": "A spinning attack that hits all enemies."
+      },
+      {
+        "name": "Charge",
+        "damage": 15,
+        "manaCost": 10,
+        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Slow", "description": "Reduces target's speed by 2 for 3 turns." },
+        "description": "Charges at the enemy, reducing their speed."
+      },
+      {
+        "name": "Last Stand",
+        "damage": 25,
+        "manaCost": 20,
+        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Desperation", "description": "Increases vitality by 5 for 3 turns." },
+        "description": "A powerful attack that increases vitality in desperation."
+      }
+    ],
+    "stats": {
+      "strength": 15,
+      "speed": 6,
+      "dexterity": 8,
+      "vitality": 20,
+      "magicPower": 5,
+      "mana": 30,
+      "manaRegen": 2,
+      "magicControl": 5
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 4,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "magicControl": 1
+    }
+  }
+}
