@@ -24,7 +24,7 @@
         "effect": "Burn",
         "description": "Unleashes a wave of fire that deals damage to all enemies in range and has a chance to apply burn.",
         "targetingModes": ["Area"],
-        "icon": "Media/Skills/Fire/FireWave.jpg"
+        "icon": "Media/Skills/Fire/fireWave.jpg"
       },
       {
         "name": "Inferno",
@@ -60,7 +60,7 @@
         "effect": null,
         "description": "Increases mana regeneration by 3 per second.",
         "targetingModes": ["Team"],
-        "icon": "Media/Skills/Mana/ManaFlow.jpg"
+        "icon": "Media/Skills/Mana/manaFlow.jpg"
       },
       {
         "name": "Fiery Resilience",
