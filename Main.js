@@ -78,6 +78,7 @@ function initializeTeamMembers(members, containerId) {
     members.forEach(member => {
         const firstRow = teamRows[0].children.length < 4 ? teamRows[0] : teamRows[1];
         firstRow.appendChild(renderMember(member));
+
         //member.initializeDOMElements(); // Call initializeDOMElements after team members are added to the DOM
     });
 
