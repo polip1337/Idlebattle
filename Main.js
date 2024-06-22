@@ -1,7 +1,7 @@
 import { startBattle, createRandomMembers,createHero } from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
-import { updateStatsDisplay, updateSkillBar,loadSkills} from './Render.js';
+import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember} from './Render.js';
 
 document.getElementById("heroTab").addEventListener("click", switchToHeroTab);
 
@@ -57,15 +57,7 @@ function fetchClassesAndInitializeTeams() {
 function initializeTeamMembers(members, containerId) {
     const container = document.getElementById(containerId);
     members.forEach(member => {
-        container.innerHTML += `
-            <div class="member" id="${member.memberId}">
-                <img src="${member.class.portrait}" alt="Portrait" class="memberPortrait">
-                <div class="health-bar"></div>
-                <div class="mana-bar"></div>
-                <div class="attack-bar"></div>
-                <div class="status">Status: Ready</div>
-            </div>
-        `;
+        container.appendChild(renderMember(member));
     });
     members.forEach(member => {
         member.initializeDOMElements(); // Call initializeDOMElements after team members are added to the DOM

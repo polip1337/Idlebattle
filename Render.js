@@ -85,3 +85,67 @@ export function getSelectedTargetingModes() {
     });
     return targetingModes;
 }
+export function     renderMember(member) {
+    const memberDiv = document.createElement('div');
+    memberDiv.className = 'member';
+
+    const portraitDiv = document.createElement('img');
+    portraitDiv.className = 'memberPortrait';
+    portraitDiv.src =  member.class.portrait;
+
+    const healthBar = document.createElement('div');
+    healthBar.className = 'health-bar';
+    // Set initial health bar width based on current health
+
+    const staminaBar = document.createElement('div');
+    staminaBar.className = 'stamina-bar';
+
+    const manaBar = document.createElement('div');
+    manaBar.className = 'mana-bar';
+
+    const iconContainer = document.createElement('div');
+    iconContainer.className = 'icon-container';
+
+    const iconRow1 = document.createElement('div');
+    iconRow1.className = 'icon-row';
+
+    const iconRow2 = document.createElement('div');
+    iconRow2.className = 'icon-row';
+
+    for (let i = 0; i < 6; i++) {
+        var skill = member.class.skills[i];
+        const iconDiv = document.createElement('div');
+        iconDiv.className= 'iconDiv';
+        const icon = document.createElement('img');
+        icon.className = 'icon';
+        icon.src = skill.icon;
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.innerHTML = `
+            <strong>${skill.name}</strong><br>
+            Damage: ${skill.damage}<br>
+            Mana Cost: ${skill.manaCost}<br>
+            Cooldown: ${skill.cooldown}<br>
+            Damage Type: ${skill.damageType}<br>
+            ${skill.description}
+        `;
+        iconDiv.appendChild(tooltip);
+        iconDiv.appendChild(icon);
+        if (i < 3) {
+            iconRow1.appendChild(iconDiv);
+        } else {
+            iconRow2.appendChild(iconDiv);
+        }
+    }
+
+    iconContainer.appendChild(iconRow1);
+    iconContainer.appendChild(iconRow2);
+
+    memberDiv.appendChild(portraitDiv);
+    memberDiv.appendChild(healthBar);
+    memberDiv.appendChild(staminaBar);
+    memberDiv.appendChild(manaBar);
+    memberDiv.appendChild(iconContainer);
+
+    return memberDiv;
+}

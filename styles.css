@@ -101,17 +101,6 @@
     border-top: 2px solid #000;
     margin: 20px 0;
 }
-.tooltip {
-  bottom: 100%; /* Position tooltip above buff */
-  left: 50%; /* Center tooltip horizontally */
-  transform: translateX(-50%); /* Center tooltip horizontally */
-  background-color: rgba(0, 0, 0, 0.8); /* Tooltip background color */
-  color: white; /* Tooltip text color */
-  padding: 5px; /* Padding for tooltip */
-  border-radius: 5px; /* Border radius for tooltip */
-  display: none; /* Hide tooltip by default */
-  width: 100px
-}
 
 .buff:hover .tooltip {
   display: block; /* Display tooltip on hover */
@@ -626,3 +615,56 @@ width:100%}
      display: inline-block;
      padding: 10px;
  }
+ .battle-view {
+     background: url('Media/bg2.jpg') no-repeat center center;
+     background-size: cover;
+     padding: 20px;
+     border: 2px solid #444;
+     border-radius: 10px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+ }
+ .member .icon-container {
+     margin-top: 10px;
+ }
+
+  .member .icon-row {
+     display: flex;
+     justify-content: center;
+     margin-bottom: 5px;
+ }
+
+  .member .icon {
+     width: 45px;
+     height: 45px;
+     background-color: #666;
+     margin: 2px;
+     border-radius: 5px;
+     border: 1px solid #888;
+ }
+.iconDiv {
+position:relative
+}
+ .iconDiv .tooltip {
+       visibility: hidden;
+      position:absolute;
+      width: 160px;
+      background-color: #fff;
+      color: #000;
+      text-align: left;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #888;
+      position: absolute;
+      z-index: 1;
+        left:30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+
+ .member .iconDiv:hover .tooltip {
+      visibility: visible;
+      width:200px;
+  }
+  .member iconDiv:hover .icon {
+        visibility: visible;
+        width:200px;
+    }

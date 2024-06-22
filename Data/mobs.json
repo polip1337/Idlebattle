@@ -1,77 +1,78 @@
 {
-
-  "Warrior": {
+  "MantisFireMage": {
     "portrait": "Media/Mantis/FireMage.jpg",
     "skills": [
       {
-        "name": "Slash",
+        "name": "Fireball",
+        "active": true,
         "damage": 10,
         "manaCost": 0,
+        "cooldown": 15,
+        "damageType": "Fire",
         "effect": null,
-        "description": "A quick slash with a sword."
+        "description": "A quick slash with a sword.",
+        "targetingModes": ["Random"],
+        "icon": "Media/Skills/Fire/Fireball.jpg"
       },
       {
-        "name": "Cleave",
-        "damage": 15,
-        "manaCost": 0,
-        "effect": null,
-        "description": "A powerful cleave that hits all enemies."
-      },
-      {
-        "name": "Shield Bash",
-        "damage": 5,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Stun", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Bashes the enemy with a shield, potentially stunning them."
-      },
-      {
-        "name": "Battle Cry",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "strength", "value": 5, "duration": 3, "name": "Strength Buff", "description": "Increases strength by 5 for 3 turns." },
-        "description": "A fierce cry that increases the warrior's strength."
-      },
-      {
-        "name": "Defensive Stance",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Defense Buff", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "A defensive stance that increases vitality."
-      },
-      {
-        "name": "Berserk",
+        "name": "Fire Wave",
+        "active": true,
         "damage": 20,
-        "manaCost": 20,
-        "effect": { "type": "debuff", "stat": "vitality", "value": -5, "duration": 3, "name": "Reckless", "description": "Decreases vitality by 5 for 3 turns." },
-        "description": "A powerful attack that decreases the warrior's vitality."
-      },
-      {
-        "name": "Taunt",
-        "damage": 0,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "strength", "value": -2, "duration": 3, "name": "Weaken", "description": "Reduces target's strength by 2 for 3 turns." },
-        "description": "Taunts the enemy, reducing their strength."
-      },
-      {
-        "name": "Whirlwind",
-        "damage": 10,
-        "manaCost": 15,
-        "effect": null,
-        "description": "A spinning attack that hits all enemies."
-      },
-      {
-        "name": "Charge",
-        "damage": 15,
         "manaCost": 10,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Slow", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Charges at the enemy, reducing their speed."
+        "cooldown": 20,
+        "damageType": "Fire",
+        "effect": "Burn",
+        "description": "Unleashes a wave of fire that deals damage to all enemies in range and has a chance to apply burn.",
+        "targetingModes": ["Area"],
+        "icon": "Media/Skills/Fire/FireWave.jpg"
       },
       {
-        "name": "Last Stand",
-        "damage": 25,
-        "manaCost": 20,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Desperation", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "A powerful attack that increases vitality in desperation."
+        "name": "Inferno",
+        "active": true,
+        "damage": 50,
+        "manaCost": 30,
+        "cooldown": 40,
+        "damageType": "Fire",
+        "effect": "Stun",
+        "description": "Summons a raging inferno that deals massive damage and has a chance to stun the target.",
+        "targetingModes": ["Single"],
+        "icon": "Media/Skills/Fire/Inferno.jpg"
+      },
+      {
+        "name": "Fire Mastery",
+        "active": false,
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": null,
+        "description": "Increases fire damage by 20%.",
+        "targetingModes": ["Self"],
+        "icon": "Media/Skills/Fire/FireMastery.jpg"
+      },
+      {
+        "name": "Mana Flow",
+        "active": false,
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": null,
+        "description": "Increases mana regeneration by 3 per second.",
+        "targetingModes": ["Team"],
+        "icon": "Media/Skills/Mana/ManaFlow.jpg"
+      },
+      {
+        "name": "Fiery Resilience",
+        "active": false,
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": null,
+        "description": "Reduces fire damage taken by 15%.",
+        "targetingModes": ["Self"],
+        "icon": "Media/Skills/Resistance/fireRes.jpg"
       }
     ],
     "stats": {
@@ -94,297 +95,5 @@
       "manaRegen": 1,
       "magicControl": 1
     }
-  },
-
-  "Healer": {
-    "portrait": "Media/Mantis/FireMage.jpg",
-    "skills": [
-      {
-        "name": "Heal",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "health", "value": 20, "duration": 1, "name": "Heal", "description": "Restores 20 health points." },
-        "description": "Heals a friendly target."
-      },
-      {
-        "name": "Cure",
-        "damage": 0,
-        "manaCost": 8,
-        "effect": { "type": "buff", "stat": "health", "value": 15, "duration": 1, "name": "Cure", "description": "Restores 15 health points and removes debuffs." },
-        "description": "Cures a friendly target and removes debuffs."
-      },
-      {
-        "name": "Holy Light",
-        "damage": 0,
-        "manaCost": 12,
-        "effect": { "type": "buff", "stat": "health", "value": 25, "duration": 1, "name": "Holy Light", "description": "Restores 25 health points." },
-        "description": "Heals a friendly target with holy light."
-      },
-      {
-        "name": "Revitalize",
-        "damage": 0,
-        "manaCost": 15,
-        "effect": { "type": "buff", "stat": "mana", "value": 10, "duration": 1, "name": "Mana Restore", "description": "Restores 10 mana points." },
-        "description": "Restores mana to a friendly target."
-      },
-      {
-        "name": "Shield",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Shield", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "Shields a friendly target, increasing vitality."
-      },
-      {
-        "name": "Smite",
-        "damage": 10,
-        "manaCost": 5,
-        "effect": null,
-        "description": "Smite the enemy with holy power."
-      },
-      {
-        "name": "Purify",
-        "damage": 0,
-        "manaCost": 8,
-        "effect": { "type": "buff", "stat": "health", "value": 10, "duration": 1, "name": "Purify", "description": "Restores 10 health points and removes debuffs." },
-        "description": "Purifies a friendly target, healing and removing debuffs."
-      },
-      {
-        "name": "Blessing",
-        "damage": 0,
-        "manaCost": 12,
-        "effect": { "type": "buff", "stat": "strength", "value": 3, "duration": 3, "name": "Blessing", "description": "Increases strength by 3 for 3 turns." },
-        "description": "Blesses a friendly target, increasing their strength."
-      },
-      {
-        "name": "Dispel",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "health", "value": 5, "duration": 1, "name": "Dispel", "description": "Restores 5 health points and removes debuffs." },
-        "description": "Dispels negative effects on a friendly target, restoring health."
-      },
-      {
-        "name": "Renew",
-        "damage": 0,
-        "manaCost": 15,
-        "effect": { "type": "buff", "stat": "health", "value": 5, "duration": 3, "name": "Renew", "description": "Restores 5 health points each turn for 3 turns." },
-        "description": "Heals a friendly target over time."
-      }
-    ],
-    "stats": {
-      "strength": 5,
-      "speed": 7,
-      "dexterity": 8,
-      "vitality": 12,
-      "magicPower": 18,
-      "mana": 40,
-      "manaRegen": 4,
-      "magicControl": 8
-    },
-    "statsPerLevel": {
-      "strength": 1,
-      "speed": 2,
-      "dexterity": 2,
-      "vitality": 3,
-      "magicPower": 4,
-      "mana": 8,
-      "manaRegen": 2,
-      "magicControl": 2
-    }
-  },
-
-
-  "Mage": {
-    "portrait": "Media/Mantis/FireMage.jpg",
-    "skills": [
-      {
-        "name": "Fireball",
-        "damage": 15,
-        "manaCost": 10,
-        "effect": null,
-        "description": "Hurls a fireball at the enemy."
-      },
-      {
-        "name": "Ice Shard",
-        "damage": 12,
-        "manaCost": 8,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Freeze", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Launches an ice shard that slows the enemy."
-      },
-      {
-        "name": "Arcane Blast",
-        "damage": 18,
-        "manaCost": 12,
-        "effect": null,
-        "description": "Blasts the enemy with arcane energy."
-      },
-      {
-        "name": "Mana Shield",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Mana Shield Buff", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "Creates a shield that increases vitality."
-      },
-      {
-        "name": "Lightning Bolt",
-        "damage": 20,
-        "manaCost": 15,
-        "effect": null,
-        "description": "Strikes the enemy with a bolt of lightning."
-      },
-      {
-        "name": "Heal",
-        "damage": 0,
-        "manaCost": 8,
-        "effect": { "type": "buff", "stat": "health", "value": 15, "duration": 1, "name": "Heal", "description": "Restores 15 health points." },
-        "description": "Heals a friendly target."
-      },
-      {
-        "name": "Polymorph",
-        "damage": 0,
-        "manaCost": 12,
-        "effect": { "type": "debuff", "stat": "strength", "value": -3, "duration": 2, "name": "Polymorph", "description": "Reduces target's strength by 3 for 2 turns." },
-        "description": "Transforms the enemy, reducing their strength."
-      },
-      {
-        "name": "Arcane Explosion",
-        "damage": 15,
-        "manaCost": 20,
-        "effect": null,
-        "description": "An explosion of arcane energy that hits all enemies."
-      },
-      {
-        "name": "Flame Strike",
-        "damage": 22,
-        "manaCost": 18,
-        "effect": null,
-        "description": "Calls down a pillar of fire on the enemy."
-      },
-      {
-        "name": "Magic Missile",
-        "damage": 10,
-        "manaCost": 5,
-        "effect": null,
-        "description": "Launches a magic missile that deals moderate damage."
-      }
-    ],
-    "stats": {
-      "strength": 5,
-      "speed": 8,
-      "dexterity": 7,
-      "vitality": 10,
-      "magicPower": 20,
-      "mana": 50,
-      "manaRegen": 5,
-      "magicControl": 10
-    },
-    "statsPerLevel": {
-      "strength": 1,
-      "speed": 2,
-      "dexterity": 2,
-      "vitality": 3,
-      "magicPower": 4,
-      "mana": 10,
-      "manaRegen": 2,
-      "magicControl": 3
-    }
-  },
-
-
-"Rogue": {
-  "portrait": "Media/Mantis/FireMage.jpg",
-    "skills": [
-      {
-        "name": "Quick Strike",
-        "damage": 12,
-        "manaCost": 0,
-        "effect": null,
-        "description": "A fast attack with a dagger."
-      },
-      {
-        "name": "Backstab",
-        "damage": 20,
-        "manaCost": 5,
-        "effect": { "type": "buff", "stat": "speed", "value": 2, "duration": 2, "name": "Agility Boost", "description": "Increases speed by 2 for 2 turns." },
-        "description": "A back attack that boosts speed."
-      },
-      {
-        "name": "Poison Dart",
-        "damage": 8,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "health", "value": -2, "duration": 3, "name": "Poison", "description": "Reduces health by 2 each turn for 3 turns." },
-        "description": "Throws a poisoned dart that deals damage over time."
-      },
-      {
-        "name": "Evasion",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "dexterity", "value": 5, "duration": 2, "name": "Evasion Boost", "description": "Increases dexterity by 5 for 2 turns." },
-        "description": "Increases dexterity to dodge attacks."
-      },
-      {
-        "name": "Shadowstep",
-        "damage": 15,
-        "manaCost": 15,
-        "effect": { "type": "buff", "stat": "dexterity", "value": 3, "duration": 3, "name": "Shadowstep Buff", "description": "Increases dexterity by 3 for 3 turns." },
-        "description": "Steps through the shadows to increase dexterity."
-      },
-      {
-        "name": "Sap",
-        "damage": 5,
-        "manaCost": 10,
-        "effect": { "type": "debuff", "stat": "strength", "value": -3, "duration": 2, "name": "Weakening Strike", "description": "Reduces target's strength by 3 for 2 turns." },
-        "description": "A disabling strike that weakens the target."
-      },
-      {
-        "name": "Fan of Knives",
-        "damage": 10,
-        "manaCost": 20,
-        "effect": null,
-        "description": "Throws knives in all directions, hitting all enemies."
-      },
-      {
-        "name": "Ambush",
-        "damage": 25,
-        "manaCost": 20,
-        "effect": { "type": "buff", "stat": "strength", "value": 5, "duration": 1, "name": "Ambush Buff", "description": "Increases strength by 5 for 1 turn." },
-        "description": "A powerful attack from stealth that increases strength briefly."
-      },
-      {
-        "name": "Vanish",
-        "damage": 0,
-        "manaCost": 15,
-        "effect": { "type": "buff", "stat": "speed", "value": 4, "duration": 1, "name": "Vanish Buff", "description": "Increases speed by 4 for 1 turn." },
-        "description": "Vanishes from sight, increasing speed."
-      },
-      {
-        "name": "Throwing Stars",
-        "damage": 10,
-        "manaCost": 5,
-        "effect": null,
-        "description": "Throws stars at the enemy, dealing moderate damage."
-      }
-    ],
-    "stats": {
-      "strength": 10,
-      "speed": 12,
-      "dexterity": 15,
-      "vitality": 8,
-      "magicPower": 5,
-      "mana": 25,
-      "manaRegen": 3,
-      "magicControl": 5
-    },
-    "statsPerLevel": {
-      "strength": 2,
-      "speed": 3,
-      "dexterity": 4,
-      "vitality": 2,
-      "magicPower": 1,
-      "mana": 5,
-      "manaRegen": 1,
-      "magicControl": 1
-    }
   }
-
-
 }
