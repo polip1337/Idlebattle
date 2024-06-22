@@ -3,25 +3,46 @@
     border: 1px solid #000;
     padding: 10px;
     margin: 10px;
-    width: 300px;
-    height: 200px;
-    background-color: #f4f4f4;
+    width:300px;
     text-align: center;
     position: relative;
     display: flex;
     flex-direction: column; /* Change to row */
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius:5%;
 }
 
 /* Member portrait */
 .memberPortrait {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100px;
     height: 100px;
     border-radius: 50%;
     margin-right: 10px; /* Add margin to the right */
     border: 2px solid #ccc;
-}
+    position: relative; /* Ensure the overlay is confined to this container */
 
+}
+.memberPortraitImage{
+width:100px;
+height:100px;
+border-radius:50%;
+}
+.health-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(to top, red 0%, red var(--health-percentage), transparent var(--health-percentage), transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+    opacity:50%;
+}
 /* Container for details (bars and skills) */
 .details-container {
     display: flex;
@@ -134,7 +155,6 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Align items to the start */
-    margin-right: 10px; /* Add margin to the right */
 }
 .portrait-details-container {
     display: flex;

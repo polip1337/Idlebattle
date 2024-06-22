@@ -527,7 +527,7 @@
  .battle-view {
      background: url('Media/bg2.jpg') no-repeat center center;
      background-size: cover;
-     padding: 20px;
+     padding: 20px 20px 0px 20px;
      border: 2px solid #444;
      border-radius: 10px;
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -548,7 +548,7 @@
      border: 1px solid #888;
      position: absolute;
      z-index: 1;
-     left:30px;
+     transform:translate(-30px,10px);
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
@@ -563,3 +563,31 @@
     justify-content: center;
     margin-bottom: 10px;
 }
+.battleSkillIcon{
+     width: 80px;
+     height: 80px;
+     position:relative;
+}
+
+ .battleSkillIcon img{
+    position:absolute;
+     width: 80px;
+     height: 80px;
+ border-radius:15%;
+ border: 2px solid #000;
+
+    /* Placeholder background color */
+    /* Add more styling as needed */
+}
+ .battleSkillIcon input{
+    z-index: 1;
+    position:absolute;
+}
+#iconContainer{
+background: black;
+opacity:90%;
+padding 10px;
+margin 15px;
+
+}
+button{};

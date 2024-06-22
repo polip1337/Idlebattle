@@ -22,11 +22,17 @@ export function updateHealth(member) {
 
 }
 
-export function updateSkillBar(hero) {
-        const element = document.querySelector(`#skill1`);
-    element.src = hero.skills[0].icon;
+export function updateSkillBar(skills) {
+    for(let i = 0; i<12; i++){
+        var element = document.querySelector("#skill"+(i+1)+" img");
+        if(skills[i])
+            element.src = skills[i].icon;
+        else
+            element.src = "Media/UI/defaultSkill.jpeg";
+    }
 
 }
+
 export function updateMana(member) {
     const manaElement = document.querySelector(`#${member.memberId} .mana-bar`);
     manaElement.style.width = `${(member.currentMana / member.stats.mana) * 100}%`;
@@ -57,12 +63,14 @@ export function  updateStatsDisplay(member) {
 export function loadSkills(hero) {
     const container = document.querySelector(`#activeSkills`);
     container.innerHTML = '';
-    hero.skills.forEach(skill => {
+    var activeSkills = hero.skills.filter(skill => skill.type == "active");
+    var passiveSkills = hero.skills.filter(skill => skill.type != "active");
+    activeSkills.forEach(skill => {
         const skillBox = document.createElement('div');
         skillBox.className = 'skill-box';
         skillBox.innerHTML = `
             <img src="${skill.icon}">
-            <span>${skill.name} target</span>
+            <span>${skill.name} </span>
             <select class="targeting-modes">
                 ${skill.targetingModes.map(mode => `<option value="${mode}">${mode}</option>`).join('')}
             </select>
@@ -88,10 +96,20 @@ export function getSelectedTargetingModes() {
 export function renderMember(member) {
     const memberDiv = document.createElement('div');
     memberDiv.className = 'member';
-
-    const portraitDiv = document.createElement('img');
+    memberDiv.id=member.memberId;
+    const portraitDiv = document.createElement('div');
     portraitDiv.className = 'memberPortrait';
-    portraitDiv.src = member.class.portrait;
+
+    const img = document.createElement('img');
+    img.src = member.class.portrait;
+    img.className = 'memberPortraitImage';
+
+    const healthOverlay = document.createElement('div');
+    healthOverlay.className = 'health-overlay';
+    healthOverlay.style.setProperty('--health-percentage', (100 - (member.currentHealth / member.maxHealth) * 100) + '%');
+
+    portraitDiv.appendChild(img);
+    portraitDiv.appendChild(healthOverlay);
 
     const healthBar = document.createElement('div');
     healthBar.className = 'health-bar';
@@ -153,9 +171,7 @@ export function renderMember(member) {
     memberDiv.appendChild(portraitDetailsDiv);
 
     detailsDiv.appendChild(iconContainer);
-    memberDiv.appendChild(healthBar);
-    memberDiv.appendChild(staminaBar);
-    memberDiv.appendChild(manaBar);
+
 
     return memberDiv;
 }
@@ -171,4 +187,14 @@ export function renderDefault(member) {
     memberDiv.appendChild(portraitDiv);
 
     return memberDiv;
+}
+export function updateHealthOverlay(member) {
+    const healthOverlay = member.element.querySelector('.health-overlay');
+    const healthPercentage = (100 - (member.currentHealth / member.maxHealth) * 100) + '%';
+    healthOverlay.style.setProperty('--health-percentage', healthPercentage);
+}
+export function takeDamage(member, damage) {
+    member.currentHealth -= damage;
+    if (member.currentHealth < 0) member.currentHealth = 0;
+    updateHealthOverlay(member); // Update the overlay to reflect new health
 }

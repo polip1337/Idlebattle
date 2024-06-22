@@ -2,7 +2,7 @@ import { startBattle, createRandomMembers,createHero } from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
 import BattleLog from './BattleLog.js';
-import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember} from './Render.js';
+import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember,takeDamage} from './Render.js';
 
 export let isPaused = false;
 export let team1;
@@ -26,9 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
         logContainer.style.display = logVisible ? 'flex' : 'none';
         toggleLogButton.textContent = logVisible ? 'Hide Log' : 'Show Log';
     });
+    setupSkillListeners();
 });
 
-
+function setupSkillListeners(){
+    for(let i = 1; i<13; i++){
+         document.getElementById("skill"+i).addEventListener('click', () => hero.useSkill(document.getElementById("skill"+i)));
+    }
+}
 
 // Function to toggle the pause state
 function togglePause() {
@@ -49,15 +54,15 @@ function fetchClassesAndInitializeTeams() {
         .then(classes => {
             team1 = new Team('Team1', 'team1-members');
 
-            //const team1Members = createHero('team1', classes,team1,team2,8);
-                const team1Members = createRandomMembers('team2', classes,team2,team1,8);
+            const team1Members = createHero('team1', classes,team1,team2,1);
 
             hero = team1Members[0];
             initializeTeamMembers(team1Members,'team1')
 
             team1.addMembers(team1Members);
-            updateSkillBar(team1Members[0]);
             document.getElementById('start-button').addEventListener('click', () => startBattle(team1,team2));
+            loadSkills(team1.members[0]);
+
         });
      fetch('Data/mobs.json')
             .then(response => response.json())
@@ -79,11 +84,11 @@ function initializeTeamMembers(members, containerId) {
         const firstRow = teamRows[0].children.length < 4 ? teamRows[0] : teamRows[1];
         firstRow.appendChild(renderMember(member));
 
-        //member.initializeDOMElements(); // Call initializeDOMElements after team members are added to the DOM
+        member.initializeDOMElements(); // Call initializeDOMElements after team members are added to the DOM
+
     });
 
 }
 function switchToHeroTab() {
   updateStatsDisplay(team1.members[0]);
-  loadSkills(team1.members[0]);
 }

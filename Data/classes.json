@@ -1,9 +1,7 @@
 {
-
   "Novice": {
     "portrait": "Media/portrait.jpg",
     "skills": [
-
       {
         "name": "Slash",
         "type": "active",
@@ -11,310 +9,200 @@
         "damageType": "slash",
         "manaCost": 0,
         "effect": null,
-        "description": "A quick slash with a sword.",
-        "damageType": "physical",
-        "icon": "Media/Skills/Barbarian/slash.png",
+        "description": "A quick slash with a weapon.",
+        "icon": "Media/Skills/Novice/slash.png",
         "targetingModes": ["First", "Lowest HP"]
-
       },
       {
-        "name": "Cleave",
+        "name": "Block",
         "type": "active",
-        "damageType": "slash",
-        "damage": 15,
+        "damageType": "none",
+        "damage": 0,
+        "manaCost": 0,
+        "effect": { "type": "buff", "stat": "defense", "value": 2, "duration": 1, "name": "Block", "description": "Increases defense by 2 for 1 turn." },
+        "description": "Assume a defensive stance, increasing defense briefly.",
+        "icon": "Media/Skills/Novice/shield.jpg",
+        "targetingModes": ["Self"]
+      },
+      {
+        "name": "Quick Step",
+        "type": "active",
+        "damageType": "none",
+        "damage": 0,
+        "manaCost": 0,
+        "effect": { "type": "buff", "stat": "speed", "value": 2, "duration": 1, "name": "Quick Step", "description": "Increases speed by 2 for 1 turn." },
+        "description": "Take a quick step to increase speed briefly.",
+        "icon": "Media/Skills/Novice/quick_step.png",
+        "targetingModes": ["Self"]
+      },
+      {
+        "name": "Thrust",
+        "type": "active",
+        "damageType": "pierce",
+        "damage": 12,
         "manaCost": 0,
         "effect": null,
-        "description": "A powerful cleave that hits all enemies.",
+        "description": "Thrust forward with a weapon, aiming to pierce through defenses.",
+        "icon": "Media/Skills/Novice/thrust.png",
         "targetingModes": ["First", "Lowest HP"]
       },
       {
-        "name": "Shield Bash",
+        "name": "Adrenaline Rush",
+        "type": "active",
+        "damageType": "none",
+        "damage": 0,
+        "manaCost": 5,
+        "effect": { "type": "buff", "stat": "strength", "value": 3, "duration": 2, "name": "Adrenaline Rush", "description": "Increases strength by 3 for 2 turns." },
+        "description": "Enter an adrenaline rush to boost strength temporarily.",
+        "icon": "Media/Skills/Novice/adrenaline_rush.png",
+        "targetingModes": ["Self"]
+      },
+      {
+        "name": "Steady Aim",
+        "type": "active",
+        "damageType": "none",
+        "damage": 0,
+        "manaCost": 5,
+        "effect": { "type": "buff", "stat": "accuracy", "value": 2, "duration": 2, "name": "Steady Aim", "description": "Increases accuracy by 2 for 2 turns." },
+        "description": "Take a moment to steady aim, improving accuracy temporarily.",
+        "icon": "Media/Skills/Novice/steady_aim.png",
+        "targetingModes": ["Self"]
+      },
+      {
+        "name": "Riposte",
+        "type": "active",
+        "damageType": "slash",
+        "damage": 8,
+        "manaCost": 0,
+        "effect": { "type": "buff", "stat": "counterattack", "value": true, "duration": 1, "name": "Riposte", "description": "Prepare to counter the next attack with a quick slash." },
+        "description": "Prepare to counter the next attack with a quick slash.",
+        "icon": "Media/Skills/Novice/riposte.png",
+        "targetingModes": ["Self"]
+      },
+      {
+        "name": "Push",
         "type": "active",
         "damageType": "blunt",
-        "damage": 5,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Stun", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Bashes the enemy with a shield, potentially stunning them.",
+        "damage": 6,
+        "manaCost": 0,
+        "effect": null,
+        "description": "Push the enemy back with a forceful strike.",
+        "icon": "Media/Skills/Novice/push.png",
         "targetingModes": ["First", "Lowest HP"]
       },
       {
-        "name": "Battle Cry",
+        "name": "Dodge",
         "type": "active",
         "damageType": "none",
         "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "strength", "value": 5, "duration": 3, "name": "Strength Buff", "description": "Increases strength by 5 for 3 turns." },
-        "description": "A fierce cry that increases the warrior's strength.",
-        "targetingModes": ["First", "Lowest HP"]
+        "manaCost": 0,
+        "effect": { "type": "buff", "stat": "evasion", "value": 2, "duration": 1, "name": "Dodge", "description": "Increases evasion by 2 for 1 turn." },
+        "description": "Quickly dodge an incoming attack, increasing evasion briefly.",
+        "icon": "Media/Skills/Novice/dodge.png",
+        "targetingModes": ["Self"]
       },
       {
-        "name": "Defensive Stance",
-        "type": "active",
-        "damageType": "none",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Defense Buff", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "A defensive stance that increases vitality.",
-        "targetingModes": ["First", "Lowest HP"]
-      },
-      {
-        "name": "Berserk",
-        "type": "active",
-        "damageType": "none",
-        "damage": 20,
-        "manaCost": 20,
-        "effect": { "type": "debuff", "stat": "vitality", "value": -5, "duration": 3, "name": "Reckless", "description": "Decreases vitality by 5 for 3 turns." },
-        "description": "A powerful attack that decreases the warrior's vitality.",
-        "targetingModes": ["First", "Lowest HP"]
-      },
-      {
-        "name": "Taunt",
-        "type": "active",
-        "damageType": "none",
-        "damage": 0,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "strength", "value": -2, "duration": 3, "name": "Weaken", "description": "Reduces target's strength by 2 for 3 turns." },
-        "description": "Taunts the enemy, reducing their strength.",
-        "targetingModes": ["First", "Lowest HP"]
-      },
-      {
-        "name": "Whirlwind",
+        "name": "Dual Strike",
         "type": "active",
         "damageType": "slash",
         "damage": 10,
-        "manaCost": 15,
+        "manaCost": 0,
         "effect": null,
-        "description": "A spinning attack that hits all enemies.",
+        "description": "Deliver two quick strikes in succession.",
+        "icon": "Media/Skills/Novice/dual_strike.png",
         "targetingModes": ["First", "Lowest HP"]
       },
-      {
-        "name": "Charge",
-        "type": "active",
-        "damageType": "slash",
-        "damage": 15,
-        "manaCost": 10,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Slow", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Charges at the enemy, reducing their speed.",
-        "targetingModes": ["First", "Lowest HP"]
-      },
-      {
-        "name": "Last Stand",
-        "type": "active",
-        "damageType": "slash",
-        "damage": 25,
-        "manaCost": 20,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Desperation", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "A powerful attack that increases vitality in desperation.",
-        "targetingModes": ["First", "Lowest HP"]
-      }
+        {
+          "name": "Stalwart",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "defense", "value": 2, "description": "Permanently increases defense by 2." },
+          "description": "Years of training have hardened your defenses.",
+          "icon": "Media/Skills/Novice/passive_stalwart.png"
+        },
+        {
+          "name": "Agility Training",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "speed", "value": 1, "description": "Permanently increases speed by 1." },
+          "description": "Regular agility exercises have improved your speed.",
+          "icon": "Media/Skills/Novice/passive_agility_training.png"
+        },
+        {
+          "name": "Focused Mind",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "accuracy", "value": 1, "description": "Permanently increases accuracy by 1." },
+          "description": "Mental discipline enhances your accuracy in combat.",
+          "icon": "Media/Skills/Novice/passive_focused_mind.png"
+        },
+        {
+          "name": "Endurance",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "vitality", "value": 3, "description": "Permanently increases vitality by 3." },
+          "description": "Years of physical training have toughened your endurance.",
+          "icon": "Media/Skills/Novice/passive_endurance.png"
+        },
+        {
+          "name": "Counterstrike",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "counterattack", "value": true, "description": "Gain a chance to counterattack after being hit." },
+          "description": "Learned the art of counterattacking when enemies strike.",
+          "icon": "Media/Skills/Novice/passive_counterstrike.png"
+        },
+        {
+          "name": "Resilience",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "defense", "value": 1, "description": "Permanently increases defense by 1." },
+          "description": "Developed resilience to endure more hits in battle.",
+          "icon": "Media/Skills/Novice/passive_resilience.png"
+        },
+        {
+          "name": "Swift Reflexes",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "evasion", "value": 1, "description": "Permanently increases evasion by 1." },
+          "description": "Enhanced reflexes enable you to dodge attacks more effectively.",
+          "icon": "Media/Skills/Novice/passive_swift_reflexes.png"
+        },
+        {
+          "name": "Precision Strikes",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "accuracy", "value": 1, "description": "Permanently increases accuracy by 1." },
+          "description": "Mastered the art of precise strikes to hit with accuracy.",
+          "icon": "Media/Skills/Novice/passive_precision_strikes.png"
+        },
+        {
+          "name": "Toughened Skin",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "vitality", "value": 2, "description": "Permanently increases vitality by 2." },
+          "description": "Thickened skin provides additional protection against damage.",
+          "icon": "Media/Skills/Novice/passive_toughened_skin.png"
+        },
+        {
+          "name": "Combat Awareness",
+          "type": "passive",
+          "effect": { "type": "buff", "stat": "evasion", "value": 1, "description": "Permanently increases evasion by 1." },
+          "description": "Heightened awareness allows you to anticipate and evade attacks.",
+          "icon": "Media/Skills/Novice/passive_combat_awareness.png"
+        }
+
     ],
     "stats": {
-      "strength": 15,
-      "speed": 6,
-      "dexterity": 8,
-      "vitality": 20,
-      "magicPower": 5,
-      "mana": 30,
-      "manaRegen": 2,
-      "magicControl": 5
+      "strength": 12,
+      "speed": 8,
+      "dexterity": 10,
+      "vitality": 15,
+      "defense": 5,
+      "accuracy": 5,
+      "evasion": 5,
+      "counterattack": false
     },
     "statsPerLevel": {
-      "strength": 3,
+      "strength": 2,
       "speed": 1,
       "dexterity": 2,
-      "vitality": 4,
-      "magicPower": 1,
-      "mana": 5,
-      "manaRegen": 1,
-      "magicControl": 1
-    }
-  },
-  "FireMage": {
-    "skills": [
-      {
-        "name": "Slash",
-        "damage": 10,
-        "manaCost": 0,
-        "effect": null,
-        "description": "A quick slash with a sword."
-      },
-      {
-        "name": "Cleave",
-        "damage": 15,
-        "manaCost": 0,
-        "effect": null,
-        "description": "A powerful cleave that hits all enemies."
-      },
-      {
-        "name": "Shield Bash",
-        "damage": 5,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Stun", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Bashes the enemy with a shield, potentially stunning them."
-      },
-      {
-        "name": "Battle Cry",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "strength", "value": 5, "duration": 3, "name": "Strength Buff", "description": "Increases strength by 5 for 3 turns." },
-        "description": "A fierce cry that increases the warrior's strength."
-      },
-      {
-        "name": "Defensive Stance",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Defense Buff", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "A defensive stance that increases vitality."
-      },
-      {
-        "name": "Berserk",
-        "damage": 20,
-        "manaCost": 20,
-        "effect": { "type": "debuff", "stat": "vitality", "value": -5, "duration": 3, "name": "Reckless", "description": "Decreases vitality by 5 for 3 turns." },
-        "description": "A powerful attack that decreases the warrior's vitality."
-      },
-      {
-        "name": "Taunt",
-        "damage": 0,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "strength", "value": -2, "duration": 3, "name": "Weaken", "description": "Reduces target's strength by 2 for 3 turns." },
-        "description": "Taunts the enemy, reducing their strength."
-      },
-      {
-        "name": "Whirlwind",
-        "damage": 10,
-        "manaCost": 15,
-        "effect": null,
-        "description": "A spinning attack that hits all enemies."
-      },
-      {
-        "name": "Charge",
-        "damage": 15,
-        "manaCost": 10,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Slow", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Charges at the enemy, reducing their speed."
-      },
-      {
-        "name": "Last Stand",
-        "damage": 25,
-        "manaCost": 20,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Desperation", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "A powerful attack that increases vitality in desperation."
-      }
-    ],
-    "stats": {
-      "strength": 15,
-      "speed": 6,
-      "dexterity": 8,
-      "vitality": 20,
-      "magicPower": 5,
-      "mana": 30,
-      "manaRegen": 2,
-      "magicControl": 5
-    },
-    "statsPerLevel": {
-      "strength": 3,
-      "speed": 1,
-      "dexterity": 2,
-      "vitality": 4,
-      "magicPower": 1,
-      "mana": 5,
-      "manaRegen": 1,
-      "magicControl": 1
-    }
-  },
-  "HolyMage": {
-    "skills": [
-      {
-        "name": "Slash",
-        "damage": 10,
-        "manaCost": 0,
-        "effect": null,
-        "description": "A quick slash with a sword."
-      },
-      {
-        "name": "Cleave",
-        "damage": 15,
-        "manaCost": 0,
-        "effect": null,
-        "description": "A powerful cleave that hits all enemies."
-      },
-      {
-        "name": "Shield Bash",
-        "damage": 5,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Stun", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Bashes the enemy with a shield, potentially stunning them."
-      },
-      {
-        "name": "Battle Cry",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "strength", "value": 5, "duration": 3, "name": "Strength Buff", "description": "Increases strength by 5 for 3 turns." },
-        "description": "A fierce cry that increases the warrior's strength."
-      },
-      {
-        "name": "Defensive Stance",
-        "damage": 0,
-        "manaCost": 10,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Defense Buff", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "A defensive stance that increases vitality."
-      },
-      {
-        "name": "Berserk",
-        "damage": 20,
-        "manaCost": 20,
-        "effect": { "type": "debuff", "stat": "vitality", "value": -5, "duration": 3, "name": "Reckless", "description": "Decreases vitality by 5 for 3 turns." },
-        "description": "A powerful attack that decreases the warrior's vitality."
-      },
-      {
-        "name": "Taunt",
-        "damage": 0,
-        "manaCost": 5,
-        "effect": { "type": "debuff", "stat": "strength", "value": -2, "duration": 3, "name": "Weaken", "description": "Reduces target's strength by 2 for 3 turns." },
-        "description": "Taunts the enemy, reducing their strength."
-      },
-      {
-        "name": "Whirlwind",
-        "damage": 10,
-        "manaCost": 15,
-        "effect": null,
-        "description": "A spinning attack that hits all enemies."
-      },
-      {
-        "name": "Charge",
-        "damage": 15,
-        "manaCost": 10,
-        "effect": { "type": "debuff", "stat": "speed", "value": -2, "duration": 3, "name": "Slow", "description": "Reduces target's speed by 2 for 3 turns." },
-        "description": "Charges at the enemy, reducing their speed."
-      },
-      {
-        "name": "Last Stand",
-        "damage": 25,
-        "manaCost": 20,
-        "effect": { "type": "buff", "stat": "vitality", "value": 5, "duration": 3, "name": "Desperation", "description": "Increases vitality by 5 for 3 turns." },
-        "description": "A powerful attack that increases vitality in desperation."
-      }
-    ],
-    "stats": {
-      "strength": 15,
-      "speed": 6,
-      "dexterity": 8,
-      "vitality": 20,
-      "magicPower": 5,
-      "mana": 30,
-      "manaRegen": 2,
-      "magicControl": 5
-    },
-    "statsPerLevel": {
-      "strength": 3,
-      "speed": 1,
-      "dexterity": 2,
-      "vitality": 4,
-      "magicPower": 1,
-      "mana": 5,
-      "manaRegen": 1,
-      "magicControl": 1
+      "vitality": 3,
+      "defense": 1,
+      "accuracy": 1,
+      "evasion": 1
     }
   }
+
 }

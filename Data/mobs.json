@@ -1,7 +1,9 @@
 {
   "MantisFireMage": {
-    "portrait": "Media/Mantis/FireMage.jpg",
-    "position":["Back,Any"],
+    "portrait": "Media/Mobs/Mantis/FireMage.jpg",
+    "position": [
+      "Back,Any"
+    ],
     "skills": [
       {
         "name": "Fireball",
@@ -12,7 +14,9 @@
         "damageType": "Fire",
         "effect": null,
         "description": "A quick slash with a sword.",
-        "targetingModes": ["Random"],
+        "targetingModes": [
+          "Random"
+        ],
         "icon": "Media/Skills/Fire/Fireball.jpg"
       },
       {
@@ -24,7 +28,9 @@
         "damageType": "Fire",
         "effect": "Burn",
         "description": "Unleashes a wave of fire that deals damage to all enemies in range and has a chance to apply burn.",
-        "targetingModes": ["Area"],
+        "targetingModes": [
+          "Area"
+        ],
         "icon": "Media/Skills/Fire/fireWave.jpg"
       },
       {
@@ -36,7 +42,9 @@
         "damageType": "Fire",
         "effect": "Stun",
         "description": "Summons a raging inferno that deals massive damage and has a chance to stun the target.",
-        "targetingModes": ["Single"],
+        "targetingModes": [
+          "Single"
+        ],
         "icon": "Media/Skills/Fire/Inferno.jpg"
       },
       {
@@ -48,7 +56,9 @@
         "damageType": "None",
         "effect": null,
         "description": "Increases fire damage by 20%.",
-        "targetingModes": ["Self"],
+        "targetingModes": [
+          "Self"
+        ],
         "icon": "Media/Skills/Fire/FireMastery.jpg"
       },
       {
@@ -60,7 +70,9 @@
         "damageType": "None",
         "effect": null,
         "description": "Increases mana regeneration by 3 per second.",
-        "targetingModes": ["Team"],
+        "targetingModes": [
+          "Team"
+        ],
         "icon": "Media/Skills/Mana/manaFlow.jpg"
       },
       {
@@ -72,10 +84,11 @@
         "damageType": "None",
         "effect": null,
         "description": "Reduces fire damage taken by 15%.",
-        "targetingModes": ["Self"],
+        "targetingModes": [
+          "Self"
+        ],
         "icon": "Media/Skills/Resistance/fireRes.jpg"
       }
-
     ],
     "stats": {
       "strength": 15,
@@ -96,6 +109,209 @@
       "mana": 5,
       "manaRegen": 1,
       "magicControl": 1
+    }
+  },
+  "GoblinArcher": {
+    "portrait": "Media/Mobs/Goblin/Archer.jpeg",
+    "skills": [
+      {
+        "name": "Poisoned Arrow",
+        "active": true,
+        "damage": 15,
+        "manaCost": 10,
+        "cooldown": 12,
+        "damageType": "Physical",
+        "effect": "Poison",
+        "description": "Shoots a poisoned arrow that deals damage over time.",
+        "targetingModes": [
+          "Single"
+        ],
+        "icon": "Media/Skills/Archer/PoisonedArrow.jpg"
+      },
+      {
+        "name": "Piercing Shot",
+        "active": true,
+        "damage": 25,
+        "manaCost": 20,
+        "cooldown": 18,
+        "damageType": "Physical",
+        "effect": null,
+        "description": "Fires an arrow that pierces through enemies in a line.",
+        "targetingModes": [
+          "Line"
+        ],
+        "icon": "Media/Skills/Archer/PiercingShot.jpg"
+      },
+      {
+        "name": "Stealth",
+        "active": true,
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": "Stealth",
+        "description": "Enters stealth mode, becoming invisible to enemies for a short duration.",
+        "targetingModes": [],
+        "icon": "Media/Skills/Archer/Stealth.jpg"
+      },
+      {
+        "name": "Archery Mastery",
+        "active": false,
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": "IncreasePhysicalDamage",
+        "description": "Increases physical damage by 20%.",
+        "targetingModes": [],
+        "icon": "Media/Skills/Archer/ArcheryMastery.jpg"
+      },
+      {
+        "name": "Evasion",
+        "active": false,
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": "IncreaseDodgeChance",
+        "description": "Increases dodge chance by 10%.",
+        "targetingModes": [],
+        "icon": "Media/Skills/Archer/Evasion.jpg"
+      },
+      {
+        "name": "Quick Reflexes",
+        "active": false,
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": "IncreaseAttackSpeed",
+        "description": "Increases attack speed by 15%.",
+        "targetingModes": [],
+        "icon": "Media/Skills/Archer/QuickReflexes.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 12,
+      "dexterity": 15,
+      "vitality": 8,
+      "magicPower": 3,
+      "mana": 25,
+      "manaRegen": 1,
+      "physicalDamage": 20,
+      "dodgeChance": 5,
+      "attackSpeed": 1.5
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 3,
+      "dexterity": 4,
+      "vitality": 1,
+      "magicPower": 0,
+      "mana": 5,
+      "manaRegen": 0.5,
+      "physicalDamage": 3,
+      "dodgeChance": 1,
+      "attackSpeed": 0.1
+    }
+  },
+
+  "GoblinHealer": {
+    "portrait": "Media/Mobs/Goblin/Healer.jpeg",
+    "skills": [
+      {
+        "name": "Healing Touch",
+        "active": true,
+        "heal": 30,
+        "manaCost": 15,
+        "cooldown": 10,
+        "effect": null,
+        "description": "Heals a target ally for 30 health.",
+        "targetingModes": [
+          "Single"
+        ],
+        "icon": "Media/Skills/Healer/HealingTouch.jpg"
+      },
+      {
+        "name": "Regeneration",
+        "active": true,
+        "heal": 10,
+        "manaCost": 20,
+        "cooldown": 15,
+        "effect": "Regen",
+        "description": "Applies a healing over time effect to a target ally for 10 health per second for 10 seconds.",
+        "targetingModes": [
+          "Single"
+        ],
+        "icon": "Media/Skills/Healer/Regeneration.jpg"
+      },
+      {
+        "name": "Cleanse",
+        "active": true,
+        "heal": 0,
+        "manaCost": 25,
+        "cooldown": 20,
+        "effect": "Cleanse",
+        "description": "Removes harmful effects from a target ally.",
+        "targetingModes": [
+          "Single"
+        ],
+        "icon": "Media/Skills/Healer/Cleanse.jpg"
+      },
+      {
+        "name": "Divine Favor",
+        "active": false,
+        "heal": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "effect": "IncreaseHealing",
+        "description": "Increases healing effectiveness by 20%.",
+        "targetingModes": [],
+        "icon": "Media/Skills/Healer/DivineFavor.jpg"
+      },
+      {
+        "name": "Empathy",
+        "active": false,
+        "heal": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "effect": "HealOverTime",
+        "description": "Applies a passive heal over time effect to all allies.",
+        "targetingModes": [],
+        "icon": "Media/Skills/Healer/Empathy.jpg"
+      },
+      {
+        "name": "Protective Aura",
+        "active": false,
+        "heal": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "effect": "IncreaseDefense",
+        "description": "Increases defense of all allies by 15%.",
+        "targetingModes": [],
+        "icon": "Media/Skills/Healer/ProtectiveAura.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 6,
+      "speed": 8,
+      "dexterity": 10,
+      "vitality": 12,
+      "magicPower": 15,
+      "mana": 35,
+      "manaRegen": 2,
+      "healingPower": 25
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 2,
+      "dexterity": 3,
+      "vitality": 4,
+      "magicPower": 5,
+      "mana": 5,
+      "manaRegen": 1,
+      "healingPower": 4
     }
   }
 }

@@ -21,6 +21,7 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
         this.blockChance = classInfo.blockChance;
 
         this.currentHealth = this.stats.vitality * 10;
+        this.maxHealth = this.stats.vitality * 10;
         this.currentMana = this.stats.mana;
         this.memberId = memberId;
         this.attackCharge = 0;
@@ -57,15 +58,9 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
     }
 
     initializeDOMElements() {
-        this.statsDisplay = document.querySelector(`#${this.memberId} .stats`);
-        this.status = document.querySelector(`#${this.memberId} .status`);
         this.element = document.querySelector(`#${this.memberId}`);
-        this.element.appendChild(this.effectsElement);
 
-        updateHealth(this);
-        updateMana(this);
-        updateAttackBar(this);
-             this.makeDraggable();
+         this.makeDraggable();
         }
     makeDraggable() {
         this.element.setAttribute('draggable', 'true');
