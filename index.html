@@ -4,9 +4,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>RPG Battle</title>
-    <link rel="stylesheet" type="text/css" href="styles.css"> <style>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="animation.css">
+    <link rel="stylesheet" type="text/css" href="battleLog.css">
+    <link rel="stylesheet" type="text/css" href="member.css">
 
-    </style>
 </head>
 <body>
 <div id="tabs">
@@ -16,21 +18,33 @@
     <button class="tablinks" onclick="openTab(event, 'library')">Library</button>
     <button class="tablinks" onclick="openTab(event, 'options')">Options</button>
 </div>
-<div id="battlefield" class="tabcontent active battle-view ">
-<!--    <img src ="Media/bg2.jpg" class="background-image">-->
-    <div id="team1" class="team">
-    </div>
-    <div class="team-divider"></div>
+<button id="start-button">Start Battle</button>
 
-    <div id="team2" class="team">
+<div id="battlefield" class="tabcontent active battle-view ">
+    <div id="teamAndBattleContainer">
+        <div id="teamContainer">
+            <div id="team1" class="team" id="team1">
+                <div class="team-row"></div>
+                <div class="team-row"></div>
+            </div>
+            <div class="team-divider"></div>
+
+            <div id="team2" class="team" id="team2">
+                <div class="team-row"></div>
+                <div class="team-row"></div>
+            </div>
+
+        </div>
+        <div id="battle-log-container">
+            <button id="toggle-log">Hide Log</button>
+            <div id="battle-log"></div>
+        </div>
     </div>
-    </img>
-    <button id="start-button">Start Battle</button>
     <div id="iconContainer">
         <div class="iconRow upperRow">
             <div class="iconGroup">
                 <div  class="icon">
-                    <img id="skill1" src ="default.png">
+                    <img id="skill1" src ="Meida/UI/defaultSkill.jpeg">
                 </div>
                 <div id="skill2" class="icon"></div>
                 <div id="skill3" class="icon"></div>

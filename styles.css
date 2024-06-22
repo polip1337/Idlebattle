@@ -1,620 +1,529 @@
 /* Container for the entire team */
-.team {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0;
-}
-
-/* Container for each member */
-.member {
-    border: 1px solid #000;
-    padding: 10px;
-    margin: 10px;
-    width: 150px;
-    height: 400px; /* Set a fixed height for each member */
-
-    background-color: #f4f4f4;
-    text-align: center;
-    position: relative;
-}
-
-/* Health bar */
-.health-bar {
-    background-color: red;
-    height: 20px;
-    width: 100%;
-    margin: 5px 0;
-}
-
-/* Mana bar */
-.mana-bar {
-    background-color: blue;
-    height: 20px;
-    width: 100%;
-    margin: 5px 0;
-}
-
-/* Attack charge bar */
-.attack-bar {
-    background-color: green;
-    height: 20px;
-    width: 100%;
-    margin: 5px 0;
-}
-
-/* Container for buffs */
-.effects {
-    margin: 5px 0;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-/* Buff icon */
-.buff {
-    display: inline-block;
-    margin: 2px;
-    padding: 2px;
-    border: 1px solid green;
-    background-color: #e0ffe0;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
-}
-
-/* Debuff icon */
-.debuff {
-    display: inline-block;
-    margin: 2px;
-    padding: 2px;
-    border: 1px solid red;
-    background-color: #ffe0e0;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
+ .team {
+     display: flex;
+     justify-content: space-around;
+     margin: 20px 0;
+     flex-direction: column;
 }
 
 /* Name and class type */
-.name {
-    font-weight: bold;
+ .name {
+     font-weight: bold;
 }
-
 /* Status message */
-.status {
-    margin-top: 10px;
-    font-style: italic;
+ .status {
+     margin-top: 10px;
+     font-style: italic;
 }
-
 /* Stats display */
-.stats {
-    margin-top: 10px;
-    font-size: 12px;
-    text-align: left;
+ .stats {
+     margin-top: 10px;
+     font-size: 12px;
+     text-align: left;
 }
-
 /* Divider between teams */
-.team-divider {
-    border-top: 2px solid #000;
-    margin: 20px 0;
+ .team-divider {
+     border-top: 2px solid #000;
+     margin: 20px 0;
 }
 
-.buff:hover .tooltip {
-  display: block; /* Display tooltip on hover */
+ .tabcontent {
+     display: none;
 }
 
-.debuff:hover .tooltip {
-  display: block; /* Display tooltip on hover */
+ .tabcontent.active {
+     display: block;
 }
-
-.tabcontent {
-  display: none;
-}
-.memberPortrait {
-width:100%}
-.tabcontent.active {
-  display: block;
-}
-
 /* Add styling for tabs */
-#tabs {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+ #tabs {
+     overflow: hidden;
+     border: 1px solid #ccc;
+     background-color: #f1f1f1;
 }
-
-.tablinks {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
+ .tablinks {
+     background-color: inherit;
+     float: left;
+     border: none;
+     outline: none;
+     cursor: pointer;
+     padding: 14px 16px;
+     transition: 0.3s;
 }
-
-.tablinks:hover {
-  background-color: #ddd;
+ .tablinks:hover {
+     background-color: #ddd;
 }
-.iconRow {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+ .iconRow {
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
 }
-
-.upperRow {
-  transform: scale(0.85); /* Make upper row 15% smaller */
+ .upperRow {
+     transform: scale(0.85);
+    /* Make upper row 15% smaller */
 }
-
 /* Add styling for icons */
-.icon {
-  width: 50px;
-  height: 50px;
-  background-color: #ccc; /* Placeholder background color */
-  /* Add more styling as needed */
+ .icon {
+     width: 50px;
+     height: 50px;
+     background-color: #ccc;
+    /* Placeholder background color */
+    /* Add more styling as needed */
 }
-.icon img{
-  width: 50px;
-  height: 50px;
-  background-color: #ccc; /* Placeholder background color */
-  /* Add more styling as needed */
+ .icon img{
+     width: 50px;
+     height: 50px;
+     background-color: #ccc;
+    /* Placeholder background color */
+    /* Add more styling as needed */
 }
-.checkBox {
-  width: 20px;
-  height: 20px;
-  background-color: #00ff00; /* Green color for checkmark icon */
-  /* Add more styling as needed */
+ .checkBox {
+     width: 20px;
+     height: 20px;
+     background-color: #00ff00;
+    /* Green color for checkmark icon */
+    /* Add more styling as needed */
 }
-.iconGroup {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+ .iconGroup {
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
 }
-#heroContent {
-  background-color: #3a3a3a;
-  padding: 20px;
-  border: 2px solid #555;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+ #heroContent {
+     background-color: #3a3a3a;
+     padding: 20px;
+     border: 2px solid #555;
+     border-radius: 10px;
+     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
-
-#heroInfoRow {
-  display: flex;
-  background-color: #4a4a4a;
-  padding: 20px;
-  border: 2px solid #666;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+ #heroInfoRow {
+     display: flex;
+     background-color: #4a4a4a;
+     padding: 20px;
+     border: 2px solid #666;
+     border-radius: 10px;
+     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
-
-#heroPortrait {
-  flex: 0 0 150px;
-  margin-right: 20px;
+ #heroPortrait {
+     flex: 0 0 150px;
+     margin-right: 20px;
 }
-
-
-#heroDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
+ #heroDetails {
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+     width: 100%;
 }
-
-#heroClassesAndStats {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  background-color: #5a5a5a;
-  padding: 5px;
-  border: 2px solid #777;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+ #heroClassesAndStats {
+     display: flex;
+     flex-direction: row;
+     gap: 20px;
+     background-color: #5a5a5a;
+     padding: 5px;
+     border: 2px solid #777;
+     border-radius: 10px;
+     box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-
-#heroClasses {
-  flex: 1;
+ #heroClasses {
+     flex: 1;
 }
-
-#heroStats {
-  flex: 2;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 10px;
-  justify-content: center;
+ #heroStats {
+     flex: 2;
+     display: grid;
+     grid-template-columns: repeat(4, 1fr);
+     grid-template-rows: repeat(2, auto);
+     gap: 10px;
+     justify-content: center;
 }
-
-.skill {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center skill names */
-  gap: 5px;
-  margin: 5px 0; /* Increase space between skills */
-  width: calc(100% / 5) - 20px);
-  background-color: #444;
-  border: 2px solid #777;
-  border-radius: 5px;
-  padding: 5px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+ .skill {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+    /* Center skill names */
+     gap: 5px;
+     margin: 5px 0;
+    /* Increase space between skills */
+     width: calc(100% / 5) - 20px);
+     background-color: #444;
+     border: 2px solid #777;
+     border-radius: 5px;
+     padding: 5px;
+     box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-
-.progressBar {
-  width: 100%;
-  background-color: #777;
-  border-radius: 5px;
-  overflow: hidden;
-      margin-top: 5px;
+ .progressBar {
+     width: 100%;
+     background-color: #777;
+     border-radius: 5px;
+     overflow: hidden;
+     margin-top: 5px;
 }
-
-.progress {
-  height: 10px;
-  background-color: #00ff00;
+ .progress {
+     height: 10px;
+     background-color: #00ff00;
 }
-
-#heroSkills {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background-color: #5a5a5a;
-  padding: 5px;
-  border: 2px solid #777;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+ #heroSkills {
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+     background-color: #5a5a5a;
+     padding: 5px;
+     border: 2px solid #777;
+     border-radius: 10px;
+     box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-
-#activeSkills, #passiveSkills {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 5px; /* Increase gap between skills */
+ #activeSkills, #passiveSkills {
+     display: grid;
+     grid-template-columns: repeat(5, 1fr);
+     grid-template-rows: repeat(2, auto);
+     gap: 5px;
+    /* Increase gap between skills */
 }
-
-#inventory {
-  margin-top: 20px;
-
+ #inventory {
+     margin-top: 20px;
 }
-
-#inventory h2 {
-  text-align: center;
-  margin-bottom: 20px;
+ #inventory h2 {
+     text-align: center;
+     margin-bottom: 20px;
 }
-
-.iconGrid {
-  display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(2, auto);
-      gap: 10px; /* Increase gap between skills */
+ .iconGrid {
+     display: grid;
+     grid-template-columns: repeat(5, 1fr);
+     grid-template-rows: repeat(2, auto);
+     gap: 10px;
+    /* Increase gap between skills */
 }
-
-.inventorySlot {
-  width: 50px;
-  height: 50px;
-  background-color: #606060;
-  border: 2px solid #888;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+ .inventorySlot {
+     width: 50px;
+     height: 50px;
+     background-color: #606060;
+     border: 2px solid #888;
+     border-radius: 5px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-
-.inventorySlot:hover {
-  background-color: #777;
+ .inventorySlot:hover {
+     background-color: #777;
 }
-#heroClassesAndStats h2 {
-  margin-top: 0;
-  border-bottom: 1px solid #777;
-  padding-bottom: 5px;
+ #heroClassesAndStats h2 {
+     margin-top: 0;
+     border-bottom: 1px solid #777;
+     padding-bottom: 5px;
 }
-#heroSkills h2 {
-  margin-top: 0;
-  border-bottom: 1px solid #777;
-  padding-bottom: 5px;
+ #heroSkills h2 {
+     margin-top: 0;
+     border-bottom: 1px solid #777;
+     padding-bottom: 5px;
 }
-#heroStats h2 {
-  grid-column: span 4;
-  margin: 0;
-  padding-bottom: 5px;
+ #heroStats h2 {
+     grid-column: span 4;
+     margin: 0;
+     padding-bottom: 5px;
 }
-
  #heroPortrait img {
-   width: 150px;
-   height: 150px;
-   border: 2px solid #777;
-   border-radius: 10px;
-   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
- }
-
+     width: 150px;
+     height: 150px;
+     border: 2px solid #777;
+     border-radius: 10px;
+     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
  #paperDoll {
-   display: grid;
-   grid-template-columns: repeat(3, 1fr);
-   grid-template-rows: repeat(4, 1fr);
-   gap: 10px;
-   padding: 10px;
-   background-color: #444;
-   border: 2px solid #777;
-   border-radius: 10px;
-   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
- }
-
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     grid-template-rows: repeat(4, 1fr);
+     gap: 10px;
+     padding: 10px;
+     background-color: #444;
+     border: 2px solid #777;
+     border-radius: 10px;
+     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
  .slot {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   width: 60px;
-   height: 60px;
-   background-color: #555;
-   border: 2px solid #777;
-   border-radius: 5px;
-   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-   text-align: center;
-   color: #fff;
-   font-size: 12px;
- }
-
- #helmetSlot { grid-area: 1 / 2 / 2 / 3; }
- #cloakSlot { grid-area: 1 / 3 / 2 / 4; }
- #amuletSlot { grid-area: 1 / 1 / 2 / 2; }
- #weaponSlot { grid-area: 2 / 1 / 3 / 2; }
- #chestArmorSlot { grid-area: 2 / 2 / 3 / 3; }
- #shieldSlot { grid-area: 2 / 3 / 3 / 4; }
- #legArmorSlot { grid-area: 3 / 2 / 4 / 3; }
- #glovesSlot { grid-area: 4 / 1 / 4 / 2; }
- #bootsSlot { grid-area: 4 / 2 / 4 / 4; }
- #ringSlot { grid-area: 4 / 3 / 5 / 3; }
-
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width: 60px;
+     height: 60px;
+     background-color: #555;
+     border: 2px solid #777;
+     border-radius: 5px;
+     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+     text-align: center;
+     color: #fff;
+     font-size: 12px;
+}
+ #helmetSlot {
+     grid-area: 1 / 2 / 2 / 3;
+}
+ #cloakSlot {
+     grid-area: 1 / 3 / 2 / 4;
+}
+ #amuletSlot {
+     grid-area: 1 / 1 / 2 / 2;
+}
+ #weaponSlot {
+     grid-area: 2 / 1 / 3 / 2;
+}
+ #chestArmorSlot {
+     grid-area: 2 / 2 / 3 / 3;
+}
+ #shieldSlot {
+     grid-area: 2 / 3 / 3 / 4;
+}
+ #legArmorSlot {
+     grid-area: 3 / 2 / 4 / 3;
+}
+ #glovesSlot {
+     grid-area: 4 / 1 / 4 / 2;
+}
+ #bootsSlot {
+     grid-area: 4 / 2 / 4 / 4;
+}
+ #ringSlot {
+     grid-area: 4 / 3 / 5 / 3;
+}
  .slot:hover {
-   background-color: #666;
- }
-
+     background-color: #666;
+}
  .statGrid {
-   display: grid;
-   grid-template-columns: 1fr 1fr;
-   gap: 10px;
- }
-#heroPortraitAndPaperDoll {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding:5px;
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 10px;
 }
-.class-container,
-.stats-container {
-    margin-top: 10px;
+ #heroPortraitAndPaperDoll {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 10px;
+     padding:5px;
 }
-.skills-container {
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    padding-right: 20px;
-    border-right: 1px solid #ddd;
+ .class-container, .stats-container {
+     margin-top: 10px;
 }
-
-.active-skills,
-.passive-skills {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-    margin-top: 10px;
+ .skills-container {
+     display: flex;
+     flex-direction: column;
+     width: 40%;
+     padding-right: 20px;
+     border-right: 1px solid #ddd;
 }
-
-.skill-box {
-    padding: 3px;
-    text-align: center;
-    cursor: pointer;
-    position: relative;
-      background-color: #444;
-      border: 2px solid #777;
-      border-radius: 5px;
-      padding: 5px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+ .active-skills, .passive-skills {
+     display: grid;
+     grid-template-columns: repeat(5, 1fr);
+     gap: 5px;
+     margin-top: 10px;
 }
-
-.skill-box img {
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
+ .skill-box {
+     padding: 3px;
+     text-align: center;
+     cursor: pointer;
+     position: relative;
+     background-color: #444;
+     border: 2px solid #777;
+     border-radius: 5px;
+     padding: 5px;
+     box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-
-.skill-box.selected {
-    border-color: green;
+ .skill-box img {
+     width: 30px;
+     height: 30px;
+     margin-right: 5px;
 }
-
-#hexGrid {
-   display: grid;
-   grid-gap:2px;
-   grid-template-columns: repeat(16,1fr);
-   width: 60%;
-   margin: 0 auto;
-   font-family: 'Raleway', sans-serif;
-   font-size: 15px;
-   list-style-type: none;
-   overflow:hidden;
- }
-
+ .skill-box.selected {
+     border-color: green;
+}
+ #hexGrid {
+     display: grid;
+     grid-gap:2px;
+     grid-template-columns: repeat(16,1fr);
+     width: 60%;
+     margin: 0 auto;
+     font-family: 'Raleway', sans-serif;
+     font-size: 15px;
+     list-style-type: none;
+     overflow:hidden;
+}
  .hex {
-   grid-column-end: span 2;
-   position: relative;
-   visibility:hidden;
-   outline:1px solid transparent; /* fix for jagged edges in FF on hover transition */
- }
+     grid-column-end: span 2;
+     position: relative;
+     visibility:hidden;
+     outline:1px solid transparent;
+    /* fix for jagged edges in FF on hover transition */
+}
  .hex::after{
-   content:'';
-   display:block;
-   padding-bottom: 86.602%;  /* =  100 / tan(60) * 1.5 */
- }
+     content:'';
+     display:block;
+     padding-bottom: 86.602%;
+    /* = 100 / tan(60) * 1.5 */
+}
  .hexIn{
-   position: absolute;
-   width:100%;
-   padding-bottom: 115.470%; /* =  width / sin(60) */
-   overflow: hidden;
-   visibility: hidden;
-   outline:1px solid transparent; /* fix for jagged edges in FF on hover transition */
-   -webkit-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
-       -ms-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
-           transform: rotate3d(0,0,1,-60deg) skewY(30deg);
- }
+     position: absolute;
+     width:100%;
+     padding-bottom: 115.470%;
+    /* = width / sin(60) */
+     overflow: hidden;
+     visibility: hidden;
+     outline:1px solid transparent;
+    /* fix for jagged edges in FF on hover transition */
+     -webkit-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
+     -ms-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
+     transform: rotate3d(0,0,1,-60deg) skewY(30deg);
+}
  .hexIn * {
-   position: absolute;
-   visibility: visible;
-   outline:1px solid transparent; /* fix for jagged edges in FF on hover transition */
- }
+     position: absolute;
+     visibility: visible;
+     outline:1px solid transparent;
+    /* fix for jagged edges in FF on hover transition */
+}
  .hexLink {
-   display:block;
-   width: 100%;
-   height: 100%;
-   text-align: center;
-   color: #fff;
-   overflow: hidden;
-   -webkit-transform: skewY(-30deg) rotate3d(0,0,1,60deg);
-       -ms-transform: skewY(-30deg) rotate3d(0,0,1,60deg);
-           transform: skewY(-30deg) rotate3d(0,0,1,60deg);
- }
-
- /*** HEX CONTENT **********************************************************************/
+     display:block;
+     width: 100%;
+     height: 100%;
+     text-align: center;
+     color: #fff;
+     overflow: hidden;
+     -webkit-transform: skewY(-30deg) rotate3d(0,0,1,60deg);
+     -ms-transform: skewY(-30deg) rotate3d(0,0,1,60deg);
+     transform: skewY(-30deg) rotate3d(0,0,1,60deg);
+}
+/*** HEX CONTENT **********************************************************************/
  .hex img {
-   left: -100%;
-   right: -100%;
-   width: auto;
-   height: 100%;
-   margin: 0 auto;
-   -webkit-transform: rotate3d(0,0,0,0deg);
-       -ms-transform: rotate3d(0,0,0,0deg);
-           transform: rotate3d(0,0,0,0deg);
- }
-
+     left: -100%;
+     right: -100%;
+     width: auto;
+     height: 100%;
+     margin: 0 auto;
+     -webkit-transform: rotate3d(0,0,0,0deg);
+     -ms-transform: rotate3d(0,0,0,0deg);
+     transform: rotate3d(0,0,0,0deg);
+}
  .hex h1, .hex p {
-   width: 100%;
-   padding: 5%;
-   box-sizing:border-box;
-   background-color: rgba(0, 128, 128, 0.8);
-   font-weight: 300;
-   -webkit-transition:  -webkit-transform .2s ease-out, opacity .3s ease-out;
-           transition:          transform .2s ease-out, opacity .3s ease-out;
- }
+     width: 100%;
+     padding: 5%;
+     box-sizing:border-box;
+     background-color: rgba(0, 128, 128, 0.8);
+     font-weight: 300;
+     -webkit-transition: -webkit-transform .2s ease-out, opacity .3s ease-out;
+     transition: transform .2s ease-out, opacity .3s ease-out;
+}
  .hex h1 {
-   bottom: 50%;
-   padding-top:50%;
-   font-size: 1.5em;
-   z-index: 1;
-   -webkit-transform:translate3d(0,-100%,0);
-       -ms-transform:translate3d(0,-100%,0);
-           transform:translate3d(0,-100%,0);
- }
+     bottom: 50%;
+     padding-top:50%;
+     font-size: 1.5em;
+     z-index: 1;
+     -webkit-transform:translate3d(0,-100%,0);
+     -ms-transform:translate3d(0,-100%,0);
+     transform:translate3d(0,-100%,0);
+}
  .hex h1::after {
-   content: '';
-   position: absolute;
-   bottom: 0;
-   left: 45%;
-   width: 10%;
-   text-align: center;
-   border-bottom: 1px solid #fff;
- }
+     content: '';
+     position: absolute;
+     bottom: 0;
+     left: 45%;
+     width: 10%;
+     text-align: center;
+     border-bottom: 1px solid #fff;
+}
  .hex p {
-   top: 50%;
-   padding-bottom:50%;
-   -webkit-transform:translate3d(0,100%,0);
-       -ms-transform:translate3d(0,100%,0);
-           transform:translate3d(0,100%,0);
- }
-
-
- /*** HOVER EFFECT  **********************************************************************/
- .hexLink:hover h1, .hexLink:focus h1,
- .hexLink:hover p, .hexLink:focus p{
-   -webkit-transform:translate3d(0,0,0);
-       -ms-transform:translate3d(0,0,0);
-           transform:translate3d(0,0,0);
- }
-
- /*** HEXAGON SIZING AND EVEN ROW INDENTATION *****************************************************************/
-
- @media (min-width:1201px) { /* <- 5-4  hexagons per row */
-   #hexGrid{
-     padding-bottom: 4.4%;
-   }
-   .hex:nth-child(15n+9){ /* first hexagon of even rows */
-     grid-column-start: 2;
-   }
- }
-
- @media (max-width: 1200px) and (min-width:901px) { /* <- 4-3  hexagons per row */
-   #hexGrid{
-     grid-template-columns: repeat(8,1fr);
-     padding-bottom: 5.5%;
-   }
-   .hex:nth-child(7n+5){ /* first hexagon of even rows */
-     grid-column-start: 2;
-   }
- }
-
- @media (max-width: 900px) and (min-width:601px) { /* <- 3-2  hexagons per row */
-   #hexGrid{
-     grid-template-columns: repeat(6,1fr);
-     padding-bottom: 7.4%;
-   }
-   .hex:nth-child(5n+4){ /* first hexagon of even rows */
-     grid-column-start: 2;
-   }
- }
-
- @media (max-width: 600px) { /* <- 2-1  hexagons per row */
- #hexGrid{
-   grid-template-columns: repeat(4,1fr);
-   padding-bottom: 11.2%;
-   grid-gap:5px;
- }
- .hex:nth-child(3n+3){ /* first hexagon of even rows */
-   grid-column-start: 2;
- }
- }
-
+     top: 50%;
+     padding-bottom:50%;
+     -webkit-transform:translate3d(0,100%,0);
+     -ms-transform:translate3d(0,100%,0);
+     transform:translate3d(0,100%,0);
+}
+/*** HOVER EFFECT **********************************************************************/
+ .hexLink:hover h1, .hexLink:focus h1, .hexLink:hover p, .hexLink:focus p{
+     -webkit-transform:translate3d(0,0,0);
+     -ms-transform:translate3d(0,0,0);
+     transform:translate3d(0,0,0);
+}
+/*** HEXAGON SIZING AND EVEN ROW INDENTATION *****************************************************************/
+ @media (min-width:1201px) {
+    /* <- 5-4 hexagons per row */
+     #hexGrid{
+         padding-bottom: 4.4%;
+    }
+     .hex:nth-child(15n+9){
+        /* first hexagon of even rows */
+         grid-column-start: 2;
+    }
+}
+ @media (max-width: 1200px) and (min-width:901px) {
+    /* <- 4-3 hexagons per row */
+     #hexGrid{
+         grid-template-columns: repeat(8,1fr);
+         padding-bottom: 5.5%;
+    }
+     .hex:nth-child(7n+5){
+        /* first hexagon of even rows */
+         grid-column-start: 2;
+    }
+}
+ @media (max-width: 900px) and (min-width:601px) {
+    /* <- 3-2 hexagons per row */
+     #hexGrid{
+         grid-template-columns: repeat(6,1fr);
+         padding-bottom: 7.4%;
+    }
+     .hex:nth-child(5n+4){
+        /* first hexagon of even rows */
+         grid-column-start: 2;
+    }
+}
+ @media (max-width: 600px) {
+    /* <- 2-1 hexagons per row */
+     #hexGrid{
+         grid-template-columns: repeat(4,1fr);
+         padding-bottom: 11.2%;
+         grid-gap:5px;
+    }
+     .hex:nth-child(3n+3){
+        /* first hexagon of even rows */
+         grid-column-start: 2;
+    }
+}
  @media (max-width: 400px) {
-   #hexGrid {
-       font-size: 13px;
-   }
- }
-
+     #hexGrid {
+         font-size: 13px;
+    }
+}
  .library-container {
      display: flex;
      width: 80%;
      height: 70%;
      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
- }
-
+}
  .topic-list {
      width: 30%;
      background-color: #fff;
      border-right: 1px solid #ddd;
      overflow-y: auto;
      padding: 10px;
- }
-
+}
  .topic-list ul {
      list-style: none;
      padding: 0;
      margin: 0;
- }
-
+}
  .topic-list li {
      padding: 10px;
      cursor: pointer;
      border-bottom: 1px solid #ddd;
- }
-
+}
  .topic-list li:hover, .topic-list li.active {
      background-color: #f0f0f0;
- }
-
+}
  .expandable {
      cursor: pointer;
      display: inline-block;
      padding: 10px;
- }
+}
+ #teamContainer{
+     width:80%
+}
+ #teamAndBattleContainer{
+     display:flex;
+}
  .battle-view {
      background: url('Media/bg2.jpg') no-repeat center center;
      background-size: cover;
@@ -622,49 +531,35 @@ width:100%}
      border: 2px solid #444;
      border-radius: 10px;
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
- }
- .member .icon-container {
-     margin-top: 10px;
- }
+}
 
-  .member .icon-row {
-     display: flex;
-     justify-content: center;
-     margin-bottom: 5px;
- }
-
-  .member .icon {
-     width: 45px;
-     height: 45px;
-     background-color: #666;
-     margin: 2px;
-     border-radius: 5px;
-     border: 1px solid #888;
- }
-.iconDiv {
-position:relative
+ .iconDiv {
+     position:relative
 }
  .iconDiv .tooltip {
-       visibility: hidden;
-      position:absolute;
-      width: 160px;
-      background-color: #fff;
-      color: #000;
-      text-align: left;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #888;
-      position: absolute;
-      z-index: 1;
-        left:30px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  }
+     visibility: hidden;
+     position:absolute;
+     width: 160px;
+     background-color: #fff;
+     color: #000;
+     text-align: left;
+     padding: 5px;
+     border-radius: 5px;
+     border: 1px solid #888;
+     position: absolute;
+     z-index: 1;
+     left:30px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
 
- .member .iconDiv:hover .tooltip {
-      visibility: visible;
-      width:200px;
-  }
-  .member iconDiv:hover .icon {
-        visibility: visible;
-        width:200px;
-    }
+.teamContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.team-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}

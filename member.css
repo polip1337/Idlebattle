@@ -1,0 +1,158 @@
+/* Container for each member */
+.member {
+    border: 1px solid #000;
+    padding: 10px;
+    margin: 10px;
+    width: 300px;
+    height: 200px;
+    background-color: #f4f4f4;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Change to row */
+    align-items: center;
+}
+
+/* Member portrait */
+.memberPortrait {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 10px; /* Add margin to the right */
+    border: 2px solid #ccc;
+}
+
+/* Container for details (bars and skills) */
+.details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+    width: 100%;
+}
+
+/* Health bar */
+.health-bar {
+    background-color: red;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* Mana bar */
+.mana-bar {
+    background-color: blue;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* Stamina bar */
+.stamina-bar {
+    background-color: yellow;
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* Container for buffs */
+.effects {
+    margin: 5px 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Buff icon */
+.buff {
+    display: inline-block;
+    margin: 2px;
+    padding: 2px;
+    border: 1px solid green;
+    background-color: #e0ffe0;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+}
+
+/* Debuff icon */
+.debuff {
+    display: inline-block;
+    margin: 2px;
+    padding: 2px;
+    border: 1px solid red;
+    background-color: #ffe0e0;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+}
+
+.buff:hover .tooltip,
+.debuff:hover .tooltip {
+    display: block;
+    /* Display tooltip on hover */
+}
+
+/* Tooltip styling */
+.tooltip {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the icon */
+    left: 50%;
+    margin-left: -60px;
+    width: 120px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+.iconDiv:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+    margin-right: 10px; /* Add margin to the right */
+}
+.portrait-details-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Align items to the start */
+}
+.iconDiv {
+    position: relative;
+    margin: 5px;
+}
+
+.icon {
+    width: 45px;
+    height: 45px;
+    background-color: #666;
+    border-radius: 5px;
+    border: 1px solid #888;
+}
+.icon-row{
+display:flex;
+flex-direction:row}

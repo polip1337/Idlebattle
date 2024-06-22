@@ -1,6 +1,7 @@
 {
   "MantisFireMage": {
     "portrait": "Media/Mantis/FireMage.jpg",
+    "position":["Back,Any"],
     "skills": [
       {
         "name": "Fireball",
