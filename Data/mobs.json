@@ -74,6 +74,7 @@
         "targetingModes": ["Self"],
         "icon": "Media/Skills/Resistance/fireRes.jpg"
       }
+
     ],
     "stats": {
       "strength": 15,
