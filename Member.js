@@ -1,11 +1,14 @@
 import { startBattle, createRandomMembers } from './Battle.js';
-import { updateHealth, updateMana, updateAttackBar,updateStatus } from './Render.js';
+import { updateHealth, updateMana,updateStamina } from './Render.js';
 import { isPaused } from './Main.js';
+import { selectTarget } from './Targeting.js';
 import EffectClass from './EffectClass.js';
+import Skill from './Skill.js';
+import {battleLog} from './Main.js';
 
 
 class Member {
-constructor(name, classType,classInfo, memberId, team,opposingTeam) {
+constructor(name, classType,classInfo, memberId, team,opposingTeam, position) {
         this.name = name;
         this.classType = classType;
         this.class = classInfo;
@@ -14,8 +17,9 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
         this.level = 1;
         this.experience = 0;
         this.stats = classInfo.stats;
-        this.skills = classInfo.skills;
-
+        this.skills = this.createSkills(classInfo.skills);
+        this.positions = classInfo.positions;
+        this.position = position;
         this.resistances = classInfo.resistances;
         this.armor = classInfo.armor;
         this.blockChance = classInfo.blockChance;
@@ -23,6 +27,7 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
         this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
         this.currentMana = this.stats.mana;
+        this.currentStamina = this.stats.vitality * 10;
         this.memberId = memberId;
         this.attackCharge = 0;
 
@@ -51,10 +56,6 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
         this.dragStartHandler = this.dragStartHandler.bind(this);
         this.dragOverHandler = this.dragOverHandler.bind(this);
         this.dropHandler = this.dropHandler.bind(this);
-        this.effectsElement = document.createElement('div');
-        this.effectsElement.className = 'effects';
-
-
     }
 
     initializeDOMElements() {
@@ -116,7 +117,13 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
         // Check if both member and target belong to the same team
         return parentOfMember === parentOfTarget;
     }
-
+    createSkills(skills) {
+        return skills.map(skillData => {
+            const skill = new Skill(skillData.name,skillData.type, skillData.icon, skillData.description, skillData.damage,
+             skillData.manaCost, skillData.staminaCost, skillData.cooldown, skillData.damageType, skillData.targetingModes, skillData.effect);
+            return skill;
+        });
+    }
     chargeAttack() {
             if(this.currentHealth >0)
             this.chargeInterval = setInterval(() => {
@@ -126,18 +133,16 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
                 if (this.attackCharge >= 100) {
                     clearInterval(this.chargeInterval);
                     this.attackCharge = 0;
-                    updateAttackBar(this);
                     const skill = this.selectSkill();
                     const target = this.selectTarget(skill);
                     this.performAttack(target,skill);
                 }
-                updateAttackBar(this);
             }, 50);
 
     }
     calculateHitChance(defender) {
     const hitChance = this.calculateAccuracy() - defender.calculateDodge();
-    return Math.random() * 100 < hitChance;
+    return true;
     }
 
     calculateAccuracy() {
@@ -147,59 +152,29 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
       calculateDodge() {
         return (this.stats.dexterity * 0.4) + (this.stats.speed * 0.6) + this.stats.dodge;
       }
-    selectSkill(){
-       // Filter out skills that are affordable
-         const affordableSkills = this.skills.filter(skill => skill.manaCost <= this.currentMana);
-
-         // If there are no affordable skills, return null
-         if (affordableSkills.length === 0) {
-           return null;
-         }
-
-         // Randomly choose one of the affordable skills
-         const randomIndex = Math.floor(Math.random() * affordableSkills.length);
-         return affordableSkills[randomIndex];
-    }
-
-    selectTarget(skill){
-        if(skill.effect){
-            if(skill.effect.type =='buff'){
-                    return this.team.getFirstAliveMember();
-            }
-        }
-
-            return this.opposingTeam.getFirstAliveMember();
-
-    }
 
     performAttack(target, skill) {
         if (this.calculateHitChance(target)) {
 
-            var damage = 0;
-            if(skill == null){
-            damage = this.stats.strength * 2;
-            updateStatus(this,'Not enough mana for skills');
-            } else {
-                if (skill.effect) {
-                    new EffectClass(target ,skill.effect);
-                }
-                this.currentMana -= skill.manaCost;
-                updateMana(this);
-                updateStatus(this, `Used ${skill.name} on ${target.name}`);
-                const damage = selectedSkill.calculateDamage(this);
-                const finalDamage = target.calculateFinalDamage(damage, selectedSkill.damageType);
-                skill.gainExperience(finalDamage);
+
+            if (skill.effect) {
+                new EffectClass(target ,skill.effect);
             }
+            this.currentMana -= skill.manaCost;
+            updateMana(this);
+            battleLog.log(this.name + ` Used ${skill.name} on ${target.name}`);
+            const damage = skill.calculateDamage(this);
+            const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
+            skill.gainExperience(finalDamage);
+
             // Apply damage to the target
-            target.receiveDamage(damage);
+            target.takeDamage(finalDamage);
         }
-            // Start charging next attack
-            this.chargeAttack();
     }
     calculateFinalDamage(damage, damageType){
         damage = this.applyBlock(damage);
         damage = this.applyArmor(damage);
-        damage = this.applyResistance(damage, selectedSkill.damageType);
+        damage = this.applyResistance(damage, damageType);
         return Math.floor(damage);
     }
     applyBlock(damage) {
@@ -217,11 +192,11 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
         const reducedDamage = damage * (1 - resistance / 100);
         return reducedDamage;
     }
-    receiveDamage(damage) {
-    this.currentHealth -= damage;
-    if (this.currentHealth < 0) this.currentHealth = 0;
-    this.updateHealth();
-  }
+    takeDamage(damage) {
+        this.currentHealth -= damage;
+        if (this.currentHealth < 0) this.currentHealth = 0;
+        updateHealth(this); // Update the overlay to reflect new health
+    }
     useSkill(opponent) {
         const damage = this.stats.magicPower * 3;
         opponent.currentHealth = Math.max(0, opponent.currentHealth - damage);
@@ -263,7 +238,21 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam) {
 
     }
 
+    handleRegeneration() {
+        if (this.currentHealth <= 0) return; // Do not regenerate if the member is defeated
 
+        // Regenerate mana
+        this.currentMana = Math.min(this.stats.mana, this.currentMana + this.stats.manaRegen);
+        updateMana(this);
+
+        // Regenerate stamina
+        this.currentStamina = Math.min(this.stats.stamina, this.currentStamina + Math.floor(0.1 * this.stats.vitality));
+        updateStamina(this);
+
+        // Regenerate health
+        this.currentHealth = Math.min(this.maxHealth, this.currentHealth + (0.01 * this.stats.vitality).toFixed(2));
+        updateHealth(this);
+    }
 
 
 }

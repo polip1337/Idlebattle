@@ -1,9 +1,13 @@
 {
   "MantisFireMage": {
     "portrait": "Media/Mobs/Mantis/FireMage.jpg",
-    "position": [
+    "positions": [
       "Back,Any"
     ],
+    "armor": 5,
+    "resistances":{
+
+    },
     "skills": [
       {
         "name": "Fireball",
@@ -98,6 +102,7 @@
       "magicPower": 5,
       "mana": 30,
       "manaRegen": 2,
+      "dodge": 5,
       "magicControl": 5
     },
     "statsPerLevel": {
@@ -108,11 +113,19 @@
       "magicPower": 1,
       "mana": 5,
       "manaRegen": 1,
+      "dodge": 1,
       "magicControl": 1
     }
   },
   "GoblinArcher": {
     "portrait": "Media/Mobs/Goblin/Archer.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "resistances":{
+
+    },
+    "armor": 2,
     "skills": [
       {
         "name": "Poisoned Arrow",
@@ -200,7 +213,7 @@
       "mana": 25,
       "manaRegen": 1,
       "physicalDamage": 20,
-      "dodgeChance": 5,
+      "dodge": 5,
       "attackSpeed": 1.5
     },
     "statsPerLevel": {
@@ -212,13 +225,20 @@
       "mana": 5,
       "manaRegen": 0.5,
       "physicalDamage": 3,
-      "dodgeChance": 1,
+      "dodge": 1,
       "attackSpeed": 0.1
     }
   },
 
   "GoblinHealer": {
     "portrait": "Media/Mobs/Goblin/Healer.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 1,
+    "resistances":{
+
+    },
     "skills": [
       {
         "name": "Healing Touch",
@@ -301,6 +321,7 @@
       "magicPower": 15,
       "mana": 35,
       "manaRegen": 2,
+      "dodge": 5,
       "healingPower": 25
     },
     "statsPerLevel": {
@@ -311,6 +332,7 @@
       "magicPower": 5,
       "mana": 5,
       "manaRegen": 1,
+      "dodge": 1,
       "healingPower": 4
     }
   }

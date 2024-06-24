@@ -4,28 +4,26 @@ import {
 import {
     updateHealth,
     updateMana,
-    updateAttackBar,
-    updateStatus,
 } from './Render.js';
 
 class EffectClass {
     constructor(target, effect) {
         this.effect = effect;
-        this.target = target;
+        this.member = target;
         this.originalValue = 0;
-        this.applyEffect(); // Apply the effect immediately
-        updateStatus(target);
+        this.applyEffect(effect); // Apply the effect immediately
+        this.renderBuff();
         this.startTimer();
     }
 
     renderBuff(){
         this.element = document.createElement('div');
-        this.element.classList.add(effect.type);
+        this.element.classList.add(this.effect.type);
         this.tooltip = document.createElement('div'); // Create tooltip element
         this.tooltip.classList.add('tooltip'); // Add tooltip class
         this.element.appendChild(this.tooltip);
-        target.effectsElement.appendChild(this.element);
-    }
+        document.querySelector(`#${this.member.memberId} .effects`).appendChild(this.element);
+        }
 
     startTimer() {
         this.timer = setTimeout(() => {
@@ -34,8 +32,11 @@ class EffectClass {
         this.updateTooltip(); // Update tooltip initially
     }
 
-    applyEffect() {
-        switch (this.effect.type) {
+    applyEffect(effect) {
+        switch (this.effect.subType) {
+            case 'Armor':
+                this.member.armor += effect.value; // Custom property to handle barrier status
+            break;
             case 'Barrier':
                 this.member.barrier = this.value; // Custom property to handle barrier status
                 break;
@@ -156,8 +157,7 @@ class EffectClass {
             default:
                 console.log(`${this.effectType} effect not implemented yet.`);
         }
-        this.member.updateHealth();
-        this.updateTooltip();
+        updateHealth(this.member);
     }
 
     createDamageOverTimeInterval(value) {
@@ -175,8 +175,11 @@ class EffectClass {
     }
     reduceStatsByFlatValue(stat, value) {
         this.member.stats[stat] -= this.value;
-
     }
+    increaseStatsByFlatValue(stat, value) {
+        this.member.stats[stat] -= this.value;
+    }
+
     revertEffect() {
         switch (this.effectType) {
             case 'Barrier':

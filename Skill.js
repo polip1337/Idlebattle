@@ -1,19 +1,25 @@
 class Skill {
-  constructor(name, baseDamage, manaCost, damageType, effectType = null, effectValue = 0) {
-    this.name = name;
-    this.baseDamage = baseDamage;
-    this.manaCost = manaCost;
-    this.damageType = damageType; // 'physical' or 'magical'
-    this.effectType = effectType; // Buffs/debuffs like 'Burn', 'Bleed', etc.
-    this.effectValue = effectValue; // Value of the buff/debuff
-    this.level = 1;
-    this.experience = 0;
-    this.experienceToNextLevel = 100; // Example value for level 1
+    constructor(name, type,icon, description, damage, manaCost,staminaCost, cooldown, damageType, targetingModes, effect) {
+        this.name = name;
+        this.icon = icon;
+        this.type = type;
+        this.description = description;
+        this.damage = damage;
+        this.manaCost = manaCost;
+        this.staminaCost = staminaCost;
+        this.cooldown = cooldown;
+        this.damageType = damageType;
+        this.targetingModes = targetingModes;
+        this.effect = effect;
+
+        this.level = 1;
+        this.experience = 0;
+        this.experienceToNextLevel = 100; // Example value for level 1
   }
 
   // Calculate damage based on the member's stats and skill level
   calculateDamage(member) {
-    let damage = this.baseDamage * this.level;
+    let damage = this.damage * this.level;
     if (this.damageType === 'physical') {
       damage += member.stats.strength;
     } else if (this.damageType === 'magical') {
@@ -49,4 +55,5 @@ class Skill {
   }
 }
 
+export default Skill;
 

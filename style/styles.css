@@ -525,7 +525,7 @@
      display:flex;
 }
  .battle-view {
-     background: url('Media/bg2.jpg') no-repeat center center;
+     background: url('../Media/bg2.jpg') no-repeat center center;
      background-size: cover;
      padding: 20px 20px 0px 20px;
      border: 2px solid #444;

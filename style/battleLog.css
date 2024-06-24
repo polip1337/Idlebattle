@@ -7,16 +7,17 @@
     width: 20%;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     border-left: 1px solid #444;
+        overflow-y: scroll;
+    height: 70vh;
+
 }
 
 #battle-log {
     flex: 1;
     padding: 10px;
-    overflow-y: auto;
 }
 
 #toggle-log {
@@ -25,4 +26,12 @@
     border: none;
     padding: 5px;
     cursor: pointer;
+}
+#battle-log-container *{
+      overflow-anchor: none;
+
+}
+#anchor {
+  overflow-anchor: auto;
+  height: 1px;
 }

@@ -13,16 +13,41 @@
     border-radius:5%;
 }
 
+.stamina-bar,
+.mana-bar {
+    position: relative;
+    width: 10px;
+    height: 100px;
+    background-color: #333;
+    border: 1px solid darkgrey;
+    margin-right: 5px;
+}
+
+.stamina-overlay,
+.mana-overlay {
+    height: 100%;
+    transition: width 0.2s;
+}
+
+.stamina-overlay {
+    background-color: blue;
+}
+
+.mana-overlay {
+    background-color: yellow;
+}
 /* Member portrait */
 .memberPortrait {
+    order: 1; /* Move the portrait to the second position in the flex container */
+    margin-top: 10px; /* Add margin to the right */
+    margin-left: 10px; /* Add margin to the right */
+
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 150px;
     height: 100px;
     border-radius: 50%;
-    margin-right: 10px; /* Add margin to the right */
-    border: 2px solid #ccc;
     position: relative; /* Ensure the overlay is confined to this container */
 
 }
@@ -30,49 +55,32 @@
 width:100px;
 height:100px;
 border-radius:50%;
+    border: 2px solid darkred;
+    margin-right: 5px; /* Add margin to the right */
+
 }
 .health-overlay {
-    position: absolute;
+    position:absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    left: 2px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     background: linear-gradient(to top, red 0%, red var(--health-percentage), transparent var(--health-percentage), transparent 100%);
     pointer-events: none;
     z-index: 1;
     opacity:50%;
+        margin-right: 5px; /* Add margin to the right */
+
 }
 /* Container for details (bars and skills) */
 .details-container {
+    order: 2; /* Move the details container to the first position in the flex container */
+
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Align items to the start */
     width: 100%;
-}
-
-/* Health bar */
-.health-bar {
-    background-color: red;
-    height: 20px;
-    width: 100%;
-    margin: 5px 0;
-}
-
-/* Mana bar */
-.mana-bar {
-    background-color: blue;
-    height: 20px;
-    width: 100%;
-    margin: 5px 0;
-}
-
-/* Stamina bar */
-.stamina-bar {
-    background-color: yellow;
-    height: 20px;
-    width: 100%;
-    margin: 5px 0;
 }
 
 /* Container for buffs */
@@ -171,7 +179,7 @@ border-radius:50%;
     height: 45px;
     background-color: #666;
     border-radius: 5px;
-    border: 1px solid #888;
+    border: 1px solid darkgrey;
 }
 .icon-row{
 display:flex;

@@ -1,17 +1,20 @@
 {
   "Novice": {
     "portrait": "Media/portrait.jpg",
+    "armor": 0,
     "skills": [
       {
         "name": "Slash",
         "type": "active",
         "damage": 10,
         "damageType": "slash",
+        "cooldown": 5,
+        "staminaCost": 5,
         "manaCost": 0,
         "effect": null,
         "description": "A quick slash with a weapon.",
         "icon": "Media/Skills/Novice/slash.png",
-        "targetingModes": ["First", "Lowest HP"]
+        "targetingModes": ["Random Front", "Lowest HP"]
       },
       {
         "name": "Block",
@@ -19,7 +22,9 @@
         "damageType": "none",
         "damage": 0,
         "manaCost": 0,
-        "effect": { "type": "buff", "stat": "defense", "value": 2, "duration": 1, "name": "Block", "description": "Increases defense by 2 for 1 turn." },
+        "staminaCost": 5,
+        "cooldown": 5,
+        "effect": { "type": "buff","subType":"Armor", "stat": "armor", "value": 2, "duration": 10, "name": "Block", "description": "Increases defense by 2 for 10 seconds." },
         "description": "Assume a defensive stance, increasing defense briefly.",
         "icon": "Media/Skills/Novice/shield.jpg",
         "targetingModes": ["Self"]
@@ -28,6 +33,7 @@
         "name": "Quick Step",
         "type": "active",
         "damageType": "none",
+        "cooldown": 5,
         "damage": 0,
         "manaCost": 0,
         "effect": { "type": "buff", "stat": "speed", "value": 2, "duration": 1, "name": "Quick Step", "description": "Increases speed by 2 for 1 turn." },
@@ -110,7 +116,7 @@
         "effect": null,
         "description": "Deliver two quick strikes in succession.",
         "icon": "Media/Skills/Novice/dual_strike.png",
-        "targetingModes": ["First", "Lowest HP"]
+        "targetingModes": ["Random Front", "Lowest HP"]
       },
         {
           "name": "Stalwart",
@@ -190,6 +196,7 @@
       "dexterity": 10,
       "vitality": 15,
       "defense": 5,
+      "mana": 150,
       "accuracy": 5,
       "evasion": 5,
       "counterattack": false

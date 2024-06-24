@@ -7,7 +7,8 @@ class BattleLog {
         const logEntry = document.createElement('div');
         logEntry.textContent = message;
         logEntry.classList.add(type);
-        this.logContainer.appendChild(logEntry);
+
+        this.logContainer.insertBefore(logEntry,this.logContainer.firstChild);
         this.logContainer.scrollTop = this.logContainer.scrollHeight; // Scroll to bottom
     }
 }

@@ -2,14 +2,16 @@ import { startBattle, createRandomMembers,createHero } from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
 import BattleLog from './BattleLog.js';
-import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember,takeDamage} from './Render.js';
+import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember,loadPassiveSkills} from './Render.js';
 
 export let isPaused = false;
-export let team1;
+export let team1 = new Team('Team1', 'team1-members');;
+export let team2 = new Team('Team2', 'team2-members');;
 export let hero;
 export let battleLog;
 
 document.getElementById("heroTab").addEventListener("click", switchToHeroTab);
+
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchClassesAndInitializeTeams();
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function setupSkillListeners(){
     for(let i = 1; i<13; i++){
-         document.getElementById("skill"+i).addEventListener('click', () => hero.useSkill(document.getElementById("skill"+i)));
+         document.getElementById("skill"+i).getElementsByTagName('img')[0].addEventListener('click', () => hero.useSkill(document.getElementById("skill"+i)));
     }
 }
 
@@ -52,9 +54,8 @@ function fetchClassesAndInitializeTeams() {
     fetch('Data/classes.json')
         .then(response => response.json())
         .then(classes => {
-            team1 = new Team('Team1', 'team1-members');
 
-            const team1Members = createHero('team1', classes,team1,team2,1);
+            const team1Members = createHero('team1', classes,team1,team2);
 
             hero = team1Members[0];
             initializeTeamMembers(team1Members,'team1')
@@ -62,12 +63,12 @@ function fetchClassesAndInitializeTeams() {
             team1.addMembers(team1Members);
             document.getElementById('start-button').addEventListener('click', () => startBattle(team1,team2));
             loadSkills(team1.members[0]);
-
+            loadPassiveSkills(team1.members[0]);
+            selectInitialSkills();
         });
      fetch('Data/mobs.json')
             .then(response => response.json())
             .then(classes => {
-                var team2 = new Team('Team2', 'team2-members');
                 const team2Members = createRandomMembers('team2', classes,team2,team1,8);
 
                 initializeTeamMembers(team2Members,'team2')
@@ -77,7 +78,14 @@ function fetchClassesAndInitializeTeams() {
 
 }
 
-
+function selectInitialSkills() {
+    for (let i = 0; i < 4; i++) {
+        hero.selectSkill(team1.members[0].skills[i], document.querySelectorAll("#activeSkills .skill-box")[i]);
+    };
+    for (let i = 10; i < 14; i++) {
+        hero.selectPassiveSkill(team1.members[0].skills[i], document.querySelectorAll("#passiveSkills .skill-box")[i-10]);
+    };
+}
 function initializeTeamMembers(members, containerId) {
     const teamRows = teamContainer.querySelectorAll("#" + containerId +' .team-row');
     members.forEach(member => {
