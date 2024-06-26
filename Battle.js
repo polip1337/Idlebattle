@@ -7,6 +7,7 @@ import Hero from './Hero.js';
 import { updateHealth, updateMana } from './Render.js';
 
 function startBattle(team1, team2) {
+    useSkillsForAllMembers(team2);
 
     const battleInterval = setInterval(() => {
         if (isPaused) return;
@@ -29,6 +30,13 @@ function startBattle(team1, team2) {
 
     }, 1000); // Adjust the interval as needed
 }
+function useSkillsForAllMembers(team) {
+    team.members.forEach(member => {
+        member.skills.forEach(skill => {
+            skill.useSkill(member);
+        });
+    });
+}
 function createRandomMembers(prefix, classes,team, opposingTeam,size) {
     const classKeys = Object.keys(classes);
     return Array.from({ length: size }, (_, i) => {
@@ -38,7 +46,7 @@ function createRandomMembers(prefix, classes,team, opposingTeam,size) {
             position = "Front";
         }else{
             position = "Back";}
-        return new Member(`${prefix}-Member${i + 1}`, randomClass, classes[randomClass], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam,position);
+        return new Member(classes[randomClass].name, randomClass, classes[randomClass], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam,position);
     });
 }
 

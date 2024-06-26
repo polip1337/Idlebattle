@@ -2,6 +2,9 @@ export function selectTarget(attacker, targetMode) {
   let target;
 
   switch (targetMode) {
+    case 'Random':
+        target = attacker.opposingTeam.getRandomAliveMember();
+        break;
     case 'Random Front':
       target = attacker.opposingTeam.getRandomFrontMember();
       break;

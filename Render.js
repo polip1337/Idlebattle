@@ -3,8 +3,19 @@
 export function updateSkillBar(skills) {
     for(let i = 0; i<12; i++){
         var element = document.querySelector("#skill"+(i+1)+" img");
-        if(skills[i])
+        var tooltip = document.querySelector("#skill"+(i+1)+" .tooltip");
+
+        if(skills[i]){
             element.src = skills[i].icon;
+            tooltip.innerHTML = `
+                        <strong>${skills[i].name}</strong><br>
+                        Damage: ${skills[i].damage}<br>
+                        Mana Cost: ${skills[i].manaCost}<br>
+                        Cooldown: ${skills[i].cooldown}<br>
+                        Damage Type: ${skills[i].damageType}<br>
+                        ${skills[i].description}
+                    `;
+            }
         else
             element.src = "Media/UI/defaultSkill.jpeg";
     }
@@ -13,8 +24,15 @@ export function updateSkillBar(skills) {
 export function updatePassiveSkillBar(skills) {
     for(let i = 0; i<12; i++){
         var element = document.querySelector("#passiveSkill"+(i+1)+" img");
-        if(skills[i])
+        var tooltip = document.querySelector("#passiveSkill"+(i+1)+" .tooltip");
+        if(skills[i]){
             element.src = skills[i].icon;
+            tooltip.innerHTML = `
+                        <strong>${skills[i].name}</strong><br>
+                        ${skills[i].description}
+                    `;
+
+        }
         else
             element.src = "Media/UI/defaultSkill.jpeg";
     }
@@ -25,17 +43,31 @@ export function updateHealth(member) {
     const healthOverlay = member.element.querySelector('.health-overlay');
     const healthPercentage = (100 - (member.currentHealth / member.maxHealth) * 100) + '%';
     healthOverlay.style.setProperty('--health-percentage', healthPercentage);
+    updateTooltip(member);
+
+}
+export function updateTooltip(member) {
+    const tooltip = member.element.querySelector('.tooltip');
+    tooltip.innerHTML = `
+        <strong>${member.name}</strong>
+        <p>Health: ${member.currentHealth}/${member.maxHealth}</p>
+        <p>Mana: ${member.currentMana}/${member.stats.mana}</p>
+        <p>Stamina: ${member.currentStamina}/${member.stats.stamina}</p>
+    `;
 
 }
 export function updateMana(member) {
     const manaOverlay = member.element.querySelector('.mana-overlay');
     const manaPercentage = (100 - (member.currentMana / member.stats.mana) * 100) + '%';
     manaOverlay.style.setProperty('--mana-percentage', manaPercentage);
+    updateTooltip(member);
+
 }
 export function updateStamina(member) {
     const staminaOverlay = member.element.querySelector('.stamina-overlay');
     const staminaPercentage = (100 - (member.currentStamina / (member.stats.vitality*10)) * 100) + '%';
     staminaOverlay.style.setProperty('--stamina-percentage', staminaPercentage);
+    updateTooltip(member);
 }
 export function  updateStatsDisplay(member) {
     const element = document.querySelector(`#heroStats`);
@@ -178,6 +210,7 @@ export function renderMember(member) {
         const skill = member.class.skills[i];
         const iconDiv = document.createElement('div');
         iconDiv.className = 'iconDiv';
+        iconDiv.id=member.memberId + 'Skill' + skill.name.replace(/\s/g, '');
 
         const icon = document.createElement('img');
         icon.className = 'icon';
@@ -193,8 +226,13 @@ export function renderMember(member) {
             Damage Type: ${skill.damageType}<br>
             ${skill.description}
         `;
+        const cooldownOverlay = document.createElement('div');
+        cooldownOverlay.className = 'cooldown-overlay';
+
         iconDiv.appendChild(tooltip);
         iconDiv.appendChild(icon);
+        iconDiv.appendChild(cooldownOverlay);
+
         if (i < 3) {
           iconRow1.appendChild(iconDiv);
         } else {
@@ -205,7 +243,15 @@ export function renderMember(member) {
 
 
     }
-
+    const portraitTooltip = document.createElement('div');
+        portraitTooltip.className = 'tooltip';
+        portraitTooltip.innerHTML = `
+            <strong>${member.name}</strong><br>
+            Health: ${member.currentHealth} / ${member.maxHealth}<br>
+            Mana: ${member.currentMana} / ${member.stats.mana}<br>
+            Stamina: ${member.currentStamina} / ${member.stats.stamina}<br>
+        `;
+    portraitDiv.appendChild(portraitTooltip);
     portraitDetailsDiv.appendChild(portraitDiv);
     portraitDetailsDiv.appendChild(detailsDiv);
     memberDiv.appendChild(portraitDetailsDiv);

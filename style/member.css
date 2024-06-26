@@ -154,7 +154,7 @@ border-radius:50%;
     border-color: #333 transparent transparent transparent;
 }
 
-.iconDiv:hover .tooltip {
+.iconDiv:hover .tooltip, .memberPortrait:hover .tooltip , .battleSkillIcon:hover .tooltip{
     visibility: visible;
     opacity: 1;
 }

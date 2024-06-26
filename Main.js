@@ -69,7 +69,7 @@ function fetchClassesAndInitializeTeams() {
      fetch('Data/mobs.json')
             .then(response => response.json())
             .then(classes => {
-                const team2Members = createRandomMembers('team2', classes,team2,team1,8);
+                const team2Members = createRandomMembers('team2', classes,team2,team1,1);
 
                 initializeTeamMembers(team2Members,'team2')
                 team2.addMembers(team2Members);
@@ -82,8 +82,8 @@ function selectInitialSkills() {
     for (let i = 0; i < 4; i++) {
         hero.selectSkill(team1.members[0].skills[i], document.querySelectorAll("#activeSkills .skill-box")[i]);
     };
-    for (let i = 10; i < 14; i++) {
-        hero.selectPassiveSkill(team1.members[0].skills[i], document.querySelectorAll("#passiveSkills .skill-box")[i-10]);
+    for (let i = 4; i < 8; i++) {
+        hero.selectSkill(team1.members[0].skills[i], document.querySelectorAll("#passiveSkills .skill-box")[i-4],true);
     };
 }
 function initializeTeamMembers(members, containerId) {

@@ -12,34 +12,28 @@ constructor(name, classType,classInfo, memberId, team, opposingTeam, position) {
     this.skills3 = null;
     this.selectedSkills = [];
     this.selectedPassiveSkills = [];
+    this.position = 'Front';
   }
-    selectSkill(skill, skillBox) {
-      const index = this.selectedSkills.indexOf(skill);
-      if (index === -1 && this.selectedSkills.length < 4) {
-         const targetingSelect = skillBox.querySelector('.targeting-modes');
-        skill.targetingMode = targetingSelect.value;
-          this.selectedSkills.push(skill);
-          skillBox.classList.add('selected');
-      } else if (index !== -1) {
-          this.selectedSkills.splice(index, 1);
-          skillBox.classList.remove('selected');
-      }
-      updateSkillBar(this.selectedSkills);
+selectSkill(skill, skillBox, isPassive = false) {
+    const selectedSkills = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
+    const maxSkills = 4;
+    const index = selectedSkills.indexOf(skill);
+    const skillBarUpdateMethod = isPassive ? updatePassiveSkillBar : updateSkillBar;
+
+    if (index === -1 && selectedSkills.length < maxSkills) {
+        if (!isPassive) {
+            const targetingSelect = skillBox.querySelector('.targeting-modes');
+            skill.targetingMode = targetingSelect.value;
+        }
+        selectedSkills.push(skill);
+        skillBox.classList.add('selected');
+    } else if (index !== -1) {
+        selectedSkills.splice(index, 1);
+        skillBox.classList.remove('selected');
     }
 
-    selectPassiveSkill(skill, skillBox) {
-      const index = this.selectedPassiveSkills.indexOf(skill);
-      if (index === -1 && this.selectedPassiveSkills.length < 4) {
-
-
-          this.selectedPassiveSkills.push(skill);
-          skillBox.classList.add('selected');
-      } else if (index !== -1) {
-          this.selectedPassiveSkills.splice(index, 1);
-          skillBox.classList.remove('selected');
-      }
-      updatePassiveSkillBar(this.selectedPassiveSkills);
-    }
+    skillBarUpdateMethod(selectedSkills);
+}
 
     useSkill(skillDiv){
 

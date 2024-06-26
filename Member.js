@@ -27,16 +27,10 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam, position) {
         this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
         this.currentMana = this.stats.mana;
-        this.currentStamina = this.stats.vitality * 10;
+        this.currentStamina = this.stats.stamina;
         this.memberId = memberId;
         this.attackCharge = 0;
 
-        this.chargeInterval = null;
-        this.healthBar = null;  // Initialize healthBar to null
-        this.manaBar = null;
-        this.attackBar = null;
-        this.status = null;
-        this.statsDisplay = null;
         this.blind = null;
         this.charm = null;
         this.clone = null;
@@ -162,13 +156,19 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam, position) {
             }
             this.currentMana -= skill.manaCost;
             updateMana(this);
-            battleLog.log(this.name + ` Used ${skill.name} on ${target.name}`);
-            const damage = skill.calculateDamage(this);
-            const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
-            skill.gainExperience(finalDamage);
+            if (skill.damageType){
+                const damage = skill.calculateDamage(this);
+                const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
+                skill.gainExperience(finalDamage);
+                target.takeDamage(finalDamage);
+                battleLog.log(this.name + ` used ${skill.name} on ${target.name} dealing `+ finalDamage+ ' damage.');
 
-            // Apply damage to the target
-            target.takeDamage(finalDamage);
+            }
+            if(skill.heal){
+                skill.gainExperience(skill.heal);
+                target.health += skill.heal;
+                battleLog.log(target.name +'Healed for'+ skill.heal);
+            }
         }
     }
     calculateFinalDamage(damage, damageType){

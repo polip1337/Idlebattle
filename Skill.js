@@ -1,5 +1,8 @@
+import { updateSkillBar,updatePassiveSkillBar, updateStamina, updateMana} from './Render.js';
+import { selectTarget } from './Targeting.js';
+
 class Skill {
-    constructor(name, type,icon, description, damage, manaCost,staminaCost, cooldown, damageType, targetingModes, effect) {
+    constructor(name, type, icon, description, damage, manaCost,staminaCost, cooldown, damageType, targetingModes, effect) {
         this.name = name;
         this.icon = icon;
         this.type = type;
@@ -53,6 +56,36 @@ class Skill {
       this.effectValue = Math.floor(this.effectValue * 1.1); // Increase effect value by 10% per level
     }
   }
+  useSkill(member, div = null){
+          let skillDiv = null;
+          if(div == null){
+            skillDiv = member.element.querySelector("#" + member.memberId + "Skill" + this.name.replace(/\s/g, ''));
+          }else{
+            skillDiv = div;
+          }
+          if(this.type == "active"){
+              this.startCooldown(skillDiv, this.cooldown,member);
+
+              const target = selectTarget(member, this.targetingModes[0]);
+
+              member.performAttack(target, this);
+          }
+  }
+  startCooldown(container, duration, member) {
+          var overlay = document.querySelector("#" + container.id + " .cooldown-overlay");
+          container.classList.add('disabled');
+          overlay.classList.remove('hidden');
+
+          overlay.style.animation = '';
+          overlay.offsetHeight;
+          overlay.style.animation = `fill ${duration}s ease-in-out forwards`;
+          overlay.addEventListener('animationend', () => {
+              overlay.classList.add('hidden');  /* Hide the square */
+              container.classList.remove('disabled');  /* Enable pointer events */
+              this.useSkill(member,container);
+
+          }, { once: true });
+      }
 }
 
 export default Skill;
