@@ -23,19 +23,21 @@
     margin-right: 5px;
 }
 
-.stamina-overlay,
-.mana-overlay {
+.stamina-overlay
+{
     height: 100%;
     transition: width 0.2s;
+    background: linear-gradient(to top, yellow 0%, yellow var(--stamina-percentage), transparent var(--stamina-percentage), transparent 100%);
+
+}
+.mana-overlay
+{
+    height: 100%;
+    transition: width 0.2s;
+    background: linear-gradient(to top, blue 0%, blue var(--mana-percentage), transparent var(--mana-percentage), transparent 100%);
+
 }
 
-.stamina-overlay {
-    background-color: blue;
-}
-
-.mana-overlay {
-    background-color: yellow;
-}
 /* Member portrait */
 .memberPortrait {
     order: 1; /* Move the portrait to the second position in the flex container */

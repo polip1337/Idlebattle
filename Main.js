@@ -1,9 +1,11 @@
-import { startBattle, createRandomMembers,createHero } from './Battle.js';
+import { startBattle, createRandomMembers,createHero, hidePopup } from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
 import BattleLog from './BattleLog.js';
-import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember,loadPassiveSkills} from './Render.js';
+import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember,loadPassiveSkills, updateMana,updateStamina} from './Render.js';
+import BattleStatistics from './BattleStatistics.js';
 
+export let battleStatistics = new BattleStatistics();
 export let isPaused = false;
 export let team1 = new Team('Team1', 'team1-members');;
 export let team2 = new Team('Team2', 'team2-members');;
@@ -11,6 +13,7 @@ export let hero;
 export let battleLog;
 
 document.getElementById("heroTab").addEventListener("click", switchToHeroTab);
+document.getElementById('close-popup').addEventListener('click', hidePopup);
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -93,7 +96,8 @@ function initializeTeamMembers(members, containerId) {
         firstRow.appendChild(renderMember(member));
 
         member.initializeDOMElements(); // Call initializeDOMElements after team members are added to the DOM
-
+        updateMana(member);
+        updateStamina(member);
     });
 
 }

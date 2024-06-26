@@ -1,5 +1,6 @@
 import Member from './Member.js';
 import {battleLog} from './Main.js';
+import {battleStatistics} from './Main.js';
 import { updateSkillBar,updatePassiveSkillBar, updateStamina, updateMana} from './Render.js';
 import { selectTarget } from './Targeting.js';
 
@@ -48,7 +49,7 @@ selectSkill(skill, skillBox, isPassive = false) {
             this.startCooldown(skillDiv, skill.cooldown);
 
             const target = selectTarget(this, skill.targetingMode);
-
+            battleStatistics.addDamageDealt("fire",20);
             this.performAttack(target,skill);
         }
 

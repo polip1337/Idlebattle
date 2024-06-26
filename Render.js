@@ -58,14 +58,14 @@ export function updateTooltip(member) {
 }
 export function updateMana(member) {
     const manaOverlay = member.element.querySelector('.mana-overlay');
-    const manaPercentage = (100 - (member.currentMana / member.stats.mana) * 100) + '%';
+    const manaPercentage = ((member.currentMana / member.stats.mana) * 100) + '%';
     manaOverlay.style.setProperty('--mana-percentage', manaPercentage);
     updateTooltip(member);
 
 }
 export function updateStamina(member) {
     const staminaOverlay = member.element.querySelector('.stamina-overlay');
-    const staminaPercentage = (100 - (member.currentStamina / (member.stats.vitality*10)) * 100) + '%';
+    const staminaPercentage = ((member.currentStamina / member.stats.stamina) * 100) + '%';
     staminaOverlay.style.setProperty('--stamina-percentage', staminaPercentage);
     updateTooltip(member);
 }

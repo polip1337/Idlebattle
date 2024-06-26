@@ -250,7 +250,8 @@ constructor(name, classType,classInfo, memberId, team,opposingTeam, position) {
         updateStamina(this);
 
         // Regenerate health
-        this.currentHealth = Math.min(this.maxHealth, this.currentHealth + (0.01 * this.stats.vitality).toFixed(2));
+        this.currentHealth = Math.min(this.maxHealth, parseFloat(this.currentHealth) + parseFloat((0.01 * this.stats.vitality)));
+        this.currentHealth = this.currentHealth.toFixed(2);
         updateHealth(this);
     }
 

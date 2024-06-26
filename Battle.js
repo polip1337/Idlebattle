@@ -3,6 +3,7 @@ import Team from './Team.js';
 import { isPaused } from './Main.js';
 import EffectClass from './EffectClass.js';
 import Hero from './Hero.js';
+import {battleStatistics} from './Main.js';
 
 import { updateHealth, updateMana } from './Render.js';
 
@@ -20,11 +21,11 @@ function startBattle(team1, team2) {
         if (!team1Alive || !team2Alive) {
             clearInterval(battleInterval);
             if (!team1Alive) {
-                team1.members.forEach(member => member.updateStatus('Defeated'));
-                team2.members.forEach(member => member.updateStatus('Victory!'));
+                showPopup("Loss!", "Your team has been defeated.");
+
             } else {
-                team1.members.forEach(member => member.updateStatus('Victory!'));
-                team2.members.forEach(member => member.updateStatus('Defeated'));
+                showPopup("Victory!", "Your team has defeated the opposing team.");
+
             }
         }
 
@@ -49,7 +50,20 @@ function createRandomMembers(prefix, classes,team, opposingTeam,size) {
         return new Member(classes[randomClass].name, randomClass, classes[randomClass], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam,position);
     });
 }
+function showPopup(title,message) {
+    const popup = document.getElementById('popup');
+    const titleDiv = document.getElementById('popupTitle');
+    const messageDiv = document.getElementById('popupText');
+    titleDiv.textContent = title;
+    messageDiv.textContent = message;
+    popup.classList.remove('hidden');
+}
 
+// Method to hide the victory popup
+function hidePopup() {
+    const popup = document.getElementById('popup');
+    popup.classList.add('hidden');
+}
 function createHero(prefix, classes,team, opposingTeam) {
     const classKeys = Object.keys(classes);
     return Array.from({ length: 1 }, (_, i) => {
@@ -69,4 +83,4 @@ function handleDeath(target, opposingTeam)
              }
          });
      }
-export { startBattle, createRandomMembers,createHero };
+export { startBattle, createRandomMembers,createHero,hidePopup };

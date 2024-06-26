@@ -587,4 +587,31 @@ padding 10px;
 margin 15px;
 
 }
-button{};
+/* Basic styles for popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 300px;
+    text-align: center;
+}
+
+.popup-content {
+    margin: 10px 0;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+#close-popup {
+    padding: 5px 10px;
+    cursor: pointer;
+}
