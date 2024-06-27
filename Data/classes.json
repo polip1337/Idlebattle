@@ -78,7 +78,7 @@
           "type": "passive",
           "effect": { "type": "buff", "stat": "vitality", "value": 2, "description": "Permanently increases vitality by 2." },
           "description": "Thickened skin provides additional protection against damage.",
-          "icon": "Media/Skills/Novice/toughenedSkin.jpg"
+          "icon": "Media/Skills/Novice/toughenedSkin.png"
         },
         {
           "name": "Combat Awareness",
