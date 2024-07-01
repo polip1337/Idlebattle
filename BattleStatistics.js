@@ -130,6 +130,20 @@ class BattleStatistics {
             this.skillUsage[skillName] = 1;
         }
     }
-
+     updateBattleStatistics() {
+        document.getElementById('total-damage-dealt').innerText = this.totalDamageDealt;
+        document.getElementById('total-damage-received').innerText = this.totalDamageReceived;
+        document.getElementById('total-healing-received').innerText = this.totalHealingReceived;
+        document.getElementById('total-buffs-applied').innerText = this.totalBuffsApplied;
+        document.getElementById('total-debuffs-applied').innerText = this.totalDebuffsApplied;
+        document.getElementById('mana-regenerated').innerText = this.manaRegenerated;
+        document.getElementById('stamina-regenerated').innerText = this.staminaRegenerated;
+        document.getElementById('stamina-spent').innerText = this.staminaSpent;
+        document.getElementById('multi-kills').innerText = this.multiKills;
+        document.getElementById('critical-hits').innerText = this.criticalHits;
+        document.getElementById('critical-damage').innerText = this.criticalDamage;
+        document.getElementById('misses').innerText = this.misses;
+        document.getElementById('skill-usage').innerText = this.skillUsage;
+    }
 }
 export default BattleStatistics;

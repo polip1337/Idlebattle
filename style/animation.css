@@ -1,9 +1,9 @@
 @keyframes fill {
     from {
-        transform: scaleY(0);
+        transform: scaleY(1);
     }
     to {
-        transform: scaleY(1);
+        transform: scaleY(0);
     }
 }
 
@@ -14,7 +14,7 @@
     height: 45px;
 }
 .cooldown-overlay{
-
+    pointer-events: none;
     width:100%;
     height: 100%;
     background-color: lightgrey; /* Change the color as needed */
@@ -27,7 +27,10 @@
     display: none;  /* Hide the square when the animation is complete */
 
 }
-
+.battleSkillIcon.disabled {
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+}
 .battleSkillIcon.disabled input{
     pointer-events: auto;
 }

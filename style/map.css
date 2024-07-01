@@ -1,0 +1,87 @@
+/* Game container to hold the map and buttons */
+#game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Map container styles */
+#map-container {
+    display: grid;
+    grid-template-columns: repeat(10, 40px);
+    grid-template-rows: repeat(10, 40px);
+    gap: 2px;
+    margin-bottom: 20px;
+}
+
+/* Map tiles */
+.map-tile {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border: 1px solid #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Different tile types */
+.plains {
+    background-color: #aaffaa;
+}
+
+.mountains {
+    background-color: #aaaaaa;
+}
+
+.forest {
+    background-color: #228B22;
+}
+
+.water {
+    background-color: #1E90FF;
+}
+
+.desert {
+    background-color: #EDC9AF;
+}
+
+.swamp {
+    background-color: #556B2F;
+}
+
+.urban {
+    background-color: #A9A9A9;
+}
+
+.volcano {
+    background-color: #FF4500;
+}
+
+.snow {
+    background-color: #FFFFFF;
+}
+
+.beach {
+    background-color: #FFF5EE;
+}
+
+/* Player tile */
+.player {
+    background-color: blue;
+}
+
+/* Movement buttons */
+#movement-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#movement-buttons div {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+}

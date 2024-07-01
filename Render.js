@@ -39,12 +39,21 @@ export function updatePassiveSkillBar(skills) {
 
 }
 
+export function updateExp(member) {
+    const expBar = document.querySelector('#level-progress-bar');
+    const expPercentage = ((member.experience / member.experienceToLevel) * 100) + '%';
+    expBar.style.setProperty('width', expPercentage);
+    const tooltip = expBar.querySelector('#level-progress-bar .tooltip-text');
+    tooltip.textContent = `EXP: ${member.experience} / ${member.experienceToLevel}`;
+
+
+}
+
 export function updateHealth(member) {
     const healthOverlay = member.element.querySelector('.health-overlay');
     const healthPercentage = (100 - (member.currentHealth / member.maxHealth) * 100) + '%';
     healthOverlay.style.setProperty('--health-percentage', healthPercentage);
     updateTooltip(member);
-
 }
 export function updateTooltip(member) {
     const tooltip = member.element.querySelector('.tooltip');
@@ -153,10 +162,39 @@ export function getSelectedTargetingModes() {
     });
     return targetingModes;
 }
-export function renderMember(member) {
+export function renderHero(member) {
     const memberDiv = document.createElement('div');
     memberDiv.className = 'member';
     memberDiv.id=member.memberId;
+
+    let portraitDiv = createPortrait(member);
+    const portraitDetailsDiv = document.createElement('div');
+    portraitDetailsDiv.className = 'portrait-details-container';
+
+    const detailsDiv = document.createElement('div');
+    detailsDiv.className = 'details-container';
+
+    const portraitTooltip = document.createElement('div');
+        portraitTooltip.className = 'tooltip';
+        portraitTooltip.innerHTML = `
+            <strong>${member.name}</strong><br>
+            Health: ${member.currentHealth} / ${member.maxHealth}<br>
+            Mana: ${member.currentMana} / ${member.stats.mana}<br>
+            Stamina: ${member.currentStamina} / ${member.stats.stamina}<br>
+        `;
+    portraitDiv.appendChild(portraitTooltip);
+    portraitDetailsDiv.appendChild(portraitDiv);
+    memberDiv.appendChild(portraitDetailsDiv);
+
+    var effectsElement = document.createElement('div');
+    effectsElement.className = 'effects';
+    memberDiv.appendChild(effectsElement);
+
+        return memberDiv;
+
+    }
+export function createPortrait(member) {
+
     const portraitDiv = document.createElement('div');
     portraitDiv.className = 'memberPortrait';
 
@@ -188,9 +226,14 @@ export function renderMember(member) {
     portraitDiv.appendChild(manaBar);
     portraitDiv.appendChild(staminaBar);
 
+    return portraitDiv;
+}
+export function renderMember(member) {
+    const memberDiv = document.createElement('div');
+    memberDiv.className = 'member';
+    memberDiv.id=member.memberId;
 
-    const healthBar = document.createElement('div');
-    healthBar.className = 'health-bar';
+    let portraitDiv = createPortrait(member);
 
     const portraitDetailsDiv = document.createElement('div');
     portraitDetailsDiv.className = 'portrait-details-container';
@@ -264,7 +307,24 @@ export function renderMember(member) {
     return memberDiv;
 }
 
+export function renderLevelUp(skill) {
+        const battlefield = document.querySelector(`#battlefield`);
+            const levelUpContainer = document.createElement('div');
+            levelUpContainer.className = 'levelUpContainer';
+            levelUpContainer.innerHTML = `<h1 class="levelUpTitle">
+                                              <span>Your</span>
+                                              <span>${skill.name}</span>
+                                              <span>is level ${skill.level} now!</span>
+                                          </h1>
+                                          <div class="firework"></div>
+                                          <div class="firework"></div>
+                                          <div class="firework"></div>`;
+        levelUpContainer.addEventListener('animationend', () => {
+                  levelUpContainer.remove();
+              }, { once: true });
+        battlefield.appendChild(levelUpContainer);
 
+}
 
 export function renderDefault(member) {
     const memberDiv = document.createElement('div');
@@ -279,3 +339,72 @@ export function renderDefault(member) {
     return memberDiv;
 }
 
+export function updateLevelProgress(currentXP, maxXP, className) {
+   const progressBar = document.getElementById('level-progress-bar');
+   const classNameText = document.getElementById('class-name');
+   const tooltipText = document.createElement('div');
+   tooltipText.className = 'tooltip-text';
+   tooltipText.textContent = `EXP: ${currentXP} / ${maxXP}`;
+
+   // Remove existing tooltip if any
+   const existingTooltip = progressBar.querySelector('.tooltip-text');
+   if (existingTooltip) {
+       progressBar.removeChild(existingTooltip);
+   }
+
+   const progressPercentage = (currentXP / maxXP) * 100;
+   progressBar.style.width = `${progressPercentage}%`;
+   classNameText.textContent = className;
+
+   progressBar.appendChild(tooltipText);
+}
+
+export function openEvolutionModal(evolutions) {
+    const modal = document.getElementById('evolution-modal');
+    const evolutionOptionsDiv = document.getElementById('evolution-options');
+    evolutionOptionsDiv.innerHTML = ''; // Clear previous options
+
+    // Populate modal with evolution options
+    evolutions.forEach((evolution, index) => {
+        const evolutionDiv = document.createElement('div');
+        evolutionDiv.className = 'evolution-option';
+        evolutionDiv.innerHTML = `
+            <h3>${evolution.name}</h3>
+            <p>${evolution.description}</p>
+            <img src="${evolution.image}" alt="${evolution.name}">
+        `;
+        evolutionDiv.addEventListener('click', () => {
+            selectEvolution(index);
+            closeEvolutionModal();
+        });
+        evolutionOptionsDiv.appendChild(evolutionDiv);
+    });
+
+    modal.style.display = 'block';
+}
+export function  deepCopy(obj) {
+    if (obj === null || typeof obj !== 'object') {
+        return obj;
+    }
+    if (Array.isArray(obj)) {
+        return obj.map(item => deepCopy(item));
+    }
+    const copy = {};
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            copy[key] = deepCopy(obj[key]);
+        }
+    }
+    return copy;
+}
+// Function to close the modal
+function closeEvolutionModal() {
+    const modal = document.getElementById('evolution-modal');
+    modal.style.display = 'none';
+}
+
+// Function to handle the selected evolution (to be implemented)
+function selectEvolution(index) {
+    console.log(`Selected evolution index: ${index}`);
+    // Implement your logic for handling the selected evolution
+}

@@ -1,0 +1,2693 @@
+{
+  "ElderTreant": {
+    "name": "Elder Treant",
+    "portrait": "Media/Mobs/Treant/ElderTreant.jpg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 20,
+    "resistances": {
+      "Fire": -10,
+      "Earth": 20,
+      "Water": 10
+    },
+    "skills": [
+      {
+        "name": "Root Snare",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "debuff", "subtype": "snare", "value": 0, "duration": 10, "name": "Rooted" },
+        "description": "Summons roots from the ground to entrap and immobilize enemies.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Nature/RootSnare.jpg"
+      },
+      {
+        "name": "Branch Smash",
+        "type": "active",
+        "damage": 35,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "Physical",
+        "effect": null,
+        "description": "A powerful strike with a massive branch, dealing significant physical damage.",
+        "targetingModes": [
+          "Random Front"
+        ],
+        "icon": "Media/Skills/Physical/BranchSmash.jpg"
+      },
+      {
+        "name": "Forest's Protection",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 30,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseArmor", "value": 15, "duration": 20, "name": "Protected" },
+        "description": "Calls upon the forest to increase the armor of all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Buff/ForestsProtection.jpg"
+      },
+      {
+        "name": "Nature's Wrath",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 30,
+        "cooldown": 25,
+        "damageType": "Earth",
+        "effect": { "type": "debuff", "subtype": "reduceSpeed", "value": 10, "duration": 15, "name": "Slowed" },
+        "description": "Unleashes the wrath of nature, dealing earth damage and reducing enemies' speed.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Earth/NaturesWrath.jpg"
+      },
+      {
+        "name": "Ancient Wisdom",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseMagicPower", "value": 10 },
+        "description": "Increases the magic power of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/AncientWisdom.jpg"
+      },
+      {
+        "name": "Regeneration",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "healOverTime", "value": 5 },
+        "description": "Heals a small amount of health over time.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/Regeneration.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 40,
+      "speed": 5,
+      "dexterity": 8,
+      "stamina": 30,
+      "vitality": 25,
+      "magicPower": 20,
+      "mana": 80,
+      "manaRegen": 5,
+      "dodge": 2,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 5,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 4,
+      "magicPower": 2,
+      "mana": 6,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+  "GladeUnicorn": {
+    "name": "Glade Unicorn",
+    "portrait": "Media/Mobs/Unicorn/GladeUnicorn.jpg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 10,
+    "resistances": {
+      "Dark": 20,
+      "Light": 30,
+      "Poison": 15
+    },
+    "skills": [
+      {
+        "name": "Horn of Purity",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "None",
+        "effect": { "type": "cleanse", "subtype": "allDebuffs", "value": 0, "duration": 0, "name": "Purified" },
+        "description": "Purifies all allies, removing all debuffs.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Purify/HornOfPurity.jpg"
+      },
+      {
+        "name": "Healing Light",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "heal", "subtype": "instant", "value": 30, "duration": 0, "name": "Healed" },
+        "description": "Heals an ally for a significant amount of health.",
+        "targetingModes": [
+          "Random Ally"
+        ],
+        "icon": "Media/Skills/Heal/HealingLight.jpg"
+      },
+      {
+        "name": "Blessing of the Glade",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 30,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseResistances", "value": 15, "duration": 20, "name": "Blessed" },
+        "description": "Blesses all allies, increasing their resistances.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Buff/BlessingOfTheGlade.jpg"
+      },
+      {
+        "name": "Luminous Strike",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 15,
+        "cooldown": 10,
+        "damageType": "Light",
+        "effect": null,
+        "description": "A dazzling strike with the horn, dealing light damage to an enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Light/LuminousStrike.jpg"
+      },
+      {
+        "name": "Nature's Grace",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseHealing", "value": 20 },
+        "description": "Increases the healing received by all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/NaturesGrace.jpg"
+      },
+      {
+        "name": "Fairy Folk's Reverence",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseMagicPower", "value": 10 },
+        "description": "Increases the magic power of all Fairy Folk allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/FairyFolkReverence.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 15,
+      "speed": 12,
+      "dexterity": 10,
+      "stamina": 25,
+      "vitality": 30,
+      "magicPower": 35,
+      "mana": 100,
+      "manaRegen": 5,
+      "dodge": 10,
+      "magicControl": 20
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 4,
+      "magicPower": 5,
+      "mana": 10,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+
+  "IronInquisitor": {
+    "name": "Iron Inquisitor",
+    "portrait": "Media/Mobs/Inquisitor/IronInquisitor.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 15,
+    "resistances": {
+      "Psychic": 20,
+      "Physical": 10,
+      "Poison": 5
+    },
+    "skills": [
+      {
+        "name": "Interrogation",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 10,
+        "cooldown": 15,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "revealSecrets", "value": 0, "duration": 10, "name": "Exposed" },
+        "description": "Uses interrogation tools to deal damage and reveal enemy secrets.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/Interrogation.jpg"
+      },
+      {
+        "name": "Enhanced Senses",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseAccuracy", "value": 20, "duration": 15, "name": "Enhanced" },
+        "description": "Activates enhanced sensory apparatus to increase accuracy of all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Buff/EnhancedSenses.jpg"
+      },
+      {
+        "name": "Tracker's Mark",
+        "type": "active",
+        "damage": 10,
+        "manaCost": 20,
+        "cooldown": 25,
+        "damageType": "Psychic",
+        "effect": { "type": "debuff", "subtype": "marked", "value": 0, "duration": 20, "name": "Tracked" },
+        "description": "Marks an enemy, making them easier to track and increasing damage taken.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Psychic/TrackersMark.jpg"
+      },
+      {
+        "name": "Interrogate Mind",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 25,
+        "cooldown": 30,
+        "damageType": "Psychic",
+        "effect": { "type": "debuff", "subtype": "confused", "value": 0, "duration": 10, "name": "Confused" },
+        "description": "Uses psychic interrogation to damage and confuse an enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Psychic/InterrogateMind.jpg"
+      },
+      {
+        "name": "Uncover Weakness",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseCritChance", "value": 10 },
+        "description": "Increases the critical hit chance of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/UncoverWeakness.jpg"
+      },
+      {
+        "name": "Relentless Pursuit",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseSpeed", "value": 5 },
+        "description": "Increases the speed of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/RelentlessPursuit.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 20,
+      "speed": 15,
+      "dexterity": 18,
+      "stamina": 20,
+      "vitality": 18,
+      "magicPower": 10,
+      "mana": 60,
+      "manaRegen": 3,
+      "dodge": 8,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+  "TeslaVanguard": {
+    "name": "Tesla Vanguard",
+    "portrait": "Media/Mobs/Vanguard/TeslaVanguard.jpg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 18,
+    "resistances": {
+      "Electric": 30,
+      "Water": -10,
+      "Physical": 10
+    },
+    "skills": [
+      {
+        "name": "Electric Discharge",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 15,
+        "cooldown": 10,
+        "damageType": "Electric",
+        "effect": { "type": "debuff", "subtype": "stunned", "value": 0, "duration": 5, "name": "Stunned" },
+        "description": "Discharges electric energy to deal damage and potentially stun the target.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Electric/ElectricDischarge.jpg"
+      },
+      {
+        "name": "Electromagnetic Pulse",
+        "type": "active",
+        "damage": 15,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "Electric",
+        "effect": { "type": "debuff", "subtype": "disrupt", "value": 0, "duration": 10, "name": "Disrupted" },
+        "description": "Releases an EMP that damages and disrupts enemy abilities.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Electric/ElectromagneticPulse.jpg"
+      },
+      {
+        "name": "Static Field",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseElectricRes", "value": 20, "duration": 15, "name": "Electrically Charged" },
+        "description": "Creates a static field that increases electric resistance for all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Buff/StaticField.jpg"
+      },
+      {
+        "name": "Overload",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 30,
+        "cooldown": 30,
+        "damageType": "Electric",
+        "effect": { "type": "debuff", "subtype": "burn", "value": 10, "duration": 10, "name": "Burned" },
+        "description": "Overloads the target with electric energy, dealing massive damage and causing burn over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Electric/Overload.jpg"
+      },
+      {
+        "name": "Conductive Armor",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "reflectDamage", "value": 5 },
+        "description": "Reflects a portion of the damage back to attackers.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/ConductiveArmor.jpg"
+      },
+      {
+        "name": "Power Surge",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseMagicPower", "value": 15 },
+        "description": "Increases the magic power of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/PowerSurge.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 25,
+      "speed": 12,
+      "dexterity": 15,
+      "stamina": 20,
+      "vitality": 22,
+      "magicPower": 30,
+      "mana": 80,
+      "manaRegen": 4,
+      "dodge": 5,
+      "magicControl": 18
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 4,
+      "mana": 6,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+
+  "DeathspikeRavager": {
+    "name": "Deathspike Ravager",
+    "portrait": "Media/Mobs/Ravager/DeathspikeRavager.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 20,
+    "resistances": {
+      "Dark": 25,
+      "Physical": 20,
+      "Poison": 15
+    },
+    "skills": [
+      {
+        "name": "Spiked Assault",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "bleed", "value": 5, "duration": 10, "name": "Bleeding" },
+        "description": "Launches a spiked assault dealing damage and causing the target to bleed over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/SpikedAssault.jpg"
+      },
+      {
+        "name": "Deathspike Barrage",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "weaken", "value": 10, "duration": 15, "name": "Weakened" },
+        "description": "Fires a barrage of deadly spikes, weakening enemies and causing damage.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Physical/DeathspikeBarrage.jpg"
+      },
+      {
+        "name": "Piercing Roar",
+        "type": "active",
+        "damage": 15,
+        "manaCost": 25,
+        "cooldown": 25,
+        "damageType": "Dark",
+        "effect": { "type": "debuff", "subtype": "fear", "value": 0, "duration": 10, "name": "Feared" },
+        "description": "Unleashes a terrifying roar, dealing dark damage and instilling fear in enemies.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Dark/PiercingRoar.jpg"
+      },
+      {
+        "name": "Ravager's Wrath",
+        "type": "active",
+        "damage": 50,
+        "manaCost": 35,
+        "cooldown": 35,
+        "damageType": "Physical",
+        "effect": { "type": "buff", "subtype": "selfHeal", "value": 10, "duration": 10, "name": "Healing" },
+        "description": "Unleashes a powerful attack that deals massive damage and heals itself over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/RavagersWrath.jpg"
+      },
+      {
+        "name": "Dark Resilience",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseDarkRes", "value": 20 },
+        "description": "Increases dark resistance for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/DarkResilience.jpg"
+      },
+      {
+        "name": "Spike Fortification",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseArmor", "value": 10 },
+        "description": "Increases the armor of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/SpikeFortification.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 28,
+      "speed": 14,
+      "dexterity": 18,
+      "stamina": 25,
+      "vitality": 20,
+      "magicPower": 8,
+      "mana": 70,
+      "manaRegen": 3,
+      "dodge": 7,
+      "magicControl": 8
+    },
+    "statsPerLevel": {
+      "strength": 4,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 6,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+  "BonecrusherBrute": {
+    "name": "Bonecrusher Brute",
+    "portrait": "Media/Mobs/Brute/BonecrusherBrute.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 25,
+    "resistances": {
+      "Physical": 30,
+      "Dark": 10,
+      "Fire": -5
+    },
+    "skills": [
+      {
+        "name": "Bone Shatter",
+        "type": "active",
+        "damage": 35,
+        "manaCost": 10,
+        "cooldown": 10,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "brokenBone", "value": 10, "duration": 10, "name": "Broken Bone" },
+        "description": "Crushes the enemy with immense force, dealing damage and causing a broken bone debuff.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/BoneShatter.jpg"
+      },
+      {
+        "name": "Ground Slam",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "stunned", "value": 0, "duration": 5, "name": "Stunned" },
+        "description": "Slams the ground, dealing damage to all enemies and potentially stunning them.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Physical/GroundSlam.jpg"
+      },
+      {
+        "name": "Brute Force",
+        "type": "active",
+        "damage": 50,
+        "manaCost": 25,
+        "cooldown": 25,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "weaken", "value": 15, "duration": 15, "name": "Weakened" },
+        "description": "Uses brute strength to deal massive damage and weaken the target.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/BruteForce.jpg"
+      },
+      {
+        "name": "Crushing Blow",
+        "type": "active",
+        "damage": 60,
+        "manaCost": 30,
+        "cooldown": 30,
+        "damageType": "Physical",
+        "effect": { "type": "buff", "subtype": "selfHeal", "value": 20, "duration": 10, "name": "Healing" },
+        "description": "Delivers a powerful blow that deals heavy damage and heals itself.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/CrushingBlow.jpg"
+      },
+      {
+        "name": "Thick Hide",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increasePhysicalRes", "value": 20 },
+        "description": "Increases physical resistance for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/ThickHide.jpg"
+      },
+      {
+        "name": "Unyielding Strength",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseStrength", "value": 15 },
+        "description": "Increases the strength of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/UnyieldingStrength.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 30,
+      "speed": 8,
+      "dexterity": 12,
+      "stamina": 25,
+      "vitality": 22,
+      "magicPower": 5,
+      "mana": 50,
+      "manaRegen": 2,
+      "dodge": 5,
+      "magicControl": 6
+    },
+    "statsPerLevel": {
+      "strength": 5,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+  "IroncladBerserker": {
+    "name": "Ironclad Berserker",
+    "portrait": "Media/Mobs/Berserker/IroncladBerserker.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 30,
+    "resistances": {
+      "Physical": 40,
+      "Fire": 10,
+      "Ice": -10
+    },
+    "skills": [
+      {
+        "name": "Frenzied Strike",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 10,
+        "cooldown": 10,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "bleed", "value": 5, "duration": 10, "name": "Bleeding" },
+        "description": "A powerful strike that deals heavy damage and causes the target to bleed over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/FrenziedStrike.jpg"
+      },
+      {
+        "name": "Ironclad Fury",
+        "type": "active",
+        "damage": 50,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "Physical",
+        "effect": { "type": "buff", "subtype": "selfHeal", "value": 15, "duration": 10, "name": "Healing" },
+        "description": "Unleashes a fury of attacks, dealing damage and healing itself over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/IroncladFury.jpg"
+      },
+      {
+        "name": "Berserk Rage",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 30,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseDamage", "value": 20, "duration": 20, "name": "Berserk" },
+        "description": "Enters a berserk state, significantly increasing damage for a short time.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Buff/BerserkRage.jpg"
+      },
+      {
+        "name": "Shield Bash",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 15,
+        "cooldown": 15,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "stunned", "value": 0, "duration": 5, "name": "Stunned" },
+        "description": "Bashes the target with a shield, dealing damage and potentially stunning them.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/ShieldBash.jpg"
+      },
+      {
+        "name": "Iron Will",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increasePhysicalRes", "value": 20 },
+        "description": "Increases physical resistance for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/IronWill.jpg"
+      },
+      {
+        "name": "Enduring Strength",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseStrength", "value": 15 },
+        "description": "Increases the strength of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/EnduringStrength.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 35,
+      "speed": 10,
+      "dexterity": 15,
+      "stamina": 30,
+      "vitality": 25,
+      "magicPower": 5,
+      "mana": 50,
+      "manaRegen": 2,
+      "dodge": 5,
+      "magicControl": 6
+    },
+    "statsPerLevel": {
+      "strength": 5,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+  "StormcallerSeer": {
+    "name": "Stormcaller Seer",
+    "portrait": "Media/Mobs/Seer/StormcallerSeer.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 10,
+    "resistances": {
+      "Electric": 40,
+      "Water": 20,
+      "Fire": -10
+    },
+    "skills": [
+      {
+        "name": "Lightning Bolt",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 15,
+        "cooldown": 10,
+        "damageType": "Electric",
+        "effect": { "type": "debuff", "subtype": "stunned", "value": 0, "duration": 5, "name": "Stunned" },
+        "description": "Hurls a bolt of lightning at the enemy, dealing electric damage and possibly stunning them.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Electric/LightningBolt.jpg"
+      },
+      {
+        "name": "Thunderstorm",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "Electric",
+        "effect": { "type": "debuff", "subtype": "shocked", "value": 10, "duration": 10, "name": "Shocked" },
+        "description": "Summons a thunderstorm, dealing damage to all enemies and applying a shock debuff.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Electric/Thunderstorm.jpg"
+      },
+      {
+        "name": "Electrify",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 30,
+        "damageType": "Electric",
+        "effect": { "type": "buff", "subtype": "increaseElectricDamage", "value": 20, "duration": 20, "name": "Electrified" },
+        "description": "Electrifies all allies, increasing their electric damage for a short time.",
+        "targetingModes": [
+          "All Team"
+        ],
+        "icon": "Media/Skills/Buff/Electrify.jpg"
+      },
+      {
+        "name": "Storm Shield",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 30,
+        "cooldown": 25,
+        "damageType": "Electric",
+        "effect": { "type": "buff", "subtype": "electricShield", "value": 30, "duration": 15, "name": "Shielded" },
+        "description": "Creates a shield of electricity around an ally, absorbing damage and retaliating against attackers.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Buff/StormShield.jpg"
+      },
+      {
+        "name": "Electric Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseElectricDamage", "value": 20 },
+        "description": "Increases electric damage for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/ElectricMastery.jpg"
+      },
+      {
+        "name": "Stormcaller Aura",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseManaRegen", "value": 5 },
+        "description": "Increases mana regeneration for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/StormcallerAura.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 15,
+      "dexterity": 12,
+      "stamina": 18,
+      "vitality": 15,
+      "magicPower": 25,
+      "mana": 100,
+      "manaRegen": 5,
+      "dodge": 10,
+      "magicControl": 20
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 2,
+      "dexterity": 1,
+      "vitality": 2,
+      "magicPower": 4,
+      "mana": 10,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+  "BloodrageWarlord": {
+    "name": "Bloodrage Warlord",
+    "portrait": "Media/Mobs/Warlord/BloodrageWarlord.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 20,
+    "resistances": {
+      "Physical": 30,
+      "Dark": 20,
+      "Fire": -10
+    },
+    "skills": [
+      {
+        "name": "Savage Strike",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 10,
+        "cooldown": 10,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "bleed", "value": 5, "duration": 10, "name": "Bleeding" },
+        "description": "A vicious attack that causes the target to bleed over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/SavageStrike.jpg"
+      },
+      {
+        "name": "Bloodrage",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 30,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseDamage", "value": 25, "duration": 20, "name": "Bloodrage" },
+        "description": "Enters a state of bloodrage, greatly increasing damage dealt for a short time.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Buff/Bloodrage.jpg"
+      },
+      {
+        "name": "Crimson Slash",
+        "type": "active",
+        "damage": 50,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "wound", "value": 10, "duration": 10, "name": "Wounded" },
+        "description": "A powerful slash that leaves a deep wound, dealing damage over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/CrimsonSlash.jpg"
+      },
+      {
+        "name": "Warcry",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 30,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseAttackSpeed", "value": 20, "duration": 15, "name": "Warcry" },
+        "description": "Lets out a fearsome warcry that increases the attack speed of all allies.",
+        "targetingModes": [
+          "All Team"
+        ],
+        "icon": "Media/Skills/Buff/Warcry.jpg"
+      },
+      {
+        "name": "Unyielding Will",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increasePhysicalRes", "value": 20 },
+        "description": "Increases physical resistance for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/UnyieldingWill.jpg"
+      },
+      {
+        "name": "Battle Hardened",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseVitality", "value": 20 },
+        "description": "Increases the vitality of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/BattleHardened.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 40,
+      "speed": 12,
+      "dexterity": 15,
+      "stamina": 30,
+      "vitality": 25,
+      "magicPower": 5,
+      "mana": 60,
+      "manaRegen": 2,
+      "dodge": 5,
+      "magicControl": 6
+    },
+    "statsPerLevel": {
+      "strength": 5,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+  "EarthshakerGuardian": {
+    "name": "Earthshaker Guardian",
+    "portrait": "Media/Mobs/Guardian/EarthshakerGuardian.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 50,
+    "resistances": {
+      "Physical": 50,
+      "Earth": 40,
+      "Fire": -20
+    },
+    "skills": [
+      {
+        "name": "Seismic Slam",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 15,
+        "cooldown": 10,
+        "damageType": "Earth",
+        "effect": { "type": "debuff", "subtype": "stunned", "value": 0, "duration": 5, "name": "Stunned" },
+        "description": "Slams the ground, causing an earthquake that deals damage and stuns enemies.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Earth/SeismicSlam.jpg"
+      },
+      {
+        "name": "Earthquake",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 30,
+        "cooldown": 20,
+        "damageType": "Earth",
+        "effect": { "type": "debuff", "subtype": "knockdown", "value": 0, "duration": 10, "name": "Knocked Down" },
+        "description": "Unleashes a massive earthquake, dealing damage to all enemies and knocking them down.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Earth/Earthquake.jpg"
+      },
+      {
+        "name": "Stone Skin",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 30,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseArmor", "value": 30, "duration": 20, "name": "Stone Skin" },
+        "description": "Hardens the skin of an ally, greatly increasing their armor for a short time.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Buff/StoneSkin.jpg"
+      },
+      {
+        "name": "Roots of the Earth",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 25,
+        "damageType": "Earth",
+        "effect": { "type": "debuff", "subtype": "rooted", "value": 0, "duration": 15, "name": "Rooted" },
+        "description": "Summons roots from the earth to entangle enemies, immobilizing them.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Earth/RootsOfTheEarth.jpg"
+      },
+      {
+        "name": "Earthen Protection",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increasePhysicalRes", "value": 20 },
+        "description": "Increases physical resistance for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/EarthenProtection.jpg"
+      },
+      {
+        "name": "Guardian's Resolve",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseVitality", "value": 20 },
+        "description": "Increases the vitality of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/GuardiansResolve.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 35,
+      "speed": 8,
+      "dexterity": 10,
+      "stamina": 40,
+      "vitality": 30,
+      "magicPower": 5,
+      "mana": 60,
+      "manaRegen": 3,
+      "dodge": 5,
+      "magicControl": 8
+    },
+    "statsPerLevel": {
+      "strength": 4,
+      "speed": 1,
+      "dexterity": 1,
+      "vitality": 4,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+  "FirebrandChieftain": {
+    "name": "Firebrand Chieftain",
+    "portrait": "Media/Mobs/Chieftain/FirebrandChieftain.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 30,
+    "resistances": {
+      "Fire": 40,
+      "Physical": 20,
+      "Water": -20
+    },
+    "skills": [
+      {
+        "name": "Flame Slash",
+        "type": "active",
+        "damage": 35,
+        "manaCost": 15,
+        "cooldown": 10,
+        "damageType": "Fire",
+        "effect": { "type": "debuff", "subtype": "burn", "value": 5, "duration": 10, "name": "Burn" },
+        "description": "A fiery slash that sets the target ablaze, causing burn damage over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Fire/FlameSlash.jpg"
+      },
+      {
+        "name": "Inferno Roar",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 30,
+        "cooldown": 25,
+        "damageType": "Fire",
+        "effect": { "type": "buff", "subtype": "increaseDamage", "value": 20, "duration": 20, "name": "Inferno Roar" },
+        "description": "Lets out a terrifying roar that increases the damage of all allies for a short time.",
+        "targetingModes": [
+          "All Team"
+        ],
+        "icon": "Media/Skills/Fire/InfernoRoar.jpg"
+      },
+      {
+        "name": "Blazing Shield",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "Fire",
+        "effect": { "type": "buff", "subtype": "fireShield", "value": 25, "duration": 15, "name": "Blazing Shield" },
+        "description": "Surrounds an ally with a shield of flames, absorbing damage and burning attackers.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Fire/BlazingShield.jpg"
+      },
+      {
+        "name": "Firestorm",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 40,
+        "cooldown": 30,
+        "damageType": "Fire",
+        "effect": { "type": "debuff", "subtype": "burn", "value": 10, "duration": 15, "name": "Firestorm" },
+        "description": "Calls down a storm of fire, dealing damage to all enemies and applying a burn effect.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Fire/Firestorm.jpg"
+      },
+      {
+        "name": "Flame Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseFireDamage", "value": 20 },
+        "description": "Increases fire damage for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/FlameMastery.jpg"
+      },
+      {
+        "name": "Chieftain's Fury",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseAttackSpeed", "value": 10 },
+        "description": "Increases the attack speed of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/ChieftainsFury.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 30,
+      "speed": 10,
+      "dexterity": 12,
+      "stamina": 25,
+      "vitality": 20,
+      "magicPower": 15,
+      "mana": 80,
+      "manaRegen": 4,
+      "dodge": 8,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 4,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 2,
+      "mana": 6,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+  "BonewardenSentinel": {
+    "name": "Bonewarden Sentinel",
+    "portrait": "Media/Mobs/Sentinel/BonewardenSentinel.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 40,
+    "resistances": {
+      "Physical": 50,
+      "Dark": 30,
+      "Holy": -20
+    },
+    "skills": [
+      {
+        "name": "Bone Bash",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 10,
+        "cooldown": 10,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "stun", "value": 0, "duration": 5, "name": "Stunned" },
+        "description": "Bashes the target with a bone club, causing damage and stunning the target.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/BoneBash.jpg"
+      },
+      {
+        "name": "Necrotic Aura",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 30,
+        "damageType": "Dark",
+        "effect": { "type": "debuff", "subtype": "reduceHealing", "value": 50, "duration": 20, "name": "Necrotic Aura" },
+        "description": "Emits a dark aura that reduces the healing received by all enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Dark/NecroticAura.jpg"
+      },
+      {
+        "name": "Shield of Bones",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseArmor", "value": 30, "duration": 15, "name": "Shield of Bones" },
+        "description": "Raises a shield made of bones, greatly increasing the armor of an ally.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Buff/ShieldOfBones.jpg"
+      },
+      {
+        "name": "Skeletal Grasp",
+        "type": "active",
+        "damage": 15,
+        "manaCost": 15,
+        "cooldown": 15,
+        "damageType": "Dark",
+        "effect": { "type": "debuff", "subtype": "root", "value": 0, "duration": 10, "name": "Rooted" },
+        "description": "Summons skeletal hands from the ground to grasp and root an enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Dark/SkeletalGrasp.jpg"
+      },
+      {
+        "name": "Bone Fortitude",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increasePhysicalRes", "value": 20 },
+        "description": "Increases physical resistance for all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/BoneFortitude.jpg"
+      },
+      {
+        "name": "Deathly Resolve",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseVitality", "value": 15 },
+        "description": "Increases the vitality of all allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/DeathlyResolve.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 28,
+      "speed": 8,
+      "dexterity": 12,
+      "stamina": 35,
+      "vitality": 25,
+      "magicPower": 10,
+      "mana": 60,
+      "manaRegen": 3,
+      "dodge": 6,
+      "magicControl": 9
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+
+  "EnchantedArcher": {
+    "name": "Enchanted Archer",
+    "portrait": "Media/Mobs/Archer/EnchantedArcher.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 15,
+    "resistances": {
+      "Physical": 20,
+      "Magic": 30,
+      "Fire": -10
+    },
+    "skills": [
+      {
+        "name": "Stunning Shot",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 10,
+        "cooldown": 8,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "stun", "value": 0, "duration": 4, "name": "Stunned" },
+        "description": "Fires an arrow that stuns the target upon impact.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/StunningShot.jpg"
+      },
+      {
+        "name": "Entangling Arrow",
+        "type": "active",
+        "damage": 15,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "Magic",
+        "effect": { "type": "debuff", "subtype": "root", "value": 0, "duration": 6, "name": "Rooted" },
+        "description": "Shoots an arrow that entangles the target, rooting them in place.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Magic/EntanglingArrow.jpg"
+      },
+      {
+        "name": "Charming Bolt",
+        "type": "active",
+        "damage": 10,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "Magic",
+        "effect": { "type": "debuff", "subtype": "charm", "value": 0, "duration": 5, "name": "Charmed" },
+        "description": "Fires a magical arrow that charms the target, causing them to fight for the archer's side temporarily.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Magic/CharmingBolt.jpg"
+      },
+      {
+        "name": "Rain of Arrows",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "Physical",
+        "effect": null,
+        "description": "Unleashes a rain of enchanted arrows that deals damage to all enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Physical/RainOfArrows.jpg"
+      },
+      {
+        "name": "Magic Arrow",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseMagicDamage", "value": 15 },
+        "description": "Increases magic damage dealt by the archer.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/MagicArrow.jpg"
+      },
+      {
+        "name": "Elven Agility",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseSpeed", "value": 10 },
+        "description": "Increases the speed and dexterity of the archer.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/ElvenAgility.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 20,
+      "speed": 25,
+      "dexterity": 30,
+      "stamina": 15,
+      "vitality": 15,
+      "magicPower": 20,
+      "mana": 50,
+      "manaRegen": 4,
+      "dodge": 10,
+      "magicControl": 12
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 3,
+      "dexterity": 4,
+      "vitality": 2,
+      "magicPower": 2,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 2,
+      "magicControl": 2
+    }
+  },
+  "MysticDruid": {
+    "name": "Mystic Druid",
+    "portrait": "Media/Mobs/Druid/MysticDruid.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 20,
+    "resistances": {
+      "Nature": 50,
+      "Fire": -20,
+      "Physical": 10
+    },
+    "skills": [
+      {
+        "name": "Summon Woodland Creatures",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "summon", "subtype": "creatures", "value": 3, "duration": 15, "name": "Woodland Creatures" },
+        "description": "Summons woodland creatures to aid in battle.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Nature/SummonWoodlandCreatures.jpg"
+      },
+      {
+        "name": "Vine Grasp",
+        "type": "active",
+        "damage": 15,
+        "manaCost": 10,
+        "cooldown": 12,
+        "damageType": "Nature",
+        "effect": { "type": "debuff", "subtype": "root", "value": 0, "duration": 6, "name": "Rooted" },
+        "description": "Manipulates vines to entangle and root an enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Nature/VineGrasp.jpg"
+      },
+      {
+        "name": "Elemental Burst",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 15,
+        "cooldown": 15,
+        "damageType": "Nature",
+        "effect": null,
+        "description": "Harnesses the power of natural elements to deal damage to an enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Nature/ElementalBurst.jpg"
+      },
+      {
+        "name": "Healing Blossom",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 18,
+        "damageType": "None",
+        "effect": { "type": "heal", "subtype": "instant", "value": 30, "duration": 0, "name": "Healing Blossom" },
+        "description": "Summons a healing blossom to restore health to an ally.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Nature/HealingBlossom.jpg"
+      },
+      {
+        "name": "Nature's Shield",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseResistances", "value": 20, "duration": 15, "name": "Nature's Shield" },
+        "description": "Envelops an ally in natural energies, increasing their resistances.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Nature/NaturesShield.jpg"
+      },
+      {
+        "name": "Druidic Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseNatureDamage", "value": 20 },
+        "description": "Increases nature damage dealt by the druid.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/DruidicMastery.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 15,
+      "speed": 20,
+      "dexterity": 18,
+      "stamina": 20,
+      "vitality": 25,
+      "magicPower": 30,
+      "mana": 70,
+      "manaRegen": 5,
+      "dodge": 8,
+      "magicControl": 15
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 4,
+      "mana": 6,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 3
+    }
+  },
+  "PixieTrickster": {
+    "name": "Pixie Trickster",
+    "portrait": "Media/Mobs/Pixie/PixieTrickster.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 10,
+    "resistances": {
+      "Magic": 40,
+      "Physical": 10,
+      "Fire": -20
+    },
+    "skills": [
+      {
+        "name": "Illusionary Strike",
+        "type": "active",
+        "damage": 15,
+        "manaCost": 10,
+        "cooldown": 8,
+        "damageType": "Magic",
+        "effect": { "type": "debuff", "subtype": "confuse", "value": 0, "duration": 5, "name": "Confused" },
+        "description": "Creates an illusion to strike the target, causing confusion.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Magic/IllusionaryStrike.jpg"
+      },
+      {
+        "name": "Stealth",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "invisibility", "value": 0, "duration": 10, "name": "Invisible" },
+        "description": "Becomes invisible, avoiding enemy attacks.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Stealth/Stealth.jpg"
+      },
+      {
+        "name": "Fairy Dust Trap",
+        "type": "active",
+        "damage": 10,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "Magic",
+        "effect": { "type": "debuff", "subtype": "slow", "value": 50, "duration": 10, "name": "Slowed" },
+        "description": "Sets a trap with fairy dust, slowing down enemies who trigger it.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Magic/FairyDustTrap.jpg"
+      },
+      {
+        "name": "Mirror Image",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 18,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "clone", "value": 0, "duration": 10, "name": "Mirror Image" },
+        "description": "Creates mirror images to distract enemies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Magic/MirrorImage.jpg"
+      },
+      {
+        "name": "Trickster's Charm",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "Magic",
+        "effect": { "type": "debuff", "subtype": "charm", "value": 0, "duration": 5, "name": "Charmed" },
+        "description": "Charms an enemy, causing them to fight for the Pixie Trickster's side temporarily.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Magic/TrickstersCharm.jpg"
+      },
+      {
+        "name": "Pixie Agility",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseSpeed", "value": 20 },
+        "description": "Increases the speed and evasion of the Pixie Trickster.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/PixieAgility.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 30,
+      "dexterity": 25,
+      "stamina": 15,
+      "vitality": 10,
+      "magicPower": 20,
+      "mana": 50,
+      "manaRegen": 4,
+      "dodge": 20,
+      "magicControl": 15
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 3,
+      "dexterity": 3,
+      "vitality": 1,
+      "magicPower": 2,
+      "mana": 4,
+      "manaRegen": 1,
+      "dodge": 2,
+      "magicControl": 2
+    }
+  },
+  "GlamourMage": {
+    "name": "Glamour Mage",
+    "portrait": "Media/Mobs/Mage/GlamourMage.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 15,
+    "resistances": {
+      "Magic": 50,
+      "Physical": 10,
+      "Fire": -10
+    },
+    "skills": [
+      {
+        "name": "Alter Appearance",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 10,
+        "cooldown": 12,
+        "damageType": "None",
+        "effect": { "type": "debuff", "subtype": "confuse", "value": 0, "duration": 5, "name": "Confused" },
+        "description": "Changes the appearance of an enemy, causing confusion.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Magic/AlterAppearance.jpg"
+      },
+      {
+        "name": "Charm",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 15,
+        "damageType": "Magic",
+        "effect": { "type": "debuff", "subtype": "charm", "value": 0, "duration": 6, "name": "Charmed" },
+        "description": "Casts a charm spell to manipulate an enemy's emotions, causing them to fight for the Glamour Mage's side temporarily.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Magic/Charm.jpg"
+      },
+      {
+        "name": "Enchant",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increasePower", "value": 20, "duration": 10, "name": "Enchanted" },
+        "description": "Casts a powerful enchantment that increases an ally's power.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Magic/Enchant.jpg"
+      },
+      {
+        "name": "Illusory Defense",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 18,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseDefense", "value": 30, "duration": 10, "name": "Illusory Defense" },
+        "description": "Creates an illusion that increases an ally's defense.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Magic/IllusoryDefense.jpg"
+      },
+      {
+        "name": "Emotion Manipulation",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "debuff", "subtype": "fear", "value": 0, "duration": 5, "name": "Fearful" },
+        "description": "Manipulates the emotions of an enemy, causing fear and reducing their effectiveness in battle.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Magic/EmotionManipulation.jpg"
+      },
+      {
+        "name": "Glamour Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseMagicControl", "value": 20 },
+        "description": "Increases the Glamour Mage's control over magic, enhancing their effectiveness.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/GlamourMastery.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 20,
+      "dexterity": 15,
+      "stamina": 15,
+      "vitality": 20,
+      "magicPower": 30,
+      "mana": 60,
+      "manaRegen": 5,
+      "dodge": 10,
+      "magicControl": 25
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 2,
+      "magicPower": 4,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 3
+    }
+  },
+  "NaturesGuardian": {
+    "name": "Nature's Guardian",
+    "portrait": "Media/Mobs/Fairy/NaturesGuardian.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 30,
+    "resistances": {
+      "Nature": 50,
+      "Physical": 20,
+      "Fire": -30
+    },
+    "skills": [
+      {
+        "name": "Summon Barrier",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "shield", "value": 30, "duration": 10, "name": "Barrier" },
+        "description": "Summons a protective barrier around an ally, absorbing damage.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Nature/SummonBarrier.jpg"
+      },
+      {
+        "name": "Healing Touch",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "None",
+        "effect": { "type": "heal", "subtype": "instant", "value": 25, "duration": 0, "name": "Healing Touch" },
+        "description": "Heals an ally with a touch of nature's power.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Nature/HealingTouch.jpg"
+      },
+      {
+        "name": "Root Grasp",
+        "type": "active",
+        "damage": 10,
+        "manaCost": 10,
+        "cooldown": 10,
+        "damageType": "Nature",
+        "effect": { "type": "debuff", "subtype": "root", "value": 0, "duration": 6, "name": "Rooted" },
+        "description": "Summons roots from the ground to entangle and root an enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Nature/RootGrasp.jpg"
+      },
+      {
+        "name": "Ancient Strength",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 15,
+        "cooldown": 15,
+        "damageType": "Nature",
+        "effect": null,
+        "description": "Channels the strength of ancient trees to deal damage to an enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Nature/AncientStrength.jpg"
+      },
+      {
+        "name": "Forest's Blessing",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "regen", "value": 5, "duration": 10, "name": "Regeneration" },
+        "description": "Blesses an ally with the power of the forest, granting regeneration over time.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Nature/ForestsBlessing.jpg"
+      },
+      {
+        "name": "Guardian's Resilience",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseArmor", "value": 20 },
+        "description": "Increases the armor of the Nature's Guardian, enhancing their durability.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/GuardiansResilience.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 25,
+      "speed": 15,
+      "dexterity": 10,
+      "stamina": 25,
+      "vitality": 30,
+      "magicPower": 15,
+      "mana": 50,
+      "manaRegen": 4,
+      "dodge": 5,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "speed": 1,
+      "dexterity": 1,
+      "vitality": 4,
+      "magicPower": 2,
+      "mana": 4,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+  "SunfireSorcerer": {
+    "name": "Sunfire Sorcerer",
+    "portrait": "Media/Mobs/Fairy/SunfireSorcerer.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 15,
+    "resistances": {
+      "Light": 50,
+      "Fire": 20,
+      "Dark": -20
+    },
+    "skills": [
+      {
+        "name": "Blinding Light",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "Light",
+        "effect": { "type": "debuff", "subtype": "blind", "value": 0, "duration": 6, "name": "Blinded" },
+        "description": "Emits a blinding light that blinds an enemy, reducing accuracy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Light/BlindingLight.jpg"
+      },
+      {
+        "name": "Solar Flare",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "Light",
+        "effect": null,
+        "description": "Creates a burst of solar energy that damages all enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Light/SolarFlare.jpg"
+      },
+      {
+        "name": "Daylight Blessing",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 18,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseDamage", "value": 20, "duration": 10, "name": "Daylight Blessing" },
+        "description": "Blesses an ally with the power of daylight, increasing their damage.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Light/DaylightBlessing.jpg"
+      },
+      {
+        "name": "Solar Beam",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 30,
+        "cooldown": 20,
+        "damageType": "Light",
+        "effect": null,
+        "description": "Fires a concentrated beam of solar energy that deals heavy damage to a single enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Light/SolarBeam.jpg"
+      },
+      {
+        "name": "Solar Infusion",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "regen", "value": 5, "duration": 10, "name": "Solar Infusion" },
+        "description": "Infuses an ally with solar energy, granting regeneration over time.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Light/SolarInfusion.jpg"
+      },
+      {
+        "name": "Sunfire Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseLightDamage", "value": 20 },
+        "description": "Mastery over sunfire magic increases the damage dealt by the Sunfire Sorcerer.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/SunfireMastery.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 15,
+      "speed": 20,
+      "dexterity": 15,
+      "stamina": 15,
+      "vitality": 20,
+      "magicPower": 30,
+      "mana": 60,
+      "manaRegen": 5,
+      "dodge": 10,
+      "magicControl": 20
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 2,
+      "magicPower": 4,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+  "MoonshadowRogue": {
+    "name": "Moonshadow Rogue",
+    "portrait": "Media/Mobs/Rogue/MoonshadowRogue.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 10,
+    "resistances": {
+      "Shadow": 50,
+      "Physical": 20,
+      "Light": -20
+    },
+    "skills": [
+      {
+        "name": "Shadow Cloak",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "invisibility", "value": 0, "duration": 10, "name": "Invisible" },
+        "description": "Cloaks in shadows, becoming invisible and avoiding enemy attacks.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Shadow/ShadowCloak.jpg"
+      },
+      {
+        "name": "Shadow Step",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "None",
+        "effect": { "type": "teleport", "subtype": "instant", "value": 0, "duration": 0, "name": "Teleport" },
+        "description": "Steps into the shadows and teleports to a different location on the battlefield.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Shadow/ShadowStep.jpg"
+      },
+      {
+        "name": "Backstab",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 25,
+        "cooldown": 18,
+        "damageType": "Physical",
+        "effect": null,
+        "description": "Launches a surprise attack from behind, dealing increased damage.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Shadow/Backstab.jpg"
+      },
+      {
+        "name": "Shadow Veil",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 30,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "evasion", "value": 30, "duration": 10, "name": "Shadow Veil" },
+        "description": "Shrouds in a veil of shadows, increasing evasion against enemy attacks.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Shadow/ShadowVeil.jpg"
+      },
+      {
+        "name": "Night's Embrace",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseDamage", "value": 20, "duration": 10, "name": "Night's Embrace" },
+        "description": "Draws power from the shadows, increasing damage dealt.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Shadow/NightsEmbrace.jpg"
+      },
+      {
+        "name": "Shadow Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseDexterity", "value": 20 },
+        "description": "Mastery over shadow magic increases dexterity and stealth abilities.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/ShadowMastery.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 20,
+      "speed": 25,
+      "dexterity": 30,
+      "stamina": 15,
+      "vitality": 15,
+      "magicPower": 10,
+      "mana": 50,
+      "manaRegen": 4,
+      "dodge": 20,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 3,
+      "dexterity": 4,
+      "vitality": 2,
+      "magicPower": 1,
+      "mana": 4,
+      "manaRegen": 1,
+      "dodge": 2,
+      "magicControl": 1
+    }
+  },
+  "SongweaverBard": {
+    "name": "Songweaver Bard",
+    "portrait": "Media/Mobs/Bard/SongweaverBard.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 10,
+    "resistances": {
+      "Magic": 20,
+      "Physical": 10,
+      "Dark": -10
+    },
+    "skills": [
+      {
+        "name": "Inspiring Melody",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseStrength", "value": 20, "duration": 10, "name": "Inspired" },
+        "description": "Plays an inspiring melody that increases an ally's strength.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Bard/InspiringMelody.jpg"
+      },
+      {
+        "name": "Charming Serenade",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "None",
+        "effect": { "type": "debuff", "subtype": "charm", "value": 0, "duration": 6, "name": "Charmed" },
+        "description": "Performs a charming serenade that charms an enemy, causing them to fight for the Songweaver Bard's side temporarily.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Bard/CharmingSerenade.jpg"
+      },
+      {
+        "name": "Dissonant Discord",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 25,
+        "cooldown": 18,
+        "damageType": "Magic",
+        "effect": null,
+        "description": "Plays a discordant tune that deals damage to an enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Bard/DissonantDiscord.jpg"
+      },
+      {
+        "name": "Harmonic Barrier",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "shield", "value": 30, "duration": 10, "name": "Harmonic Barrier" },
+        "description": "Creates a harmonic barrier that absorbs damage for an ally.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Bard/HarmonicBarrier.jpg"
+      },
+      {
+        "name": "Echoes of Healing",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 30,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "heal", "subtype": "instant", "value": 25, "duration": 0, "name": "Echoes of Healing" },
+        "description": "Sings healing echoes that restore health to an ally.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Bard/EchoesOfHealing.jpg"
+      },
+      {
+        "name": "Melodic Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseMagicControl", "value": 20 },
+        "description": "Mastery over melodies enhances magic control, increasing effectiveness.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/MelodicMastery.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 15,
+      "dexterity": 20,
+      "stamina": 15,
+      "vitality": 15,
+      "magicPower": 25,
+      "mana": 60,
+      "manaRegen": 5,
+      "dodge": 10,
+      "magicControl": 25
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 2,
+      "dexterity": 3,
+      "vitality": 2,
+      "magicPower": 3,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 3
+    }
+  },
+  "StarfallOracle": {
+    "name": "Starfall Oracle",
+    "portrait": "Media/Mobs/Oracle/StarfallOracle.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 15,
+    "resistances": {
+      "Light": 30,
+      "Dark": 10,
+      "Magic": 20
+    },
+    "skills": [
+      {
+        "name": "Celestial Prediction",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseDodge", "value": 20, "duration": 10, "name": "Foresight" },
+        "description": "Foresees an enemy's attack, increasing dodge chance for an ally.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Oracle/CelestialPrediction.jpg"
+      },
+      {
+        "name": "Meteor Shower",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 25,
+        "cooldown": 18,
+        "damageType": "Magic",
+        "effect": null,
+        "description": "Summons a shower of meteors that damages all enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Oracle/MeteorShower.jpg"
+      },
+      {
+        "name": "Starlight Blessing",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseMagicPower", "value": 20, "duration": 10, "name": "Starlight Blessing" },
+        "description": "Bestows a blessing from starlight, increasing an ally's magic power.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Oracle/StarlightBlessing.jpg"
+      },
+      {
+        "name": "Cosmic Ray",
+        "type": "active",
+        "damage": 50,
+        "manaCost": 30,
+        "cooldown": 20,
+        "damageType": "Magic",
+        "effect": null,
+        "description": "Fires a concentrated beam of cosmic energy that deals heavy damage to a single enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Oracle/CosmicRay.jpg"
+      },
+      {
+        "name": "Stellar Harmony",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "heal", "subtype": "instant", "value": 30, "duration": 0, "name": "Stellar Harmony" },
+        "description": "Channels healing energy from the stars to restore health to an ally.",
+        "targetingModes": [
+          "Random Team"
+        ],
+        "icon": "Media/Skills/Oracle/StellarHarmony.jpg"
+      },
+      {
+        "name": "Celestial Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseMagicControl", "value": 20 },
+        "description": "Mastery over celestial magic enhances magic control, improving spell effectiveness.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/CelestialMastery.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 15,
+      "dexterity": 15,
+      "stamina": 20,
+      "vitality": 15,
+      "magicPower": 30,
+      "mana": 60,
+      "manaRegen": 5,
+      "dodge": 10,
+      "magicControl": 25
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 4,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 3
+    }
+  },
+  "FrostwingKnight": {
+    "name": "Frostwing Knight",
+    "portrait": "Media/Mobs/Knight/FrostwingKnight.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 25,
+    "resistances": {
+      "Ice": 50,
+      "Physical": 20,
+      "Fire": -20
+    },
+    "skills": [
+      {
+        "name": "Glacial Strike",
+        "type": "active",
+        "damage": 40,
+        "manaCost": 20,
+        "cooldown": 12,
+        "damageType": "Ice",
+        "effect": null,
+        "description": "Delivers a powerful strike infused with icy cold, dealing damage to a single enemy.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Knight/GlacialStrike.jpg"
+      },
+      {
+        "name": "Blizzard Shield",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 18,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "shield", "value": 40, "duration": 10, "name": "Blizzard Shield" },
+        "description": "Creates a shield of swirling ice and snow that absorbs damage for the Frostwing Knight.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Knight/BlizzardShield.jpg"
+      },
+      {
+        "name": "Icy Gale",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "Ice",
+        "effect": null,
+        "description": "Summons a chilling wind that damages and slows down all enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Knight/IcyGale.jpg"
+      },
+      {
+        "name": "Frostwing Glide",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 12,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "evasion", "value": 30, "duration": 10, "name": "Frostwing Glide" },
+        "description": "Glides gracefully through the air, increasing evasion against enemy attacks.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Knight/FrostwingGlide.jpg"
+      },
+      {
+        "name": "Frozen Fortitude",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 30,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseArmor", "value": 30, "duration": 10, "name": "Frozen Fortitude" },
+        "description": "Enhances resilience with a layer of frost, increasing armor.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Knight/FrozenFortitude.jpg"
+      },
+      {
+        "name": "Icicle Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffIceDamage", "value": 20 },
+        "description": "Mastery over ice magic increases ice damage dealt.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/IcicleMastery.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 25,
+      "speed": 20,
+      "dexterity": 15,
+      "stamina": 25,
+      "vitality": 20,
+      "magicPower": 10,
+      "mana": 50,
+      "manaRegen": 4,
+      "dodge": 15,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "speed": 2,
+      "dexterity": 1,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  }
+
+
+
+
+}

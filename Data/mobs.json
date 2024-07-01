@@ -1,122 +1,1223 @@
 {
-  "MantisFireMage": {
-    "name": "Mantis Fire Mage",
-    "portrait": "Media/Mobs/Mantis/FireMage.jpg",
+  "GoblinWarrior": {
+    "name": "Goblin Warrior",
+    "portrait": "Media/Mobs/Goblin/warrior.jpeg",
     "positions": [
-      "Back,Any"
+      "Front,Any"
     ],
-    "armor": 5,
+    "armor": 10,
     "resistances":{
 
     },
+    "experience":15,
     "skills": [
       {
-        "name": "Fireball",
+        "name": "Slash",
         "type": "active",
-        "damage": 10,
+        "damage": 15,
         "manaCost": 0,
-        "cooldown": 15,
-        "damageType": "Fire",
+        "cooldown": 10,
+        "damageType": "Physical",
         "effect": null,
         "description": "A quick slash with a sword.",
         "targetingModes": [
-          "Random"
+          "Random Front"
         ],
-        "icon": "Media/Skills/Fire/Fireball.jpg"
+        "icon": "Media/Skills/Physical/quick-slash.svg"
       },
       {
-        "name": "Fire Wave",
+        "name": "Shield Bash",
         "type": "active",
-        "damage": 20,
-        "manaCost": 10,
+        "damage": 10,
+        "manaCost": 0,
         "cooldown": 20,
-        "damageType": "Fire",
-        "effect": null,
-        "description": "Unleashes a wave of fire that deals damage to all enemies in range and has a chance to apply burn.",
-        "targetingModes": [
-          "Random"
-        ],
-        "icon": "Media/Skills/Fire/fireWave.jpg"
-      },
-      {
-        "name": "Inferno",
-        "type": "active",
-        "damage": 50,
-        "manaCost": 30,
-        "cooldown": 40,
-        "damageType": "Fire",
-        "effect": null,
-        "description": "Summons a raging inferno that deals massive damage and has a chance to stun the target.",
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subType": "Stun", "value": 1, "duration": 5, "name": "Stun","stackMode": "duration"},
+        "description": "Bashes the target with a shield, dealing damage and has a chance to stun.",
         "targetingModes": [
           "Random Front"
         ],
-        "icon": "Media/Skills/Fire/Inferno.jpg"
+        "icon": "Media/Skills/Physical/shield-bash.svg"
       },
       {
-        "name": "Fire Mastery",
-        "type": "passive",
+        "name": "Battle Cry",
+        "type": "active",
         "damage": 0,
         "manaCost": 0,
-        "cooldown": 0,
+        "cooldown": 30,
         "damageType": "None",
-        "effect": null,
-        "description": "Increases fire damage by 20%.",
-        "targetingModes": [
-          "Self"
-        ],
-        "icon": "Media/Skills/Fire/FireMastery.jpg"
-      },
-      {
-        "name": "Mana Flow",
-        "type": "passive",
-        "damage": 0,
-        "manaCost": 0,
-        "cooldown": 0,
-        "damageType": "None",
-        "effect": null,
-        "description": "Increases mana regeneration by 3 per second.",
+        "effect": { "type": "buff", "subtype":"increaseDamage", "value": 10, "duration": 10, "name": "Increase Damage",
+          "stackMode": "refresh"
+        },
+        "description": "Lets out a battle cry that increases the damage of all allies.",
         "targetingModes": [
           "All Team Any"
         ],
-        "icon": "Media/Skills/Mana/manaFlow.jpg"
+        "icon": "Media/Skills/Physical/shouting.svg"
       },
       {
-        "name": "Fiery Resilience",
+        "name": "Warriors Endurance",
         "type": "passive",
         "damage": 0,
         "manaCost": 0,
         "cooldown": 0,
         "damageType": "None",
-        "effect": null,
-        "description": "Reduces fire damage taken by 15%.",
+        "effect": { "type": "passive", "subtype": "buffHealth", "value": 20 },
+        "description": "Increases health by 20%.",
         "targetingModes": [
           "Self"
         ],
-        "icon": "Media/Skills/Resistance/fireRes.jpg"
+        "icon": "Media/Skills/Physical/muscular-torso.svg"
+      },
+      {
+        "name": "Stamina Surge",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffStaminaRegen", "value": 5 },
+        "description": "Increases stamina regeneration by 5 per second.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Physical/StaminaSurge.jpg"
+      },
+      {
+        "name": "Tough Skin",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffArmor", "value": 10 },
+        "description": "Increases armor by 10.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Physical/ToughSkin.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 25,
+      "speed": 5,
+      "dexterity": 10,
+      "stamina": 30,
+      "vitality": 25,
+      "magicPower": 0,
+      "mana": 0,
+      "manaRegen": 0,
+      "dodge": 5,
+      "magicControl": 0
+    },
+    "statsPerLevel": {
+      "strength": 4,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 5,
+      "magicPower": 0,
+      "mana": 0,
+      "manaRegen": 0,
+      "dodge": 1,
+      "magicControl": 0
+    }
+  },
+  "GoblinShaman": {
+    "name": "Goblin Shaman",
+    "portrait": "Media/Mobs/Goblin/shaman.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 3,
+    "resistances":{
+
+    },
+    "experience":10,
+    "skills": [
+      {
+        "name": "Healing Wave",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 15,
+        "damageType": "None",
+        "effect": { "subType": "Heal", "value": 20 },
+        "description": "Heals an ally with a wave of restorative magic.",
+        "targetingModes": [
+          "Random Ally"
+        ],
+        "icon": "Media/Skills/Healing/HealingWave.jpg"
+      },
+      {
+        "name": "Totem of Strength",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "Strenghten", "value": 10, "duration": 20, "name": "Increase Strength","stackMode": "refresh","icon": "TODO"},
+        "description": "Places a totem that increases the strength of all allies in range.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Buff/TotemOfStrength.jpg"
+      },
+      {
+        "name": "Mystic Shield",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 30,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseArmor", "value": 15, "duration": 15, "name": "Increase Armor", "icon": "TODO" },
+        "description": "Casts a protective shield that increases the armor of an ally.",
+        "targetingModes": [
+          "Random Ally"
+        ],
+        "icon": "Media/Skills/Buff/MysticShield.jpg"
+      },
+      {
+        "name": "Spirit Guidance",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffManaRegen", "value": 10 },
+        "description": "Increases mana regeneration for all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Passive/SpiritGuidance.jpg"
+      },
+      {
+        "name": "Shamanic Fury",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffMagicPower", "value": 15 },
+        "description": "Increases magic power of all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Passive/ShamanicFury.jpg"
+      },
+      {
+        "name": "Earth's Blessing",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffHealth", "value": 10 },
+        "description": "Increases the health of all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Passive/EarthsBlessing.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 7,
+      "dexterity": 12,
+      "stamina": 15,
+      "vitality": 20,
+      "magicPower": 25,
+      "mana": 80,
+      "manaRegen": 5,
+      "dodge": 5,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 4,
+      "mana": 8,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+  "GoblinHealer": {
+    "name": "Goblin Healer",
+    "portrait": "Media/Mobs/Goblin/Healer.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 2,
+    "resistances":{
+
+    },
+    "experience":15,
+    "skills": [
+      {
+        "name": "Healing Touch",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 10,
+        "damageType": "None",
+        "effect": { "type": "heal", "value": 25 },
+        "description": "Heals an ally with a gentle touch.",
+        "targetingModes": [
+          "Random Ally"
+        ],
+        "icon": "Media/Skills/Healing/HealingTouch.jpg"
+      },
+      {
+        "name": "Revitalize",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 30,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "heal", "value": 4, "duration": 10, "name": "Healing Over Time" },
+        "description": "Heals an ally over time.",
+        "targetingModes": [
+          "Random Ally"
+        ],
+        "icon": "Media/Skills/Healing/Revitalize.jpg"
+      },
+      {
+        "name": "Group Heal",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 40,
+        "cooldown": 35,
+        "damageType": "None",
+        "effect": { "type": "heal", "value": 20 },
+        "description": "Heals all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Healing/GroupHeal.jpg"
+      },
+      {
+        "name": "Healing Aura",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "auraHeal", "value": 5 },
+        "description": "Continuously heals all allies in range.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Passive/HealingAura.jpg"
+      },
+      {
+        "name": "Mana Surge",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffManaRegen", "value": 5 },
+        "description": "Increases mana regeneration for all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Passive/ManaSurge.jpg"
+      },
+      {
+        "name": "Protective Ward",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffArmor", "value": 10 },
+        "description": "Increases armor of all allies.",
+        "targetingModes": [
+          "All Team Any"
+        ],
+        "icon": "Media/Skills/Passive/ProtectiveWard.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 8,
+      "speed": 6,
+      "dexterity": 10,
+      "stamina": 18,
+      "vitality": 22,
+      "magicPower": 22,
+      "mana": 70,
+      "manaRegen": 4,
+      "dodge": 4,
+      "magicControl": 12
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 3,
+      "mana": 7,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+  "GoblinScout": {
+    "name": "Goblin Scout",
+    "portrait": "Media/Mobs/Goblin/Scout.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 4,
+    "resistances":{
+
+    },
+    "experience":10,
+    "skills": [
+      {
+        "name": "Quick Strike",
+        "type": "active",
+        "damage": 10,
+        "manaCost": 0,
+        "cooldown": 5,
+        "damageType": "Physical",
+        "effect": null,
+        "description": "A rapid attack with a dagger.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/quick-slash.svg"
+      },
+      {
+        "name": "Poison Dart",
+        "type": "active",
+        "damage": 8,
+        "manaCost": 5,
+        "cooldown": 15,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subType":"Poison","damageType": "Poison", "value": 5, "duration": 10, "icon":"Media/UI/poison-bottle.svg","name": "Poison" },
+        "description": "Shoots a poison dart that deals damage over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/PoisonDart.jpg"
+      },
+      {
+        "name": "Sneak Attack",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 10,
+        "cooldown": 25,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subType": "Stun", "value": 1, "duration": 5, "name": "Stun","stacksDuration": true},
+        "description": "A stealthy attack that deals high damage and can stun the target.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/SneakAttack.jpg"
+      },
+      {
+        "name": "Agility Boost",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffSpeed", "value": 5 },
+        "description": "Increases speed.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/AgilityBoost.jpg"
+      },
+      {
+        "name": "Camouflage",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffDodge", "value": 10 },
+        "description": "Increases dodge chance.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/Camouflage.jpg"
+      },
+      {
+        "name": "Keen Eyes",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffCritChance", "value": 5 },
+        "description": "Increases critical hit chance.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Physical/semi-closed-eye.svg"
+      }
+    ],
+    "stats": {
+      "strength": 12,
+      "speed": 20,
+      "dexterity": 18,
+      "stamina": 15,
+      "vitality": 10,
+      "magicPower": 5,
+      "mana": 30,
+      "manaRegen": 2,
+      "dodge": 15,
+      "magicControl": 5
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 3,
+      "dexterity": 3,
+      "vitality": 2,
+      "magicPower": 1,
+      "mana": 3,
+      "manaRegen": 1,
+      "dodge": 2,
+      "magicControl": 1
+    }
+  },
+  "GoblinAlchemist": {
+    "name": "Goblin Alchemist",
+    "portrait": "Media/Mobs/Goblin/alchemist.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 3,
+    "resistances":{
+
+    },
+    "experience":15,
+    "skills": [
+      {
+        "name": "Acid Flask",
+        "type": "active",
+        "damage": 5,
+        "manaCost": 10,
+        "cooldown": 10,
+        "damageType": "Chemical",
+        "effect": { "type": "debuff", "subtype": "reduceArmor", "value": 5, "duration": 10, "name": "Corrosion" },
+        "description": "Throws an acid flask that deals damage and reduces the target's armor.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Chemical/AcidFlask.jpg"
+      },
+      {
+        "name": "Poison Cloud",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "Chemical",
+        "effect": { "type": "debuff", "subtype":"dot", "value": 5, "duration": 15, "name": "Poison" },
+        "description": "Creates a cloud of poison that deals damage over time to all enemies in range.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Chemical/PoisonCloud.jpg"
+      },
+      {
+        "name": "Paralyzing Potion",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 30,
+        "damageType": "Chemical",
+        "effect": { "type": "debuff", "subtype": "stun", "value": 1, "duration": 5, "name": "Paralysis" },
+        "description": "Throws a potion that has a chance to paralyze the target.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Chemical/ParalyzingPotion.jpg"
+      },
+      {
+        "name": "Weakening Elixir",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 20,
+        "damageType": "Chemical",
+        "effect": { "type": "debuff", "subtype": "reduceStrength", "value": 5, "duration": 15, "name": "Weakness" },
+        "description": "Throws an elixir that reduces the target's strength.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Chemical/WeakeningElixir.jpg"
+      },
+      {
+        "name": "Toxic Bomb",
+        "type": "active",
+        "damage": 15,
+        "manaCost": 30,
+        "cooldown": 25,
+        "damageType": "Chemical",
+        "effect": { "type": "debuff", "subtype": "reduceDodge", "value": 10, "duration": 10, "name": "Toxicity" },
+        "description": "Throws a bomb that deals damage and reduces the target's dodge chance.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Chemical/ToxicBomb.jpg"
+      },
+      {
+        "name": "Alchemical Mastery",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffDebuffDuration", "value": 5 },
+        "description": "Increases the duration of all debuffs applied by the Goblin Alchemist.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/AlchemicalMastery.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 10,
+      "speed": 12,
+      "dexterity": 15,
+      "stamina": 15,
+      "vitality": 12,
+      "magicPower": 18,
+      "mana": 60,
+      "manaRegen": 3,
+      "dodge": 8,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 2,
+      "dexterity": 3,
+      "vitality": 2,
+      "magicPower": 3,
+      "mana": 6,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+  "GoblinFirestarter": {
+    "name": "Goblin Firestarter",
+    "portrait": "Media/Mobs/Goblin/firestarter.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 4,
+    "resistances":{
+
+    },
+    "experience":15,
+    "skills": [
+      {
+        "name": "Fire Blast",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 10,
+        "cooldown": 15,
+        "damageType": "Fire",
+        "effect": { "type": "debuff", "subtype": "burn", "value": 5, "duration": 10, "name": "Burn" },
+        "description": "Unleashes a blast of fire that deals damage and may cause burn.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Fire/FireBlast.jpg"
+      },
+      {
+        "name": "Wildfire",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "Fire",
+        "effect": { "type": "debuff", "subtype":"dot", "value": 10, "duration": 15, "name": "Wildfire Burn" },
+        "description": "Spreads fire that deals damage over time to all enemies and has a chance to spread to allies.",
+        "targetingModes": [
+          "All Enemies",
+          "Random Ally"
+        ],
+        "icon": "Media/Skills/Fire/Wildfire.jpg"
+      },
+      {
+        "name": "Flame Wave",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 25,
+        "cooldown": 25,
+        "damageType": "Fire",
+        "effect": null,
+        "description": "A wave of flame that deals damage to all enemies in range and may hit allies.",
+        "targetingModes": [
+          "All Enemies",
+          "Random Ally"
+        ],
+        "icon": "Media/Skills/Fire/FlameWave.jpg"
+      },
+      {
+        "name": "Explosive Potion",
+        "type": "active",
+        "damage": 50,
+        "manaCost": 30,
+        "cooldown": 35,
+        "damageType": "Fire",
+        "effect": { "type": "debuff", "subtype": "stun", "value": 1, "duration": 5, "name": "Explosion Stun" },
+        "description": "Throws an explosive potion that deals massive damage and stuns, but can backfire.",
+        "targetingModes": [
+          "Random",
+          "Random Ally"
+        ],
+        "icon": "Media/Skills/Fire/ExplosivePotion.jpg"
+      },
+      {
+        "name": "Burning Rage",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffFireDamage", "value": 10 },
+        "description": "Increases fire damage dealt, but also increases the chance of hitting allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/BurningRage.jpg"
+      },
+      {
+        "name": "Uncontrolled Flames",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseAllyHitChance", "value": 5 },
+        "description": "Increases the chance of fire attacks hitting allies.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/UncontrolledFlames.jpg"
       }
     ],
     "stats": {
       "strength": 15,
-      "speed": 6,
-      "dexterity": 8,
-      "stamina": 20,
-      "vitality": 20,
-      "magicPower": 5,
+      "speed": 10,
+      "dexterity": 12,
+      "stamina": 14,
+      "vitality": 10,
+      "magicPower": 25,
+      "mana": 60,
+      "manaRegen": 3,
+      "dodge": 5,
+      "magicControl": 10
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 2,
+      "magicPower": 4,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 2
+    }
+  },
+  "GoblinArcher": {
+    "name": "Goblin Archer",
+    "portrait": "Media/Mobs/Goblin/Archer.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 3,
+    "resistances":{
+
+    },
+    "experience":15,
+    "skills": [
+      {
+        "name": "Piercing Shot",
+        "type": "active",
+        "damage": 15,
+        "manaCost": 5,
+        "cooldown": 10,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "reduceArmor", "value": 3, "duration": 5, "name": "Pierced Armor" },
+        "description": "Fires an arrow that pierces through armor, reducing its effectiveness.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/PiercingShot.jpg"
+      },
+      {
+        "name": "Poison Arrow",
+        "type": "active",
+        "damage": 10,
+        "manaCost": 8,
+        "cooldown": 15,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "dot", "value": 5, "duration": 10, "name": "Poison" },
+        "description": "Shoots a poisoned arrow that deals damage over time.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/PoisonArrow.jpg"
+      },
+      {
+        "name": "Multi-Shot",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 20,
+        "cooldown": 20,
+        "damageType": "Physical",
+        "effect": null,
+        "description": "Fires multiple arrows at once, hitting multiple enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Physical/MultiShot.jpg"
+      },
+      {
+        "name": "Explosive Arrow",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 15,
+        "cooldown": 25,
+        "damageType": "Fire",
+        "effect": { "type": "debuff", "subtype": "burn", "value": 5, "duration": 5, "name": "Burn" },
+        "description": "Shoots an explosive arrow that deals fire damage and may cause burn.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Fire/ExplosiveArrow.jpg"
+      },
+      {
+        "name": "Sharpshooter",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffCritChance", "value": 10 },
+        "description": "Increases critical hit chance.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/Sharpshooter.jpg"
+      },
+      {
+        "name": "Quick Reflexes",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "buffDodge", "value": 5 },
+        "description": "Increases dodge chance.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/QuickReflexes.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 12,
+      "speed": 18,
+      "dexterity": 20,
+      "stamina": 12,
+      "vitality": 10,
+      "magicPower": 8,
+      "mana": 40,
+      "manaRegen": 2,
+      "dodge": 10,
+      "magicControl": 5
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "speed": 3,
+      "dexterity": 4,
+      "vitality": 1,
+      "magicPower": 1,
+      "mana": 4,
+      "manaRegen": 1,
+      "dodge": 2,
+      "magicControl": 1
+    }
+  },
+  "GoblinBeastmaster": {
+    "name": "Goblin Beastmaster",
+    "portrait": "Media/Mobs/Goblin/beastmaster.jpeg",
+    "positions": [
+      "Back,Any"
+    ],
+    "armor": 6,
+    "resistances":{
+
+    },
+    "experience":15,
+    "skills": [
+      {
+        "name": "Call of the Wild",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "summon", "subtype": "beast", "value": 1, "duration": 30, "name": "Summoned Beast" },
+        "description": "Summons a beast to fight alongside the Goblin Beastmaster.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Summon/CallOfTheWild.jpg"
+      },
+      {
+        "name": "Savage Strike",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 10,
+        "cooldown": 15,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "bleed", "value": 5, "duration": 10, "name": "Bleed" },
+        "description": "Commands a beast to strike, causing damage and bleeding.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/SavageStrike.jpg"
+      },
+      {
+        "name": "Pack Leader",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseDamage", "value": 10, "duration": 20, "name": "Pack Strength" },
+        "description": "Increases the damage of all allied beasts.",
+        "targetingModes": [
+          "All Beasts"
+        ],
+        "icon": "Media/Skills/Buff/PackLeader.jpg"
+      },
+      {
+        "name": "Ferocious Roar",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "debuff", "subtype": "reduceArmor", "value": 5, "duration": 10, "name": "Intimidation" },
+        "description": "Unleashes a roar that reduces the armor of all enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Debuff/FerociousRoar.jpg"
+      },
+      {
+        "name": "Beastmaster's Bond",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseBeastHealth", "value": 15 },
+        "description": "Increases the health of all summoned beasts.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/BeastmastersBond.jpg"
+      },
+      {
+        "name": "Untamed Fury",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseCritChance", "value": 5 },
+        "description": "Increases the critical hit chance of all summoned beasts.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/UntamedFury.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 18,
+      "speed": 12,
+      "dexterity": 14,
+      "stamina": 18,
+      "vitality": 15,
+      "magicPower": 8,
       "mana": 50,
       "manaRegen": 2,
-      "dodge": 5,
+      "dodge": 7,
       "magicControl": 5
     },
     "statsPerLevel": {
       "strength": 3,
-      "speed": 1,
+      "speed": 2,
       "dexterity": 2,
-      "vitality": 4,
+      "vitality": 3,
       "magicPower": 1,
       "mana": 5,
       "manaRegen": 1,
       "dodge": 1,
       "magicControl": 1
     }
+  },
+  "GoblinBerserker": {
+    "name": "Goblin Berserker",
+    "portrait": "Media/Mobs/Goblin/berserker.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 8,
+    "resistances":{
+
+    },
+    "experience":20,
+    "skills": [
+      {
+        "name": "Berserk Slash",
+        "type": "active",
+        "damage": 25,
+        "manaCost": 5,
+        "cooldown": 10,
+        "damageType": "Physical",
+        "effect": { "type": "debuff", "subtype": "bleed", "value": 5, "duration": 5, "name": "Bleed" },
+        "description": "A furious slash that causes bleeding.",
+        "targetingModes": [
+          "Random Front"
+        ],
+        "icon": "Media/Skills/Physical/BerserkSlash.jpg"
+      },
+      {
+        "name": "Rage Strike",
+        "type": "active",
+        "damage": 35,
+        "manaCost": 10,
+        "cooldown": 15,
+        "damageType": "Physical",
+        "effect": null,
+        "description": "A powerful strike fueled by rage, dealing significant damage.",
+        "targetingModes": [
+          "Random"
+        ],
+        "icon": "Media/Skills/Physical/RageStrike.jpg"
+      },
+      {
+        "name": "Frenzy",
+        "type": "active",
+        "damage": 20,
+        "manaCost": 15,
+        "cooldown": 20,
+        "damageType": "Physical",
+        "effect": { "type": "buff", "subtype": "increaseSpeed", "value": 5, "duration": 10, "name": "Frenzied Speed" },
+        "description": "Increases attack speed and damage for a short duration.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Buff/Frenzy.jpg"
+      },
+      {
+        "name": "War Cry",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "debuff", "subtype": "reduceDamage", "value": 10, "duration": 10, "name": "Intimidated" },
+        "description": "A mighty war cry that reduces the damage of all enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Debuff/WarCry.jpg"
+      },
+      {
+        "name": "Unstoppable Rage",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseDamage", "value": 10 },
+        "description": "Passively increases damage dealt as the Berserker takes more damage.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/UnstoppableRage.jpg"
+      },
+      {
+        "name": "Bloodlust",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "healOnKill", "value": 5 },
+        "description": "Heals a small amount of health whenever the Berserker kills an enemy.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/Bloodlust.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 25,
+      "speed": 10,
+      "dexterity": 10,
+      "stamina": 20,
+      "vitality": 15,
+      "magicPower": 5,
+      "mana": 30,
+      "manaRegen": 1,
+      "dodge": 5,
+      "magicControl": 3
+    },
+    "statsPerLevel": {
+      "strength": 4,
+      "speed": 1,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 2,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
+  },
+  "GoblinChieftain": {
+    "name": "Goblin Chieftain",
+    "portrait": "Media/Mobs/Goblin/Chieftain.jpeg",
+    "positions": [
+      "Front,Any"
+    ],
+    "armor": 10,
+    "resistances":{
+
+    },
+    "experience":25,
+    "skills": [
+      {
+        "name": "Chieftain's Strike",
+        "type": "active",
+        "damage": 30,
+        "manaCost": 10,
+        "cooldown": 10,
+        "damageType": "Physical",
+        "effect": null,
+        "description": "A powerful strike that deals significant damage.",
+        "targetingModes": [
+          "Random Front"
+        ],
+        "icon": "Media/Skills/Physical/ChieftainsStrike.jpg"
+      },
+      {
+        "name": "Goblin's Rally",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 20,
+        "cooldown": 25,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseDamage", "value": 15, "duration": 15, "name": "Rallying Cry" },
+        "description": "Rallies all goblins, increasing their damage output.",
+        "targetingModes": [
+          "All Team Goblin"
+        ],
+        "icon": "Media/Skills/Buff/GoblinsRally.jpg"
+      },
+      {
+        "name": "Commanding Presence",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 25,
+        "cooldown": 30,
+        "damageType": "None",
+        "effect": { "type": "buff", "subtype": "increaseArmor", "value": 10, "duration": 20, "name": "Increased Armor" },
+        "description": "Increases the armor of all allied goblins.",
+        "targetingModes": [
+          "All Team Goblin"
+        ],
+        "icon": "Media/Skills/Buff/CommandingPresence.jpg"
+      },
+      {
+        "name": "Battle Roar",
+        "type": "active",
+        "damage": 0,
+        "manaCost": 15,
+        "cooldown": 20,
+        "damageType": "None",
+        "effect": { "type": "debuff", "subtype": "reduceDamage", "value": 10, "duration": 10, "name": "Intimidated" },
+        "description": "A mighty roar that reduces the damage of all enemies.",
+        "targetingModes": [
+          "All Enemies"
+        ],
+        "icon": "Media/Skills/Debuff/BattleRoar.jpg"
+      },
+      {
+        "name": "Leader's Fortitude",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseHealth", "value": 20 },
+        "description": "Increases the health of all allied goblins.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/LeadersFortitude.jpg"
+      },
+      {
+        "name": "Inspiring Aura",
+        "type": "passive",
+        "damage": 0,
+        "manaCost": 0,
+        "cooldown": 0,
+        "damageType": "None",
+        "effect": { "type": "passive", "subtype": "increaseSpeed", "value": 5 },
+        "description": "Increases the speed of all allied goblins.",
+        "targetingModes": [
+          "Self"
+        ],
+        "icon": "Media/Skills/Passive/InspiringAura.jpg"
+      }
+    ],
+    "stats": {
+      "strength": 30,
+      "speed": 12,
+      "dexterity": 15,
+      "stamina": 25,
+      "vitality": 20,
+      "magicPower": 10,
+      "mana": 60,
+      "manaRegen": 3,
+      "dodge": 5,
+      "magicControl": 5
+    },
+    "statsPerLevel": {
+      "strength": 4,
+      "speed": 2,
+      "dexterity": 2,
+      "vitality": 4,
+      "magicPower": 2,
+      "mana": 5,
+      "manaRegen": 1,
+      "dodge": 1,
+      "magicControl": 1
+    }
   }
+
+
+
+
+
+
 }

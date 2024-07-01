@@ -7,9 +7,11 @@ import {battleStatistics} from './Main.js';
 
 import { updateHealth, updateMana } from './Render.js';
 
+let battleStarted = false;
+
 function startBattle(team1, team2) {
     useSkillsForAllMembers(team2);
-
+    battleStarted = true;
     const battleInterval = setInterval(() => {
         if (isPaused) return;
 
@@ -22,9 +24,17 @@ function startBattle(team1, team2) {
             clearInterval(battleInterval);
             if (!team1Alive) {
                 showPopup("Loss!", "Your team has been defeated.");
+                team1.members[0].skills.forEach(skill => {
+                     skill.heroStopSkill(team1.members[0]);
+                 });
+                 battleStarted = false;
 
             } else {
                 showPopup("Victory!", "Your team has defeated the opposing team.");
+                team1.members[0].skills.forEach(skill => {
+                      skill.heroStopSkill(team1.members[0]);
+                  });
+                 battleStarted = false;
 
             }
         }
@@ -50,6 +60,20 @@ function createRandomMembers(prefix, classes,team, opposingTeam,size) {
         return new Member(classes[randomClass].name, randomClass, classes[randomClass], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam,position);
     });
 }
+
+function createMembers(prefix,classes, team, opposingTeam, mobs) {
+        return mobs.map((mob, index) => {
+            const className = mob.type;
+            let position = null;
+            if (classes[className].positions[0].includes("Front")) {
+                position = "Front";
+            } else {
+                position = "Back";
+            }
+            return new Member(classes[className].name, className, classes[className], `${prefix.toLowerCase()}-member${index}`, team, opposingTeam, position, mob.level);
+            });
+    ;
+}
 function showPopup(title,message) {
     const popup = document.getElementById('popup');
     const titleDiv = document.getElementById('popupTitle');
@@ -71,16 +95,5 @@ function createHero(prefix, classes,team, opposingTeam) {
         return new Hero("Hero", 'Novice', classes['Novice'], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam);
     });
 }
-function handleDeath(target, opposingTeam)
-    {
-         target.currentHealth = 0;
-         updateHealth(target);
-         updateStatus(target,'Defeated');
 
-         opposingTeam.members.forEach(team2Member => {
-             if (team2Member.currentHealth > 0) {
-                 team2Member.gainExperience(50);
-             }
-         });
-     }
-export { startBattle, createRandomMembers,createHero,hidePopup };
+export { startBattle, createRandomMembers,createHero,hidePopup, createMembers,battleStarted};

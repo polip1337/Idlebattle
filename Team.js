@@ -6,7 +6,9 @@ class Team {
         this.members = [];
         this.teamContainer = document.getElementById(teamContainerId);
     }
-
+    clearMembers() {
+        this.members = [];
+    }
     getFirstAliveMember() {
         const aliveMembers = this.members.filter(member => member.currentHealth > 0);
 
@@ -59,7 +61,7 @@ class Team {
     }
 
     getBackMember(index) {
-        const backMembers = this.members.filter(member => member.position === 'back');
+        const backMembers = this.members.filter(member => member.position === 'Back');
 
         if (backMembers.length >= index) {
             return backMembers[index - 1];
@@ -71,7 +73,7 @@ class Team {
     }
 
     getAllBackMembers() {
-        return this.members.filter(member => member.position === 'back');
+        return this.members.filter(member => member.position === 'Back');
     }
 
     getAllAliveMembers() {
@@ -98,7 +100,7 @@ class Team {
     }
 
     getRandomBackMember() {
-        const backMembers = this.members.filter(member => member.position === 'back' && member.currentHealth > 0);
+        const backMembers = this.members.filter(member => member.position === 'Back' && member.currentHealth > 0);
 
         if (backMembers.length > 0) {
             const randomIndex = Math.floor(Math.random() * backMembers.length);
@@ -120,7 +122,7 @@ class Team {
     }
 
     getLowestHPBackMember() {
-        const backMembers = this.members.filter(member => member.position === 'back' && member.currentHealth > 0);
+        const backMembers = this.members.filter(member => member.position === 'Back' && member.currentHealth > 0);
 
         if (backMembers.length > 0) {
             return backMembers.reduce((lowestHPMember, currentMember) => {
@@ -159,7 +161,7 @@ class Team {
     }
 
     getHighestHPBackMember() {
-        const backMembers = this.members.filter(member => member.position === 'back' && member.currentHealth > 0);
+        const backMembers = this.members.filter(member => member.position === 'Back' && member.currentHealth > 0);
 
         if (backMembers.length > 0) {
             return backMembers.reduce((highestHPMember, currentMember) => {

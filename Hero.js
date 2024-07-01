@@ -1,8 +1,10 @@
 import Member from './Member.js';
 import {battleLog} from './Main.js';
+import {battleStarted} from './Battle.js';
 import {battleStatistics} from './Main.js';
 import { updateSkillBar,updatePassiveSkillBar, updateStamina, updateMana} from './Render.js';
 import { selectTarget } from './Targeting.js';
+import Skill from './Skill.js';
 
 class Hero extends Member {
 constructor(name, classType,classInfo, memberId, team, opposingTeam, position) {
@@ -14,6 +16,7 @@ constructor(name, classType,classInfo, memberId, team, opposingTeam, position) {
     this.selectedSkills = [];
     this.selectedPassiveSkills = [];
     this.position = 'Front';
+    this.repeat = false;
   }
 selectSkill(skill, skillBox, isPassive = false) {
     const selectedSkills = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
@@ -35,27 +38,41 @@ selectSkill(skill, skillBox, isPassive = false) {
 
     skillBarUpdateMethod(selectedSkills);
 }
-
-    useSkill(skillDiv){
-
+    createSkills(skills) {
+        let i =1;
+        return skills.map(skillData => {
+            var element = document.querySelector("#skill" + i);
+            i++;
+            const skill = new Skill(skillData.name,skillData.type, skillData.icon, skillData.description, skillData.damage,
+             skillData.manaCost, skillData.staminaCost, skillData.cooldown, skillData.damageType, skillData.targetingModes, skillData.effect, element);
+            return skill;
+        });
+    }
+    getSkill(skillDiv){
         const skillNumber = parseInt(skillDiv.id.match(/\d+/)[0]);
-        const skill = this.selectedSkills[skillNumber -1];
-        if(skill.manaCost <= this.currentMana && skill.staminaCost <= this.currentStamina){
-            this.currentMana -=skill.manaCost;
-            this.currentStamina -=skill.staminaCost;
-            updateMana(this);
-            updateStamina(this);
+        return this.selectedSkills[skillNumber -1];
+    }
+    useSkill(skillDiv){
+        if(battleStarted){
+            const skillNumber = parseInt(skillDiv.id.match(/\d+/)[0]);
+            const skill = this.selectedSkills[skillNumber -1];
+            if(skill.manaCost <= this.currentMana && skill.staminaCost <= this.currentStamina){
+                this.currentMana -=skill.manaCost;
+                this.currentStamina -=skill.staminaCost;
+                updateMana(this);
+                updateStamina(this);
 
-            this.startCooldown(skillDiv, skill.cooldown);
+                this.startCooldown(skillDiv, skill.cooldown,skillNumber);
 
-            const target = selectTarget(this, skill.targetingMode);
-            battleStatistics.addDamageDealt("fire",20);
-            this.performAttack(target,skill);
+                const targets = selectTarget(this, skill.targetingMode);
+                targets.forEach(target => {
+                    this.performAttack(this, target,skill, true);
+                });
+            }
         }
-
     }
 
-    startCooldown(container, duration) {
+    startCooldown(container, duration, skillNumber) {
         var overlay = document.querySelector("#" + container.id + " .cooldown-overlay");
         container.classList.add('disabled');
         overlay.classList.remove('hidden');
@@ -66,10 +83,11 @@ selectSkill(skill, skillBox, isPassive = false) {
         overlay.addEventListener('animationend', () => {
             overlay.classList.add('hidden');  /* Hide the square */
             container.classList.remove('disabled');  /* Enable pointer events */
-            if( document.querySelector("#" + container.id + " input").checked){
+            if( this.skills[skillNumber-1].repeat){
                 this.useSkill(container);
             };
         }, { once: true });
     }
 }
+
 export default Hero;

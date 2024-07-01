@@ -9,13 +9,13 @@
       {
         "name": "Slash",
         "type": "active",
-        "damage": 10,
+        "damage": 50,
         "damageType": "slash",
         "cooldown": 5,
         "staminaCost": 5,
         "manaCost": 0,
         "effect": null,
-        "description": "A quick jab with a weapon.",
+        "description": "A quick slash with a weapon.",
         "icon": "Media/Skills/Novice/slash.png",
         "targetingModes": ["Random Front", "Lowest HP"]
       },
@@ -27,8 +27,8 @@
         "manaCost": 0,
         "staminaCost": 5,
         "cooldown": 10,
-        "effect": { "type": "buff","subType":"Armor", "stat": "armor", "value": 2, "duration": 5, "name": "Block", "description": "Increases defense by 2 for 10 seconds." },
-        "description": "Assume a defensive stance, increasing defense briefly.",
+        "effect": { "type": "buff","subType":"Armor", "stat": "armor", "value": 2, "duration": 5, "name": "Block", "description": "Increases armor by 2 for 10 seconds." },
+        "description": "Puts your shield where it should be, increasing armor briefly.",
         "icon": "Media/Skills/Novice/shield.jpg",
         "targetingModes": ["Self"]
       },
@@ -52,17 +52,17 @@
         "damage": 2,
         "manaCost": 0,
         "staminaCost": 5,
-        "effect": null,
-        "description": "Thrust forward with a weapon, aiming to pierce through defenses.",
+        "effect": { "type": "debuff", "subType":"Bleed", "damageType": "Bleed","stat": "", "value": 2, "duration": 15, "name": "Bleed", "icon":"Media/UI/bleed.svg","description": "Deals 2 damage per second." },
+        "description": "A last resort. But it makes them bleed.",
         "icon": "Media/Skills/Novice/bite.jpg",
-        "targetingModes": ["First", "Lowest HP"]
+        "targetingModes": ["Random Front", "Lowest HP"]
       },
 
         {
           "name": "Resilience",
           "type": "passive",
           "effect": { "type": "buff", "stat": "defense", "value": 1, "description": "Permanently increases defense by 1." },
-          "description": "Developed resilience to endure more hits in battle.",
+          "description": "Developed resilience to endure more hits in battle by increasing armor.",
           "icon": "Media/Skills/Novice/resilience.jpg"
         },
 
@@ -70,14 +70,14 @@
           "name": "Lone Wolf",
           "type": "passive",
           "effect": { "type": "buff", "stat": "accuracy", "value": 1, "description": "Permanently increases accuracy by 1." },
-          "description": "Mastered the art of precise strikes to hit with accuracy.",
+          "description": "You got better when fighting alone. Increase accuracy and dodge.",
           "icon": "Media/Skills/Novice/loneWolf.jpg"
         },
         {
           "name": "Toughened Skin",
           "type": "passive",
           "effect": { "type": "buff", "stat": "vitality", "value": 2, "description": "Permanently increases vitality by 2." },
-          "description": "Thickened skin provides additional protection against damage.",
+          "description": "Thickened skin provides additional health.",
           "icon": "Media/Skills/Novice/toughenedSkin.png"
         },
         {
@@ -90,16 +90,17 @@
 
     ],
     "stats": {
-      "strength": 12,
-      "speed": 8,
+      "strength": 10,
+      "magicPower": 10,
       "dexterity": 10,
+      "magicControl": 10,
       "vitality": 15,
-      "defense": 5,
       "mana": 150,
       "stamina": 50,
+      "manaRegen": 5,
       "accuracy": 5,
-      "evasion": 5,
-      "manaRegen": 5
+      "evasion": 5
+
     },
     "statsPerLevel": {
       "strength": 2,

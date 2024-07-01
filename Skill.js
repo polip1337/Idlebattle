@@ -1,8 +1,8 @@
-import { updateSkillBar,updatePassiveSkillBar, updateStamina, updateMana} from './Render.js';
+import { updateSkillBar,updatePassiveSkillBar, updateStamina, updateMana, renderLevelUp} from './Render.js';
 import { selectTarget } from './Targeting.js';
 
 class Skill {
-    constructor(name, type, icon, description, damage, manaCost,staminaCost, cooldown, damageType, targetingModes, effect) {
+    constructor(name, type, icon, description, damage, manaCost,staminaCost, cooldown, damageType, targetingModes, effect, element) {
         this.name = name;
         this.icon = icon;
         this.type = type;
@@ -14,7 +14,7 @@ class Skill {
         this.damageType = damageType;
         this.targetingModes = targetingModes;
         this.effect = effect;
-
+        this.div= element;
         this.level = 1;
         this.experience = 0;
         this.experienceToNextLevel = 100; // Example value for level 1
@@ -40,9 +40,11 @@ class Skill {
 
   // Gain experience for the skill
   gainExperience(amount) {
+
     this.experience += amount;
     while (this.experience >= this.experienceToNextLevel) {
       this.levelUp();
+      renderLevelUp(this);
     }
   }
 
@@ -57,19 +59,38 @@ class Skill {
     }
   }
   useSkill(member, div = null){
-          let skillDiv = null;
-          if(div == null){
+    if(this.type == "active"){
+        let skillDiv = null;
+        if(div == null){
             skillDiv = member.element.querySelector("#" + member.memberId + "Skill" + this.name.replace(/\s/g, ''));
-          }else{
-            skillDiv = div;
-          }
-          if(this.type == "active"){
-              this.startCooldown(skillDiv, this.cooldown,member);
+            this.startCooldown(skillDiv, this.cooldown,member);
+            this.div = skillDiv;
+        }else{
+        this.startCooldown(this.div, this.cooldown,member);
 
-              const target = selectTarget(member, this.targetingModes[0]);
+        const targets = selectTarget(member, this.targetingModes[0]);
+        targets.forEach(target => {
+            member.performAttack(member, target,this);
+        });
+        }
 
-              member.performAttack(target, this);
-          }
+    }
+  }
+  pause(member){
+    if(this.type == "active"){
+        var overlay = this.div.querySelector(" .cooldown-overlay");
+        overlay.classList.add('paused');
+    }
+  }
+  unpause(member){
+      if(this.type == "active"){
+          var overlay = this.div.querySelector(" .cooldown-overlay");
+          overlay.classList.remove('paused');
+      }
+    }
+  heroStopSkill(member){
+    var overlay = document.querySelector("#" + container.id + " .cooldown-overlay");
+    overlay.style.animation = '';
   }
   startCooldown(container, duration, member) {
           var overlay = document.querySelector("#" + container.id + " .cooldown-overlay");

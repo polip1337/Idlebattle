@@ -8,16 +8,15 @@
     <link rel="stylesheet" type="text/css" href="style/animation.css">
     <link rel="stylesheet" type="text/css" href="style/battleLog.css">
     <link rel="stylesheet" type="text/css" href="style/member.css">
+    <link rel="stylesheet" type="text/css" href="style/fireworks.css">
+    <link rel="stylesheet" type="text/css" href="style/bottomBar.css">
+    <link rel="stylesheet" type="text/css" href="style/evolutionModal.css">
+    <link rel="stylesheet" type="text/css" href="style/stats.css">
+    <link rel="stylesheet" type="text/css" href="style/map.css">
+    <link rel="stylesheet" type="text/css" href="style/greenBorderAnimation.css">
 
 </head>
 <body>
-<div id="tabs">
-    <button class="tablinks" onclick="openTab(event, 'battlefield')">Battle</button>
-    <button id="heroTab" class="tablinks" onclick="openTab(event, 'heroContent')">Hero</button>
-    <button class="tablinks" onclick="openTab(event, 'map')">Map</button>
-    <button class="tablinks" onclick="openTab(event, 'library')">Library</button>
-    <button class="tablinks" onclick="openTab(event, 'options')">Options</button>
-</div>
 <div id="popup" class="popup hidden">
     <div class="popup-content">
         <h2 id="popupTitle">Victory!</h2>
@@ -25,13 +24,26 @@
         <button id="close-popup">Close</button>
     </div>
 </div>
-
-<button id="start-button">Start Battle</button>
+<div id="evolution-modal" class="modal">
+    <div class="modal-content">
+        <h2>Choose Your Evolution</h2>
+        <div id="evolution-options" class="evolution-options">
+            <!-- Evolution options will be populated here dynamically -->
+        </div>
+    </div>
+</div>
 
 <div id="battlefield" class="tabcontent active battle-view ">
     <div id="teamAndBattleContainer">
+        <div id="stage-controls">
+            <button id="decrease-stage">&lt;</button>
+            <span id="current-stage">Stage 1</span>
+            <button id="increase-stage">&gt;</button>
+        </div>
         <div id="teamContainer">
+
             <div id="team1" class="team" id="team1">
+
                 <div class="team-row"></div>
                 <div class="team-row"></div>
             </div>
@@ -44,6 +56,7 @@
 
         </div>
         <div id="battle-log-container">
+
             <button id="toggle-log">Hide Log</button>
             <div id="battle-log">
                 <div id="anchor"></div>
@@ -51,147 +64,9 @@
             </div>
         </div>
     </div>
-    <div id="iconContainer">
-        <div class="iconRow upperRow">
-            <div class="iconGroup">
-                <div id="passiveSkill1" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill2" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill3" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill4" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-            </div>
-            <div class="iconGroup">
-                <div id="passiveSkill5" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill6" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill7" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill8" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-            </div>
-            <div class="iconGroup">
-                <div id="passiveSkill9" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill10" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill11" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                </div>
-                <div id="passiveSkill12" class="battleSkillIcon">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
 
-                </div>
-            </div>
-        </div>
-        <div class="iconRow lowerRow">
-            <div class="iconGroup">
-                <div id="skill1"  class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img  src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-
-                </div>
-                <div id="skill2" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-                <div id="skill3" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-                <div id="skill4" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-            </div>
-            <div class="iconGroup">
-                <div id="skill5" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-                <div id="skill6" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-                <div id="skill7" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-                <div id="skill8" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-            </div>
-            <div class="iconGroup">
-                <div id="skill9" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-                <div id="skill10" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-                <div id="skill11" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-                <div id="skill12" class="battleSkillIcon">
-                    <input type="checkbox" class="checkBox">
-                    <img   src ="Media/UI/defaultSkill.jpeg">
-                    <div class="tooltip"> </div>
-                    <div class="cooldown-overlay"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+
 <div id="heroContent" class="tabcontent">
     <div id="heroInfoRow">
         <div id="heroPortraitAndPaperDoll">
@@ -372,278 +247,15 @@
 
 <div id="map" class="tabcontent">
     <h2>Map Section</h2>
-    <ul id="hexGrid">
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-        <li class="hex">
-            <div class="hexIn">
-                <a class="hexLink" href="#">
-                    <img src="Media/Mobs/Mantis/FireMage.jpg" alt="" />
-                    <h1>This is a title</h1>
-                    <p>Some sample text about the article this hexagon leads to</p>
-                </a>
-            </div>
-        </li>
-    </ul>
+    <div id="map-container"></div>
+    <div id="movement-buttons">
+        <button id="move-up">Up</button>
+        <div>
+            <button id="move-left">Left</button>
+            <button id="move-right">Right</button>
+        </div>
+        <button id="move-down">Down</button>
+    </div>
 
 
 </div>
@@ -672,12 +284,244 @@
         </div>
     </div>
 </div>
-
+<div id="battle-statistics" class="tabcontent statistics-page">
+    <h1>Battle Statistics</h1>
+    <div class="statistic-item">
+        <span class="statistic-name">Total Damage Dealt:</span>
+        <span class="statistic-value" id="total-damage-dealt">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Total Damage Received:</span>
+        <span class="statistic-value" id="total-damage-received">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Total Healing Received:</span>
+        <span class="statistic-value" id="total-healing-received">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Total Buffs Applied:</span>
+        <span class="statistic-value" id="total-buffs-applied">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Total Debuffs Applied:</span>
+        <span class="statistic-value" id="total-debuffs-applied">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Mana Regenerated:</span>
+        <span class="statistic-value" id="mana-regenerated">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Stamina Regenerated:</span>
+        <span class="statistic-value" id="stamina-regenerated">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Stamina Spent:</span>
+        <span class="statistic-value" id="stamina-spent">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Multi-Kills:</span>
+        <span class="statistic-value" id="multi-kills">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Critical Hits:</span>
+        <span class="statistic-value" id="critical-hits">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Critical Damage:</span>
+        <span class="statistic-value" id="critical-damage">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Misses:</span>
+        <span class="statistic-value" id="misses">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Skill Usage:</span>
+        <span class="statistic-value" id="skill-usage">0</span>
+    </div>
+</div>
 <div id="options" class="tabcontent">
     <h2>Options Section</h2>
     <!-- Content for options section -->
 </div>
+<div id="footer">
+    <div id="level-progress-container">
+        <div id="level-progress-bar">
+            <span id="class-name">Novice</span>
+        </div>
+    </div>
+    <div id="bottomContainer">
+        <div class="iconContainer">
+            <div class="iconRow upperRow">
+                <div class="iconGroup">
+                    <div id="passiveSkill1" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill2" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill3" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill4" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                </div>
+                <div class="iconGroup">
+                    <div id="passiveSkill5" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill6" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill7" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill8" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                </div>
+                <div class="iconGroup">
+                    <div id="passiveSkill9" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill10" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill11" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                    </div>
+                    <div id="passiveSkill12" class="battleSkillIcon">
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
 
+                    </div>
+                </div>
+            </div>
+            <div class="iconRow lowerRow">
+                <div class="iconGroup">
+                    <div id="skill1"  class="battleSkillIcon">
+                        
+                        <img  src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+
+                    </div>
+                    <div id="skill2" class="battleSkillIcon ">
+
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                    <div id="skill3" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                    <div id="skill4" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                </div>
+                <div class="iconGroup">
+                    <div id="skill5" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                    <div id="skill6" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                    <div id="skill7" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                    <div id="skill8" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                </div>
+                <div class="iconGroup">
+                    <div id="skill9" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                    <div id="skill10" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                    <div id="skill11" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                    <div id="skill12" class="battleSkillIcon">
+                        
+                        <img   src ="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"> </div>
+                        <div class="cooldown-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="gridContainer">
+            <div class="gridItem">
+                <button class="tablinks" onclick="openTab(event, 'battlefield')">Battle</button>
+            </div>
+            <div class="gridItem">
+                <button id="heroTab" class="tablinks" onclick="openTab(event, 'heroContent')">Hero</button>
+            </div>
+            <div class="gridItem">
+                <button class="tablinks" onclick="openTab(event, 'map')">Map</button>
+            </div>
+            <div class="gridItem">
+                <button class="tablinks" onclick="openTab(event, 'library')">Library</button>
+            </div>
+            <div class="gridItem">
+                <button class="tablinks" onclick="openTab(event, 'options')">Options</button>
+            </div>
+            <div class="gridItem">
+                <button id="start-button">Start Battle</button>
+            </div>
+            <div class="gridItem">
+                <button class="tablinks" onclick="openTab(event, 'battle-statistics')">Stats</button>
+            </div>
+            <div class="gridItem">
+                <!-- Content for the eighth grid item -->
+            </div>
+            <div class="gridItem">
+                <!-- Content for the ninth grid item -->
+            </div>
+        </div>
+    </div>
+
+</div>
 <script src="Hero.js" type="module" ></script>
 
 <script src="Member.js" type="module" ></script>
@@ -687,5 +531,6 @@
 <script src="Battle.js" type="module"></script>
 <script src="Main.js" type="module"></script>
 <script src="navigation.js"  ></script>
+<script src="map.js"  ></script>
 </body>
 </html>

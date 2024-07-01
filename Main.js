@@ -1,8 +1,9 @@
-import { startBattle, createRandomMembers,createHero, hidePopup } from './Battle.js';
+import { startBattle, createRandomMembers,createHero, hidePopup, createMembers } from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
+import Area from './Area.js';
 import BattleLog from './BattleLog.js';
-import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember,loadPassiveSkills, updateMana,updateStamina} from './Render.js';
+import { updateStatsDisplay, updateSkillBar,loadSkills, renderMember,loadPassiveSkills, updateMana,updateStamina,updateHealth, renderLevelUp, renderHero, updateLevelProgress, openEvolutionModal} from './Render.js';
 import BattleStatistics from './BattleStatistics.js';
 
 export let battleStatistics = new BattleStatistics();
@@ -12,10 +13,24 @@ export let team2 = new Team('Team2', 'team2-members');;
 export let hero;
 export let battleLog;
 
-document.getElementById("heroTab").addEventListener("click", switchToHeroTab);
+battleStatistics.updateBattleStatistics();
+
+window.onload = function() {
+    const modal = document.getElementById('evolution-modal');
+    const closeButton = document.getElementsByClassName('close-button')[0];
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            closeEvolutionModal();
+        }
+    }
+}
 document.getElementById('close-popup').addEventListener('click', hidePopup);
-
-
+updateLevelProgress(0, 100, "Novice");
+let currentArea = new Area("Data/Areas/goblinPlains.JSON");
+let mobsData = null;
+let currentStage = 1;
+let clickTimeout;
 document.addEventListener('DOMContentLoaded', () => {
     fetchClassesAndInitializeTeams();
     const logContainer = document.getElementById('battle-log');
@@ -36,7 +51,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function setupSkillListeners(){
     for(let i = 1; i<13; i++){
-         document.getElementById("skill"+i).getElementsByTagName('img')[0].addEventListener('click', () => hero.useSkill(document.getElementById("skill"+i)));
+     document.getElementById("skill"+i).getElementsByTagName('img')[0].addEventListener('click', (event) => {
+        if (clickTimeout) {
+          clearTimeout(clickTimeout);
+          clickTimeout = null;
+          if(!event.target.parentNode.classList.contains("disabled")){
+            hero.useSkill(document.getElementById("skill"+i));
+          }
+          let repeat = hero.getSkill(document.getElementById("skill"+i)).repeat;
+          hero.getSkill(document.getElementById("skill"+i)).repeat = !repeat;// Toggle the repeat property
+          event.target.parentNode.classList.toggle("rainbow");
+        } else {
+          clickTimeout = setTimeout(() => {
+            hero.useSkill(document.getElementById("skill"+i));
+            clickTimeout = null;
+          }, 300); // Adjust the delay as needed
+        }
+      });
+
     }
 }
 
@@ -72,10 +104,8 @@ function fetchClassesAndInitializeTeams() {
      fetch('Data/mobs.json')
             .then(response => response.json())
             .then(classes => {
-                const team2Members = createRandomMembers('team2', classes,team2,team1,1);
-
-                initializeTeamMembers(team2Members,'team2')
-                team2.addMembers(team2Members);
+                mobsData = classes;
+                loadStage(currentStage);
             });
 
 
@@ -91,16 +121,74 @@ function selectInitialSkills() {
 }
 function initializeTeamMembers(members, containerId) {
     const teamRows = teamContainer.querySelectorAll("#" + containerId +' .team-row');
+    teamRows[0].innerHTML = '';
+    teamRows[1].innerHTML = '';
     members.forEach(member => {
-        const firstRow = teamRows[0].children.length < 4 ? teamRows[0] : teamRows[1];
-        firstRow.appendChild(renderMember(member));
+        var row = member.position == "Front" ? teamRows[0] : teamRows[1];
+        let rowChildren = Array.from(row.children);
+
+                if (rowChildren.length >= 4) {
+                    // Select the other row to add the member
+                    row = row === teamRows[0] ? teamRows[1] : teamRows[0];
+                }
+        if(member.name == "Hero"){
+                row.appendChild(renderHero(member));
+        }else{
+                row.appendChild(renderMember(member));
+        }
 
         member.initializeDOMElements(); // Call initializeDOMElements after team members are added to the DOM
         updateMana(member);
         updateStamina(member);
+        updateHealth(member);
     });
 
 }
-function switchToHeroTab() {
-  updateStatsDisplay(team1.members[0]);
+function loadStage(stageNumber) {
+    currentArea.stageNumber = stageNumber;
+    team2.clearMembers();
+
+    const team2Members = createMembers('team2', mobsData,team2,team1,currentArea.spawnMobs());
+
+    initializeTeamMembers(team2Members,'team2');
+
+    team2.addMembers(team2Members);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const maxStage = 10; // Adjust according to your game's maximum stage
+  const minStage = 1; // Adjust according to your game's minimum stage
+
+  const currentStageSpan = document.getElementById('current-stage');
+  const decreaseStageButton = document.getElementById('decrease-stage');
+  const increaseStageButton = document.getElementById('increase-stage');
+
+  function updateStageDisplay() {
+    currentStageSpan.textContent = `Stage ${currentStage}`;
+  }
+
+  decreaseStageButton.addEventListener('click', () => {
+    if (currentStage > minStage) {
+      currentStage--;
+      updateStageDisplay();
+      // Call function to handle mob spawning for the new stage
+      loadStage(currentStage);
+    }
+  });
+
+  increaseStageButton.addEventListener('click', () => {
+    if (currentStage < maxStage) {
+      currentStage++;
+      updateStageDisplay();
+      // Call function to handle mob spawning for the new stage
+      loadStage(currentStage);
+    }
+  });
+
+
+                  updateStageDisplay();
+
+  // Initial load
+
+});
+
