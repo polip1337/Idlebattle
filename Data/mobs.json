@@ -108,7 +108,7 @@
   "GoblinScout": {
     "id": "goblinScout",
     "name": "Goblin Scout",
-    "portrait": "Media/Mobs/Goblin/Scout.jpeg",
+    "portrait": "Media/Mobs/Goblin/scout.jpeg",
     "positions": [
       "Back"
     ],
