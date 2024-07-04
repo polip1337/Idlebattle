@@ -25,11 +25,19 @@ selectSkill(skill, skillBox, isPassive = false) {
     const maxSkills = 4;
     const index = selectedSkills.indexOf(skill);
     const skillBarUpdateMethod = isPassive ? updatePassiveSkillBar : updateSkillBar;
+    if(isPassive){
+        skill.setElement(document.querySelector("#skill" + index));
+
+    }else{
+        skill.setElement(document.querySelector("#passiveSkill" + index));
+    }
 
     if (index === -1 && selectedSkills.length < maxSkills) {
         if (!isPassive) {
             const targetingSelect = skillBox.querySelector('.targeting-modes');
             skill.targetingMode = targetingSelect.value;
+        }else{
+
         }
         selectedSkills.push(skill);
         skillBox.classList.add('selected');
@@ -40,31 +48,23 @@ selectSkill(skill, skillBox, isPassive = false) {
 
     skillBarUpdateMethod(selectedSkills);
 }
-    createSkills(skills) {
-        for (let i = 1; i < 5; i++) {
-            var element = document.querySelector("#skill" + i);
-            var passiveElement = document.querySelector("#passiveSkill" + i);
 
-            skills[i-1].setElement(element);
-            skills[i+3].setElement(passiveElement);
-        };
-
-        return skills;
-    }
     getSkill(skillDiv){
         const skillNumber = parseInt(skillDiv.id.match(/\d+/)[0]);
         return this.selectedSkills[skillNumber -1];
     }
-    useSkill(skillDiv, skill = null, i){
-        if(battleStarted){
-            if(skill == null){
-                const skillNumber = parseInt(skillDiv.id.match(/\d+/)[0]);
-                skill = this.selectedSkills[skillNumber -1];
-            }else{
-                skill.setElement(document.querySelector("#skill" + i));
-
+    triggerRepeatSkills(){
+        var activeSkills = this.selectedSkills.filter(skill => skill.type == "active");
+        activeSkills.forEach(skill => {
+            if (skill.repeat && !skill.onCooldown){
+                this.useSkill(skill.div);
             }
+        });
+    }
+    useSkill(skillDiv){
+        if(battleStarted){
 
+            const skill = this.getSkill(skillDiv);
             if(skill.manaCost <= this.currentMana && skill.staminaCost <= this.currentStamina){
                 battleStatistics.addSkillUsage(skill.name);
                 battleStatistics.addManaSpent(skill.manaCost);
@@ -73,7 +73,7 @@ selectSkill(skill, skillBox, isPassive = false) {
                 this.currentStamina -=skill.staminaCost;
                 updateMana(this);
                 updateStamina(this);
-
+                skill.setElement(skillDiv);
                 skill.startCooldown(this);
 
                 const targets = selectTarget(this, skill.targetingMode);

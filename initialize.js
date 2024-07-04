@@ -102,7 +102,6 @@ async function loadGameData() {
 
 function createAndInitHero(classes, team,opposingTeam){
     hero = new Hero("Hero", classes['novice'], classes['novice'].skills,1, team, opposingTeam);
-
     team1.addMember(hero);
 
     renderTeamMembers(team1.members,'team1')
@@ -110,6 +109,7 @@ function createAndInitHero(classes, team,opposingTeam){
     renderSkills(team1.members[0]);
     renderPassiveSkills(team1.members[0]);
     selectInitialSkills();
+
     return hero;
 }
 function loadStage(stageNumber,mobs) {

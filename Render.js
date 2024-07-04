@@ -6,6 +6,7 @@ export function updateSkillBar(skills) {
         var tooltip = document.querySelector("#skill"+(i+1)+" .tooltip");
 
         if(skills[i]){
+            skills[i].setElement(document.querySelector("#skill"+(i+1)));
             element.src = skills[i].icon;
             updateSkillTooltip(tooltip, skills[i]);
             }
@@ -45,6 +46,9 @@ export function updatePassiveSkillBar(skills) {
         var element = document.querySelector("#passiveSkill"+(i+1)+" img");
         var tooltip = document.querySelector("#passiveSkill"+(i+1)+" .tooltip");
         if(skills[i]){
+            skills[i].setElement(document.querySelector("#passiveSkill"+(i+1)));
+
+
             element.src = skills[i].icon;
             tooltip.innerHTML = `
                         <strong>${skills[i].name}</strong><br>

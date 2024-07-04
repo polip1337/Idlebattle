@@ -12,14 +12,7 @@ let battleStarted = false;
 function startBattle(team1, team2) {
     useSkillsForAllMembers(team2);
     battleStarted = true;
-    let i = 1;
-    var activeSkills = team1.members[0].skills.filter(skill => skill.type == "active");
-    activeSkills.forEach(skill => {
-        if (skill.repeat && !skill.onCooldown){
-            hero.useSkill(null,skill,i);
-            i++;
-        }
-    });
+    hero.triggerRepeatSkills();
     const battleInterval = setInterval(() => {
         if (isPaused) return;
 
