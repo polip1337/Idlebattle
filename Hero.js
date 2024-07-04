@@ -1,15 +1,16 @@
 import Member from './Member.js';
-import {battleLog} from './Main.js';
+import {battleLog} from './initialize.js';
 import {battleStarted} from './Battle.js';
-import {battleStatistics} from './Main.js';
+import {battleStatistics} from './initialize.js';
 import { updateSkillBar,updatePassiveSkillBar, updateStamina, updateMana} from './Render.js';
 import { selectTarget } from './Targeting.js';
 import Skill from './Skill.js';
 
 class Hero extends Member {
-constructor(name, classType,classInfo, memberId, team, opposingTeam, position) {
-    super(name, classType,classInfo, memberId, team, opposingTeam);
+constructor(name, classInfo,skills, level = 1, team,opposingTeam) {
+    super(name, classInfo,skills, level = 1, team,opposingTeam);
     this.class2 =null;
+
     this.skills2 = null;
     this.class3 = null;
     this.skills3 = null;
@@ -39,14 +40,15 @@ selectSkill(skill, skillBox, isPassive = false) {
     skillBarUpdateMethod(selectedSkills);
 }
     createSkills(skills) {
-        let i =1;
-        return skills.map(skillData => {
+        for (let i = 1; i < 5; i++) {
             var element = document.querySelector("#skill" + i);
-            i++;
-            const skill = new Skill(skillData.name,skillData.type, skillData.icon, skillData.description, skillData.damage,
-             skillData.manaCost, skillData.staminaCost, skillData.cooldown, skillData.damageType, skillData.targetingModes, skillData.effect, element);
-            return skill;
-        });
+            var passiveElement = document.querySelector("#passiveSkill" + i);
+
+            skills[i-1].setElement(element);
+            skills[i+3].setElement(passiveElement);
+        };
+
+        return skills;
     }
     getSkill(skillDiv){
         const skillNumber = parseInt(skillDiv.id.match(/\d+/)[0]);
@@ -61,8 +63,8 @@ selectSkill(skill, skillBox, isPassive = false) {
                 this.currentStamina -=skill.staminaCost;
                 updateMana(this);
                 updateStamina(this);
-
-                this.startCooldown(skillDiv, skill.cooldown,skillNumber);
+                skill.setElement(skillDiv);
+                skill.startCooldown(this);
 
                 const targets = selectTarget(this, skill.targetingMode);
                 targets.forEach(target => {
@@ -70,23 +72,6 @@ selectSkill(skill, skillBox, isPassive = false) {
                 });
             }
         }
-    }
-
-    startCooldown(container, duration, skillNumber) {
-        var overlay = document.querySelector("#" + container.id + " .cooldown-overlay");
-        container.classList.add('disabled');
-        overlay.classList.remove('hidden');
-
-        overlay.style.animation = '';
-        overlay.offsetHeight;
-        overlay.style.animation = `fill ${duration}s ease-in-out forwards`;
-        overlay.addEventListener('animationend', () => {
-            overlay.classList.add('hidden');  /* Hide the square */
-            container.classList.remove('disabled');  /* Enable pointer events */
-            if( this.skills[skillNumber-1].repeat){
-                this.useSkill(container);
-            };
-        }, { once: true });
     }
 }
 

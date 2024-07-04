@@ -1,0 +1,796 @@
+{
+  "slash": {
+    "id": "slash",
+    "name": "Slash",
+    "type": "active",
+    "damage": 50,
+    "damageType": "slash",
+    "cooldown": 10,
+    "staminaCost": 5,
+    "manaCost": 0,
+    "effect": null,
+    "description": "A quick slash with a weapon.",
+    "icon": "Media/Skills/Novice/slash.png",
+    "targetingModes": [
+      "Random Front",
+      "Lowest HP"
+    ]
+  },
+  "block": {
+    "id": "block",
+    "name": "Block",
+    "type": "active",
+    "damageType": "none",
+    "damage": 0,
+    "manaCost": 0,
+    "staminaCost": 5,
+    "cooldown": 10,
+    "effects": [
+      {
+        "id": "increaseArmorFlat"
+      }
+    ],
+    "description": "Puts your shield where it should be, increasing armor briefly.",
+    "icon": "Media/Skills/Novice/shield.jpg",
+    "targetingModes": [
+      "Self"
+    ]
+  },
+  "quickStep": {
+    "id": "quickStep",
+    "name": "Quick Step",
+    "type": "active",
+    "damageType": "none",
+    "cooldown": 5,
+    "damage": 0,
+    "manaCost": 0,
+    "staminaCost": 5,
+    "effects": [
+      {
+        "id": "decreaseCooldown",
+        "description": "A short burst of speed decreasing cooldowns."
+      }
+    ],
+    "description": "Take a quick step to increase speed briefly.",
+    "icon": "Media/Skills/Novice/quick_step.png",
+    "targetingModes": [
+      "Self"
+    ]
+  },
+  "bite": {
+    "id": "bite",
+    "name": "Bite",
+    "type": "active",
+    "damageType": "pierce",
+    "cooldown": 5,
+    "damage": 2,
+    "manaCost": 0,
+    "staminaCost": 5,
+    "effects": [
+      {
+        "id": "bleed"
+      }
+    ],
+    "description": "A last resort. But it makes them bleed.",
+    "icon": "Media/Skills/Novice/bite.jpg",
+    "targetingModes": [
+      "Random Front",
+      "Lowest HP"
+    ]
+  },
+  "shieldBash": {
+    "id": "shieldBash",
+    "name": "Shield Bash",
+    "type": "active",
+    "damage": 10,
+    "manaCost": 0,
+    "cooldown": 20,
+    "damageType": "Physical",
+    "effects": [
+      {
+        "id": "stun"
+      }
+    ],
+    "description": "Bashes the target with a shield, dealing damage and has a chance to stun.",
+    "targetingModes": [
+      "Random Front"
+    ],
+    "icon": "Media/Skills/Physical/shield-bash.svg"
+  },
+  "battleCry": {
+    "id": "battleCry",
+    "name": "Battle Cry",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 30,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "increaseDamagePercentage"
+      }
+    ],
+    "description": "Lets out a battle cry that increases the damage of all allies.",
+    "targetingModes": [
+      "All Ally"
+    ],
+    "icon": "Media/Skills/Physical/shouting.svg"
+  },
+  "healingWave": {
+    "id": "healingWave",
+    "name": "Healing Wave",
+    "type": "active",
+    "damage": 0,
+    "heal": 20,
+    "manaCost": 20,
+    "cooldown": 15,
+    "damageType": "None",
+    "effects": null,
+    "description": "Heals an ally with a wave of restorative magic.",
+    "targetingModes": [
+      "Random Ally"
+    ],
+    "icon": "Media/Skills/Healing/HealingWave.jpg"
+  },
+  "totemOfStrength": {
+    "id": "totemOfStrength",
+    "name": "Totem of Strength",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 15,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "increaseStrengthFlat"
+      }
+    ],
+    "description": "Places a totem that increases the strength of all allies in range.",
+    "targetingModes": [
+      "All Ally"
+    ],
+    "icon": "Media/Skills/Buff/TotemOfStrength.jpg"
+  },
+  "mysticShield": {
+
+    "id": "mysticShield",
+    "name": "Mystic Shield",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 25,
+    "cooldown": 30,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "increaseArmorFlat",
+        "value": 15,
+        "duration": 15
+      }
+    ],
+    "description": "Casts a protective shield that increases the armor of an ally.",
+    "targetingModes": [
+      "Random Ally"
+    ],
+    "icon": "Media/Skills/Buff/MysticShield.jpg"
+  },
+  "healingTouch": {
+    "id": "healingTouch",
+    "name": "Healing Touch",
+    "type": "active",
+    "damage": 0,
+    "heal": 25,
+    "manaCost": 15,
+    "cooldown": 10,
+    "damageType": "None",
+    "effects": null,
+    "description": "Heals an ally with a gentle touch.",
+    "targetingModes": [
+      "Random Ally"
+    ],
+    "icon": "Media/Skills/Healing/HealingTouch.jpg"
+  },
+  "revitalize": {
+    "id": "revitalize",
+    "name": "Revitalize",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 30,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "regen"
+      }
+    ],
+    "description": "Heals an ally over time.",
+    "targetingModes": [
+      "Random Ally"
+    ],
+    "icon": "Media/Skills/Healing/Revitalize.jpg"
+  },
+  "groupHeal": {
+    "id": "groupHeal",
+    "name": "Group Heal",
+    "type": "active",
+    "damage": 0,
+    "heal": 20,
+    "manaCost": 40,
+    "cooldown": 35,
+    "damageType": "None",
+    "effects": null,
+    "description": "Heals all allies.",
+    "targetingModes": [
+      "All Ally"
+    ],
+    "icon": "Media/Skills/Healing/GroupHeal.jpg"
+  },
+  "quickStrike": {
+    "id": "quickStrike",
+    "name": "Quick Strike",
+    "type": "active",
+    "damage": 10,
+    "manaCost": 0,
+    "cooldown": 5,
+    "damageType": "Physical",
+    "effect": null,
+    "description": "A rapid attack with a dagger.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/quick-slash.svg"
+  },
+  "poisonDart": {
+    "id": "poisonDart",
+    "name": "Poison Dart",
+    "type": "active",
+    "damage": 8,
+    "manaCost": 5,
+    "cooldown": 15,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "poison"}],
+    "description": "Shoots a poison dart that deals damage over time.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/PoisonDart.jpg"
+  },
+  "sneakAttack": {
+    "id": "sneakAttack",
+    "name": "Sneak Attack",
+    "type": "active",
+    "damage": 20,
+    "manaCost": 10,
+    "cooldown": 25,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "stun"}],
+    "description": "A stealthy attack that deals high damage and can stun the target.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/SneakAttack.jpg"
+  },
+  "acidFlask": {
+    "id": "acidFlask",
+    "name": "Acid Flask",
+    "type": "active",
+    "damage": 5,
+    "manaCost": 10,
+    "cooldown": 10,
+    "damageType": "Chemical",
+    "effects": [{
+      "id": "reduceArmorPercentage"}],
+    "description": "Throws an acid flask that deals damage and reduces the target's armor.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Chemical/AcidFlask.jpg"
+  },
+  "poisonCloud": {
+    "id": "poisonCloud",
+    "name": "Poison Cloud",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 20,
+    "cooldown": 20,
+    "damageType": "Chemical",
+    "effects": [{
+      "id": "poison",
+      "duration": 15
+    }],
+    "description": "Creates a cloud of poison that deals damage over time to all enemies in range.",
+    "targetingModes": [
+      "All Enemies"
+    ],
+    "icon": "Media/Skills/Chemical/PoisonCloud.jpg"
+  },
+  "paralyzingPotion": {
+    "id": "paralyzingPotion",
+    "name": "Paralyzing Potion",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 25,
+    "cooldown": 30,
+    "damageType": "Chemical",
+    "effects": [{
+      "id":"stun"}],
+    "description": "Throws a potion that has a chance to stun the target.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Chemical/ParalyzingPotion.jpg"
+  },
+  "weakeningElixir": {
+    "id": "weakeningElixir",
+    "name": "Weakening Elixir",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 15,
+    "cooldown": 20,
+    "damageType": "Chemical",
+    "effects": [{
+      "id": "reduceStrengthPercentage",
+      "value": 5,
+      "duration": 15}],
+    "description": "Throws an elixir that reduces the target's strength.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Chemical/WeakeningElixir.jpg"
+  },
+  "toxicBomb": {
+    "id": "toxicBomb",
+    "name": "Toxic Bomb",
+    "type": "active",
+    "damage": 15,
+    "manaCost": 30,
+    "cooldown": 25,
+    "damageType": "Chemical",
+    "effects": [{
+      "id": "reduceDodgeFlat"}],
+    "description": "Throws a bomb that deals damage and reduces the target's dodge chance.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Chemical/ToxicBomb.jpg"
+  },
+  "fireBlast": {
+    "id": "fireBlast",
+    "name": "Fire Blast",
+    "type": "active",
+    "damage": 20,
+    "manaCost": 10,
+    "cooldown": 15,
+    "damageType": "Fire",
+    "effects": [{
+      "id": "burn"
+    }],
+    "description": "Unleashes a blast of fire that deals damage and may cause burn.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Fire/FireBlast.jpg"
+  },
+  "wildfire": {
+    "id": "wildfire",
+    "name": "Wildfire",
+    "type": "active",
+    "damage": 30,
+    "manaCost": 20,
+    "cooldown": 20,
+    "damageType": "Fire",
+    "effects": [{
+      "id": "wildfireBurn"
+    }],
+    "description": "Spreads fire that deals damage over time to all enemies and has a chance to spread to allies.",
+    "targetingModes": [
+      "All Enemies"
+    ],
+    "extraTargets": ["Random Ally"],
+    "icon": "Media/Skills/Fire/Wildfire.jpg"
+  },
+  "flameWave": {
+    "id": "flameWave",
+    "name": "Flame Wave",
+    "type": "active",
+    "damage": 25,
+    "manaCost": 25,
+    "cooldown": 25,
+    "damageType": "Fire",
+    "effect": null,
+    "description": "A wave of flame that deals damage to all enemies in range and may hit allies.",
+    "targetingModes": [
+      "All Enemies"
+    ],
+    "extraTargets": ["Random Ally"],
+    "icon": "Media/Skills/Fire/FlameWave.jpg"
+  },
+  "explosivePotion": {
+    "id": "explosivePotion",
+    "name": "Explosive Potion",
+    "type": "active",
+    "damage": 50,
+    "manaCost": 30,
+    "cooldown": 35,
+    "damageType": "Fire",
+    "effects": [{
+      "id": "stun"
+    }],
+    "description": "Throws an explosive potion that deals massive damage and stuns, but can backfire.",
+    "targetingModes": [
+      "Random"
+    ],
+    "extraTargets": ["Random Ally"],
+    "icon": "Media/Skills/Fire/ExplosivePotion.jpg"
+  },
+  "poisonArrow": {
+    "id": "poisonArrow",
+    "name": "Poison Arrow",
+    "type": "active",
+    "damage": 10,
+    "manaCost": 8,
+    "cooldown": 15,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "poison"}],
+    "description": "Shoots a poisoned arrow that deals damage over time.",
+    "targetingModes": [
+      "Random Back"
+    ],
+    "icon": "Media/Skills/Physical/PoisonArrow.jpg"
+  },
+  "multiShot": {
+    "id": "multiShot",
+    "name": "Multi-Shot",
+    "type": "active",
+    "damage": 20,
+    "manaCost": 20,
+    "cooldown": 20,
+    "damageType": "Physical",
+    "effect": null,
+    "description": "Fires multiple arrows at once, hitting multiple enemies.",
+    "targetingModes": [
+      "All Enemies"
+    ],
+    "icon": "Media/Skills/Physical/MultiShot.jpg"
+  },
+  "explosiveArrow": {
+    "id": "explosiveArrow",
+    "name": "Explosive Arrow",
+    "type": "active",
+    "damage": 25,
+    "manaCost": 15,
+    "cooldown": 25,
+    "damageType": "Fire",
+    "effects": [{
+      "id": "burn"}],
+    "description": "Shoots an explosive arrow that deals fire damage and may cause burn.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Fire/ExplosiveArrow.jpg"
+  },
+  "piercingShot": {
+    "id": "piercingShot",
+    "name": "Piercing Shot",
+    "type": "active",
+    "damage": 15,
+    "manaCost": 5,
+    "cooldown": 10,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "reduceArmorPercentage"}],
+    "description": "Fires an arrow that pierces through armor, reducing its effectiveness.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/PiercingShot.jpg"
+  },
+  "callOfTheWild": {
+    "id": "callOfTheWild",
+    "name": "Call of the Wild",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 15,
+    "cooldown": 15,
+    "damageType": "None",
+    "effects": [{
+      "id": "summonWolf"}],
+    "description": "Summons a beast to fight alongside the Goblin Beastmaster.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Summon/CallOfTheWild.jpg"
+  },
+  "savageStrike": {
+    "id": "savageStrike",
+    "name": "Savage Strike",
+    "type": "active",
+    "damage": 20,
+    "manaCost": 10,
+    "cooldown": 15,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "bleed"}],
+    "description": "Commands a beast to strike, causing damage and bleeding.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/SavageStrike.jpg"
+  },
+  "packLeader": {
+    "id": "packLeader",
+    "name": "Pack Leader",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 20,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDamagePercentage",
+      "duration": 20
+    }],
+    "description": "Increases the damage of all allied beasts.",
+    "targetingModes": [
+      "All Beasts"
+    ],
+    "icon": "Media/Skills/Buff/PackLeader.jpg"
+  },
+  "ferociousRoar": {
+    "id": "ferociousRoar",
+    "name": "Ferocious Roar",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 15,
+    "cooldown": 20,
+    "damageType": "None",
+    "effects": [{
+      "id": "reduceArmorPercentage"}],
+    "description": "Unleashes a roar that reduces the armor of all enemies.",
+    "targetingModes": [
+      "All Enemies"
+    ],
+    "icon": "Media/Skills/Debuff/FerociousRoar.jpg"
+  },
+  "berserkSlash": {
+    "id": "berserkSlash",
+    "name": "Berserk Slash",
+    "type": "active",
+    "damage": 25,
+    "manaCost": 5,
+    "cooldown": 10,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "bleed",
+      "value": 5,
+      "duration": 5}],
+    "description": "A furious slash that causes bleeding.",
+    "targetingModes": [
+      "Random Front"
+    ],
+    "icon": "Media/Skills/Physical/BerserkSlash.jpg"
+  },
+  "rageStrike": {
+    "id": "rageStrike",
+    "name": "Rage Strike",
+    "type": "active",
+    "damage": 35,
+    "manaCost": 10,
+    "cooldown": 15,
+    "damageType": "Physical",
+    "effect": null,
+    "description": "A powerful strike fueled by rage, dealing significant damage.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/RageStrike.jpg"
+  },
+  "frenzy": {
+    "id": "frenzy",
+    "name": "Frenzy",
+    "type": "active",
+    "damage": 20,
+    "manaCost": 15,
+    "cooldown": 15,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "decreaseCooldown"
+      }],
+    "description": "Increases attack speed and damage for a short duration.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Buff/Frenzy.jpg"
+  },
+  "warCry": {
+    "id": "warCry",
+    "name": "War Cry",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 20,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [{
+      "id": "reduceDamagePercentage",
+      "value": 10
+    }],
+    "description": "A mighty war cry that reduces the damage of all enemies.",
+    "targetingModes": [
+      "All Enemies"
+    ],
+    "icon": "Media/Skills/Debuff/WarCry.jpg"
+  },
+  "chieftainsStrike": {
+    "id": "chieftainsStrike",
+    "name": "Chieftains Strike",
+    "type": "active",
+    "damage": 30,
+    "manaCost": 10,
+    "cooldown": 10,
+    "damageType": "Physical",
+    "effect": null,
+    "description": "A powerful strike that deals significant damage.",
+    "targetingModes": [
+      "Random Front"
+    ],
+    "icon": "Media/Skills/Physical/ChieftainsStrike.jpg"
+  },
+  "goblinsRally": {
+    "id": "goblinsRally",
+    "name": "Goblins Rally",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 20,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDamagePercentage",
+      "value": 15,
+      "duration": 15}],
+    "description": "Rallies all goblins, increasing their damage output.",
+    "targetingModes": [
+      "All Ally"
+    ],
+    "icon": "Media/Skills/Buff/GoblinsRally.jpg"
+  },
+  "commandingPresence": {
+    "id": "commandingPresence",
+    "name": "Commanding Presence",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 25,
+    "cooldown": 30,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseArmorPercentage"}],
+    "description": "Increases the armor of all allied goblins.",
+    "targetingModes": [
+      "All Ally"
+    ],
+    "icon": "Media/Skills/Buff/CommandingPresence.jpg"
+  },
+  "battleRoar": {
+    "id": "battleRoar",
+    "name": "Battle Roar",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 15,
+    "cooldown": 20,
+    "damageType": "None",
+    "effects": [{
+      "id": "reduceDamagePercentage",
+      "value": -10}],
+    "description": "A mighty roar that reduces the damage of all enemies.",
+    "targetingModes": [
+      "All Enemies"
+    ],
+    "icon": "Media/Skills/Debuff/BattleRoar.jpg"
+  },
+  "howl": {
+    "id": "howl",
+    "name": "Howl",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 10,
+    "cooldown": 15,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseArmorFlat"
+    }],
+    "description": "The wolf lets out a powerful howl, increasing the armor of all nearby allies.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/None/Howl.jpg"
+  },
+
+  "packHunt": {
+    "id": "packHunt",
+    "name": "Pack Hunt",
+    "type": "active",
+    "damage": 20,
+    "manaCost": 15,
+    "cooldown": 20,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "reduceArmorPercentage"
+    }],
+    "description": "The wolf calls its pack to hunt down the target, dealing damage and reducing their armor.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/PackHunt.jpg"
+  },
+
+  "savageBite": {
+    "id": "savageBite",
+    "name": "Savage Bite",
+    "type": "active",
+    "damage": 25,
+    "manaCost": 10,
+    "cooldown": 12,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "bleed"
+    }],
+    "description": "A fierce bite that causes the target to bleed over time.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/SavageBite.jpg"
+  },
+
+  "swiftPounce": {
+    "id": "swiftPounce",
+    "name": "Swift Pounce",
+    "type": "active",
+    "damage": 15,
+    "manaCost": 8,
+    "cooldown": 10,
+    "damageType": "Physical",
+    "effects": [{
+      "id": "stun"
+    }],
+    "description": "The wolf pounces on the target, dealing damage and stunning them briefly.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/SwiftPounce.jpg"
+  },
+
+  "furiousCharge": {
+    "id": "furiousCharge",
+    "name": "Furious Charge",
+    "type": "active",
+    "damage": 20,
+    "manaCost": 12,
+    "cooldown": 18,
+    "damageType": "Physical",
+    "effects": null,
+    "description": "The wolf charges at its target with great force.",
+    "targetingModes": [
+      "Random"
+    ],
+    "icon": "Media/Skills/Physical/FuriousCharge.jpg"
+  },
+
+  "primalRage": {
+    "id": "primalRage",
+    "name": "Primal Rage",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 20,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDamageFlat"
+    }],
+    "description": "The wolf enters a primal rage, increasing its damage for a short period.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/None/PrimalRage.jpg"
+  }
+
+}

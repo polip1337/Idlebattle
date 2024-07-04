@@ -1,106 +1,24 @@
 {
   "Novice": {
+    "id": "novice",
+    "name": "Novice",
     "portrait": "Media/portrait.jpg",
-    "armor": 0,
-    "blockChance": 0,
-    "resistances": {},
-    "dodge": 0,
-    "skills": [
-      {
-        "name": "Slash",
-        "type": "active",
-        "damage": 50,
-        "damageType": "slash",
-        "cooldown": 5,
-        "staminaCost": 5,
-        "manaCost": 0,
-        "effect": null,
-        "description": "A quick slash with a weapon.",
-        "icon": "Media/Skills/Novice/slash.png",
-        "targetingModes": ["Random Front", "Lowest HP"]
-      },
-      {
-        "name": "Block",
-        "type": "active",
-        "damageType": "none",
-        "damage": 0,
-        "manaCost": 0,
-        "staminaCost": 5,
-        "cooldown": 10,
-        "effect": { "type": "buff","subType":"Armor", "stat": "armor", "value": 2, "duration": 5, "name": "Block", "description": "Increases armor by 2 for 10 seconds." },
-        "description": "Puts your shield where it should be, increasing armor briefly.",
-        "icon": "Media/Skills/Novice/shield.jpg",
-        "targetingModes": ["Self"]
-      },
-      {
-        "name": "Quick Step",
-        "type": "active",
-        "damageType": "none",
-        "cooldown": 5,
-        "damage": 0,
-        "manaCost": 0,
-        "staminaCost": 5,
-        "effect": { "type": "buff", "stat": "speed", "value": 2, "duration": 1, "name": "Quick Step", "description": "Increases speed by 2 for 1 turn." },
-        "description": "Take a quick step to increase speed briefly.",
-        "icon": "Media/Skills/Novice/quick_step.png",
-        "targetingModes": ["Self"]
-      },
-      {
-        "name": "Bite",
-        "type": "active",
-        "damageType": "pierce",
-        "damage": 2,
-        "manaCost": 0,
-        "staminaCost": 5,
-        "effect": { "type": "debuff", "subType":"Bleed", "damageType": "Bleed","stat": "", "value": 2, "duration": 15, "name": "Bleed", "icon":"Media/UI/bleed.svg","description": "Deals 2 damage per second." },
-        "description": "A last resort. But it makes them bleed.",
-        "icon": "Media/Skills/Novice/bite.jpg",
-        "targetingModes": ["Random Front", "Lowest HP"]
-      },
-
-        {
-          "name": "Resilience",
-          "type": "passive",
-          "effect": { "type": "buff", "stat": "defense", "value": 1, "description": "Permanently increases defense by 1." },
-          "description": "Developed resilience to endure more hits in battle by increasing armor.",
-          "icon": "Media/Skills/Novice/resilience.jpg"
-        },
-
-        {
-          "name": "Lone Wolf",
-          "type": "passive",
-          "effect": { "type": "buff", "stat": "accuracy", "value": 1, "description": "Permanently increases accuracy by 1." },
-          "description": "You got better when fighting alone. Increase accuracy and dodge.",
-          "icon": "Media/Skills/Novice/loneWolf.jpg"
-        },
-        {
-          "name": "Toughened Skin",
-          "type": "passive",
-          "effect": { "type": "buff", "stat": "vitality", "value": 2, "description": "Permanently increases vitality by 2." },
-          "description": "Thickened skin provides additional health.",
-          "icon": "Media/Skills/Novice/toughenedSkin.png"
-        },
-        {
-          "name": "Combat Awareness",
-          "type": "passive",
-          "effect": { "type": "buff", "stat": "evasion", "value": 1, "description": "Permanently increases evasion by 1." },
-          "description": "Heightened awareness allows you to anticipate and evade attacks.",
-          "icon": "Media/Skills/Novice/combatAwareness.jpg"
-        }
-
-    ],
+    "skills": ["slash","bite","block","quickStep","combatAwareness","loneWolf","toughenedSkin","resilience"],
     "stats": {
       "strength": 10,
       "magicPower": 10,
       "dexterity": 10,
       "magicControl": 10,
-      "vitality": 15,
+      "vitality": 75,
       "mana": 150,
       "stamina": 50,
       "manaRegen": 5,
       "accuracy": 5,
-      "evasion": 5
-
+      "dodge": 5,
+      "armor": 0,
+      "blockChance": 0,
+      "damage": 1,
+      "resistances": {}
     },
     "statsPerLevel": {
       "strength": 2,

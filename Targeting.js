@@ -14,18 +14,22 @@ export function selectTarget(attacker, targetMode) {
 
       break;
     case 'Random Back':
-      target.push(attacker.opposingTeam.getRandomBackMember());
+        if(attacker.opposingTeam.getRandomBackMember()!= undefined){
+            target.push(attacker.opposingTeam.getRandomBackMember());
+        }else if (attacker.opposingTeam.getRandomFrontMember() != undefined && target.length == 0){
+            target.push(attacker.opposingTeam.getRandomFrontMember());
+        }
       break;
     case 'Random Any':
       target.push(attacker.opposingTeam.getRandomAliveMember());
       break;
-    case 'Random Team Front':
+    case 'Random Ally Front':
       target.push(attacker.team.getRandomFrontMember());
       break;
-    case 'Random Team Back':
+    case 'Random Ally Back':
       target.push(attacker.team.getRandomBackMember());
       break;
-    case 'Random Team Any':
+    case 'Random Ally':
       target.push(attacker.team.getRandomAliveMember());
       break;
     case 'Self':
@@ -44,31 +48,31 @@ export function selectTarget(attacker, targetMode) {
       target.push(attacker.team.getBackMember(X));
       break;
     case 'All Front':
-      target.push(attacker.opposingTeam.getAllFrontMembers());
+      target = attacker.opposingTeam.getAllFrontMembers();
       break;
     case 'All Back':
-      target.push(attacker.opposingTeam.getAllBackMembers());
+      target = attacker.opposingTeam.getAllBackMembers();
       break;
-    case 'All Any':
-      target.push(attacker.opposingTeam.getAllAliveMembers());
+    case 'All Enemies':
+      target = attacker.opposingTeam.getAllAliveMembers();
       break;
     case 'All Team Front':
-      target.push(attacker.team.getAllFrontMembers());
+      target = attacker.team.getAllFrontMembers();
       break;
     case 'All Team Back':
-      target.push(attacker.team.getAllBackMembers());
+      target = attacker.team.getAllBackMembers();
       break;
-    case 'All Team Any':
-      target.push(attacker.team.getAllAliveMembers());
+    case 'All Ally':
+      target = attacker.team.getAllAliveMembers();
       break;
     case 'Row Front':
-      target.push(attacker.battlefield.getRowFrontMembers(attacker));
+      target = attacker.battlefield.getRowFrontMembers(attacker);
       break;
     case 'Row Back':
-      target.push(attacker.battlefield.getRowBackMembers(attacker));
+      target = attacker.battlefield.getRowBackMembers(attacker);
       break;
     case 'All Characters':
-      target.push(attacker.battlefield.getAllCharacters());
+      target = attacker.battlefield.getAllCharacters();
       break;
     case 'Lowest HP Front':
       target.push(attacker.opposingTeam.getLowestHPFrontMember());
@@ -76,7 +80,7 @@ export function selectTarget(attacker, targetMode) {
     case 'Lowest HP Back':
       target.push(attacker.opposingTeam.getLowestHPBackMember());
       break;
-    case 'Lowest HP Any':
+    case 'Lowest HP':
       target.push(attacker.opposingTeam.getLowestHPMember());
       break;
     case 'Highest HP Front':
@@ -107,25 +111,25 @@ export function selectTarget(attacker, targetMode) {
       target.push(attacker.team.getHighestHPMember());
       break;
     case 'Column 1':
-      target.push(attacker.battlefield.getColumnMembers(1));
+      target = attacker.battlefield.getColumnMembers(1);
       break;
     case 'Column 2':
-      target.push(attacker.battlefield.getColumnMembers(2));
+      target = attacker.battlefield.getColumnMembers(2);
       break;
     case 'Column 3':
-      target.push(attacker.battlefield.getColumnMembers(3));
+      target = attacker.battlefield.getColumnMembers(3);
       break;
     case 'Column 4':
-      target.push(attacker.battlefield.getColumnMembers(4));
+      target = attacker.battlefield.getColumnMembers(4);
       break;
     case 'Adjacent Enemies':
-      target.push(attacker.opposingTeam.getAdjacentMembers(attacker));
+      target = attacker.opposingTeam.getAdjacentMembers(attacker);
       break;
     case 'Adjacent Allies':
-      target.push(attacker.team.getAdjacentMembers(attacker));
+      target = attacker.team.getAdjacentMembers(attacker);
       break;
     case 'Diagonal from Caster':
-      target.push(attacker.battlefield.getDiagonalMembers(attacker));
+      target = attacker.battlefield.getDiagonalMembers(attacker);
       break;
     case 'Diagonal from Target':
       break;

@@ -2,27 +2,35 @@ import { updateSkillBar,updatePassiveSkillBar, updateStamina, updateMana, render
 import { selectTarget } from './Targeting.js';
 
 class Skill {
-    constructor(name, type, icon, description, damage, manaCost,staminaCost, cooldown, damageType, targetingModes, effect, element) {
-        this.name = name;
-        this.icon = icon;
-        this.type = type;
-        this.description = description;
-        this.damage = damage;
-        this.manaCost = manaCost;
-        this.staminaCost = staminaCost;
-        this.cooldown = cooldown;
-        this.damageType = damageType;
-        this.targetingModes = targetingModes;
-        this.effect = effect;
+    constructor(skillData,effects, element = null) {
+        this.name = skillData.name;
+        this.icon = skillData.icon;
+        this.type = skillData.type;
+        this.description = skillData.description;
+        this.damage = skillData.damage;
+        this.heal = skillData.heal;
+        this.manaCost = skillData.manaCost;
+        this.staminaCost = skillData.staminaCost;
+        this.cooldown = skillData.cooldown;
+        this.remainingDuration = 0;
+        this.cooldownStartTime = null;
+        this.onCooldown = false;
+        this.damageType = skillData.damageType;
+        this.targetingModes = skillData.targetingModes;
+        this.extraTargets = skillData.extraTargets;
+        this.effects = effects;
         this.div= element;
+        this.repeat = false;
         this.level = 1;
         this.experience = 0;
         this.experienceToNextLevel = 100; // Example value for level 1
   }
-
+    setElement(element) {
+        this.div = element;
+    }
   // Calculate damage based on the member's stats and skill level
   calculateDamage(member) {
-    let damage = this.damage * this.level;
+    let damage = this.damage * this.level * member.stats.damage;
     if (this.damageType === 'physical') {
       damage += member.stats.strength;
     } else if (this.damageType === 'magical') {
@@ -58,19 +66,26 @@ class Skill {
       this.effectValue = Math.floor(this.effectValue * 1.1); // Increase effect value by 10% per level
     }
   }
-  useSkill(member, div = null){
+  useSkill(member){
     if(this.type == "active"){
+        this.repeat = true;
         let skillDiv = null;
-        if(div == null){
+        if(this.div == null){
             skillDiv = member.element.querySelector("#" + member.memberId + "Skill" + this.name.replace(/\s/g, ''));
-            this.startCooldown(skillDiv, this.cooldown,member);
             this.div = skillDiv;
+            this.startCooldown(member);
         }else{
-        this.startCooldown(this.div, this.cooldown,member);
+        this.startCooldown(member);
+        var targets = selectTarget(member, this.targetingModes[0]);
 
-        const targets = selectTarget(member, this.targetingModes[0]);
+        if(this.extraTargets != undefined){
+            this.extraTargets.forEach(mode => {
+                        targets = targets.concat(selectTarget(member, mode));
+            })
+        }
+
         targets.forEach(target => {
-            member.performAttack(member, target,this);
+            member.performAttack(member, target, this);
         });
         }
 
@@ -88,25 +103,63 @@ class Skill {
           overlay.classList.remove('paused');
       }
     }
-  heroStopSkill(member){
-    var overlay = document.querySelector("#" + container.id + " .cooldown-overlay");
+  heroStopSkill(){
+    var overlay = this.div.querySelector(" .cooldown-overlay");
     overlay.style.animation = '';
   }
-  startCooldown(container, duration, member) {
-          var overlay = document.querySelector("#" + container.id + " .cooldown-overlay");
-          container.classList.add('disabled');
-          overlay.classList.remove('hidden');
+  startCooldown(member) {
+    this.cooldownStartTime = Date.now();
+    this.remainingDuration = this.cooldown;
+    this.updateCooldownAnimation(member);
+    this.onCooldown = true;
+  }
+  reduceCooldown( amount,member) {
+      const elapsedTime = (Date.now() - this.cooldownStartTime) / 1000;
+      console.log("Elapsed time: " + elapsedTime);
+      console.log("Total cooldown: " + this.cooldown);
+      console.log("Amount to change: " + amount);
 
+      this.remainingDuration = Math.max(0, this.cooldown - elapsedTime - amount);
+      console.log("remainingDuration: " + this.remainingDuration);
+
+      if(this.remainingDuration > 0) {
+        this.updateCooldownAnimation(  member);
+      }
+      else{
+        console.log("Finishing early for skill " + this.name);
+        this.finishiCooldown(member);
+      }
+  }
+  updateCooldownAnimation(member) {
+          var overlay = this.div.querySelector(" .cooldown-overlay");
+          this.div.classList.add('disabled');
+          overlay.classList.remove('hidden');
           overlay.style.animation = '';
           overlay.offsetHeight;
-          overlay.style.animation = `fill ${duration}s ease-in-out forwards`;
-          overlay.addEventListener('animationend', () => {
-              overlay.classList.add('hidden');  /* Hide the square */
-              container.classList.remove('disabled');  /* Enable pointer events */
-              this.useSkill(member,container);
 
+          const remainingPercentage = (this.remainingDuration / this.cooldown) * 100;
+          overlay.style.height = `${remainingPercentage}%`;
+          overlay.style.animation = `fill ${this.remainingDuration}s ease-in-out forwards`;
+          console.log("For skill "+ this.name + "RemainingDuration after draw: " + this.remainingDuration);
+
+          overlay.addEventListener('animationend', () => {
+            this.finishiCooldown(member);
           }, { once: true });
       }
+  finishiCooldown(member){
+    var overlay = this.div.querySelector(" .cooldown-overlay");
+    overlay.style.animation = '';
+    overlay.offsetHeight;
+    this.remainingDuration = 0;
+    this.cooldownStartTime = null;
+    overlay.classList.add('hidden');  /* Hide the square */
+    this.div.classList.remove('disabled');  /* Enable pointer events */
+    if( this.repeat != false){
+      this.useSkill(member);
+    }else{
+        this.onCooldown = false;
+    }
+  }
 }
 
 export default Skill;

@@ -50,7 +50,7 @@
         "effect": { "type": "buff", "subtype": "increaseArmor", "value": 15, "duration": 20, "name": "Protected" },
         "description": "Calls upon the forest to increase the armor of all allies.",
         "targetingModes": [
-          "All Team Any"
+          "All Team"
         ],
         "icon": "Media/Skills/Buff/ForestsProtection.jpg"
       },
@@ -125,7 +125,7 @@
     "name": "Glade Unicorn",
     "portrait": "Media/Mobs/Unicorn/GladeUnicorn.jpg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 10,
     "resistances": {
@@ -144,7 +144,7 @@
         "effect": { "type": "cleanse", "subtype": "allDebuffs", "value": 0, "duration": 0, "name": "Purified" },
         "description": "Purifies all allies, removing all debuffs.",
         "targetingModes": [
-          "All Team Any"
+          "All Team"
         ],
         "icon": "Media/Skills/Purify/HornOfPurity.jpg"
       },
@@ -172,7 +172,7 @@
         "effect": { "type": "buff", "subtype": "increaseResistances", "value": 15, "duration": 20, "name": "Blessed" },
         "description": "Blesses all allies, increasing their resistances.",
         "targetingModes": [
-          "All Team Any"
+          "All Team"
         ],
         "icon": "Media/Skills/Buff/BlessingOfTheGlade.jpg"
       },
@@ -281,7 +281,7 @@
         "effect": { "type": "buff", "subtype": "increaseAccuracy", "value": 20, "duration": 15, "name": "Enhanced" },
         "description": "Activates enhanced sensory apparatus to increase accuracy of all allies.",
         "targetingModes": [
-          "All Team Any"
+          "All Team"
         ],
         "icon": "Media/Skills/Buff/EnhancedSenses.jpg"
       },
@@ -417,7 +417,7 @@
         "effect": { "type": "buff", "subtype": "increaseElectricRes", "value": 20, "duration": 15, "name": "Electrically Charged" },
         "description": "Creates a static field that increases electric resistance for all allies.",
         "targetingModes": [
-          "All Team Any"
+          "All Team"
         ],
         "icon": "Media/Skills/Buff/StaticField.jpg"
       },
@@ -859,7 +859,7 @@
     "name": "Stormcaller Seer",
     "portrait": "Media/Mobs/Seer/StormcallerSeer.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 10,
     "resistances": {
@@ -1305,7 +1305,7 @@
         "icon": "Media/Skills/Passive/FlameMastery.jpg"
       },
       {
-        "name": "Chieftain's Fury",
+        "name": "Chieftains Fury",
         "type": "passive",
         "damage": 0,
         "manaCost": 0,
@@ -1470,7 +1470,7 @@
     "name": "Enchanted Archer",
     "portrait": "Media/Mobs/Archer/EnchantedArcher.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 15,
     "resistances": {
@@ -1592,7 +1592,7 @@
     "name": "Mystic Druid",
     "portrait": "Media/Mobs/Druid/MysticDruid.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 20,
     "resistances": {
@@ -1714,7 +1714,7 @@
     "name": "Pixie Trickster",
     "portrait": "Media/Mobs/Pixie/PixieTrickster.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 10,
     "resistances": {
@@ -1836,7 +1836,7 @@
     "name": "Glamour Mage",
     "portrait": "Media/Mobs/Mage/GlamourMage.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 15,
     "resistances": {
@@ -2080,7 +2080,7 @@
     "name": "Sunfire Sorcerer",
     "portrait": "Media/Mobs/Fairy/SunfireSorcerer.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 15,
     "resistances": {
@@ -2202,7 +2202,7 @@
     "name": "Moonshadow Rogue",
     "portrait": "Media/Mobs/Rogue/MoonshadowRogue.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 10,
     "resistances": {
@@ -2324,7 +2324,7 @@
     "name": "Songweaver Bard",
     "portrait": "Media/Mobs/Bard/SongweaverBard.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 10,
     "resistances": {
@@ -2446,7 +2446,7 @@
     "name": "Starfall Oracle",
     "portrait": "Media/Mobs/Oracle/StarfallOracle.jpeg",
     "positions": [
-      "Back,Any"
+      "Back"
     ],
     "armor": 15,
     "resistances": {

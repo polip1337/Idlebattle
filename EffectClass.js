@@ -1,12 +1,15 @@
 import {
     isPaused
-} from './Main.js';
+} from './initialize.js';
+import Member from './Member.js'
 import {
     updateHealth,
     updateMana,
     updateStamina,
     deepCopy
+
 } from './Render.js';
+import {mobsClasses, renderTeamMembers} from './initialize.js';
 
 class EffectClass {
     constructor(target, effect) {
@@ -16,16 +19,20 @@ class EffectClass {
         this.timer = null;
         this.startTime = null;
         this.remainingTime = null;
+        this.render = true;
         if(effect.stackMode == "duration" && this.isAlreadyApplied(effect, target)){
             this.extendTimer(effect.duration);
-        }else if(effect.stackMode == "refresh"){
-            refreshTimer();
+        }else if(effect.stackMode == "refresh" && this.isAlreadyApplied(effect, target)){
+            this.refreshTimer();
         }
         else{
             this.applyEffect(effect);
-            this.renderBuff();
-            this.startTimer();
-            this.startTooltipTimer();
+            if(this.render){
+                this.renderBuff();
+                this.startTimer();
+                this.startTooltipTimer();
+            }
+
         }
     }
 
@@ -100,9 +107,6 @@ class EffectClass {
         }
     applyEffect(effect) {
         switch (this.effect.subType) {
-            case 'Armor':
-                this.target.armor += effect.value; // Custom property to handle barrier status
-            break;
             case 'Barrier':
                 this.target.barrier = this.value; // Custom property to handle barrier status
                 break;
@@ -113,10 +117,10 @@ class EffectClass {
                 this.createBlightInterval(this.value);
                 break;
             case 'Bleed':
-                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
-                break;
             case 'Burn':
-                this.createDamageOverTimeInterval(this.value);
+            case 'Poison':
+            case 'WildfireBurn':
+                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
                 break;
             case 'Charm':
                 // Logic for Charm effect
@@ -151,11 +155,10 @@ class EffectClass {
             case 'Fear':
                 // Logic for Fear effect
                 break;
-            case 'Freeze':
-                this.target.stats.speed = 0; // Freeze effect
-                break;
-            case 'Haste':
-                this.target.stats.speed += this.target.stats.speed * this.value / 100;
+            case 'flatChange':
+                 this.target.stats[this.effect.stat] += this.effect.value;
+                console.log("Applied flat change on " + this.effect.stat + ". New value: " +this.target.stats[this.effect.stat]);
+
                 break;
             case 'heal':
                  this.target.healDamage(this.effect.value);
@@ -166,11 +169,23 @@ class EffectClass {
             case 'Hexproof':
                 this.target.hexproof = true; // Custom property to handle hexproof status
                 break;
+            case 'decreaseCooldown':
+                this.render = false;
+
+                this.target.skills.forEach(skill => {
+                if(skill.onCooldown ){
+                    if(skill.effects != undefined && skill.effects.subType == 'decreaseCooldown'){
+
+                    }else{
+                        console.log("Decreasing cooldown on skill: " + skill.name);
+
+                        skill.reduceCooldown(this.effect.value,this.target);
+                    }
+                }
+                });
+                break;
             case 'Invisibility':
                 this.target.invisible = true; // Custom property to handle invisibility status
-                break;
-            case 'increaseArmor':
-                changeBaseStatsByPercentage('armor', this.effect.value);
                 break;
             case 'Life Drain':
                 this.createLifeDrainInterval(this.value);
@@ -193,14 +208,16 @@ class EffectClass {
             case 'Petrify':
                 // Logic for Petrify effect
                 break;
-            case 'Poison':
-                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
-                break;
+            case 'percentChange':
+                this.target.stats[this.effect.stat] += this.effect.value * this.target.stats[this.effect.stat] / 100;
+                console.log("applied percentage change on " + this.effect.stat + ". New value: " +this.target.stats[this.effect.stat]);
+            break;
+
             case 'Purify':
                 this.removeNegativeEffects(); // Method to remove negative effects
                 break;
             case 'Regen':
-                this.createHealOverTimeInterval(this.effect.value,this.effect.duration);
+                this.createHealOverTimeInterval(this.effect.value,this.target);
                 break;
             case 'Reflect':
                 this.target.reflect = this.value; // Custom property to handle reflect status
@@ -211,29 +228,17 @@ class EffectClass {
             case 'Sleep':
                 // Logic for Sleep effect
                 break;
-            case 'Slow':
-                this.target.stats.speed -= this.target.stats.speed * this.value / 100;
+            case 'summon':
+                this.summon(this.target,this.effect.who,this.effect.limit);
                 break;
             case 'Stun':
                 this.target.stopSkills();
                 break;
-            case 'Strength Increase':
-                this.target.stats.strength += this.value;
-                break;
-            case 'Strengthen':
-                changeStatsByPercentage('strength', this.effect.value);
-                break;
             case 'Taunt':
                 // Logic for Taunt effect
                 break;
-            case 'Vitality Increase':
-                this.target.stats.vitality += this.value;
-                break;
-            case 'Weaken':
-                changeStatsByPercentage(effect.stat, effect.value);
-                break;
             default:
-                console.log(`${this.effect.type} effect not implemented yet.`);
+                console.log(`${this.effect.type},${this.effect.subType} effect not implemented yet.`);
         }
         this.target.effects.push(this);
     }
@@ -269,7 +274,25 @@ class EffectClass {
     increaseStatsByFlatValue(stat, value) {
         this.target.stats[stat] -= this.value;
     }
+    summon(target,who,limit) {
+            if(target.summons < limit){
+                var member = new Member(this.deepCopy(mobsClasses[who].name),
+                                      this.deepCopy(mobsClasses[who].class),
+                                      this.deepCopy(mobsClasses[who].skills),
+                                      target.level);
+                member.initialize(target.opposingTeam,target.team,target.team.length+1);
+                renderTeamMembers([member],'team2',false);
+                member.skills.forEach(skill => {
+                    skill.useSkill(member);
+                });
 
+                target.team.addMembers([member]);
+                target.summons += 1;
+            }else{
+
+            }
+
+    }
     revertEffect() {
         switch (this.effect.subType) {
             case 'Barrier':
@@ -283,11 +306,10 @@ class EffectClass {
             case 'Mana Drain':
             case 'Poison':
             case 'Regen':
+            case 'WildfireBurn':
                 clearInterval(this.interval);
                 break;
-            case 'Weaken':
-                this.target.stats.strength += this.target.stats.strength * this.value / 100;
-                break;
+
             case 'Disarm':
                 this.target.disarmed = false;
                 break;
@@ -295,24 +317,18 @@ class EffectClass {
                 this.target.stats.strength -= this.value;
                 this.target.stats.defense += this.value;
                 break;
-            case 'Slow':
-                this.target.stats.speed += this.target.stats.speed * this.value / 100;
+            case 'flatChange':
+                this.target.stats[this.effect.stat] += this.effect.value;
+                console.log("Applied flat change on " + this.effect.stat + ". New value: " +this.target.stats[this.effect.stat]);
                 break;
-            case 'Freeze':
-                this.target.stats.speed = this.originalSpeed;
-                break;
-            case 'Haste':
-                this.target.stats.speed -= this.target.stats.speed * this.value / 100;
-                break;
-            case 'Strength Increase':
-                this.target.stats.strength -= this.value;
+            case 'percentChange':
+                this.target.stats[this.effect.stat] = this.target.stats[this.effect.stat] / (1 + (this.effect.value / 100));
+                console.log("applied percentage change on " + this.effect.stat + ". New value: " +this.target.stats[this.effect.stat]);
                 break;
             case 'Stun':
                 this.target.startSkills();
             break;
-            case 'Vitality Increase':
-                this.target.stats.vitality -= this.value;
-                break;
+
             case 'Invisibility':
                 this.target.invisible = false;
                 break;
@@ -324,7 +340,7 @@ class EffectClass {
                 break;
                 // Revert logic for other effects as necessary
             default:
-                console.log(`${this.effect.name} effect not implemented yet.`);
+                console.log(`${this.effect.type}, ${this.effect.subType} effect revert not implemented yet.`);
         }
 
     }
@@ -342,5 +358,20 @@ class EffectClass {
          }// Revert the effect when the buff expires
         this.element.remove();
     }
+    deepCopy(obj) {
+            if (obj === null || typeof obj !== 'object') {
+                return obj;
+            }
+            if (Array.isArray(obj)) {
+                return obj.map(item => this.deepCopy(item));
+            }
+            const copy = {};
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    copy[key] = this.deepCopy(obj[key]);
+                }
+            }
+            return copy;
+        }
 }
 export default EffectClass;

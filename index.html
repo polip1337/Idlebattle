@@ -492,25 +492,25 @@
         </div>
         <div id="gridContainer">
             <div class="gridItem">
-                <button class="tablinks" onclick="openTab(event, 'battlefield')">Battle</button>
+                <button id="battlefieldNavButton" class="tablinks" >Battle</button>
             </div>
             <div class="gridItem">
-                <button id="heroTab" class="tablinks" onclick="openTab(event, 'heroContent')">Hero</button>
+                <button id="heroContentNavButton" class="tablinks" >Hero</button>
             </div>
             <div class="gridItem">
-                <button class="tablinks" onclick="openTab(event, 'map')">Map</button>
+                <button id="mapNavButton" class="tablinks" >Map</button>
             </div>
             <div class="gridItem">
-                <button class="tablinks" onclick="openTab(event, 'library')">Library</button>
+                <button id="libraryNavButton" class="tablinks" >Library</button>
             </div>
             <div class="gridItem">
-                <button class="tablinks" onclick="openTab(event, 'options')">Options</button>
+                <button id="optionsNavButton" class="tablinks" >Options</button>
             </div>
             <div class="gridItem">
                 <button id="start-button">Start Battle</button>
             </div>
             <div class="gridItem">
-                <button class="tablinks" onclick="openTab(event, 'battle-statistics')">Stats</button>
+                <button id="battle-statisticsNavButton" class="tablinks">Stats</button>
             </div>
             <div class="gridItem">
                 <!-- Content for the eighth grid item -->
@@ -530,7 +530,8 @@
 <script src="Team.js" type="module"></script>
 <script src="Battle.js" type="module"></script>
 <script src="Main.js" type="module"></script>
-<script src="navigation.js"  ></script>
+<script src="initialize.js" type="module"></script>
+<script src="navigation.js"  type="module"></script>
 <script src="map.js"  ></script>
 </body>
 </html>

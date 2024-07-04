@@ -146,7 +146,7 @@ border-radius:50%;
     bottom: 125%; /* Position above the icon */
     left: 50%;
     margin-left: -60px;
-    width: 120px;
+    width: 150px;
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
@@ -186,6 +186,8 @@ border-radius:50%;
 .iconDiv {
     position: relative;
     margin: 5px;
+    height: 45px;
+    width: 45px;
 }
 
 .icon {

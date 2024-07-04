@@ -7,19 +7,37 @@ export function updateSkillBar(skills) {
 
         if(skills[i]){
             element.src = skills[i].icon;
-            tooltip.innerHTML = `
-                        <strong>${skills[i].name}</strong><br>
-                        Damage: ${skills[i].damage}<br>
-                        Mana Cost: ${skills[i].manaCost}<br>
-                        Cooldown: ${skills[i].cooldown}<br>
-                        Damage Type: ${skills[i].damageType}<br>
-                        ${skills[i].description}
-                    `;
+            updateSkillTooltip(tooltip, skills[i]);
             }
         else
             element.src = "Media/UI/defaultSkill.jpeg";
     }
 
+}
+
+export function updateSkillTooltip(tooltip, skill){
+
+    let tooltipContent = `
+    <strong>${skill.name}</strong><br>
+    ${skill.damage !== 0 ? `Damage: ${skill.damage}<br>` : ''}
+    ${skill.manaCost !== 0 ? `Mana Cost: ${skill.manaCost}<br>` : ''}
+    ${skill.cooldown !== 0 ? `Cooldown: ${skill.cooldown}<br>` : ''}
+    ${skill.damageType.toLowerCase() !== 'none' ? `Damage Type: ${skill.damageType}<br>` : ''}
+    ${skill.description}<br>
+`;
+    if (skill.effects) {
+        const effect = skill.effects;
+
+        tooltipContent += `
+            <strong>Effect: ${effect.name !== undefined ? effect.name : 'Unnamed Effect'}</strong><br>
+            ${effect.damageType !== undefined && effect.damageType !== 'none' ? `Damage Type: ${effect.damageType}<br>` : ''}
+            ${effect.value !== undefined && effect.value !== 0 ? `Value: ${effect.value}<br>` : ''}
+            ${effect.duration !== undefined && effect.duration !== 0 ? `Duration: ${effect.duration}s<br>` : ''}
+        `;
+    };
+
+
+tooltip.innerHTML = tooltipContent;
 }
 export function updatePassiveSkillBar(skills) {
     for(let i = 0; i<12; i++){
@@ -45,6 +63,7 @@ export function updateExp(member) {
     expBar.style.setProperty('width', expPercentage);
     const tooltip = expBar.querySelector('#level-progress-bar .tooltip-text');
     tooltip.textContent = `EXP: ${member.experience} / ${member.experienceToLevel}`;
+
 
 
 }
@@ -98,13 +117,14 @@ export function  updateStatsDisplay(member) {
             <p>Magic Control: <span id="heroMagicControl">${member.stats.magicControl}</span></p>
         `;
     }
-export function loadSkills(hero) {
+export function renderSkills(hero) {
     const container = document.querySelector(`#activeSkills`);
     container.innerHTML = '';
     var activeSkills = hero.skills.filter(skill => skill.type == "active");
     activeSkills.forEach(skill => {
         const skillBox = document.createElement('div');
         skillBox.className = 'skill-box';
+        skillBox.id = 'skill-box' + skill.name.replace(/\s/g, '');
         skillBox.innerHTML = `
             <img src="${skill.icon}">
             <span>${skill.name} </span>
@@ -130,13 +150,24 @@ export function loadSkills(hero) {
         container.appendChild(skillBox);
     });
 }
-export function loadPassiveSkills(hero) {
+
+export function updateProgressBar(skill) {
+    const progressBar = document.querySelector('#skill-box' + skill.name.replace(/\s/g, '') + " .progress");
+
+    const widthPercentage = (skill.experience / skill.experienceToNextLevel) * 100;
+    progressBar.style.width = `${widthPercentage}%`;
+}
+
+
+export function renderPassiveSkills(hero) {
     const container = document.querySelector(`#passiveSkills`);
     container.innerHTML = '';
     var passiveSkills = hero.skills.filter(skill => skill.type != "active");
     passiveSkills.forEach(skill => {
         const skillBox = document.createElement('div');
         skillBox.className = 'skill-box';
+        skillBox.id = 'skill-box' + skill.name.replace(/\s/g, '');
+
         skillBox.innerHTML = `
             <img src="${skill.icon}">
             <span>${skill.name} </span>
@@ -250,7 +281,7 @@ export function renderMember(member) {
     const iconRow2 = document.createElement('div');
     iconRow2.className = 'icon-row';
     for (let i = 0; i < 6; i++) {
-        const skill = member.class.skills[i];
+        const skill = member.skills[i];
         const iconDiv = document.createElement('div');
         iconDiv.className = 'iconDiv';
         iconDiv.id=member.memberId + 'Skill' + skill.name.replace(/\s/g, '');
@@ -261,14 +292,7 @@ export function renderMember(member) {
 
         const tooltip = document.createElement('div');
         tooltip.className = 'tooltip';
-        tooltip.innerHTML = `
-            <strong>${skill.name}</strong><br>
-            Damage: ${skill.damage}<br>
-            Mana Cost: ${skill.manaCost}<br>
-            Cooldown: ${skill.cooldown}<br>
-            Damage Type: ${skill.damageType}<br>
-            ${skill.description}
-        `;
+        updateSkillTooltip(tooltip, skill);
         const cooldownOverlay = document.createElement('div');
         cooldownOverlay.className = 'cooldown-overlay';
 
@@ -408,3 +432,27 @@ function selectEvolution(index) {
     console.log(`Selected evolution index: ${index}`);
     // Implement your logic for handling the selected evolution
 }
+export function showTooltip(event, content) {
+        var tooltip = content;
+
+        // Set initial position
+        let top = event.clientY + 20; // 20px below the cursor
+        let left = event.clientX + 20; // 20px to the right of the cursor
+
+        // Get tooltip dimensions
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const tooltipHeight = tooltipRect.height;
+
+
+
+        // Adjust position if tooltip extends outside the window
+
+        if (0 > tooltipRect.top) {
+            top = 100; // Move above the cursor
+            tooltip.style.top = `${top}px`;
+            tooltip.style.left = `40px`;
+            tooltip.style.bottom = `auto`;
+        }
+
+
+    }

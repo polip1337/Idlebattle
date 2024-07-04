@@ -113,7 +113,10 @@ class Team {
 
         if (frontMembers.length > 0) {
             return frontMembers.reduce((lowestHPMember, currentMember) => {
-                if (currentMember.currentHealth < lowestHPMember.currentHealth) {
+                const currentPercentage = (currentMember.currentHealth / currentMember.maxHealth) * 100;
+                const lowestPercentage = (lowestHPMember.currentHealth / lowestHPMember.maxHealth) * 100;
+
+                if (currentPercentage < lowestPercentage) {
                     return currentMember;
                 }
                 return lowestHPMember;

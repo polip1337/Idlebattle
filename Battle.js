@@ -1,9 +1,9 @@
 import Member from './Member.js';
 import Team from './Team.js';
-import { isPaused } from './Main.js';
+import { isPaused } from './initialize.js';
 import EffectClass from './EffectClass.js';
 import Hero from './Hero.js';
-import {battleStatistics} from './Main.js';
+import {battleStatistics} from './initialize.js';
 
 import { updateHealth, updateMana } from './Render.js';
 
@@ -24,14 +24,17 @@ function startBattle(team1, team2) {
             clearInterval(battleInterval);
             if (!team1Alive) {
                 showPopup("Loss!", "Your team has been defeated.");
-                team1.members[0].skills.forEach(skill => {
+                var activeSkills = team1.members[0].skills.filter(skill => skill.type == "active");
+                activeSkills.forEach(skill => {
+
                      skill.heroStopSkill(team1.members[0]);
                  });
                  battleStarted = false;
 
             } else {
                 showPopup("Victory!", "Your team has defeated the opposing team.");
-                team1.members[0].skills.forEach(skill => {
+                var activeSkills = team1.members[0].skills.filter(skill => skill.type == "active");
+                activeSkills.forEach(skill => {
                       skill.heroStopSkill(team1.members[0]);
                   });
                  battleStarted = false;
@@ -47,19 +50,9 @@ function useSkillsForAllMembers(team) {
             skill.useSkill(member);
         });
     });
+
 }
-function createRandomMembers(prefix, classes,team, opposingTeam,size) {
-    const classKeys = Object.keys(classes);
-    return Array.from({ length: size }, (_, i) => {
-        const randomClass = classKeys[Math.floor(Math.random() * classKeys.length)];
-        let position = null;
-        if (i<4){
-            position = "Front";
-        }else{
-            position = "Back";}
-        return new Member(classes[randomClass].name, randomClass, classes[randomClass], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam,position);
-    });
-}
+
 
 function createMembers(prefix,classes, team, opposingTeam, mobs) {
         return mobs.map((mob, index) => {
@@ -96,4 +89,4 @@ function createHero(prefix, classes,team, opposingTeam) {
     });
 }
 
-export { startBattle, createRandomMembers,createHero,hidePopup, createMembers,battleStarted};
+export { startBattle, createHero,hidePopup, createMembers,battleStarted};

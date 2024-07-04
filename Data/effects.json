@@ -1,0 +1,144 @@
+{
+  "bleed": {
+    "name": "Bleed",
+    "type": "debuff",
+    "subType": "Bleed",
+    "damageType": "Bleed",
+    "stat": "",
+    "value": 2,
+    "duration": 15,
+    "icon": "Media/UI/bleed.svg",
+    "description": "Deals 2 damage per second."
+  },
+  "stun": {
+    "name": "Stun",
+    "type": "debuff",
+    "subType": "Stun",
+    "duration": 5,
+    "stackMode": "duration"
+  },
+  "regen": {
+    "name": "Regen",
+    "type": "buff",
+    "subType": "Regen",
+    "value": 4,
+    "duration": 10,
+    "stackMode": "duration"
+  },
+  "poison": {
+    "name": "Poison",
+    "type": "debuff",
+    "subType": "Poison",
+    "damageType": "Poison",
+    "value": 5,
+    "duration": 10,
+    "icon": "Media/UI/poison-bottle.svg"
+  },
+  "burn": {
+    "name": "Burn",
+    "type": "debuff",
+    "subType": "Burn",
+    "value": 5,
+    "duration": 10
+  },
+  "wildfireBurn": {
+    "name": "Wildfire Burn",
+    "type": "debuff",
+    "subType": "WildfireBurn",
+    "value": 10,
+    "duration": 15
+  },
+  "summonWolf": {
+    "name": "Summon wolf",
+    "type": "summon",
+    "subType": "summon",
+    "who": "wolf",
+    "limit": 1
+
+  },
+  "decreaseCooldown": {
+    "name": "Decrease Cooldown",
+    "type": "buff",
+    "subType": "decreaseCooldown",
+    "value": 5
+  },
+  
+  "increaseDamagePercentage": {
+    "name": "Increase Damage",
+    "type": "buff",
+    "subType": "percentChange",
+    "stat": "damage",
+    "value": 10,
+    "duration": 10,
+    "stackMode": "refresh"
+  },
+  "reduceDamagePercentage": {
+    "name": "Reduce Damage",
+    "type": "debuff",
+    "subType": "percentChange",
+    "stat": "damage",
+    "value": -5,
+    "duration": 10
+  },
+
+  "increaseArmorFlat": {
+    "name": "Increase Armor",
+    "type": "buff",
+    "subType": "flatChange",
+    "stat": "armor",
+    "value": 2,
+    "duration": 5
+  },
+  "increaseArmorPercentage": {
+    "name": "Increase Armor %",
+    "type": "buff",
+    "subType": "percentChange",
+    "stat": "armor",
+    "value": 10,
+    "duration": 20
+  },
+  "reduceArmorPercentage": {
+    "name": "Reduce Armor %",
+    "type": "debuff",
+    "subType": "percentChange",
+    "stat": "armor",
+    "value": -5,
+    "duration": 10
+  },
+  "reduceArmorFlat": {
+    "name": "Reduce Armor",
+    "type": "debuff",
+    "subType": "flatChange",
+    "stat": "armor",
+    "value": -3,
+    "duration": 5
+  },
+
+  "increaseStrengthFlat": {
+    "name": "Increase Strength ",
+    "type": "buff",
+    "subType": "flatChange",
+    "stat": "strength",
+    "value": 10,
+    "duration": 20,
+    "stackMode": "refresh"
+  },
+  "reduceStrengthPercentage": {
+    "name": "Reduce Strength %",
+    "type": "debuff",
+    "subType": "percentChange",
+    "stat": "strength",
+    "value": -10,
+    "duration": 20,
+    "stackMode": "refresh",
+    "icon": "TODO"
+  },
+  "reduceDodgeFlat": {
+    "name": "Reduce Dodge",
+    "type": "debuff",
+    "subType": "flatChange",
+    "stat": "dodge",
+    "value": -10,
+    "duration": 10
+  }
+}
