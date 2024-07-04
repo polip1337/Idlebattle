@@ -1,4 +1,4 @@
-import { startBattle, createHero, hidePopup, createMembers } from './Battle.js';
+import { startBattle, createHero, hidePopup, createMembers,repeatStage, nextStage } from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
 import Member from './Member.js';
@@ -17,6 +17,8 @@ export let team1 = new Team('Team1', 'team1-members');;
 export let team2 = new Team('Team2', 'team2-members');;
 export let hero;
 export let battleLog;
+export let classTiers;
+export let heroClasses;
 
 updateLevelProgress(0, 100, "Novice");
 let currentArea = new Area("Data/Areas/goblinPlains.JSON");
@@ -70,8 +72,10 @@ async function loadMobs(skills) {
     return classes;
 }
 async function loadClasses(skills) {
-    const classesData = await loadJSON('Data/classes.json');
+    var classesData = await loadJSON('Data/classes.json');
     const classes = {};
+    classTiers = classesData['tiers'];
+    classesData = classesData['classes'];
     for (const key in classesData) {
         const heroClass = classesData[key];
         const classSkills = heroClass.skills.map(skillId => skills[skillId]);
@@ -86,7 +90,7 @@ async function loadGameData() {
         const passiveSkills = await loadSkills(effects,'Data/passives.json');
         skills = {...skills, ...passiveSkills};
         mobsClasses = await loadMobs(skills);
-        const heroClasses = await loadClasses(skills);
+        heroClasses = await loadClasses(skills);
 
         initiateBattleLog();
         createAndInitHero(heroClasses,team1,team2);
@@ -122,7 +126,9 @@ function loadStage(stageNumber,mobs) {
 
     team2.addMembers(team2Members);
 }
-
+export function reLoadStage() {
+    loadStage(currentArea.stageNumber,mobsClasses);
+}
 function selectInitialSkills() {
     for (let i = 0; i < 4; i++) {
         hero.selectSkill(team1.members[0].skills[i], document.querySelectorAll("#activeSkills .skill-box")[i]);
@@ -176,13 +182,21 @@ export function renderTeamMembers(members, containerId, clear = true) {
 
 }
 function initiateEventListeners() {
-    document.getElementById('start-button').addEventListener('click', () => startBattle(team1,team2));
+    document.getElementById('team2-overlay').addEventListener('click', () => {
+        document.getElementById('team2-overlay').classList.add('hidden');
+        document.getElementById('teamAndBattleContainer').style = 'opacity: 1'
+        startBattle(team1,team2);
+    });
     document.getElementById('battlefieldNavButton').addEventListener('click', () => openTab(event, 'battlefield'));
     document.getElementById('heroContentNavButton').addEventListener('click', () => openTab(event, 'heroContent'));
     document.getElementById('mapNavButton').addEventListener('click', () => openTab(event, 'map'));
     document.getElementById('libraryNavButton').addEventListener('click', () => openTab(event, 'library'));
     document.getElementById('optionsNavButton').addEventListener('click', () => openTab(event, 'options'));
     document.getElementById('battle-statisticsNavButton').addEventListener('click', () => openTab(event, 'battle-statistics'));
+    document.getElementById('evolveNavButton').addEventListener('click', () => openEvolutionModal(hero));
+
+    document.getElementById('repeat-popup').addEventListener('click', () => repeatStage());
+    document.getElementById('nextStage-popup').addEventListener('click', () => nextStage());
 
     document.addEventListener('keydown', (event) => {
         if (event.code === 'Space') {
@@ -245,16 +259,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   increaseStageButton.addEventListener('click', () => {
-    if (currentStage < maxStage) {
-      currentStage++;
-      updateStageDisplay();
-      // Call function to handle mob spawning for the new stage
-      loadStage(currentStage,mobsClasses);
-    }
+    loadNextStage(currentStage);
   });
   updateStageDisplay();
 });
-
+export function loadNextStage() {
+    if (currentStage < 10) {
+        currentArea.stageNumber = currentStage +1;
+        document.getElementById('current-stage').textContent = `Stage ${currentStage}`;
+        loadStage(currentArea.stageNumber,mobsClasses);
+    }
+}
 function togglePause() {
     isPaused = !isPaused;
     battleLog.log(isPaused ? "Battle Paused" : "Battle Resumed");

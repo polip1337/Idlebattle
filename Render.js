@@ -21,6 +21,7 @@ export function updateSkillTooltip(tooltip, skill){
     <strong>${skill.name}</strong><br>
     ${skill.damage !== 0 ? `Damage: ${skill.damage}<br>` : ''}
     ${skill.manaCost !== 0 ? `Mana Cost: ${skill.manaCost}<br>` : ''}
+    ${skill.staminaCost !== 0 ? `Stamina Cost: ${skill.staminaCost}<br>` : ''}
     ${skill.cooldown !== 0 ? `Cooldown: ${skill.cooldown}<br>` : ''}
     ${skill.damageType.toLowerCase() !== 'none' ? `Damage Type: ${skill.damageType}<br>` : ''}
     ${skill.description}<br>
@@ -383,19 +384,18 @@ export function updateLevelProgress(currentXP, maxXP, className) {
    progressBar.appendChild(tooltipText);
 }
 
-export function openEvolutionModal(evolutions) {
+export function openEvolutionModal(hero) {
     const modal = document.getElementById('evolution-modal');
     const evolutionOptionsDiv = document.getElementById('evolution-options');
     evolutionOptionsDiv.innerHTML = ''; // Clear previous options
 
     // Populate modal with evolution options
-    evolutions.forEach((evolution, index) => {
+    hero.availableClasses.forEach((evolution, index) => {
         const evolutionDiv = document.createElement('div');
         evolutionDiv.className = 'evolution-option';
         evolutionDiv.innerHTML = `
             <h3>${evolution.name}</h3>
             <p>${evolution.description}</p>
-            <img src="${evolution.image}" alt="${evolution.name}">
         `;
         evolutionDiv.addEventListener('click', () => {
             selectEvolution(index);

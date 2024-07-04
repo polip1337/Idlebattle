@@ -6,7 +6,7 @@
     "damageType": "Bleed",
     "stat": "",
     "value": 2,
-    "duration": 15,
+    "duration": 1,
     "icon": "Media/UI/bleed.svg",
     "description": "Deals 2 damage per second."
   },
@@ -140,5 +140,75 @@
     "stat": "dodge",
     "value": -10,
     "duration": 10
+  },
+  "invisibility": {
+    "name": "Invisibility",
+    "type": "buff",
+    "subType": "stealth",
+    "duration": 10
+  },
+  "stealGold": {
+    "name": "Steal Gold",
+    "type": "utility",
+    "subType": "steal",
+    "value": 50
+  },
+  "increaseDodge": {
+    "name": "Increase Dodge",
+    "type": "buff",
+    "subType": "dodge",
+    "value": 15,
+    "duration": 10
+  },
+  "blindEnemies": {
+    "name": "Blind Enemies",
+    "type": "debuff",
+    "subType": "blind",
+    "duration": 5
+  },
+
+  "teleportBehindEnemy": {
+    "name": "Teleport Behind Enemy",
+    "type": "utility",
+    "subType": "teleport"
+  },
+  "increaseSpeed": {
+    "name": "Increase Speed",
+    "type": "passive",
+    "subType": "speed",
+    "value": 5
+  },
+  "openLocks": {
+    "name": "Open Locks",
+    "type": "passive",
+    "subType": "utility"
+  },
+  "improveStealth": {
+    "name": "Improve Stealth",
+    "type": "passive",
+    "subType": "stealth"
+  },
+  "increaseCriticalChance": {
+    "name": "Increase Critical Chance",
+    "type": "passive",
+    "subType": "criticalChance",
+    "value": 5
+  },
+  "reduceDetection": {
+    "name": "Reduce Detection",
+    "type": "passive",
+    "subType": "stealth"
+  },
+  "detectTraps": {
+    "name": "Detect Traps",
+    "type": "passive",
+    "subType": "utility"
+  },
+  "increaseLightArmor": {
+    "name": "Increase Light Armor",
+    "type": "passive",
+    "subType": "armor",
+    "value": 5
   }
 }
+

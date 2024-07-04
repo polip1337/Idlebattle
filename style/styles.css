@@ -397,6 +397,15 @@
 #team1{
     padding-top: 70px;
     }
+#team2-overlay{
+    position: absolute;
+      left: 0;
+      right: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    width:400px;
+    z-index:1;
+}
 .team-row {
     display: flex;
     justify-content: center;
@@ -418,7 +427,13 @@
     width: 300px;
     text-align: center;
 }
-
+.startBattlePopup {
+    position: fixed;
+    top: 20%;
+    left: 35%;
+    z-index: 1000;
+    text-align: center;
+}
 .popup-content {
     margin: 10px 0;
 }
@@ -430,6 +445,15 @@
 #close-popup {
     padding: 5px 10px;
     cursor: pointer;
+}
+
+#teamAndBattleContainer {
+     height: 78vh;
+     opacity: 0.2;
+}
+#evolution-modal {
+    z-index: 1000;
+
 }
 
 

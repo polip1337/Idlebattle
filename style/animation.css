@@ -33,6 +33,10 @@
     display: none;  /* Hide the square when the animation is complete */
 
 }
+.hidden {
+    display: none;  /* Hide the square when the animation is complete */
+
+}
 .battleSkillIcon.disabled {
     opacity: 0.4;
     filter: alpha(opacity=40);

@@ -3,7 +3,7 @@ import Team from './Team.js';
 import { isPaused } from './initialize.js';
 import EffectClass from './EffectClass.js';
 import Hero from './Hero.js';
-import {battleStatistics} from './initialize.js';
+import {battleStatistics, reLoadStage, loadNextStage, classTiers, heroClasses, hero,team1,team2} from './initialize.js';
 
 import { updateHealth, updateMana } from './Render.js';
 
@@ -12,6 +12,14 @@ let battleStarted = false;
 function startBattle(team1, team2) {
     useSkillsForAllMembers(team2);
     battleStarted = true;
+    let i = 1;
+    var activeSkills = team1.members[0].skills.filter(skill => skill.type == "active");
+    activeSkills.forEach(skill => {
+        if (skill.repeat && !skill.onCooldown){
+            hero.useSkill(null,skill,i);
+            i++;
+        }
+    });
     const battleInterval = setInterval(() => {
         if (isPaused) return;
 
@@ -24,25 +32,24 @@ function startBattle(team1, team2) {
             clearInterval(battleInterval);
             if (!team1Alive) {
                 showPopup("Loss!", "Your team has been defeated.");
-                var activeSkills = team1.members[0].skills.filter(skill => skill.type == "active");
-                activeSkills.forEach(skill => {
-
-                     skill.heroStopSkill(team1.members[0]);
-                 });
-                 battleStarted = false;
-
+                stopBattle(team1, team2);
+                checkClassAvailability();
             } else {
                 showPopup("Victory!", "Your team has defeated the opposing team.");
-                var activeSkills = team1.members[0].skills.filter(skill => skill.type == "active");
-                activeSkills.forEach(skill => {
-                      skill.heroStopSkill(team1.members[0]);
-                  });
-                 battleStarted = false;
-
+                stopBattle(team1, team2);
+                checkClassAvailability();
             }
         }
 
     }, 1000); // Adjust the interval as needed
+}
+
+function stopBattle(team1, team2){
+var activeSkills = team1.members[0].skills.filter(skill => skill.type == "active");
+    activeSkills.forEach(skill => {
+          skill.heroStopSkill(team1.members[0]);
+      });
+      team2.members.forEach(member => {member.stopSkills();});
 }
 function useSkillsForAllMembers(team) {
     team.members.forEach(member => {
@@ -52,8 +59,6 @@ function useSkillsForAllMembers(team) {
     });
 
 }
-
-
 function createMembers(prefix,classes, team, opposingTeam, mobs) {
         return mobs.map((mob, index) => {
             const className = mob.type;
@@ -79,7 +84,18 @@ function showPopup(title,message) {
 // Method to hide the victory popup
 function hidePopup() {
     const popup = document.getElementById('popup');
+    const repeat = document.getElementById('repeat');
     popup.classList.add('hidden');
+}
+function repeatStage(){
+    hidePopup();
+    reLoadStage();
+    startBattle(team1, team2);
+}
+function nextStage(){
+    hidePopup();
+    loadNextStage();
+    startBattle(team1, team2)
 }
 function createHero(prefix, classes,team, opposingTeam) {
     const classKeys = Object.keys(classes);
@@ -88,5 +104,34 @@ function createHero(prefix, classes,team, opposingTeam) {
         return new Hero("Hero", 'Novice', classes['Novice'], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam);
     });
 }
+function checkClassAvailability() {
+        for (let tier in classTiers) {
+            classTiers[tier].forEach(className => {
+                const classData = heroClasses[className];
+                if(className != "Novice"){
+                    const requirements = classData.requirements;
+                    if (meetsRequirements(requirements) && !hero.availableClasses.includes(className)) {
+                        hero.availableClasses.push(classData);
+                    }
+                }
+            });
+        }
+    }
 
-export { startBattle, createHero,hidePopup, createMembers,battleStarted};
+function meetsRequirements(requirements) {
+        for (let key in requirements) {
+            if (typeof requirements[key] === 'object') {
+                for (let subKey in requirements[key]) {
+                    if ((battleStatistics[key][subKey] || 0) < requirements[key][subKey]) {
+                        return false;
+                    }
+                }
+            } else {
+                if ((this[key] || 0) < requirements[key]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+export { startBattle, createHero,hidePopup, createMembers,battleStarted, repeatStage, nextStage};

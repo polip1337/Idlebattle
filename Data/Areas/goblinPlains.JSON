@@ -3,7 +3,7 @@
     {
       "stage": 1,
       "mobs": [
-        {"type": "goblinBerserker", "count": 1, "level": 3}
+        {"type": "goblinScout", "count": 1, "level": 1}
       ]
     },
     {

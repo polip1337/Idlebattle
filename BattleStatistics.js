@@ -17,8 +17,8 @@ class BattleStatistics {
             this.dotDamage = 0;
             this.manaRegenerated = 0;
             this.staminaRegenerated = 0;
-            this.manaSpentBySkill = {};
-            this.staminaSpentBySkill = {};
+            this.manaSpent = 0;
+            this.staminaSpent = 0;
             this.totalHealingReceived = 0;
             this.totalBuffsApplied = 0;
             this.totalDebuffsApplied = 0;
@@ -97,17 +97,17 @@ class BattleStatistics {
     }
 
     addStaminaSpent(amount) {
-        if (this.staminaSpentBySkill[skillName]) {
-            this.staminaSpentBySkill[skillName] += amount;
+        if (this.staminaSpent) {
+            this.staminaSpent += amount;
         } else {
-            this.staminaSpentBySkill[skillName] = amount;
+            this.staminaSpent = amount;
         }
     }
     addManaSpent(amount) {
-        if (this.manaSpentBySkill[skillName]) {
-            this.manaSpentBySkill[skillName] += amount;
+        if (this.manaSpent) {
+            this.manaSpent += amount;
         } else {
-            this.manaSpentBySkill[skillName] = amount;
+            this.manaSpent = amount;
         }
     }
     addMultiHit() {
@@ -131,14 +131,24 @@ class BattleStatistics {
         }
     }
      updateBattleStatistics() {
-        document.getElementById('total-damage-dealt').innerText = this.totalDamageDealt;
-        document.getElementById('total-damage-received').innerText = this.totalDamageReceived;
+        let damageDataString = Object.keys(this.damageDealt)
+         .map(key => `${key}: ${this.damageDealt[key]}`)
+         .join('<br>');
+
+         let damageReceivedDataString = Object.keys(this.damageReceived)
+          .map(key => `${key}: ${this.damageReceived[key]}`)
+          .join(', ');
+
+        document.getElementById('total-damage-dealt').innerHTML = damageDataString;
+;
+        document.getElementById('total-damage-received').innerHTML = damageReceivedDataString;
         document.getElementById('total-healing-received').innerText = this.totalHealingReceived;
         document.getElementById('total-buffs-applied').innerText = this.totalBuffsApplied;
         document.getElementById('total-debuffs-applied').innerText = this.totalDebuffsApplied;
         document.getElementById('mana-regenerated').innerText = this.manaRegenerated;
         document.getElementById('stamina-regenerated').innerText = this.staminaRegenerated;
         document.getElementById('stamina-spent').innerText = this.staminaSpent;
+        document.getElementById('mana-spent').innerText = this.manaSpent;
         document.getElementById('multi-kills').innerText = this.multiKills;
         document.getElementById('critical-hits').innerText = this.criticalHits;
         document.getElementById('critical-damage').innerText = this.criticalDamage;

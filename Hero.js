@@ -18,6 +18,7 @@ constructor(name, classInfo,skills, level = 1, team,opposingTeam) {
     this.selectedPassiveSkills = [];
     this.position = 'Front';
     this.repeat = false;
+    this.availableClasses = [];
   }
 selectSkill(skill, skillBox, isPassive = false) {
     const selectedSkills = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
@@ -54,16 +55,25 @@ selectSkill(skill, skillBox, isPassive = false) {
         const skillNumber = parseInt(skillDiv.id.match(/\d+/)[0]);
         return this.selectedSkills[skillNumber -1];
     }
-    useSkill(skillDiv){
+    useSkill(skillDiv, skill = null, i){
         if(battleStarted){
-            const skillNumber = parseInt(skillDiv.id.match(/\d+/)[0]);
-            const skill = this.selectedSkills[skillNumber -1];
+            if(skill == null){
+                const skillNumber = parseInt(skillDiv.id.match(/\d+/)[0]);
+                skill = this.selectedSkills[skillNumber -1];
+            }else{
+                skill.setElement(document.querySelector("#skill" + i));
+
+            }
+
             if(skill.manaCost <= this.currentMana && skill.staminaCost <= this.currentStamina){
+                battleStatistics.addSkillUsage(skill.name);
+                battleStatistics.addManaSpent(skill.manaCost);
+                battleStatistics.addStaminaSpent(skill.staminaCost);
                 this.currentMana -=skill.manaCost;
                 this.currentStamina -=skill.staminaCost;
                 updateMana(this);
                 updateStamina(this);
-                skill.setElement(skillDiv);
+
                 skill.startCooldown(this);
 
                 const targets = selectTarget(this, skill.targetingMode);

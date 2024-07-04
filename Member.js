@@ -4,7 +4,7 @@ import { isPaused} from './initialize.js';
 import { selectTarget } from './Targeting.js';
 import EffectClass from './EffectClass.js';
 import Skill from './Skill.js';
-import {battleLog} from './initialize.js';
+import {battleLog, battleStatistics} from './initialize.js';
 
 
 class Member {
@@ -142,13 +142,18 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null) {
             if (skill.damageType && skill.damage!=0){
                 const damage = skill.calculateDamage(this);
                 const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
+
+                target.takeDamage(finalDamage);
                 if(isHero){
                     skill.gainExperience(finalDamage);
+                    battleStatistics.addDamageDealt(skill.damageType, finalDamage);
+                    if(target.dead)
+                        member.gainExperience(target.class.experience);
                 }
-                target.takeDamage(finalDamage);
-                if(target.dead && isHero){
-                    member.gainExperience(target.class.experience);
+                if(target.name == 'Hero'){
+                    battleStatistics.addDamageReceived(skill.damageType, finalDamage);
                 }
+
                 battleLog.log(this.name + ` used ${skill.name} on ${target.name} dealing `+ finalDamage+ ' damage.');
 
             }

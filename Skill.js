@@ -106,6 +106,9 @@ class Skill {
   heroStopSkill(){
     var overlay = this.div.querySelector(" .cooldown-overlay");
     overlay.style.animation = '';
+    overlay.classList.add('hidden');  /* Hide the square */
+    this.div.classList.remove('disabled');
+    this.onCooldown = false;
   }
   startCooldown(member) {
     this.cooldownStartTime = Date.now();
@@ -155,6 +158,9 @@ class Skill {
     overlay.classList.add('hidden');  /* Hide the square */
     this.div.classList.remove('disabled');  /* Enable pointer events */
     if( this.repeat != false){
+      if(member.name == "Hero"){
+        member.useSkill(this.div);
+      }
       this.useSkill(member);
     }else{
         this.onCooldown = false;

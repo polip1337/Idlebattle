@@ -100,7 +100,7 @@ class EffectClass {
         return existingEffect ;
     }
     startTooltipTimer() {
-            this.interval = setInterval(() => {
+            this.timerInterval = setInterval(() => {
 
                 this.updateTooltip();
             }, 1000);
@@ -249,6 +249,7 @@ class EffectClass {
             target.takeDamage(finalDamage);
             this.updateTooltip();
         }, 1000);
+        console.log("This Interval id:" + this.interval + damageType);
     }
     createHealOverTimeInterval(heal, target) {
             this.interval = setInterval(() => {
@@ -307,7 +308,9 @@ class EffectClass {
             case 'Poison':
             case 'Regen':
             case 'WildfireBurn':
+
                 clearInterval(this.interval);
+                console.log("Clearing:" + this.interval + this.effect.damageType);
                 break;
 
             case 'Disarm':
@@ -351,6 +354,7 @@ class EffectClass {
 
     remove() {
         clearTimeout(this.timer);
+        clearInterval(this.timerInterval);
         this.revertEffect();
          const index = this.target.effects.indexOf(this);
          if (index !== -1) {
