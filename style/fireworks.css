@@ -146,7 +146,7 @@
 }
 
 .levelUpContainer{
-  font-family: 'Baloo Paaji', cursive;
+  font-family: 'Georgia', cursive;
   top: 40%;
   left: 30%;
   display: flex;
@@ -156,9 +156,9 @@
   height: 220px;
   position: absolute;
   z-index: 1;
-  text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
+  text-shadow: 2px 0 yellow, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
                1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
-  color:darkgreen;
+  color:black;
   text-align: center;
   vertical-align: middle;
 }

@@ -1,21 +1,21 @@
 import { startBattle } from './Battle.js';
-import { updateHealth, updateMana,updateStamina,updateExp,deepCopy } from './Render.js';
+import { updateHealth, updateMana,updateStamina,updateExp,deepCopy,updateExpBarText } from './Render.js';
 import { isPaused} from './initialize.js';
 import { selectTarget } from './Targeting.js';
 import EffectClass from './EffectClass.js';
 import Skill from './Skill.js';
-import {battleLog, battleStatistics} from './initialize.js';
+import {battleLog, battleStatistics,hero } from './initialize.js';
 
 
 class Member {
-constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null) {
+constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,isHero = false) {
         this.name = name;
         this.classType = classInfo.name;
         this.class = classInfo;
         this.team = team;
         this.opposingTeam = opposingTeam;
         this.level = level;
-
+        this.isHero = isHero;
         this.stats = deepCopy(classInfo.stats);
         this.statsPerLevel = classInfo.statsPerLevel;
         this.summons = 0;
@@ -112,23 +112,24 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null) {
     createSkills(skills) {
      var allSkills = [];
         skills.forEach(skill => {
-            allSkills.push (new Skill(skill,skill.effects,null));
+            var skill = new Skill(skill,skill.effects,null);
+            if(!this.isHero){
+             skill.repeat = true;
+            }
+            allSkills.push(skill);
         });
     return allSkills;
     }
 
     calculateHitChance(defender) {
-    const hitChance = this.calculateAccuracy() - defender.calculateDodge();
-    return true;
+        const hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1);
+        const randomNumber = Math.floor(Math.random() * 101);
+        if (randomNumber <= hitChance) {
+            return true;
+        }
+        battleLog.log(this.name +" Missed "+ defender.name +"! Hit chance was: " + hitChance + '%');
+        return false;
     }
-
-    calculateAccuracy() {
-        return (this.stats.dexterity * 0.5) + (this.stats.speed * 0.3) + this.stats.accuracy;
-      }
-
-      calculateDodge() {
-        return (this.stats.dexterity * 0.4) + (this.stats.speed * 0.6) + this.stats.dodge;
-      }
 
     performAttack(member, target, skill, isHero =false) {
         if (this.calculateHitChance(target)) {
@@ -147,8 +148,6 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null) {
                 if(isHero){
                     skill.gainExperience(finalDamage);
                     battleStatistics.addDamageDealt(skill.damageType, finalDamage);
-                    if(target.dead)
-                        member.gainExperience(target.class.experience);
                 }
                 if(target.name == 'Hero'){
                     battleStatistics.addDamageReceived(skill.damageType, finalDamage);
@@ -195,17 +194,23 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null) {
         updateHealth(this); // Update the overlay to reflect new health
     }
     takeDamage(damage) {
-        this.currentHealth -= damage;
-        if (this.currentHealth < 0){
-            this.handleDeath();
+        if(!this.dead){
+            this.currentHealth -= damage;
+            if (this.currentHealth < 0){
+                this.handleDeath();
+            }
+            updateHealth(this); // Update the overlay to reflect new health
         }
-        updateHealth(this); // Update the overlay to reflect new health
     }
     handleDeath(){
         this.currentHealth = 0;
         this.element.querySelector(".memberPortrait img").src ="Media/UI/dead.jpg";
         this.dead = true;
         this.stopSkills();
+        if(this.name != 'Hero'){
+           hero.gainExperience(this.class.experience);
+
+        }
     }
     stopSkills(){
         this.skills.forEach(skill => {
@@ -243,7 +248,9 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null) {
         this.maxHealth = this.stats.vitality * 10;
         this.maxMana = this.stats.mana;
         this.currentMana = this.stats.mana;
-
+        if(this.name == 'Hero'){
+            updateExpBarText(this)
+        }
     }
 
     handleRegeneration() {

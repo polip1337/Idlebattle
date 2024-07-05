@@ -173,6 +173,7 @@ class EffectClass {
                 this.render = false;
 
                 this.target.skills.forEach(skill => {
+
                 if(skill.onCooldown ){
                     if(skill.effects != undefined && skill.effects.subType == 'decreaseCooldown'){
 
@@ -181,6 +182,9 @@ class EffectClass {
 
                         skill.reduceCooldown(this.effect.value,this.target);
                     }
+                }{
+                    console.log(skill.name + " is not on cooldown");
+
                 }
                 });
                 break;
@@ -249,7 +253,7 @@ class EffectClass {
             target.takeDamage(finalDamage);
             this.updateTooltip();
         }, 1000);
-        console.log("This Interval id:" + this.interval + damageType);
+        //console.log("This Interval id:" + this.interval + damageType);
     }
     createHealOverTimeInterval(heal, target) {
             this.interval = setInterval(() => {
@@ -310,7 +314,7 @@ class EffectClass {
             case 'WildfireBurn':
 
                 clearInterval(this.interval);
-                console.log("Clearing:" + this.interval + this.effect.damageType);
+              //  console.log("Clearing:" + this.interval + this.effect.damageType);
                 break;
 
             case 'Disarm':

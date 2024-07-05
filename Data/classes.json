@@ -2,17 +2,6 @@
   "tiers": {
     "1": [
       "bronzeSquire"
-    ],
-    "2": [
-      "Warrior"
-    ],
-    "3": [
-      "Mage",
-      "Rogue"
-    ],
-    "4": [
-      "Knight",
-      "Sorcerer"
     ]
   },
   "classes": {

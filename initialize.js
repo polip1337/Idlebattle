@@ -7,7 +7,7 @@ import Skill from './Skill.js';
 import BattleLog from './BattleLog.js';
 import { updateStatsDisplay, updateSkillBar,renderSkills, renderMember,
 renderPassiveSkills, updateMana,updateStamina,updateHealth, renderLevelUp,
-renderHero, updateLevelProgress, openEvolutionModal, deepCopy, showTooltip} from './Render.js';
+renderHero, renderLevelProgress, openEvolutionModal, deepCopy, showTooltip} from './Render.js';
 import BattleStatistics from './BattleStatistics.js';
 import {openTab} from './navigation.js';
 
@@ -20,7 +20,6 @@ export let battleLog;
 export let classTiers;
 export let heroClasses;
 
-updateLevelProgress(0, 100, "Novice");
 let currentArea = new Area("Data/Areas/goblinPlains.JSON");
 export let mobsClasses = null;
 let currentStage = 1;
@@ -103,6 +102,7 @@ async function loadGameData() {
 function createAndInitHero(classes, team,opposingTeam){
     hero = new Hero("Hero", classes['novice'], classes['novice'].skills,1, team, opposingTeam);
     team1.addMember(hero);
+    renderLevelProgress(hero);
 
     renderTeamMembers(team1.members,'team1')
 
@@ -220,7 +220,7 @@ function setupSkillListeners(){
           clearTimeout(clickTimeout);
           clickTimeout = null;
           if(!event.target.parentNode.classList.contains("disabled")){
-            hero.useSkill(document.getElementById("skill"+i));
+            hero.selectedSkills[i-1].useSkill(hero);
           }
           let repeat = hero.getSkill(document.getElementById("skill"+i)).repeat;
           hero.getSkill(document.getElementById("skill"+i)).repeat = !repeat;// Toggle the repeat property
@@ -228,7 +228,7 @@ function setupSkillListeners(){
         } else {
           clickTimeout = setTimeout(() => {
             if(!event.target.parentNode.classList.contains("disabled")){
-                hero.useSkill(document.getElementById("skill"+i));
+                hero.selectedSkills[i-1].useSkill(hero);
                 clickTimeout = null;
             }
           }, 300); // Adjust the delay as needed

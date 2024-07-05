@@ -63,7 +63,7 @@
     "type": "active",
     "damageType": "Pierce",
     "cooldown": 5,
-    "damage": 2,
+    "damage": 10,
     "manaCost": 0,
     "staminaCost": 5,
     "effects": [
@@ -244,6 +244,7 @@
     "type": "active",
     "damage": 10,
     "manaCost": 0,
+    "staminaCost": 5,
     "cooldown": 5,
     "damageType": "slash",
     "effect": null,
@@ -258,7 +259,8 @@
     "name": "Poison Dart",
     "type": "active",
     "damage": 8,
-    "manaCost": 5,
+    "manaCost": 0,
+    "staminaCost": 5,
     "cooldown": 15,
     "damageType": "poison",
     "effects": [
@@ -278,6 +280,7 @@
     "type": "active",
     "damage": 20,
     "manaCost": 10,
+    "staminaCost": 5,
     "cooldown": 25,
     "damageType": "Physical",
     "effects": [
@@ -297,6 +300,7 @@
     "type": "active",
     "damage": 5,
     "manaCost": 10,
+    "staminaCost": 5,
     "cooldown": 10,
     "damageType": "Chemical",
     "effects": [

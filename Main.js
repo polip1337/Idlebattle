@@ -3,7 +3,6 @@ import Team from './Team.js';
 import Hero from './Hero.js';
 import Area from './Area.js';
 import BattleLog from './BattleLog.js';
-import { updateStatsDisplay, updateSkillBar, renderMember,renderPassiveSkills, updateMana,updateStamina,updateHealth, renderLevelUp, renderHero, updateLevelProgress, openEvolutionModal} from './Render.js';
 import BattleStatistics from './BattleStatistics.js';
 
 window.onload = function() {

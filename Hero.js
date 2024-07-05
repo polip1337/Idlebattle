@@ -8,7 +8,7 @@ import Skill from './Skill.js';
 
 class Hero extends Member {
 constructor(name, classInfo,skills, level = 1, team,opposingTeam) {
-    super(name, classInfo,skills, level = 1, team,opposingTeam);
+    super(name, classInfo,skills, level = 1, team,opposingTeam,true);
     this.class2 =null;
 
     this.skills2 = null;
@@ -57,32 +57,11 @@ selectSkill(skill, skillBox, isPassive = false) {
         var activeSkills = this.selectedSkills.filter(skill => skill.type == "active");
         activeSkills.forEach(skill => {
             if (skill.repeat && !skill.onCooldown){
-                this.useSkill(skill.div);
+                skill.useSkill(this);
             }
         });
     }
-    useSkill(skillDiv){
-        if(battleStarted){
 
-            const skill = this.getSkill(skillDiv);
-            if(skill.manaCost <= this.currentMana && skill.staminaCost <= this.currentStamina){
-                battleStatistics.addSkillUsage(skill.name);
-                battleStatistics.addManaSpent(skill.manaCost);
-                battleStatistics.addStaminaSpent(skill.staminaCost);
-                this.currentMana -=skill.manaCost;
-                this.currentStamina -=skill.staminaCost;
-                updateMana(this);
-                updateStamina(this);
-                skill.setElement(skillDiv);
-                skill.startCooldown(this);
-
-                const targets = selectTarget(this, skill.targetingMode);
-                targets.forEach(target => {
-                    this.performAttack(this, target,skill, true);
-                });
-            }
-        }
-    }
 }
 
 export default Hero;

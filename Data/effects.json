@@ -6,7 +6,7 @@
     "damageType": "Bleed",
     "stat": "",
     "value": 2,
-    "duration": 1,
+    "duration": 4,
     "icon": "Media/UI/bleed.svg",
     "description": "Deals 2 damage per second."
   },

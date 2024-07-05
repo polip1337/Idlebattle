@@ -3,15 +3,19 @@ import Team from './Team.js';
 import { isPaused } from './initialize.js';
 import EffectClass from './EffectClass.js';
 import Hero from './Hero.js';
-import {battleStatistics, reLoadStage, loadNextStage, classTiers, heroClasses, hero,team1,team2} from './initialize.js';
+import {battleStatistics, reLoadStage, loadNextStage, classTiers, heroClasses, hero,team1,team2, battleLog} from './initialize.js';
+import {renderSkills} from './Render.js';
 
 import { updateHealth, updateMana } from './Render.js';
 
 let battleStarted = false;
+const delay = ms => new Promise(res => setTimeout(res, ms));
 
 function startBattle(team1, team2) {
-    useSkillsForAllMembers(team2);
+    battleLog.log("Battle started");
     battleStarted = true;
+    useSkillsForAllMembers(team2);
+
     hero.triggerRepeatSkills();
     const battleInterval = setInterval(() => {
         if (isPaused) return;
@@ -25,12 +29,15 @@ function startBattle(team1, team2) {
             clearInterval(battleInterval);
             if (!team1Alive) {
                 showPopup("Loss!", "Your team has been defeated.");
-                stopBattle(team1, team2);
-                checkClassAvailability();
             } else {
                 showPopup("Victory!", "Your team has defeated the opposing team.");
-                stopBattle(team1, team2);
-                checkClassAvailability();
+            }
+            stopBattle(team1, team2);
+            checkClassAvailability();
+            if(document.getElementById('repeat').checked){
+                setTimeout(() => {
+                        repeatStage();
+                    }, 1000);
             }
         }
 
@@ -40,9 +47,9 @@ function startBattle(team1, team2) {
 function stopBattle(team1, team2){
 var activeSkills = team1.members[0].skills.filter(skill => skill.type == "active");
     activeSkills.forEach(skill => {
-          skill.heroStopSkill(team1.members[0]);
+          skill.heroStopSkill();
       });
-      team2.members.forEach(member => {member.stopSkills();});
+    team2.members.forEach(member => {member.stopSkills();});
 }
 function useSkillsForAllMembers(team) {
     team.members.forEach(member => {
@@ -77,7 +84,6 @@ function showPopup(title,message) {
 // Method to hide the victory popup
 function hidePopup() {
     const popup = document.getElementById('popup');
-    const repeat = document.getElementById('repeat');
     popup.classList.add('hidden');
 }
 function repeatStage(){

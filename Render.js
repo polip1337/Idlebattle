@@ -67,11 +67,50 @@ export function updateExp(member) {
     const expPercentage = ((member.experience / member.experienceToLevel) * 100) + '%';
     expBar.style.setProperty('width', expPercentage);
     const tooltip = expBar.querySelector('#level-progress-bar .tooltip-text');
-    tooltip.textContent = `EXP: ${member.experience} / ${member.experienceToLevel}`;
 
+    let statsText = '';
+    if (member.statsPerLevel) {
+        for (const [stat, value] of Object.entries(member.statsPerLevel)) {
+            statsText += `\n${stat}: ${value} <br>`;
+        }
+    }
 
+    tooltip.innerHTML = `EXP: ${member.experience} / ${member.experienceToLevel}${statsText}`;
 
 }
+export function updateExpBarText(member) {
+   const classNameText = document.getElementById('class-name');
+   classNameText.textContent = member.classType + " Level: " + member.level;
+
+}
+
+export function renderLevelProgress(member) {
+   const progressBar = document.getElementById('level-progress-bar');
+   const classNameText = document.getElementById('class-name');
+   const tooltipText = document.createElement('div');
+   tooltipText.className = 'tooltip-text';
+   let statsText = '';
+   if (member.statsPerLevel) {
+       for (const [stat, value] of Object.entries(member.statsPerLevel)) {
+           statsText += `\n${stat}: ${value} <br>`;
+       }
+   }
+
+   tooltipText.innerHTML = `EXP: ${member.experience} / ${member.experienceToLevel}${statsText}`;
+
+   const existingTooltip = progressBar.querySelector('.tooltip-text');
+   if (existingTooltip) {
+       progressBar.removeChild(existingTooltip);
+   }
+
+   const progressPercentage = (member.experience / member.experienceToLevel) * 100;
+   progressBar.style.width = `${progressPercentage}%`;
+   classNameText.textContent = member.classType + " Level: " + member.level;
+
+   progressBar.appendChild(tooltipText);
+}
+
+
 
 export function updateHealth(member) {
     const healthOverlay = member.element.querySelector('.health-overlay');
@@ -368,25 +407,6 @@ export function renderDefault(member) {
     return memberDiv;
 }
 
-export function updateLevelProgress(currentXP, maxXP, className) {
-   const progressBar = document.getElementById('level-progress-bar');
-   const classNameText = document.getElementById('class-name');
-   const tooltipText = document.createElement('div');
-   tooltipText.className = 'tooltip-text';
-   tooltipText.textContent = `EXP: ${currentXP} / ${maxXP}`;
-
-   // Remove existing tooltip if any
-   const existingTooltip = progressBar.querySelector('.tooltip-text');
-   if (existingTooltip) {
-       progressBar.removeChild(existingTooltip);
-   }
-
-   const progressPercentage = (currentXP / maxXP) * 100;
-   progressBar.style.width = `${progressPercentage}%`;
-   classNameText.textContent = className;
-
-   progressBar.appendChild(tooltipText);
-}
 
 export function openEvolutionModal(hero) {
     const modal = document.getElementById('evolution-modal');
