@@ -1,14 +1,11 @@
-import { startBattle } from './Battle.js';
-import { updateHealth, updateMana,updateStamina,updateExp,deepCopy,updateExpBarText, expBarTextAddGlow } from './Render.js';
-import { isPaused} from './initialize.js';
-import { selectTarget } from './Targeting.js';
+import {deepCopy, updateExp, updateExpBarText, updateHealth, updateMana, updateStamina} from './Render.js';
+import {battleLog, battleStatistics, evolutionService, hero} from './initialize.js';
 import EffectClass from './EffectClass.js';
 import Skill from './Skill.js';
-import {battleLog, battleStatistics,hero, evolutionService } from './initialize.js';
 
 
 class Member {
-constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,isHero = false) {
+    constructor(name, classInfo, skills, level = 1, team = null, opposingTeam = null, isHero = false) {
         this.name = name;
         this.classType = classInfo.name;
         this.class = classInfo;
@@ -20,10 +17,10 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
         this.statsPerLevel = classInfo.statsPerLevel;
         this.summons = 0;
         this.positions = classInfo.positions;
-        if(this.positions == undefined){
+        if (this.positions == undefined) {
             this.position = "Front";
 
-        }else{
+        } else {
             this.position = classInfo.positions[0];
         }
         this.dead = false;
@@ -41,20 +38,22 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
 
         this.experience = 0;
         this.experienceToLevel = 100;
-        for (var i = 1; i <level ; i++) {
+        for (var i = 1; i < level; i++) {
             this.levelUp();
         }
     }
 
-    initialize(team1,team2,memberId) {
+    initialize(team1, team2, memberId) {
         this.memberId = `team2-member` + memberId;
         this.team = team2;
         this.opposingTeam = team1;
 
     }
-    initializeDOMElements(){
+
+    initializeDOMElements() {
         this.element = document.querySelector(`#${this.memberId}`);
     }
+
     makeDraggable() {
         this.element.setAttribute('draggable', 'true');
         this.element.addEventListener('dragstart', this.dragStartHandler);
@@ -86,11 +85,10 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
         const targetIndex = Array.from(target.parentNode.children).indexOf(target);
 
         const parent = target.parentNode;
-        if(targetIndex > memberIndex){
+        if (targetIndex > memberIndex) {
             parent.insertBefore(member, parent.children[targetIndex]);
             parent.insertBefore(target, parent.children[memberIndex]);
-        }
-        else{
+        } else {
             if (memberIndex === parent.children.length - 1) {
                 parent.appendChild(target);
             } else {
@@ -109,122 +107,131 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
         // Check if both member and target belong to the same team
         return parentOfMember === parentOfTarget;
     }
+
     createSkills(skills) {
-     var allSkills = [];
+        var allSkills = [];
         skills.forEach(skill => {
-            var skill = new Skill(skill,skill.effects,null);
-            if(!this.isHero){
-             skill.repeat = true;
+            var skill = new Skill(skill, skill.effects, null);
+            if (!this.isHero) {
+                skill.repeat = true;
             }
             allSkills.push(skill);
         });
-    return allSkills;
+        return allSkills;
     }
 
     calculateHitChance(defender, skillModifier) {
-        if (this == defender){
+        if (this == defender) {
             console.log("Self targeted");
             return true;
         }
         const hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1);
-        if(skillModifier != undefined){
+        if (skillModifier != undefined) {
             hitChance += skillModifier;
         }
         const randomNumber = Math.floor(Math.random() * 101);
         if (randomNumber <= hitChance) {
             return true;
         }
-        battleLog.log(this.name +" Missed "+ defender.name +"! Hit chance was: " + hitChance + '%');
+        battleLog.log(this.name + " Missed " + defender.name + "! Hit chance was: " + hitChance + '%');
         return false;
     }
 
-    performAttack(member, target, skill, isHero =false) {
-        if (this.calculateHitChance(target,skill.toHit)) {
+    performAttack(member, target, skill, isHero = false) {
+        if (this.calculateHitChance(target, skill.toHit)) {
 
 
             if (skill.effects) {
-                new EffectClass(target ,skill.effects);
+                new EffectClass(target, skill.effects);
             }
             this.currentMana -= skill.manaCost;
             updateMana(this);
-            if (skill.damageType && skill.damage!=0){
+            if (skill.damageType && skill.damage != 0) {
                 const damage = skill.calculateDamage(this);
                 const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
 
                 target.takeDamage(finalDamage);
-                if(isHero){
+                if (isHero) {
                     skill.gainExperience(finalDamage);
                     battleStatistics.addDamageDealt(skill.damageType, finalDamage);
                 }
-                if(target.name == 'Hero'){
+                if (target.name == 'Hero') {
                     battleStatistics.addDamageReceived(skill.damageType, finalDamage);
                 }
 
-                battleLog.log(this.name + ` used ${skill.name} on ${target.name} dealing `+ finalDamage+ ' damage.');
+                battleLog.log(this.name + ` used ${skill.name} on ${target.name} dealing ` + finalDamage + ' damage.');
 
             }
-            if(skill.heal){
+            if (skill.heal) {
                 skill.gainExperience(skill.heal);
                 target.healDamage(skill.heal);
-                battleLog.log(target.name +'Healed for'+ skill.heal);
+                battleLog.log(target.name + 'Healed for' + skill.heal);
             }
         }
     }
-    calculateFinalDamage(damage, damageType){
-        if (damageType != 'Bleed'){
+
+    calculateFinalDamage(damage, damageType) {
+        if (damageType != 'Bleed') {
             damage = this.applyBlock(damage);
             damage = this.applyArmor(damage);
         }
         damage = this.applyResistance(damage, damageType);
         return Math.floor(damage);
     }
+
     applyBlock(damage) {
         if (Math.random() * 100 < this.stats.blockChance) {
-          return damage * 0.5; // Reduce damage by 50% if block succeeds
+            return damage * 0.5; // Reduce damage by 50% if block succeeds
         }
         return damage;
-      }
+    }
 
-      applyArmor(damage) {
+    applyArmor(damage) {
         return Math.max(0, damage - this.stats.armor); // Reduce damage by armor amount
-      }
+    }
+
     applyResistance(damage, damageType) {
         const resistance = this.stats.resistances[damageType] || 0;
         const reducedDamage = damage * (1 - resistance / 100);
         return reducedDamage;
     }
+
     healDamage(heal) {
         this.currentHealth += heal;
-        if (this.currentHealth > this.maxHealth){
+        if (this.currentHealth > this.maxHealth) {
             this.currentHealth = this.maxHealth;
         }
         updateHealth(this); // Update the overlay to reflect new health
     }
+
     takeDamage(damage) {
-        if(!this.dead){
+        if (!this.dead) {
             this.currentHealth -= damage;
-            if (this.currentHealth < 0){
+            if (this.currentHealth < 0) {
                 this.handleDeath();
             }
             updateHealth(this); // Update the overlay to reflect new health
         }
     }
-    handleDeath(){
+
+    handleDeath() {
         this.currentHealth = 0;
-        this.element.querySelector(".memberPortrait img").src ="Media/UI/dead.jpg";
+        this.element.querySelector(".memberPortrait img").src = "Media/UI/dead.jpg";
         this.dead = true;
         this.stopSkills();
-        if(this.name != 'Hero'){
-           hero.gainExperience(this.class.experience);
+        if (this.name != 'Hero') {
+            hero.gainExperience(this.class.experience);
 
         }
     }
-    stopSkills(){
+
+    stopSkills() {
         this.skills.forEach(skill => {
             skill.pause(this);
         });
     }
-    startSkills(){
+
+    startSkills() {
         this.skills.forEach(skill => {
             skill.unpause(this);
         });
@@ -235,28 +242,28 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
         if (this.experience >= this.experienceToLevel) {
             this.levelUp();
         }
-                updateExp(this);
+        updateExp(this);
 
     }
 
     levelUp() {
         this.level++;
         for (const stat in this.statsPerLevel) {
-                this.stats[stat] += this.statsPerLevel[stat];
+            this.stats[stat] += this.statsPerLevel[stat];
         }
         this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
         this.maxMana = this.stats.mana;
         this.currentMana = this.stats.mana;
-        if(this.name == 'Hero'){
+        if (this.name == 'Hero') {
             updateExpBarText(this.classType + " Level: " + this.level);
-            if ([2,8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {
+            if ([2, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {
                 evolutionService.levelThresholdReached(1);
                 return true;
             }
         }
         this.experience = 0;
-        this.experienceToLevel = Math.floor(this.experienceToLevel*1.1);
+        this.experienceToLevel = Math.floor(this.experienceToLevel * 1.1);
 
 
     }

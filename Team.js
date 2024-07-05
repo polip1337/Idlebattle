@@ -1,14 +1,14 @@
-import Member from './Member.js';
-
 class Team {
     constructor(name, teamContainerId) {
         this.name = name;
         this.members = [];
         this.teamContainer = document.getElementById(teamContainerId);
     }
+
     clearMembers() {
         this.members = [];
     }
+
     getFirstAliveMember() {
         const aliveMembers = this.members.filter(member => member.currentHealth > 0);
 
@@ -86,10 +86,12 @@ class Team {
             return member;
         });
     }
+
     addMember(member) {
         member.memberId = `${this.name.toLowerCase()}-member${this.members.length}`;
         this.members.push(member);
     }
+
     getRandomFrontMember() {
         const frontMembers = this.members.filter(member => member.position === 'Front' && member.currentHealth > 0);
 

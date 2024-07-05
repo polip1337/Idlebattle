@@ -5,13 +5,13 @@ export function openTab(evt, tabName) {
     // Hide all tab contents
     const tabContents = document.getElementsByClassName('tabcontent');
     for (let content of tabContents) {
-    content.classList.remove('active');
+        content.classList.remove('active');
     }
 
     // Deactivate all tab links
     const tabLinks = document.getElementsByClassName('tablinks');
     for (let link of tabLinks) {
-    link.classList.remove('active');
+        link.classList.remove('active');
     }
 
     // Show the selected tab content
@@ -19,12 +19,12 @@ export function openTab(evt, tabName) {
 
     // Activate the clicked tab link
     evt.currentTarget.classList.add('active');
-    if(tabName == 'battle-statistics'){
+    if (tabName == 'battle-statistics') {
         battleStatistics.updateBattleStatistics();
     }
-    if(tabName == 'heroContent'){
+    if (tabName == 'heroContent') {
         team1.members[0].skills.forEach(skill => {
-                updateProgressBar(skill);
+            updateProgressBar(skill);
         })
     }
 }

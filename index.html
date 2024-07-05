@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>RPG Battle</title>
-    <link rel="stylesheet" type="text/css" href="style/styles.css">
-    <link rel="stylesheet" type="text/css" href="style/animation.css">
-    <link rel="stylesheet" type="text/css" href="style/battleLog.css">
-    <link rel="stylesheet" type="text/css" href="style/member.css">
-    <link rel="stylesheet" type="text/css" href="style/fireworks.css">
-    <link rel="stylesheet" type="text/css" href="style/bottomBar.css">
-    <link rel="stylesheet" type="text/css" href="style/evolutionModal.css">
-    <link rel="stylesheet" type="text/css" href="style/stats.css">
-    <link rel="stylesheet" type="text/css" href="style/map.css">
-    <link rel="stylesheet" type="text/css" href="style/greenBorderAnimation.css">
-    <link rel="stylesheet" type="text/css" href="style/glow.css">
+    <link href="style/styles.css" rel="stylesheet" type="text/css">
+    <link href="style/animation.css" rel="stylesheet" type="text/css">
+    <link href="style/battleLog.css" rel="stylesheet" type="text/css">
+    <link href="style/member.css" rel="stylesheet" type="text/css">
+    <link href="style/fireworks.css" rel="stylesheet" type="text/css">
+    <link href="style/bottomBar.css" rel="stylesheet" type="text/css">
+    <link href="style/evolutionModal.css" rel="stylesheet" type="text/css">
+    <link href="style/stats.css" rel="stylesheet" type="text/css">
+    <link href="style/map.css" rel="stylesheet" type="text/css">
+    <link href="style/greenBorderAnimation.css" rel="stylesheet" type="text/css">
+    <link href="style/glow.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
-<div id="popup" class="popup hidden">
+<div class="popup hidden" id="popup">
     <div class="popup-content">
         <h2 id="popupTitle">Victory!</h2>
         <p id="popupText">Your team has won the battle.</p>
@@ -28,59 +28,59 @@
     </div>
 </div>
 <div class="startBattlePopup">
-    <img id="team2-overlay" src="Media/startBattle.png" >
+    <img id="team2-overlay" src="Media/startBattle.png">
 </div>
-<div id="evolution-modal" class="modal">
+<div class="modal" id="evolution-modal">
     <div class="modal-content">
         <h2>Choose Your Evolution</h2>
-        <div id="evolution-options" class="evolution-options">
+        <div class="evolution-options" id="evolution-options">
             <!-- Evolution options will be populated here dynamically -->
         </div>
     </div>
 </div>
 
-<div id="battlefield" class="tabcontent active battle-view ">
+<div class="tabcontent active battle-view " id="battlefield">
     <div id="teamAndBattleContainer-overlay">
 
-    <div id="teamAndBattleContainer" >
-        <div id="stage-controls">
-            <button id="decrease-stage">&lt;</button>
-            <span id="current-stage">Stage 1</span>
-            <button id="increase-stage">&gt;</button>
-            <input type="checkbox" id="repeat">Repeat</input>
-        </div>
-        <div id="teamContainer">
-
-            <div id="team1" class="team" id="team1">
-
-                <div class="team-row"></div>
-                <div class="team-row"></div>
+        <div id="teamAndBattleContainer">
+            <div id="stage-controls">
+                <button id="decrease-stage">&lt;</button>
+                <span id="current-stage">Stage 1</span>
+                <button id="increase-stage">&gt;</button>
+                <input id="repeat" type="checkbox">Repeat</input>
             </div>
-            <div class="team-divider"></div>
-            <div id="team2" class="team" id="team2">
-                <div class="team-row"></div>
-                <div class="team-row"></div>
-            </div>
+            <div id="teamContainer">
 
+                <div class="team" id="team1" id="team1">
 
-        </div>
-        <div id="battle-log-container">
+                    <div class="team-row"></div>
+                    <div class="team-row"></div>
+                </div>
+                <div class="team-divider"></div>
+                <div class="team" id="team2" id="team2">
+                    <div class="team-row"></div>
+                    <div class="team-row"></div>
+                </div>
 
-            <button id="toggle-log">Hide Log</button>
-            <div id="battle-log">
-                <div id="anchor"></div>
 
             </div>
+            <div id="battle-log-container">
+
+                <button id="toggle-log">Hide Log</button>
+                <div id="battle-log">
+                    <div id="anchor"></div>
+
+                </div>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 
-<div id="heroContent" class="tabcontent">
+<div class="tabcontent" id="heroContent">
     <div id="heroInfoRow">
         <div id="heroPortraitAndPaperDoll">
             <div id="heroPortrait">
-                <img src="Media/portrait.jpg" alt="Hero Portrait" />
+                <img alt="Hero Portrait" src="Media/portrait.jpg"/>
             </div>
             <div id="paperDoll">
                 <div class="slot" id="cloakSlot">Cloak</div>
@@ -142,7 +142,7 @@
                     <p>Mana Regen: <span id="heroManaRegen">0</span></p>
                     <p>Magic Control: <span id="heroMagicControl">5</span></p>
                 </div>
-                    <div id="heroSkills">
+                <div id="heroSkills">
                     <h2>Active Skills</h2>
                     <div id="activeSkills">
                         <!-- Space for 10 active skills in a 5x2 grid -->
@@ -254,7 +254,7 @@
 
 </div>
 
-<div id="map" class="tabcontent">
+<div class="tabcontent" id="map">
     <h2>Map Section</h2>
     <div id="map-container"></div>
     <div id="movement-buttons">
@@ -269,7 +269,7 @@
 
 </div>
 
-<div id="library" class="tabcontent">
+<div class="tabcontent" id="library">
     <div class="library-container">
         <div class="topic-list">
             <ul id="topics">
@@ -293,7 +293,7 @@
         </div>
     </div>
 </div>
-<div id="battle-statistics" class="tabcontent statistics-page">
+<div class="tabcontent statistics-page" id="battle-statistics">
     <h1>Battle Statistics</h1>
     <div class="statistic-item">
         <span class="statistic-name">Total Damage Dealt:</span>
@@ -352,7 +352,7 @@
         <span class="statistic-value" id="skill-usage">0</span>
     </div>
 </div>
-<div id="options" class="tabcontent">
+<div class="tabcontent" id="options">
     <h2>Options Section</h2>
     <!-- Content for options section -->
 </div>
@@ -366,138 +366,138 @@
         <div class="iconContainer">
             <div class="iconRow upperRow">
                 <div class="iconGroup">
-                    <div id="passiveSkill1" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="passiveSkill1">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                     </div>
-                    <div id="passiveSkill2" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="passiveSkill2">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                     </div>
-                    <div id="passiveSkill3" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="passiveSkill3">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                     </div>
-                    <div id="passiveSkill4" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
-                    </div>
-                </div>
-                <div class="iconGroup">
-                    <div id="passiveSkill5" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
-                    </div>
-                    <div id="passiveSkill6" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
-                    </div>
-                    <div id="passiveSkill7" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
-                    </div>
-                    <div id="passiveSkill8" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="passiveSkill4">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                     </div>
                 </div>
                 <div class="iconGroup">
-                    <div id="passiveSkill9" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="passiveSkill5">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                     </div>
-                    <div id="passiveSkill10" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="passiveSkill6">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                     </div>
-                    <div id="passiveSkill11" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="passiveSkill7">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                     </div>
-                    <div id="passiveSkill12" class="battleSkillIcon">
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="passiveSkill8">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
+                    </div>
+                </div>
+                <div class="iconGroup">
+                    <div class="battleSkillIcon" id="passiveSkill9">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
+                    </div>
+                    <div class="battleSkillIcon" id="passiveSkill10">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
+                    </div>
+                    <div class="battleSkillIcon" id="passiveSkill11">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
+                    </div>
+                    <div class="battleSkillIcon" id="passiveSkill12">
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
 
                     </div>
                 </div>
             </div>
             <div class="iconRow lowerRow">
                 <div class="iconGroup">
-                    <div id="skill1"  class="battleSkillIcon">
-                        
-                        <img  src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill1">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
 
                     </div>
-                    <div id="skill2" class="battleSkillIcon ">
+                    <div class="battleSkillIcon " id="skill2">
 
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
-                    <div id="skill3" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill3">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
-                    <div id="skill4" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill4">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                 </div>
                 <div class="iconGroup">
-                    <div id="skill5" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill5">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
-                    <div id="skill6" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill6">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
-                    <div id="skill7" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill7">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
-                    <div id="skill8" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill8">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                 </div>
                 <div class="iconGroup">
-                    <div id="skill9" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill9">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
-                    <div id="skill10" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill10">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
-                    <div id="skill11" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill11">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
-                    <div id="skill12" class="battleSkillIcon">
-                        
-                        <img   src ="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"> </div>
+                    <div class="battleSkillIcon" id="skill12">
+
+                        <img src="Media/UI/defaultSkill.jpeg">
+                        <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                 </div>
@@ -505,27 +505,27 @@
         </div>
         <div id="gridContainer">
             <div class="gridItem">
-                <button id="battlefieldNavButton" class="tablinks" >Battle</button>
+                <button class="tablinks" id="battlefieldNavButton">Battle</button>
             </div>
             <div class="gridItem">
-                <button id="heroContentNavButton" class="tablinks" >Hero</button>
+                <button class="tablinks" id="heroContentNavButton">Hero</button>
             </div>
             <div class="gridItem">
-                <button id="mapNavButton" class="tablinks" >Map</button>
+                <button class="tablinks" id="mapNavButton">Map</button>
             </div>
             <div class="gridItem">
-                <button id="libraryNavButton" class="tablinks" >Library</button>
+                <button class="tablinks" id="libraryNavButton">Library</button>
             </div>
             <div class="gridItem">
-                <button id="optionsNavButton" class="tablinks" >Options</button>
+                <button class="tablinks" id="optionsNavButton">Options</button>
             </div>
             <div class="gridItem">
             </div>
             <div class="gridItem">
-                <button id="battle-statisticsNavButton" class="tablinks">Stats</button>
+                <button class="tablinks" id="battle-statisticsNavButton">Stats</button>
             </div>
             <div class="gridItem">
-                <button id="evolveNavButton" class="tablinks">Evolve</button>
+                <button class="tablinks" id="evolveNavButton">Evolve</button>
             </div>
             <div class="gridItem">
                 <!-- Content for the ninth grid item -->
@@ -534,16 +534,16 @@
     </div>
 
 </div>
-<script src="Hero.js" type="module" ></script>
+<script src="Hero.js" type="module"></script>
 
-<script src="Member.js" type="module" ></script>
+<script src="Member.js" type="module"></script>
 <script src="EffectClass.js" type="module"></script>
-<script src="Render.js" type="module" ></script>
+<script src="Render.js" type="module"></script>
 <script src="Team.js" type="module"></script>
 <script src="Battle.js" type="module"></script>
 <script src="Main.js" type="module"></script>
 <script src="initialize.js" type="module"></script>
-<script src="navigation.js"  type="module"></script>
-<script src="map.js"  ></script>
+<script src="navigation.js" type="module"></script>
+<script src="map.js"></script>
 </body>
 </html>

@@ -1,15 +1,6 @@
-import {
-    isPaused
-} from './initialize.js';
-import Member from './Member.js'
-import {
-    updateHealth,
-    updateMana,
-    updateStamina,
-    deepCopy
-
-} from './Render.js';
 import {mobsClasses, renderTeamMembers} from './initialize.js';
+import Member from './Member.js'
+import {deepCopy} from './Render.js';
 
 class EffectClass {
     constructor(target, effect) {
@@ -20,14 +11,13 @@ class EffectClass {
         this.startTime = null;
         this.remainingTime = null;
         this.render = true;
-        if(effect.stackMode == "duration" && this.isAlreadyApplied(effect, target)){
+        if (effect.stackMode == "duration" && this.isAlreadyApplied(effect, target)) {
             this.extendTimer(effect.duration);
-        }else if(effect.stackMode == "refresh" && this.isAlreadyApplied(effect, target)){
+        } else if (effect.stackMode == "refresh" && this.isAlreadyApplied(effect, target)) {
             this.refreshTimer();
-        }
-        else{
+        } else {
             this.applyEffect(effect);
-            if(this.render){
+            if (this.render) {
                 this.renderBuff();
                 this.startTimer();
                 this.startTooltipTimer();
@@ -36,7 +26,7 @@ class EffectClass {
         }
     }
 
-    renderBuff(){
+    renderBuff() {
         this.element = document.createElement('div');
         var icon = document.createElement('img');
         icon.src = this.effect.icon;
@@ -48,7 +38,7 @@ class EffectClass {
         this.element.appendChild(this.tooltip);
         document.querySelector(`#${this.target.memberId} .effects`).appendChild(this.element);
 
-        }
+    }
 
     startTimer() {
         this.startTime = Date.now(); // Record the start time
@@ -58,6 +48,7 @@ class EffectClass {
 
         this.updateTooltip(); // Update tooltip initially
     }
+
     getTimeLeft() {
         if (this.timer === null) {
             return 0; // No timer set, return 0
@@ -68,7 +59,7 @@ class EffectClass {
     }
 
     extendTimer(additionalTime) {
-        var otherEffect = this.getAlreadyApplied(this.effect,this.target);
+        var otherEffect = this.getAlreadyApplied(this.effect, this.target);
         const timeLeft = otherEffect.getTimeLeft();
 
         otherEffect.effect.duration = timeLeft + additionalTime; // Add the additional time
@@ -76,12 +67,14 @@ class EffectClass {
         otherEffect.setTimer(otherEffect.effect.duration); // Restart the timer with the new duration
         otherEffect.updateTooltip(); // Update the tooltip
     }
+
     refreshTimer() {
-            var otherEffect = this.getAlreadyApplied(this.effect,this.target);
-            otherEffect.startTime = Date.now(); // Reset the start time
-            otherEffect.setTimer(otherEffect.effect.duration); // Restart the timer with the new duration
-            otherEffect.updateTooltip(); // Update the tooltip
+        var otherEffect = this.getAlreadyApplied(this.effect, this.target);
+        otherEffect.startTime = Date.now(); // Reset the start time
+        otherEffect.setTimer(otherEffect.effect.duration); // Restart the timer with the new duration
+        otherEffect.updateTooltip(); // Update the tooltip
     }
+
     setTimer(duration) {
         if (this.timer !== null) {
             clearTimeout(this.timer);
@@ -91,20 +84,24 @@ class EffectClass {
             this.remove();
         }, duration * 1000); // Convert duration to milliseconds
     }
+
     isAlreadyApplied(effect, target) {
         const existingEffect = target.effects.find(e => e.effect.name === effect.name);
         return existingEffect !== undefined;
     }
+
     getAlreadyApplied(effect, target) {
         const existingEffect = target.effects.find(e => e.effect.name === effect.name);
-        return existingEffect ;
+        return existingEffect;
     }
-    startTooltipTimer() {
-            this.timerInterval = setInterval(() => {
 
-                this.updateTooltip();
-            }, 1000);
-        }
+    startTooltipTimer() {
+        this.timerInterval = setInterval(() => {
+
+            this.updateTooltip();
+        }, 1000);
+    }
+
     applyEffect(effect) {
         switch (this.effect.subType) {
             case 'Barrier':
@@ -156,12 +153,12 @@ class EffectClass {
                 // Logic for Fear effect
                 break;
             case 'flatChange':
-                 this.target.stats[this.effect.stat] += this.effect.value;
-                console.log("Applied flat change on " + this.effect.stat + ". New value: " +this.target.stats[this.effect.stat]);
+                this.target.stats[this.effect.stat] += this.effect.value;
+                console.log("Applied flat change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
 
                 break;
             case 'heal':
-                 this.target.healDamage(this.effect.value);
+                this.target.healDamage(this.effect.value);
                 break;
             case 'Hex':
                 // Logic for Hex effect
@@ -174,18 +171,19 @@ class EffectClass {
 
                 this.target.skills.forEach(skill => {
 
-                if(skill.onCooldown ){
-                    if(skill.effects != undefined && skill.effects.subType == 'decreaseCooldown'){
+                    if (skill.onCooldown) {
+                        if (skill.effects != undefined && skill.effects.subType == 'decreaseCooldown') {
 
-                    }else{
-                        console.log("Decreasing cooldown on skill: " + skill.name);
+                        } else {
+                            console.log("Decreasing cooldown on skill: " + skill.name);
 
-                        skill.reduceCooldown(this.effect.value,this.target);
+                            skill.reduceCooldown(this.effect.value, this.target);
+                        }
                     }
-                }{
-                    console.log(skill.name + " is not on cooldown");
+                    {
+                        console.log(skill.name + " is not on cooldown");
 
-                }
+                    }
                 });
                 break;
             case 'Invisibility':
@@ -214,14 +212,14 @@ class EffectClass {
                 break;
             case 'percentChange':
                 this.target.stats[this.effect.stat] += this.effect.value * this.target.stats[this.effect.stat] / 100;
-                console.log("applied percentage change on " + this.effect.stat + ". New value: " +this.target.stats[this.effect.stat]);
-            break;
+                console.log("applied percentage change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
+                break;
 
             case 'Purify':
                 this.removeNegativeEffects(); // Method to remove negative effects
                 break;
             case 'Regen':
-                this.createHealOverTimeInterval(this.effect.value,this.target);
+                this.createHealOverTimeInterval(this.effect.value, this.target);
                 break;
             case 'Reflect':
                 this.target.reflect = this.value; // Custom property to handle reflect status
@@ -233,7 +231,7 @@ class EffectClass {
                 // Logic for Sleep effect
                 break;
             case 'summon':
-                this.summon(this.target,this.effect.who,this.effect.limit);
+                this.summon(this.target, this.effect.who, this.effect.limit);
                 break;
             case 'Stun':
                 this.target.stopSkills();
@@ -255,49 +253,56 @@ class EffectClass {
         }, 1000);
         //console.log("This Interval id:" + this.interval + damageType);
     }
+
     createHealOverTimeInterval(heal, target) {
-            this.interval = setInterval(() => {
-                target.healDamage(heal);
-                this.updateTooltip();
-            }, 1000);
-        }
+        this.interval = setInterval(() => {
+            target.healDamage(heal);
+            this.updateTooltip();
+        }, 1000);
+    }
+
     changeStatsByPercentage(stat, value) {
         this.originalValue = this.target.stats[stat];
         this.target.stats[stat] += Math.floor(this.target.stats[stat] * (value / 100));
 
         this.updateTooltip();
     }
-    changeBaseStatsByPercentage(baseStat, value) {
-       this.originalValue = this.target.baseStat;
-       this.target.baseStat += Math.floor(this.target.baseStat * (value / 100));
 
-       this.updateTooltip();
-   }
+    changeBaseStatsByPercentage(baseStat, value) {
+        this.originalValue = this.target.baseStat;
+        this.target.baseStat += Math.floor(this.target.baseStat * (value / 100));
+
+        this.updateTooltip();
+    }
+
     reduceStatsByFlatValue(stat, value) {
         this.target.stats[stat] -= this.value;
     }
+
     increaseStatsByFlatValue(stat, value) {
         this.target.stats[stat] -= this.value;
     }
-    summon(target,who,limit) {
-            if(target.summons < limit){
-                var member = new Member(this.deepCopy(mobsClasses[who].name),
-                                      this.deepCopy(mobsClasses[who].class),
-                                      this.deepCopy(mobsClasses[who].skills),
-                                      target.level);
-                member.initialize(target.opposingTeam,target.team,target.team.length+1);
-                renderTeamMembers([member],'team2',false);
-                member.skills.forEach(skill => {
-                    skill.useSkill(member);
-                });
 
-                target.team.addMembers([member]);
-                target.summons += 1;
-            }else{
+    summon(target, who, limit) {
+        if (target.summons < limit) {
+            var member = new Member(this.deepCopy(mobsClasses[who].name),
+                this.deepCopy(mobsClasses[who].class),
+                this.deepCopy(mobsClasses[who].skills),
+                target.level);
+            member.initialize(target.opposingTeam, target.team, target.team.length + 1);
+            renderTeamMembers([member], 'team2', false);
+            member.skills.forEach(skill => {
+                skill.useSkill(member);
+            });
 
-            }
+            target.team.addMembers([member]);
+            target.summons += 1;
+        } else {
+
+        }
 
     }
+
     revertEffect() {
         switch (this.effect.subType) {
             case 'Barrier':
@@ -314,7 +319,7 @@ class EffectClass {
             case 'WildfireBurn':
 
                 clearInterval(this.interval);
-              //  console.log("Clearing:" + this.interval + this.effect.damageType);
+                //  console.log("Clearing:" + this.interval + this.effect.damageType);
                 break;
 
             case 'Disarm':
@@ -326,15 +331,15 @@ class EffectClass {
                 break;
             case 'flatChange':
                 this.target.stats[this.effect.stat] += this.effect.value;
-                console.log("Applied flat change on " + this.effect.stat + ". New value: " +this.target.stats[this.effect.stat]);
+                console.log("Applied flat change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
                 break;
             case 'percentChange':
                 this.target.stats[this.effect.stat] = this.target.stats[this.effect.stat] / (1 + (this.effect.value / 100));
-                console.log("applied percentage change on " + this.effect.stat + ". New value: " +this.target.stats[this.effect.stat]);
+                console.log("applied percentage change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
                 break;
             case 'Stun':
                 this.target.startSkills();
-            break;
+                break;
 
             case 'Invisibility':
                 this.target.invisible = false;
@@ -345,12 +350,13 @@ class EffectClass {
             case 'Entrap':
                 this.target.entrap = false;
                 break;
-                // Revert logic for other effects as necessary
+            // Revert logic for other effects as necessary
             default:
                 console.log(`${this.effect.type}, ${this.effect.subType} effect revert not implemented yet.`);
         }
 
     }
+
     updateTooltip() {
         const timeLeft = Math.floor(this.getTimeLeft());
         this.tooltip.textContent = `${this.effect.name}: ${timeLeft} seconds left`; // Update tooltip content
@@ -360,26 +366,28 @@ class EffectClass {
         clearTimeout(this.timer);
         clearInterval(this.timerInterval);
         this.revertEffect();
-         const index = this.target.effects.indexOf(this);
-         if (index !== -1) {
-             this.target.effects.splice(index, 1);
-         }// Revert the effect when the buff expires
+        const index = this.target.effects.indexOf(this);
+        if (index !== -1) {
+            this.target.effects.splice(index, 1);
+        }// Revert the effect when the buff expires
         this.element.remove();
     }
+
     deepCopy(obj) {
-            if (obj === null || typeof obj !== 'object') {
-                return obj;
-            }
-            if (Array.isArray(obj)) {
-                return obj.map(item => this.deepCopy(item));
-            }
-            const copy = {};
-            for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    copy[key] = this.deepCopy(obj[key]);
-                }
-            }
-            return copy;
+        if (obj === null || typeof obj !== 'object') {
+            return obj;
         }
+        if (Array.isArray(obj)) {
+            return obj.map(item => this.deepCopy(item));
+        }
+        const copy = {};
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                copy[key] = this.deepCopy(obj[key]);
+            }
+        }
+        return copy;
+    }
 }
+
 export default EffectClass;

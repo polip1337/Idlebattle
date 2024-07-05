@@ -1,27 +1,27 @@
 class BattleStatistics {
     constructor() {
-            this.damageDealt = {  };
-            this.damageReceived = { };
-            this.enemiesDefeated = {};
-            this.successfulDodges = 0;
-            this.successfulBlocks = 0;
-            this.healingDone = 0;
-            this.manaUsed = 0;
-            this.staminaUsed = 0;
-            this.criticalHits = 0;
-            this.criticalDamage = 0;
-            this.misses = 0;
-            this.skillUsage = {};
-            this.totalDamageBySkill = {};
-            this.multiHits = 0;
-            this.dotDamage = 0;
-            this.manaRegenerated = 0;
-            this.staminaRegenerated = 0;
-            this.manaSpent = 0;
-            this.staminaSpent = 0;
-            this.totalHealingReceived = 0;
-            this.totalBuffsApplied = 0;
-            this.totalDebuffsApplied = 0;
+        this.damageDealt = {};
+        this.damageReceived = {};
+        this.enemiesDefeated = {};
+        this.successfulDodges = 0;
+        this.successfulBlocks = 0;
+        this.healingDone = 0;
+        this.manaUsed = 0;
+        this.staminaUsed = 0;
+        this.criticalHits = 0;
+        this.criticalDamage = 0;
+        this.misses = 0;
+        this.skillUsage = {};
+        this.totalDamageBySkill = {};
+        this.multiHits = 0;
+        this.dotDamage = 0;
+        this.manaRegenerated = 0;
+        this.staminaRegenerated = 0;
+        this.manaSpent = 0;
+        this.staminaSpent = 0;
+        this.totalHealingReceived = 0;
+        this.totalBuffsApplied = 0;
+        this.totalDebuffsApplied = 0;
 
     }
 
@@ -64,6 +64,7 @@ class BattleStatistics {
     addManaUsed(amount) {
         this.manaUsed += amount;
     }
+
     addCriticalHit(damage) {
         this.criticalHits++;
         this.criticalDamage += damage;
@@ -76,6 +77,7 @@ class BattleStatistics {
             this.skillUsage[skillName] = 1;
         }
     }
+
     addTotalHealingReceived(amount) {
         this.totalHealingReceived += amount;
     }
@@ -103,6 +105,7 @@ class BattleStatistics {
             this.staminaSpent = amount;
         }
     }
+
     addManaSpent(amount) {
         if (this.manaSpent) {
             this.manaSpent += amount;
@@ -110,6 +113,7 @@ class BattleStatistics {
             this.manaSpent = amount;
         }
     }
+
     addMultiHit() {
         this.multiHit++;
     }
@@ -130,17 +134,18 @@ class BattleStatistics {
             this.skillUsage[skillName] = 1;
         }
     }
-     updateBattleStatistics() {
-        let damageDataString = Object.keys(this.damageDealt)
-         .map(key => `${key}: ${this.damageDealt[key]}`)
-         .join('<br>');
 
-         let damageReceivedDataString = Object.keys(this.damageReceived)
-          .map(key => `${key}: ${this.damageReceived[key]}`)
-          .join(', ');
+    updateBattleStatistics() {
+        let damageDataString = Object.keys(this.damageDealt)
+            .map(key => `${key}: ${this.damageDealt[key]}`)
+            .join('<br>');
+
+        let damageReceivedDataString = Object.keys(this.damageReceived)
+            .map(key => `${key}: ${this.damageReceived[key]}`)
+            .join(', ');
 
         document.getElementById('total-damage-dealt').innerHTML = damageDataString;
-;
+
         document.getElementById('total-damage-received').innerHTML = damageReceivedDataString;
         document.getElementById('total-healing-received').innerText = this.totalHealingReceived;
         document.getElementById('total-buffs-applied').innerText = this.totalBuffsApplied;
@@ -156,4 +161,5 @@ class BattleStatistics {
         document.getElementById('skill-usage').innerText = this.skillUsage;
     }
 }
+
 export default BattleStatistics;
