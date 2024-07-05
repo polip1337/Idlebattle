@@ -3,7 +3,7 @@ import Team from './Team.js';
 import { isPaused } from './initialize.js';
 import EffectClass from './EffectClass.js';
 import Hero from './Hero.js';
-import {battleStatistics, reLoadStage, loadNextStage, classTiers, heroClasses, hero,team1,team2, battleLog} from './initialize.js';
+import {battleStatistics, reLoadStage, loadNextStage, hero,team1,team2, battleLog,evolutionService} from './initialize.js';
 import {renderSkills} from './Render.js';
 
 import { updateHealth, updateMana } from './Render.js';
@@ -33,7 +33,7 @@ function startBattle(team1, team2) {
                 showPopup("Victory!", "Your team has defeated the opposing team.");
             }
             stopBattle(team1, team2);
-            checkClassAvailability();
+            evolutionService.checkClassAvailability();
             if(document.getElementById('repeat').checked){
                 setTimeout(() => {
                         repeatStage();
@@ -103,34 +103,5 @@ function createHero(prefix, classes,team, opposingTeam) {
         return new Hero("Hero", 'Novice', classes['Novice'], `${prefix.toLowerCase()}-member${i}`, team,opposingTeam);
     });
 }
-function checkClassAvailability() {
-        for (let tier in classTiers) {
-            classTiers[tier].forEach(className => {
-                const classData = heroClasses[className];
-                if(className != "Novice"){
-                    const requirements = classData.requirements;
-                    if (meetsRequirements(requirements) && !hero.availableClasses.includes(className)) {
-                        hero.availableClasses.push(classData);
-                    }
-                }
-            });
-        }
-    }
 
-function meetsRequirements(requirements) {
-        for (let key in requirements) {
-            if (typeof requirements[key] === 'object') {
-                for (let subKey in requirements[key]) {
-                    if ((battleStatistics[key][subKey] || 0) < requirements[key][subKey]) {
-                        return false;
-                    }
-                }
-            } else {
-                if ((this[key] || 0) < requirements[key]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 export { startBattle, createHero,hidePopup, createMembers,battleStarted, repeatStage, nextStage};

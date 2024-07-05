@@ -112,7 +112,7 @@
     "positions": [
       "Back"
     ],
-    "experience":10,
+    "experience":100,
     "skills": ["quickStrike","poisonDart","sneakAttack","agilityBoost","camouflage","keenEyes"],
     "stats": {
       "strength": 12,

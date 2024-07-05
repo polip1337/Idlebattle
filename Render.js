@@ -78,12 +78,18 @@ export function updateExp(member) {
     tooltip.innerHTML = `EXP: ${member.experience} / ${member.experienceToLevel}${statsText}`;
 
 }
-export function updateExpBarText(member) {
+export function updateExpBarText(string) {
    const classNameText = document.getElementById('class-name');
-   classNameText.textContent = member.classType + " Level: " + member.level;
-
+   classNameText.textContent = string;
 }
-
+export function expBarTextAddGlow(index) {
+   const classNameText = document.getElementById('level-progress-bar');
+   classNameText.classList.add('glow');
+}
+export function expBarTextRemoveGlow(index) {
+   const classNameText = document.getElementById('level-progress-bar');
+   classNameText.classList.remove('glow');
+}
 export function renderLevelProgress(member) {
    const progressBar = document.getElementById('level-progress-bar');
    const classNameText = document.getElementById('class-name');

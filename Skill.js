@@ -126,7 +126,7 @@ class Skill {
       }
     }
   heroStopSkill(){
-    this.finishiCooldown(this);
+    this.finishCooldown(this);
   }
   startCooldown(member) {
     this.cooldownStartTime = Date.now();

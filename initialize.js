@@ -3,6 +3,7 @@ import Team from './Team.js';
 import Hero from './Hero.js';
 import Member from './Member.js';
 import Area from './Area.js';
+import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
 import BattleLog from './BattleLog.js';
 import { updateStatsDisplay, updateSkillBar,renderSkills, renderMember,
@@ -12,6 +13,7 @@ import BattleStatistics from './BattleStatistics.js';
 import {openTab} from './navigation.js';
 
 export let battleStatistics = new BattleStatistics();
+export let evolutionService = new EvolutionService();
 export let isPaused = false;
 export let team1 = new Team('Team1', 'team1-members');;
 export let team2 = new Team('Team2', 'team2-members');;

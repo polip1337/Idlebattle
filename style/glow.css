@@ -1,0 +1,16 @@
+@keyframes colorChange {
+  0% {
+    background-color: #4caf50;
+  }
+  50% {
+    background-color: goldenrod;
+  }
+  100% {
+    background-color: #4caf50;
+  }
+}
+
+.glow {
+  animation: colorChange 5s infinite;
+  color: black;
+}

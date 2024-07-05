@@ -19,6 +19,9 @@ constructor(name, classInfo,skills, level = 1, team,opposingTeam) {
     this.position = 'Front';
     this.repeat = false;
     this.availableClasses = [];
+    this.class1Evolve = false;
+    this.class2Evolve = false;
+    this.class3Evolve = false;
   }
 selectSkill(skill, skillBox, isPassive = false) {
     const selectedSkills = isPassive ? this.selectedPassiveSkills : this.selectedSkills;

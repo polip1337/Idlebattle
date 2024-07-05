@@ -12,7 +12,7 @@
     padding 10px;
     margin 15px;
     Display: flex;
-
+    height: 100%;
 }
 #bottomContainer .iconContainer{
     display:block;

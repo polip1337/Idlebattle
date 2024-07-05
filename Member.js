@@ -1,10 +1,10 @@
 import { startBattle } from './Battle.js';
-import { updateHealth, updateMana,updateStamina,updateExp,deepCopy,updateExpBarText } from './Render.js';
+import { updateHealth, updateMana,updateStamina,updateExp,deepCopy,updateExpBarText, expBarTextAddGlow } from './Render.js';
 import { isPaused} from './initialize.js';
 import { selectTarget } from './Targeting.js';
 import EffectClass from './EffectClass.js';
 import Skill from './Skill.js';
-import {battleLog, battleStatistics,hero } from './initialize.js';
+import {battleLog, battleStatistics,hero, evolutionService } from './initialize.js';
 
 
 class Member {
@@ -122,6 +122,10 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
     }
 
     calculateHitChance(defender) {
+        if (this == defender){
+            console.log("Self targeted");
+            return true;
+        }
         const hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1);
         const randomNumber = Math.floor(Math.random() * 101);
         if (randomNumber <= hitChance) {
@@ -223,24 +227,17 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
         });
     }
 
-    regenMana() {
-        this.currentMana = Math.min(this.stats.mana, this.currentMana + this.stats.manaRegen);
-        updateMana(this);
-    }
-
     gainExperience(exp) {
         this.experience += exp;
         if (this.experience >= this.experienceToLevel) {
             this.levelUp();
         }
-        updateExp(this);
+                updateExp(this);
 
     }
 
     levelUp() {
         this.level++;
-        this.experience = 0;
-        this.experienceToLevel = Math.floor(this.experienceToLevel*1.1);
         for (const stat in this.statsPerLevel) {
                 this.stats[stat] += this.statsPerLevel[stat];
         }
@@ -249,8 +246,16 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
         this.maxMana = this.stats.mana;
         this.currentMana = this.stats.mana;
         if(this.name == 'Hero'){
-            updateExpBarText(this)
+            updateExpBarText(this.classType + " Level: " + this.level);
+            if ([2,8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {
+                evolutionService.levelThresholdReached(1);
+                return true;
+            }
         }
+        this.experience = 0;
+        this.experienceToLevel = Math.floor(this.experienceToLevel*1.1);
+
+
     }
 
     handleRegeneration() {

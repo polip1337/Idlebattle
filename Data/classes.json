@@ -24,7 +24,7 @@
         "magicPower": 10,
         "dexterity": 10,
         "magicControl": 10,
-        "vitality": 75,
+        "vitality": 25,
         "mana": 150,
         "stamina": 50,
         "manaRegen": 5,
