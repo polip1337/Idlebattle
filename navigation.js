@@ -7,6 +7,8 @@ export function openTab(evt, tabName) {
     for (let content of tabContents) {
         content.classList.remove('active');
     }
+    const battlePopup = document.getElementsByClassName('startBattlePopup');
+    battlePopup[0].style.display = 'none';
 
     // Deactivate all tab links
     const tabLinks = document.getElementsByClassName('tablinks');
@@ -19,6 +21,9 @@ export function openTab(evt, tabName) {
 
     // Activate the clicked tab link
     evt.currentTarget.classList.add('active');
+    if (tabName == 'battlefield') {
+        battlePopup[0].style.display = 'block';
+    }
     if (tabName == 'battle-statistics') {
         battleStatistics.updateBattleStatistics();
     }

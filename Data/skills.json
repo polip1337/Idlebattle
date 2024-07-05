@@ -131,8 +131,9 @@
     "targetingModes": [
       "Random Back"
     ],
-    "icon": "Media/Skills/Attack/ThrowRock.jpg"
-  },  "swingTorch": {
+    "icon": "Media/Skills/Novice/throwRock.svg"
+  },
+  "swingTorch": {
   "id": "swingTorch",
   "name": "Swing Torch",
   "type": "active",
@@ -150,7 +151,7 @@
   "targetingModes": [
     "Random Front"
   ],
-  "icon": "Media/Skills/Attack/SwingTorch.jpg"
+  "icon": "Media/Skills/Novice/torch.svg"
 },
   "blindWithTorch": {
     "id": "blindWithTorch",
@@ -169,7 +170,7 @@
     "targetingModes": [
       "Random Front"
     ],
-    "icon": "Media/Skills/Debuff/BlindWithTorch.jpg"
+    "icon": "Media/Skills/Novice/blindWithTorch.jpg"
   },
   "hum": {
     "id": "hum",
@@ -181,14 +182,15 @@
     "cooldown": 10,
     "damageType": "None",
     "effects": [{
-      "id": "increaseToHit",
-      "duration": 3
+      "id": "hum",
+      "name": "High morale",
+      "duration": 15
     }],
     "description": "Hums a tune to increase the user's accuracy temporarily.",
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Buff/Hum.jpg"
+    "icon": "Media/Skills/Novice/hum.svg"
   },
   "healingWave": {
     "id": "healingWave",

@@ -152,8 +152,8 @@ function selectInitialSkills() {
         hero.selectSkill(team1.members[0].skills[i], document.querySelectorAll("#activeSkills .skill-box")[i]);
     }
 
-    for (let i = 4; i < 8; i++) {
-        hero.selectSkill(team1.members[0].skills[i], document.querySelectorAll("#passiveSkills .skill-box")[i - 4], true);
+    for (let i = 8; i < 12; i++) {
+        hero.selectSkill(team1.members[0].skills[i], document.querySelectorAll("#passiveSkills .skill-box")[i - 8], true);
     }
 
 }
@@ -210,11 +210,11 @@ function initiateEventListeners() {
     });
     document.getElementById('battlefieldNavButton').addEventListener('click', () => openTab(event, 'battlefield'));
     document.getElementById('heroContentNavButton').addEventListener('click', () => openTab(event, 'heroContent'));
-    document.getElementById('mapNavButton').addEventListener('click', () => openTab(event, 'map'));
+    //document.getElementById('mapNavButton').addEventListener('click', () => openTab(event, 'map'));
     document.getElementById('libraryNavButton').addEventListener('click', () => openTab(event, 'library'));
     document.getElementById('optionsNavButton').addEventListener('click', () => openTab(event, 'options'));
     document.getElementById('battle-statisticsNavButton').addEventListener('click', () => openTab(event, 'battle-statistics'));
-    document.getElementById('evolveNavButton').addEventListener('click', () => openEvolutionModal(hero));
+    //document.getElementById('evolveNavButton').addEventListener('click', () => openEvolutionModal(hero));
 
     document.getElementById('repeat-popup').addEventListener('click', () => repeatStage());
     document.getElementById('nextStage-popup').addEventListener('click', () => nextStage());

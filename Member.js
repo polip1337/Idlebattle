@@ -125,10 +125,12 @@ class Member {
             console.log("Self targeted");
             return true;
         }
-        const hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1);
+        var hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1) + this.stats.accuracy - defender.stats.dodge;
         if (skillModifier != undefined) {
             hitChance += skillModifier;
         }
+
+
         const randomNumber = Math.floor(Math.random() * 101);
         if (randomNumber <= hitChance) {
             return true;

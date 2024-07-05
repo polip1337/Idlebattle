@@ -309,7 +309,7 @@ class EffectClass {
                 this.target.stats.defense += this.value;
                 break;
             case 'flatChange':
-                this.target.stats[this.effect.stat] += this.effect.value;
+                this.target.stats[this.effect.stat] -= this.effect.value;
                 console.log("Applied flat change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
                 break;
             case 'percentChange':

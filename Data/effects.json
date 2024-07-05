@@ -68,6 +68,16 @@
     "icon": "Media/UI/blind.svg",
     "description": "Decreases the chance to hit."
   },
+  "hum": {
+    "name": "High Morale",
+    "type": "buff",
+    "subType": "flatChange",
+    "stat": "accuracy",
+    "value": 10,
+    "duration": 10,
+    "icon": "Media/Skills/Novice/hum.svg",
+    "description": "Increases the chance to hit."
+  },
 
   "decreaseCooldown": {
     "name": "Decrease Cooldown",

@@ -25,10 +25,12 @@ class Hero extends Member {
         const index = selectedSkills.indexOf(skill);
         const skillBarUpdateMethod = isPassive ? updatePassiveSkillBar : updateSkillBar;
         if (isPassive) {
-            skill.setElement(document.querySelector("#skill" + index));
+            skill.setElement(document.querySelector("#passiveSkill" + index));
+
 
         } else {
-            skill.setElement(document.querySelector("#passiveSkill" + index));
+            skill.setElement(document.querySelector("#skill" + index));
+
         }
 
         if (index === -1 && selectedSkills.length < maxSkills) {
