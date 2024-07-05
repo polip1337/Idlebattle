@@ -261,27 +261,6 @@ class EffectClass {
         }, 1000);
     }
 
-    changeStatsByPercentage(stat, value) {
-        this.originalValue = this.target.stats[stat];
-        this.target.stats[stat] += Math.floor(this.target.stats[stat] * (value / 100));
-
-        this.updateTooltip();
-    }
-
-    changeBaseStatsByPercentage(baseStat, value) {
-        this.originalValue = this.target.baseStat;
-        this.target.baseStat += Math.floor(this.target.baseStat * (value / 100));
-
-        this.updateTooltip();
-    }
-
-    reduceStatsByFlatValue(stat, value) {
-        this.target.stats[stat] -= this.value;
-    }
-
-    increaseStatsByFlatValue(stat, value) {
-        this.target.stats[stat] -= this.value;
-    }
 
     summon(target, who, limit) {
         if (target.summons < limit) {

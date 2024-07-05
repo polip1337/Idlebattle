@@ -3,7 +3,6 @@ import {battleLog, evolutionService, hero, isPaused, loadNextStage, reLoadStage,
 import Hero from './Hero.js';
 
 let battleStarted = false;
-const delay = ms => new Promise(res => setTimeout(res, ms));
 
 function startBattle(team1, team2) {
     battleLog.log("Battle started");
@@ -57,20 +56,6 @@ function useSkillsForAllMembers(team) {
 
 }
 
-function createMembers(prefix, classes, team, opposingTeam, mobs) {
-    return mobs.map((mob, index) => {
-        const className = mob.type;
-        let position = null;
-        if (classes[className].positions[0].includes("Front")) {
-            position = "Front";
-        } else {
-            position = "Back";
-        }
-        return new Member(classes[className].name, className, classes[className], `${prefix.toLowerCase()}-member${index}`, team, opposingTeam, position, mob.level);
-    });
-
-}
-
 function showPopup(title, message) {
     const popup = document.getElementById('popup');
     const titleDiv = document.getElementById('popupTitle');
@@ -98,12 +83,4 @@ function nextStage() {
     startBattle(team1, team2)
 }
 
-function createHero(prefix, classes, team, opposingTeam) {
-    const classKeys = Object.keys(classes);
-    return Array.from({length: 1}, (_, i) => {
-        const randomClass = classKeys[Math.floor(Math.random() * classKeys.length)];
-        return new Hero("Hero", 'Novice', classes['Novice'], `${prefix.toLowerCase()}-member${i}`, team, opposingTeam);
-    });
-}
-
-export {startBattle, createHero, hidePopup, createMembers, battleStarted, repeatStage, nextStage};
+export {startBattle, hidePopup, battleStarted, repeatStage, nextStage};

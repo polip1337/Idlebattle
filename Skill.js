@@ -45,13 +45,6 @@ class Skill {
         return damage;
     }
 
-    // Apply the skill effect to a target member
-    applyEffect(targetMember) {
-        if (this.effectType) {
-            targetMember.applyBuff(new Buff(this.effectType, 5, targetMember, this.effectType, this.effectValue));
-        }
-    }
-
     // Gain experience for the skill
     gainExperience(amount) {
 
@@ -118,14 +111,14 @@ class Skill {
         }
     }
 
-    pause(member) {
+    pause() {
         if (this.type == "active") {
             var overlay = this.div.querySelector(" .cooldown-overlay");
             overlay.classList.add('paused');
         }
     }
 
-    unpause(member) {
+    unpause() {
         if (this.type == "active") {
             var overlay = this.div.querySelector(" .cooldown-overlay");
             overlay.classList.remove('paused');

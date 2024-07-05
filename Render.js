@@ -242,15 +242,6 @@ export function renderPassiveSkills(hero) {
     });
 }
 
-export function getSelectedTargetingModes() {
-    const targetingModes = {};
-    selectedSkills.forEach(skill => {
-        const skillBox = document.querySelector(`.skill-box:contains(${skill.name})`);
-        const selectedMode = skillBox.querySelector('.targeting-modes').value;
-        targetingModes[skill.name] = selectedMode;
-    });
-    return targetingModes;
-}
 
 export function renderHero(member) {
     const memberDiv = document.createElement('div');
@@ -410,20 +401,6 @@ export function renderLevelUp(skill) {
     battlefield.appendChild(levelUpContainer);
 
 }
-
-export function renderDefault(member) {
-    const memberDiv = document.createElement('div');
-    memberDiv.className = 'member';
-
-    const portraitDiv = document.createElement('img');
-    portraitDiv.className = 'memberPortrait';
-    portraitDiv.src = "Media/UI/defaultPortrait.jpg";
-
-    memberDiv.appendChild(portraitDiv);
-
-    return memberDiv;
-}
-
 
 export function openEvolutionModal(hero) {
     const modal = document.getElementById('evolution-modal');
