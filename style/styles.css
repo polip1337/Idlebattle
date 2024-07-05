@@ -166,7 +166,7 @@
 }
  #activeSkills, #passiveSkills {
      display: grid;
-     grid-template-columns: repeat(5, 1fr);
+     grid-template-columns: repeat(4, 1fr);
      grid-template-rows: repeat(2, auto);
      gap: 5px;
     /* Increase gap between skills */

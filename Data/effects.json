@@ -6,10 +6,11 @@
     "damageType": "Bleed",
     "stat": "",
     "value": 2,
-    "duration": 4,
+    "duration": 10,
     "icon": "Media/UI/bleed.svg",
     "description": "Deals 2 damage per second."
   },
+
   "stun": {
     "name": "Stun",
     "type": "debuff",
@@ -56,6 +57,18 @@
     "limit": 1
 
   },
+
+  "blind": {
+    "name": "Blind",
+    "type": "debuff",
+    "subType": "flatChange",
+    "stat": "accuracy",
+    "value": -50,
+    "duration": 10,
+    "icon": "Media/UI/blind.svg",
+    "description": "Decreases the chance to hit."
+  },
+
   "decreaseCooldown": {
     "name": "Decrease Cooldown",
     "type": "buff",

@@ -3,7 +3,7 @@
     "id": "slash",
     "name": "Basic Slash",
     "type": "active",
-    "damage": 50,
+    "damage": 10,
     "damageType": "Slash",
     "cooldown": 10,
     "staminaCost": 5,
@@ -120,9 +120,11 @@
     "id": "throwRock",
     "name": "Throw Rock",
     "type": "active",
-    "damage": 8,
-    "manaCost": 5,
+    "damage": 10,
+    "manaCost": 0,
+    "staminaCost": 5,
     "cooldown": 8,
+    "toHit": -20,
     "damageType": "blunt",
     "effects": null,
     "description": "Throws a rock at the enemy, dealing physical damage.",
@@ -130,6 +132,63 @@
       "Random Back"
     ],
     "icon": "Media/Skills/Attack/ThrowRock.jpg"
+  },  "swingTorch": {
+  "id": "swingTorch",
+  "name": "Swing Torch",
+  "type": "active",
+  "damage": 10,
+  "manaCost": 5,
+  "staminaCost": 5,
+  "cooldown": 4,
+  "damageType": "fire",
+  "effects": [{
+    "id": "burn",
+    "duration": 3,
+    "damagePerTurn": 2
+  }],
+  "description": "Swings a torch to deal damage and potentially burn the enemy.",
+  "targetingModes": [
+    "Random Front"
+  ],
+  "icon": "Media/Skills/Attack/SwingTorch.jpg"
+},
+  "blindWithTorch": {
+    "id": "blindWithTorch",
+    "name": "Blind with Torch",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 8,
+    "staminaCost": 5,
+    "cooldown": 6,
+    "damageType": "none",
+    "effects": [{
+      "id": "blind",
+      "duration": 2
+    }],
+    "description": "Uses the torch to blind the enemy, reducing their accuracy.",
+    "targetingModes": [
+      "Random Front"
+    ],
+    "icon": "Media/Skills/Debuff/BlindWithTorch.jpg"
+  },
+  "hum": {
+    "id": "hum",
+    "name": "Hum",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 5,
+    "staminaCost": 5,
+    "cooldown": 10,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseToHit",
+      "duration": 3
+    }],
+    "description": "Hums a tune to increase the user's accuracy temporarily.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Buff/Hum.jpg"
   },
   "healingWave": {
     "id": "healingWave",
@@ -1182,7 +1241,255 @@
       "Self"
     ],
     "icon": "Media/Skills/Passive/LightArmorExpertise.jpg"
+  },
+
+  "aimedShot": {
+    "id": "aimedShot",
+    "name": "Aimed Shot",
+    "type": "active",
+    "damage": 15,
+    "manaCost": 8,
+    "cooldown": 5,
+    "damageType": "physical",
+    "effects": null,
+    "description": "A carefully aimed shot that deals significant damage.",
+    "targetingModes": [
+      "Single Enemy"
+    ],
+    "icon": "Media/Skills/Attack/AimedShot.jpg"
+  },
+  "quickShot": {
+    "id": "quickShot",
+    "name": "Quick Shot",
+    "type": "active",
+    "damage": 8,
+    "manaCost": 5,
+    "cooldown": 3,
+    "damageType": "physical",
+    "effects": null,
+    "description": "A quick shot that deals moderate damage.",
+    "targetingModes": [
+      "Single Enemy"
+    ],
+    "icon": "Media/Skills/Attack/QuickShot.jpg"
+  },
+  "piercingArrow": {
+    "id": "piercingArrow",
+    "name": "Piercing Arrow",
+    "type": "active",
+    "damage": 12,
+    "manaCost": 10,
+    "cooldown": 6,
+    "damageType": "physical",
+    "effects": null,
+    "description": "An arrow that pierces through multiple enemies.",
+    "targetingModes": [
+      "Line"
+    ],
+    "icon": "Media/Skills/Attack/PiercingArrow.jpg"
+  },
+  "multishot": {
+    "id": "multishot",
+    "name": "Multishot",
+    "type": "active",
+    "damage": 6,
+    "manaCost": 12,
+    "cooldown": 8,
+    "damageType": "physical",
+    "effects": null,
+    "description": "Fires multiple arrows at once, hitting several enemies.",
+    "targetingModes": [
+      "Multiple Enemies"
+    ],
+    "icon": "Media/Skills/Attack/Multishot.jpg"
+  },
+  "eagleEye": {
+    "id": "eagleEye",
+    "name": "Eagle Eye",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 5,
+    "cooldown": 15,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseAccuracy"
+    }],
+    "description": "Increases accuracy temporarily.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Utility/EagleEye.jpg"
+  },
+  "arrowRain": {
+    "id": "arrowRain",
+    "name": "Arrow Rain",
+    "type": "active",
+    "damage": 10,
+    "manaCost": 20,
+    "cooldown": 20,
+    "damageType": "physical",
+    "effects": null,
+    "description": "Releases a barrage of arrows, dealing damage to all enemies in the area.",
+    "targetingModes": [
+      "Area"
+    ],
+    "icon": "Media/Skills/Attack/ArrowRain.jpg"
+  },
+  "trickShot": {
+    "id": "trickShot",
+    "name": "Trick Shot",
+    "type": "active",
+    "damage": 10,
+    "manaCost": 8,
+    "cooldown": 10,
+    "damageType": "physical",
+    "effects": [{
+      "id": "increaseDodge"
+    }],
+    "description": "A skillful shot that increases the archer's dodge chance.",
+    "targetingModes": [
+      "Single Enemy"
+    ],
+    "icon": "Media/Skills/Utility/TrickShot.jpg"
+  },
+  "steadyHand": {
+    "id": "steadyHand",
+    "name": "Steady Hand",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseAccuracy"
+    }],
+    "description": "Permanently increases accuracy.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/SteadyHand.jpg"
+  },
+  "precision": {
+    "id": "precision",
+    "name": "Precision",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseCriticalChance"
+    }],
+    "description": "Permanently increases critical hit chance.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Precision.jpg"
+  },
+  "archeryMastery": {
+    "id": "archeryMastery",
+    "name": "Archery Mastery",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDamage"
+    }],
+    "description": "Permanently increases damage dealt with bows.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/ArcheryMastery.jpg"
+  },
+  "camouflage": {
+    "id": "camouflage",
+    "name": "Camouflage",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "reduceDetection"
+    }],
+    "description": "Increases ability to avoid detection.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Camouflage.jpg"
+  },
+  "fleetFoot": {
+    "id": "fleetFoot",
+    "name": "Fleet Foot",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseSpeed"
+    }],
+    "description": "Permanently increases movement speed.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/FleetFoot.jpg"
+  },
+  "sharpReflexes": {
+    "id": "sharpReflexes",
+    "name": "Sharp Reflexes",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDodge"
+    }],
+    "description": "Permanently increases dodge chance.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/SharpReflexes.jpg"
+  },
+  "concentration": {
+    "id": "concentration",
+    "name": "Concentration",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseManaRegen"
+    }],
+    "description": "Permanently increases mana regeneration rate.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Concentration.jpg"
+  },
+  "marksmanship": {
+    "id": "marksmanship",
+    "name": "Marksmanship",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDamage"
+    }],
+    "description": "Permanently increases damage with ranged weapons.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Marksmanship.jpg"
   }
+
+
 }
 
 

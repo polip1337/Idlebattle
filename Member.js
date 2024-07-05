@@ -121,12 +121,15 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
     return allSkills;
     }
 
-    calculateHitChance(defender) {
+    calculateHitChance(defender, skillModifier) {
         if (this == defender){
             console.log("Self targeted");
             return true;
         }
         const hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1);
+        if(skillModifier != undefined){
+            hitChance += skillModifier;
+        }
         const randomNumber = Math.floor(Math.random() * 101);
         if (randomNumber <= hitChance) {
             return true;
@@ -136,7 +139,7 @@ constructor(name, classInfo,skills, level = 1,team = null,opposingTeam = null,is
     }
 
     performAttack(member, target, skill, isHero =false) {
-        if (this.calculateHitChance(target)) {
+        if (this.calculateHitChance(target,skill.toHit)) {
 
 
             if (skill.effects) {
