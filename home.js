@@ -1,5 +1,6 @@
 import { openTab } from './navigation.js';
 import { loadGameData } from './initialize.js';
+import { startSlideshow } from './slideshow.js';
 
 export function initializeHomeScreen() {
     const homeScreen = document.getElementById('home-screen');
@@ -17,8 +18,10 @@ export function initializeHomeScreen() {
 
     newGameButton.addEventListener('click', () => {
         hideHomeScreen();
-        loadGameData();
-        openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
+        startSlideshow(() => {
+            loadGameData();
+            openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
+        });
     });
 
     loadGameButton.addEventListener('click', () => {
