@@ -1,85 +1,82 @@
-// Add this to your JavaScript file
+import { openTab } from './navigation.js';
 
-const mapSize = 30; // Define a larger map size
-const visibleSize = 10; // Size of the visible map section
-
-
-// Initial position of the player in the middle of the larger map
-let playerPosition = {x: Math.floor(mapSize / 2), y: Math.floor(mapSize / 2)};
-
-// Function to render the visible map section
-function renderVisibleMap() {
+export function initializeMap() {
     const mapContainer = document.getElementById('map-container');
-    mapContainer.innerHTML = ''; // Clear the existing map
+    const poiList = document.getElementById('poi-list');
+    const addPoiButton = document.getElementById('add-poi-button');
 
-    const startX = Math.max(0, playerPosition.x - Math.floor(visibleSize / 2));
-    const startY = Math.max(0, playerPosition.y - Math.floor(visibleSize / 2));
+    // Sample points of interest (can be loaded from a JSON file later)
+    let pointsOfInterest = [
+        { name: "Goblin Plains", x: 200, y: 150, icon: "Media/map/poi-goblin.png" },
+        { name: "Mystic Forest", x: 400, y: 300, icon: "Media/map/poi-forest.png" },
+    ];
 
-    for (let i = 0; i < visibleSize; i++) {
-        for (let j = 0; j < visibleSize; j++) {
-            const tileX = startX + i;
-            const tileY = startY + j;
+    // Render existing POIs
+    function renderPOIs() {
+        poiList.innerHTML = ''; // Clear existing POIs
+        pointsOfInterest.forEach((poi, index) => {
+            // Create POI element on map
+            const poiElement = document.createElement('div');
+            poiElement.classList.add('poi');
+            poiElement.style.left = `${poi.x}px`;
+            poiElement.style.top = `${poi.y}px`;
+            poiElement.dataset.index = index;
 
-            if (tileX < mapSize && tileY < mapSize) {
-                const tileType = fullMap[tileX][tileY];
-                const tile = document.createElement('div');
-                tile.className = `map-tile ${tileType}`;
-                tile.id = `tile-${tileX}-${tileY}`;
+            const poiIcon = document.createElement('img');
+            poiIcon.src = poi.icon;
+            poiIcon.alt = poi.name;
+            poiIcon.classList.add('poi-icon');
 
-                // Mark the player's position
-                if (tileX === playerPosition.x && tileY === playerPosition.y) {
-                    tile.classList.add('player');
-                }
+            const poiName = document.createElement('span');
+            poiName.classList.add('poi-name');
+            poiName.textContent = poi.name;
 
-                mapContainer.appendChild(tile);
-            }
+            poiElement.appendChild(poiIcon);
+            poiElement.appendChild(poiName);
+            mapContainer.appendChild(poiElement);
+
+            // Create POI list item
+            const listItem = document.createElement('li');
+            listItem.classList.add('poi-list-item');
+            listItem.dataset.index = index;
+            listItem.textContent = poi.name;
+            listItem.addEventListener('click', () => {
+                // Scroll to POI on map
+                poiElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                poiElement.classList.add('highlight');
+                setTimeout(() => poiElement.classList.remove('highlight'), 2000);
+            });
+            poiList.appendChild(listItem);
+        });
+    }
+
+    // Add new POI
+    function addPOI() {
+        const name = prompt("Enter the name of the new point of interest:");
+        if (!name) return;
+
+        const icon = prompt("Enter the icon path (e.g., Media/map/poi-new.png):", "Media/map/poi-default.png");
+        const x = Math.floor(Math.random() * (mapContainer.offsetWidth - 100));
+        const y = Math.floor(Math.random() * (mapContainer.offsetHeight - 100));
+
+        pointsOfInterest.push({ name, x, y, icon });
+        renderPOIs();
+    }
+
+    // Initialize map interactions
+    addPoiButton.addEventListener('click', addPOI);
+    mapContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('poi-icon') || event.target.classList.contains('poi-name')) {
+            const poiIndex = event.target.closest('.poi').dataset.index;
+            const poi = pointsOfInterest[poiIndex];
+            alert(`Selected: ${poi.name}\nCoordinates: (${poi.x}, ${poi.y})`);
+            // Future: Trigger stage loading or other game logic
         }
-    }
+    });
+
+    // Initial render
+    renderPOIs();
+
+    // Ensure map tab is accessible
+    document.getElementById('mapNavButton').addEventListener('click', () => openTab(event, 'map'));
 }
-
-// Function to move the player
-function movePlayer(direction) {
-    // Calculate new position
-    let newPosition = {...playerPosition};
-
-    switch (direction) {
-        case 'up':
-            newPosition.x = Math.max(0, playerPosition.x - 1);
-            break;
-        case 'down':
-            newPosition.x = Math.min(mapSize - 1, playerPosition.x + 1);
-            break;
-        case 'left':
-            newPosition.y = Math.max(0, playerPosition.y - 1);
-            break;
-        case 'right':
-            newPosition.y = Math.min(mapSize - 1, playerPosition.y + 1);
-            break;
-    }
-
-    // Update the map if the position has changed
-    if (newPosition.x !== playerPosition.x || newPosition.y !== playerPosition.y) {
-        playerPosition = newPosition;
-        renderVisibleMap();
-    }
-}
-
-// Function to load the map from JSON file
-function loadMap() {
-    fetch('Data/map.json')
-        .then(response => response.json())
-        .then(data => {
-            fullMap = data.map;
-            renderVisibleMap();
-        })
-        .catch(error => console.error('Error loading map:', error));
-}
-
-// Event listeners for movement buttons
-document.getElementById('move-up').addEventListener('click', () => movePlayer('up'));
-document.getElementById('move-down').addEventListener('click', () => movePlayer('down'));
-document.getElementById('move-left').addEventListener('click', () => movePlayer('left'));
-document.getElementById('move-right').addEventListener('click', () => movePlayer('right'));
-
-// Load the map on page load
-loadMap();

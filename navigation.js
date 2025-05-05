@@ -32,5 +32,7 @@ export function openTab(evt, tabName) {
             updateProgressBar(skill);
         })
     }
+    if(tabName =='map'){
+    }
 }
 

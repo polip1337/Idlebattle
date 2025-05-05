@@ -21,6 +21,7 @@ import {
 } from './Render.js';
 import BattleStatistics from './BattleStatistics.js';
 import {openTab} from './navigation.js';
+import {initializeMap} from './map.js';
 
 export let battleStatistics = new BattleStatistics();
 export let evolutionService = new EvolutionService();
@@ -110,6 +111,7 @@ async function loadGameData() {
     createAndInitHero(heroClasses, team1, team2);
     loadStage(currentStage, mobsClasses);
     initiateEventListeners();
+    initializeMap(); // Initialize the map
 
 }
 
@@ -210,7 +212,7 @@ function initiateEventListeners() {
     });
     document.getElementById('battlefieldNavButton').addEventListener('click', () => openTab(event, 'battlefield'));
     document.getElementById('heroContentNavButton').addEventListener('click', () => openTab(event, 'heroContent'));
-    //document.getElementById('mapNavButton').addEventListener('click', () => openTab(event, 'map'));
+    document.getElementById('mapNavButton').addEventListener('click', () => openTab(event, 'map'));
     document.getElementById('libraryNavButton').addEventListener('click', () => openTab(event, 'library'));
     document.getElementById('optionsNavButton').addEventListener('click', () => openTab(event, 'options'));
     document.getElementById('battle-statisticsNavButton').addEventListener('click', () => openTab(event, 'battle-statistics'));

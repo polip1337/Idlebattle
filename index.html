@@ -255,18 +255,17 @@
 </div>
 
 <div class="tabcontent" id="map">
-    <h2>Map Section</h2>
-    <div id="map-container"></div>
-    <div id="movement-buttons">
-        <button id="move-up">Up</button>
-        <div>
-            <button id="move-left">Left</button>
-            <button id="move-right">Right</button>
-        </div>
-        <button id="move-down">Down</button>
+    <h2>World Map</h2>
+    <div id="map-controls">
+        <button id="add-poi-button">Add Point of Interest</button>
     </div>
-
-
+    <div style="display: flex;">
+        <div id="map-container"></div>
+        <div id="poi-list-container">
+            <h3>Points of Interest</h3>
+            <ul id="poi-list"></ul>
+        </div>
+    </div>
 </div>
 
 <div class="tabcontent" id="library">
@@ -511,6 +510,7 @@
                 <button class="tablinks" id="heroContentNavButton">Hero</button>
             </div>
             <div class="gridItem">
+                <button class="tablinks" id="mapNavButton">Map</button>
             </div>
             <div class="gridItem">
                 <button class="tablinks" id="libraryNavButton">Library</button>
@@ -542,6 +542,6 @@
 <script src="Main.js" type="module"></script>
 <script src="initialize.js" type="module"></script>
 <script src="navigation.js" type="module"></script>
-<script src="map.js"></script>
+<script src="map.js" type="module"></script>
 </body>
 </html>
