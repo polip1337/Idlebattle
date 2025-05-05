@@ -5,14 +5,9 @@ window.onload = function () {
         if (event.target === modal) {
             closeEvolutionModal();
         }
-    }
-}
+    };
 
-
-
-
-
-
-
-
-
+    // Ensure home screen is visible on load
+    document.getElementById('home-screen').classList.add('active');
+    document.getElementById('footer').classList.add('hidden');
+};

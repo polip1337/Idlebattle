@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
     <title>RPG Battle</title>
     <link href="style/styles.css" rel="stylesheet" type="text/css">
     <link href="style/animation.css" rel="stylesheet" type="text/css">
@@ -15,9 +14,21 @@
     <link href="style/map.css" rel="stylesheet" type="text/css">
     <link href="style/greenBorderAnimation.css" rel="stylesheet" type="text/css">
     <link href="style/glow.css" rel="stylesheet" type="text/css">
-
+    <link href="style/home.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div class="home-screen active" id="home-screen">
+    <div class="home-menu">
+        <h1>RPG Battle</h1>
+        <div class="home-buttons">
+            <button id="new-game"><img src="Media/buttons/new-game.png" alt="New Game"></button>
+            <button id="load-game"><img src="Media/buttons/load-game.png" alt="Load Game"></button>
+            <button id="options"><img src="Media/buttons/options.png" alt="Options"></button>
+            <button id="exit"><img src="Media/buttons/exit.png" alt="Exit"></button>
+        </div>
+    </div>
+</div>
+
 <div class="popup hidden" id="popup">
     <div class="popup-content">
         <h2 id="popupTitle">Victory!</h2>
@@ -27,7 +38,7 @@
         <button id="nextStage-popup">NextStage</button>
     </div>
 </div>
-<div class="startBattlePopup">
+<div class="startBattlePopup" style="display:none">
     <img id="team2-overlay" src="Media/startBattle.png">
 </div>
 <div class="modal" id="evolution-modal">
@@ -39,9 +50,8 @@
     </div>
 </div>
 
-<div class="tabcontent active battle-view " id="battlefield">
+<div class="tabcontent battle-view" id="battlefield">
     <div id="teamAndBattleContainer-overlay">
-
         <div id="teamAndBattleContainer">
             <div id="stage-controls">
                 <button id="decrease-stage">&lt;</button>
@@ -50,26 +60,20 @@
                 <input id="repeat" type="checkbox">Repeat</input>
             </div>
             <div id="teamContainer">
-
-                <div class="team" id="team1" id="team1">
-
+                <div class="team" id="team1">
                     <div class="team-row"></div>
                     <div class="team-row"></div>
                 </div>
                 <div class="team-divider"></div>
-                <div class="team" id="team2" id="team2">
+                <div class="team" id="team2">
                     <div class="team-row"></div>
                     <div class="team-row"></div>
                 </div>
-
-
             </div>
             <div id="battle-log-container">
-
                 <button id="toggle-log">Hide Log</button>
                 <div id="battle-log">
                     <div id="anchor"></div>
-
                 </div>
             </div>
         </div>
@@ -100,7 +104,6 @@
                 <div id="inventory">
                     <h2>Inventory</h2>
                     <div class="iconGrid">
-                        <!-- Inventory icons -->
                         <div class="inventorySlot"></div>
                         <div class="inventorySlot"></div>
                         <div class="inventorySlot"></div>
@@ -123,10 +126,7 @@
                         <div class="inventorySlot"></div>
                     </div>
                 </div>
-                <div id="heroClasses">
-
-                    <!-- Add more classes as needed -->
-                </div>
+                <div id="heroClasses"></div>
                 <div id="heroStats">
                     <h2>Classes</h2>
                     <p>Warrior</p>
@@ -145,7 +145,6 @@
                 <div id="heroSkills">
                     <h2>Active Skills</h2>
                     <div id="activeSkills">
-                        <!-- Space for 10 active skills in a 5x2 grid -->
                         <div class="skill">
                             <p>Slash</p>
                             <div class="progressBar">
@@ -182,7 +181,6 @@
                                 <div class="progress" style="width: 60%;"></div>
                             </div>
                         </div>
-
                     </div>
                     <h2>Passive Skills</h2>
                     <div id="passiveSkills">
@@ -251,7 +249,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <div class="tabcontent" id="map">
@@ -355,7 +352,7 @@
     <h2>Options Section</h2>
     <!-- Content for options section -->
 </div>
-<div id="footer">
+<div id="footer" class="hidden">
     <div id="level-progress-container">
         <div id="level-progress-bar">
             <span id="class-name">Novice</span>
@@ -416,33 +413,27 @@
                     <div class="battleSkillIcon" id="passiveSkill12">
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
-
                     </div>
                 </div>
             </div>
             <div class="iconRow lowerRow">
                 <div class="iconGroup">
                     <div class="battleSkillIcon" id="skill1">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
-
                     </div>
-                    <div class="battleSkillIcon " id="skill2">
-
+                    <div class="battleSkillIcon" id="skill2">
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                     <div class="battleSkillIcon" id="skill3">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                     <div class="battleSkillIcon" id="skill4">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
@@ -450,25 +441,21 @@
                 </div>
                 <div class="iconGroup">
                     <div class="battleSkillIcon" id="skill5">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                     <div class="battleSkillIcon" id="skill6">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                     <div class="battleSkillIcon" id="skill7">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                     <div class="battleSkillIcon" id="skill8">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
@@ -476,25 +463,21 @@
                 </div>
                 <div class="iconGroup">
                     <div class="battleSkillIcon" id="skill9">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                     <div class="battleSkillIcon" id="skill10">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                     <div class="battleSkillIcon" id="skill11">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
                     </div>
                     <div class="battleSkillIcon" id="skill12">
-
                         <img src="Media/UI/defaultSkill.jpeg">
                         <div class="tooltip"></div>
                         <div class="cooldown-overlay"></div>
@@ -518,22 +501,18 @@
             <div class="gridItem">
                 <button class="tablinks" id="optionsNavButton">Options</button>
             </div>
-            <div class="gridItem">
-            </div>
+            <div class="gridItem"></div>
             <div class="gridItem">
                 <button class="tablinks" id="battle-statisticsNavButton">Stats</button>
             </div>
+            <div class="gridItem"></div>
             <div class="gridItem">
-            </div>
-            <div class="gridItem">
-                <!-- Content for the ninth grid item -->
+                <button class="tablinks" id="homeNavButton">Home</button>
             </div>
         </div>
     </div>
-
 </div>
 <script src="Hero.js" type="module"></script>
-
 <script src="Member.js" type="module"></script>
 <script src="EffectClass.js" type="module"></script>
 <script src="Render.js" type="module"></script>
@@ -543,5 +522,6 @@
 <script src="initialize.js" type="module"></script>
 <script src="navigation.js" type="module"></script>
 <script src="map.js" type="module"></script>
+<script src="home.js" type="module"></script>
 </body>
 </html>
