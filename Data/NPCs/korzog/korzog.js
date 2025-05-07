@@ -1,6 +1,6 @@
 export default {
     name: "Korzog",
-    portrait: "Media/npc/korzog.jpg",
+    portrait: "Media/npc/kerzog.jpg",
     dialogues: ["base"],
     tradeInventory: ["fogCharm", "healingPotion"]
 };

@@ -37,6 +37,14 @@
         "y": 300,
         "icon": "Media/map/poi-shrine.png",
         "type": "combat"
+      },
+      {
+        "name": "Driftmoor",
+        "x": 300,
+        "y": 800,
+        "icon": "Media/map/poi-dock.png",
+        "type": "travel",
+        "mapId": "driftmoor"
       }
     ]
   },
@@ -68,14 +76,6 @@
         "mapId": "threadhall"
       },
       {
-        "name": "Driftmoor",
-        "x": 300,
-        "y": 800,
-        "icon": "Media/map/poi-dock.png",
-        "type": "travel",
-        "mapId": "driftmoor"
-      },
-      {
         "name": "Verdant Hollow",
         "x": 600,
         "y": 200,
@@ -101,10 +101,18 @@
         "name": "Korzog’s Station",
         "x": 600,
         "y": 300,
-        "icon": "Media/map/poi-npc.png",
+        "icon": "Media/npc/kerzog.jpg",
         "type": "dialogue",
         "npcId": "korzog",
         "dialogueId": "base"
+      },
+      {
+        "name": "Exit",
+        "x": 600,
+        "y": 800,
+        "icon": "Media/map/poi-town.jpg",
+        "type": "travel",
+        "mapId": "hollowreach"
       }
     ]
   },
@@ -128,6 +136,14 @@
         "type": "dialogue",
         "npcId": "joren_halfhand",
         "dialogueId": "base"
+      },
+      {
+        "name": "Exit",
+        "x": 400,
+        "y": 600,
+        "icon": "Media/map/poi-gate.jpg",
+        "type": "travel",
+        "mapId": "hollowreach_Valley"
       }
     ]
   },
@@ -151,6 +167,15 @@
         "type": "dialogue",
         "npcId": "mira_solace",
         "dialogueId": "base"
+      },
+
+      {
+        "name": "Exit",
+        "x": 400,
+        "y": 600,
+        "icon": "Media/map/poi-gate.jpg",
+        "type": "travel",
+        "mapId": "hollowreach"
       }
     ]
   },
