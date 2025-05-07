@@ -1,16 +1,39 @@
+@font-face {
+    font-family: 'Cinzel';
+    src: url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+}
+
 .library-container {
     display: flex;
-    width: 80%;
-    height: 70%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 78vh;
+    background: url('Media/parchment.jpg') no-repeat center/cover;
+    border: 4px solid #2a1f14;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.library-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+    pointer-events: none;
 }
 
 .topic-list {
-    width: 30%;
-    background-color: #fff;
-    border-right: 1px solid #ddd;
+    width: 35%;
+    background: #1a1410;
+    border-right: 2px solid #4a3c2b;
     overflow-y: auto;
-    padding: 10px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .topic-list ul {
@@ -20,17 +43,302 @@
 }
 
 .topic-list li {
-    padding: 10px;
+    padding: 12px 15px;
+    color: #d4b68a;
     cursor: pointer;
-    border-bottom: 1px solid #ddd;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    border-bottom: 1px solid #4a3c2b;
+    transition: background 0.3s ease, color 0.3s ease;
+    position: relative;
+}
+
+.topic-list li::before {
+    content: '📜';
+    margin-right: 10px;
+    font-size: 14px;
 }
 
 .topic-list li:hover, .topic-list li.active {
-    background-color: #f0f0f0;
+    background: #3a2c1b;
+    color: #ffd700;
+    box-shadow: inset 0 0 5px rgba(255, 215, 0, 0.3);
 }
 
 .expandable {
-    cursor: pointer;
+    font-weight: 700;
+}
+
+.expandable span {
     display: inline-block;
-    padding: 10px;
+        flex-grow: 1;
+
+}
+
+.expandable::after {
+    content: '▶';
+    position: absolute;
+    right: 15px;
+    top: 20px;
+    transform: translateY(-50%);
+    color: #d4b68a;
+    transition: transform 0.3s ease;
+}
+
+.expandable.expanded::after {
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.subtopics {
+    padding-left: 25px;
+    display: none;
+}
+
+.subtopics li {
+    padding: 8px 15px;@font-face {
+                          font-family: 'Cinzel';
+                          src: url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+                      }
+
+                      @font-face {
+                          font-family: 'IM Fell English';
+                          src: url('https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap');
+                      }
+
+                      .library-container {
+                          display: flex;
+                          width: 100vw;
+                          height: 100vh;
+                          margin: 0;
+                          background: url('Media/parchment.jpg') no-repeat center/cover;
+                          border: none;
+                          box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
+                          position: fixed;
+                          top: 0;
+                          left: 0;
+                          overflow: hidden;
+                          z-index: 2;
+                      }
+
+                      .library-container::before {
+                          content: '';
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          width: 100%;
+                          height: 100%;
+                          background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+                          pointer-events: none;
+                          z-index: 0;
+                      }
+
+                      .topic-list {
+                          width: 35%;
+                          background: #1a1410;
+                          border-right: 2px solid #4a3c2b;
+                          overflow-y: auto;
+                          padding: 20px;
+                          position: relative;
+                          z-index: 1;
+                      }
+
+                      .topic-list ul {
+                          list-style: none;
+                          padding: 0;
+                          margin: 0;
+                      }
+
+                      .topic-list li {
+                          padding: 12px 15px;
+                          color: #d4b68a;
+                          cursor: pointer;
+                          font-family: 'Cinzel', serif;
+                          font-size: 16px;
+                          border-bottom: 1px solid #4a3c2b;
+                          transition: background 0.3s ease, color 0.3s ease;
+                          position: relative;
+                          display: flex;
+                          align-items: center;
+                          min-height: 40px; /* Ensure consistent height */
+                      }
+
+                      .topic-list li::before {
+                          content: '📜';
+                          margin-right: 10px;
+                          font-size: 14px;
+                      }
+
+                      .topic-list li:hover, .topic-list li.active {
+                          background: #3a2c1b;
+                          color: #ffd700;
+                          box-shadow: inset 0 0 5px rgba(255, 215, 0, 0.3);
+                      }
+
+                      .expandable {
+                          font-weight: 700;
+                      }
+
+                      .expandable span {
+                          display: inline-block;
+                          flex-grow: 1;
+                      }
+
+                      .expandable::after {
+                          content: '▶';
+                          position: absolute;
+                          right: 15px;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          color: #d4b68a;
+                          font-size: 12px;
+                          width: 12px;
+                          height: 12px;
+                          line-height: 12px;
+                          text-align: center;
+                          transition: transform 0.3s ease;
+                      }
+
+                      .expandable.expanded::after {
+                          transform: translateY(-50%) rotate(90deg);
+                      }
+
+                      .subtopics {
+                          padding-left: 25px;
+                          display: none;
+                      }
+
+                      .subtopics li {
+                          padding: 8px 15px;
+                          font-size: 14px;
+                          min-height: 36px; /* Consistent height for subtopics */
+                      }
+
+                      .subtopics li::before {
+                          content: '✒';
+                          margin-right: 10px;
+                      }
+
+                      .content-area {
+                          width: 65%;
+                          padding: 30px;
+                          color: #d4b68a;
+                          overflow-y: auto;
+                          font-family: 'IM Fell English', serif;
+                          font-size: 16px;
+                          line-height: 1.8;
+                          background: rgba(26, 20, 16, 0.7);
+                          border-left: 2px solid #4a3c2b;
+                          position: relative;
+                          z-index: 1;
+                          transition: opacity 0.5s ease;
+                      }
+
+                      .content-area h2 {
+                          color: #ffd700;
+                          font-family: 'Cinzel', serif;
+                          font-size: 24px;
+                          margin-bottom: 20px;
+                          text-shadow: 2px 2px 4px #000;
+                          border-bottom: 1px solid #4a3c2b;
+                          padding-bottom: 10px;
+                      }
+
+                      .content-area p {
+                          margin: 0 0 15px;
+                      }
+
+                      .content-area.fade-in {
+                          opacity: 1;
+                      }
+
+                      .content-area.fade-out {
+                          opacity: 0;
+                      }
+
+                      /* Scrollbar styling */
+                      .topic-list::-webkit-scrollbar,
+                      .content-area::-webkit-scrollbar {
+                          width: 8px;
+                      }
+
+                      .topic-list::-webkit-scrollbar-track,
+                      .content-area::-webkit-scrollbar-track {
+                          background: #1a1410;
+                      }
+
+                      .topic-list::-webkit-scrollbar-thumb,
+                      .content-area::-webkit-scrollbar-thumb {
+                          background: #4a3c2b;
+                          border-radius: 4px;
+                      }
+
+                      .topic-list::-webkit-scrollbar-thumb:hover,
+                      .content-area::-webkit-scrollbar-thumb:hover {
+                          background: #6b5a3e;
+                      }
+    font-size: 14px;
+}
+
+.subtopics li::before {
+    content: '✒';
+    margin-right: 10px;
+}
+
+.content-area {
+    width: 65%;
+    padding: 30px;
+    color: #d4b68a;
+    overflow-y: auto;
+    font-family: 'IM Fell English', serif;
+    font-size: 16px;
+    line-height: 1.8;
+    background: rgba(26, 20, 16, 0.7);
+    border-left: 2px solid #4a3c2b;
+    position: relative;
+    z-index: 1;
+    transition: opacity 0.5s ease;
+}
+
+.content-area h2 {
+    color: #ffd700;
+    font-family: 'Cinzel', serif;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px #000;
+    border-bottom: 1px solid #4a3c2b;
+    padding-bottom: 10px;
+}
+
+.content-area p {
+    margin: 0 0 15px;
+}
+
+.content-area.fade-in {
+    opacity: 1;
+}
+
+.content-area.fade-out {
+    opacity: 0;
+}
+
+/* Scrollbar styling */
+.topic-list::-webkit-scrollbar,
+.content-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.topic-list::-webkit-scrollbar-track,
+.content-area::-webkit-scrollbar-track {
+    background: #1a1410;
+}
+
+.topic-list::-webkit-scrollbar-thumb,
+.content-area::-webkit-scrollbar-thumb {
+    background: #4a3c2b;
+    border-radius: 4px;
+}
+
+.topic-list::-webkit-scrollbar-thumb:hover,
+.content-area::-webkit-scrollbar-thumb:hover {
+    background: #6b5a3e;
 }

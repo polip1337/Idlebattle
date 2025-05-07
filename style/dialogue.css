@@ -70,6 +70,28 @@
     position: relative;
 }
 
+.hypertext:hover .hypertext-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.hypertext-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    background: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 14px;
+    z-index: 4000;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
 .dialogue-options {
     display: flex;
     flex-direction: column;

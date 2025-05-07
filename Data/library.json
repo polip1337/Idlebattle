@@ -3,12 +3,31 @@
     {
       "name": "The Fog",
       "data-topic": "fog",
-      "content": "The Fog is an unnatural mist that enveloped the continent when the magical portals closed a thousand years ago. It isolates cities like Hollowreach, twisting the minds of travelers and concealing monstrous creatures. Legends speak of a relic in the Mystic Forest capable of dispelling it."
+      "content": "The Fog is an unnatural mist that enveloped the continent when the magical portals closed a thousand years ago. It isolates cities like Hollowreach, twisting the minds of travelers and concealing monstrous creatures. Legends speak of a relic in the Mystic Forest capable of dispelling it.",
+      "subtopics": [
+        {
+          "name": "Origins",
+          "data-topic": "fogOrigins",
+          "content": "The Fog emerged abruptly when the portals failed, suggesting a connection to their ancient magic. Some sages believe it is a curse unleashed by a forgotten deity."
+        },
+        {
+          "name": "Effects",
+          "data-topic": "fogEffects",
+          "content": "The Fog warps perception, causing hallucinations and disorientation. It also harbors creatures that thrive in its gloom, preying on lost souls."
+        }
+      ]
     },
     {
       "name": "Magical Portals",
       "data-topic": "portals",
-      "content": "The Magical Portals were a network of gateways that once connected the empire’s cities, allowing instant travel across the continent. Powered by ancient magic, they collapsed suddenly, unleashing the Fog and severing ties between civilizations."
+      "content": "The Magical Portals were a network of gateways that once connected the empire’s cities, allowing instant travel across the continent. Powered by ancient magic, they collapsed suddenly, unleashing the Fog and severing ties between civilizations.",
+      "subtopics": [
+        {
+          "name": "Construction",
+          "data-topic": "portalConstruction",
+          "content": "Crafted by the empire’s greatest mages, the portals were anchored by runestones imbued with celestial energy, now lost to time."
+        }
+      ]
     },
     {
       "name": "Mystic Forest",
@@ -18,7 +37,19 @@
     {
       "name": "Hollowreach",
       "data-topic": "hollowreach",
-      "content": "Hollowreach is a forgotten city of the old empire, now isolated by the Fog. Once a bustling hub, it clings to survival as its people dream of restoring the portals and reconnecting with the world."
+      "content": "Hollowreach is a forgotten city of the old empire, now isolated by the Fog. Once a bustling hub, it clings to survival as its people dream of restoring the portals and reconnecting with the world.",
+      "subtopics": [
+        {
+          "name": "History",
+          "data-topic": "hollowreachHistory",
+          "content": "Founded during the empire’s golden age, Hollowreach was a center of trade and magic until the Fog cut it off from the world."
+        },
+        {
+          "name": "Current State",
+          "data-topic": "hollowreachCurrent",
+          "content": "The city’s walls stand strong, but its people struggle with dwindling resources and constant threats from Fog-born creatures."
+        }
+      ]
     }
   ]
 }
