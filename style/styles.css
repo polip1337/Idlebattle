@@ -327,37 +327,6 @@
      border-color: green;
 }
 
- .library-container {
-     display: flex;
-     width: 80%;
-     height: 70%;
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
- .topic-list {
-     width: 30%;
-     background-color: #fff;
-     border-right: 1px solid #ddd;
-     overflow-y: auto;
-     padding: 10px;
-}
- .topic-list ul {
-     list-style: none;
-     padding: 0;
-     margin: 0;
-}
- .topic-list li {
-     padding: 10px;
-     cursor: pointer;
-     border-bottom: 1px solid #ddd;
-}
- .topic-list li:hover, .topic-list li.active {
-     background-color: #f0f0f0;
-}
- .expandable {
-     cursor: pointer;
-     display: inline-block;
-     padding: 10px;
-}
  #teamContainer{
      width:80%
 }

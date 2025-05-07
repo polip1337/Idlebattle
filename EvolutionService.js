@@ -43,7 +43,7 @@ class EvolutionService {
             if (typeof requirements[key] === 'object') {
                 for (let subKey in requirements[key]) {
                     if ((battleStatistics[key][subKey] || 0) < requirements[key][subKey]) {
-                        return false;
+                        return false; 
                     }
                 }
             } else {

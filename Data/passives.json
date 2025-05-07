@@ -487,5 +487,293 @@
       "Self"
     ],
     "icon": "Media/Skills/Passive/InspiringAura.jpg"
+  },
+  "steadyHand": {
+    "id": "steadyHand",
+    "name": "Steady Hand",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseAccuracy"
+    }],
+    "description": "Permanently increases accuracy.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/SteadyHand.jpg"
+  },
+  "precision": {
+    "id": "precision",
+    "name": "Precision",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseCriticalChance"
+    }],
+    "description": "Permanently increases critical hit chance.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Precision.jpg"
+  },
+  "archeryMastery": {
+    "id": "archeryMastery",
+    "name": "Archery Mastery",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDamage"
+    }],
+    "description": "Permanently increases damage dealt with bows.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/ArcheryMastery.jpg"
+  },
+  "camouflage": {
+    "id": "camouflage",
+    "name": "Camouflage",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "reduceDetection"
+    }],
+    "description": "Increases ability to avoid detection.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Camouflage.jpg"
+  },
+  "fleetFoot": {
+    "id": "fleetFoot",
+    "name": "Fleet Foot",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseSpeed"
+    }],
+    "description": "Permanently increases movement speed.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/FleetFoot.jpg"
+  },
+  "sharpReflexes": {
+    "id": "sharpReflexes",
+    "name": "Sharp Reflexes",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDodge"
+    }],
+    "description": "Permanently increases dodge chance.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/SharpReflexes.jpg"
+  },
+  "concentration": {
+    "id": "concentration",
+    "name": "Concentration",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseManaRegen"
+    }],
+    "description": "Permanently increases mana regeneration rate.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Concentration.jpg"
+  },
+  "marksmanship": {
+    "id": "marksmanship",
+    "name": "Marksmanship",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [{
+      "id": "increaseDamage"
+    }],
+    "description": "Permanently increases damage with ranged weapons.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Marksmanship.jpg"
+  },
+  "agility": {
+    "id": "agility",
+    "name": "Agility",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "increaseSpeed"
+      }
+    ],
+    "description": "Permanently increases speed.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Agility.jpg"
+  },
+  "lockpicking": {
+    "id": "lockpicking",
+    "name": "Lockpicking",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "openLocks"
+      }
+    ],
+    "description": "Increases the ability to pick locks.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Lockpicking.jpg"
+  },
+  "evasion": {
+    "id": "evasion",
+    "name": "Evasion",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "increaseDodge"
+      }
+    ],
+    "description": "Permanently increases dodge chance.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/Evasion.jpg"
+  },
+  "shadowMastery": {
+    "id": "shadowMastery",
+    "name": "Shadow Mastery",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "improveStealth"
+      }
+    ],
+    "description": "Permanently improves stealth abilities.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/ShadowMastery.jpg"
+  },
+  "criticalStrike": {
+    "id": "criticalStrike",
+    "name": "Critical Strike",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "increaseCriticalChance"
+      }
+    ],
+    "description": "Permanently increases chance of landing critical strikes.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/CriticalStrike.jpg"
+  },
+  "silentMovement": {
+    "id": "silentMovement",
+    "name": "Silent Movement",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "reduceDetection"
+      }
+    ],
+    "description": "Reduces the chance of being detected while moving.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/SilentMovement.jpg"
+  },
+  "trapSense": {
+    "id": "trapSense",
+    "name": "Trap Sense",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "detectTraps"
+      }
+    ],
+    "description": "Increases the chance to detect traps.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/TrapSense.jpg"
+  },
+  "lightArmorExpertise": {
+    "id": "lightArmorExpertise",
+    "name": "Light Armor Expertise",
+    "type": "passive",
+    "damage": 0,
+    "manaCost": 0,
+    "cooldown": 0,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "increaseLightArmor"
+      }
+    ],
+    "description": "Increases the effectiveness of light armor.",
+    "targetingModes": [
+      "Self"
+    ],
+    "icon": "Media/Skills/Passive/LightArmorExpertise.jpg"
   }
 }

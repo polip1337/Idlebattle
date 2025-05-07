@@ -15,6 +15,7 @@
     <link href="style/map.css" rel="stylesheet" type="text/css">
     <link href="style/greenBorderAnimation.css" rel="stylesheet" type="text/css">
     <link href="style/glow.css" rel="stylesheet" type="text/css">
+    <link href="style/library.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
@@ -273,16 +274,7 @@
     <div class="library-container">
         <div class="topic-list">
             <ul id="topics">
-                <li data-topic="topic1">Topic 1</li>
-                <li data-topic="topic2">Topic 2</li>
-                <li>
-                    <span class="expandable" onclick="toggleSubtopics(this)">Topic 3</span>
-                    <ul class="subtopics">
-                        <li data-topic="subtopic3-1">Subtopic 3.1</li>
-                        <li data-topic="subtopic3-2">Subtopic 3.2</li>
-                    </ul>
-                </li>
-                <li data-topic="topic4">Topic 4</li>
+                <!-- Dynamic content will be inserted here -->
             </ul>
         </div>
         <div class="content-area">
@@ -543,5 +535,6 @@
 <script src="initialize.js" type="module"></script>
 <script src="navigation.js" type="module"></script>
 <script src="map.js"></script>
+<script src="libraryLoader.js"></script>
 </body>
 </html>
