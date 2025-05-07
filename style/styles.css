@@ -334,7 +334,7 @@
      display:flex;
 }
  .battle-view {
-     background: url('../Media/bg2.jpg') no-repeat center center;
+     background: url('../Media/Backgrounds/goblin_Cave.png') no-repeat center center;
      background-size: cover;
      border: 2px solid #444;
      border-radius: 10px;
@@ -397,6 +397,7 @@
     text-align: center;
 }
 .startBattlePopup {
+    display:none;
     position: fixed;
     top: 20%;
     left: 35%;

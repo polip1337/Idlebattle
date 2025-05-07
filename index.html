@@ -17,7 +17,6 @@
     <link href="style/home.css" rel="stylesheet" type="text/css">
     <link href="style/slideshow.css" rel="stylesheet" type="text/css">
     <link href="style/dialogue.css" rel="stylesheet" type="text/css">
-    <link href="style/tooltip.css" rel="stylesheet" type="text/css">
     <link href="style/library.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -25,7 +24,7 @@
     <div class="home-menu">
         <h1>RPG Battle</h1>
         <div class="home-buttons">
-            <button id="new-game"><img src="Media/buttons/new-game.png" alt="New Game"></button>
+            <button id="new-game"><img src="../Media/UI/new_game.jpg" alt="New Game"></button>
             <button id="load-game"><img src="Media/buttons/load-game.png" alt="Load Game"></button>
             <button id="options"><img src="Media/buttons/options.png" alt="Options"></button>
             <button id="exit"><img src="Media/buttons/exit.png" alt="Exit"></button>
@@ -90,7 +89,7 @@
         <button id="nextStage-popup">NextStage</button>
     </div>
 </div>
-<div class="startBattlePopup" style="display:none">
+<div class="startBattlePopup" >
     <img id="team2-overlay" src="Media/startBattle.png">
 </div>
 <div class="modal" id="evolution-modal">
@@ -102,8 +101,8 @@
     </div>
 </div>
 
-<div class="tabcontent" id="battlefield">
-    <div id="teamAndBattleContainer-overlay">
+<div class="tabcontent" id="battlefield" class="battle-view">
+    <div id="teamAndBattleContainer-overlay" class="battle-view">
         <div id="teamAndBattleContainer">
             <div id="stage-controls">
                 <button id="decrease-stage"><</button>
@@ -304,10 +303,6 @@
 </div>
 
 <div class="tabcontent" id="map">
-    <h2>World Map</h2>
-    <div id="map-controls">
-        <button id="add-poi-button">Add Point of Interest</button>
-    </div>
     <div style="display: flex;">
         <div id="map-container"></div>
         <div id="poi-list-container">

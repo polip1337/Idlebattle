@@ -109,6 +109,8 @@ export async function loadGameData() {
     loadStage(currentStage, mobsClasses);
     initiateEventListeners();
     initializeMap();
+    // Open map tab by default
+    openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
 }
 
 function createAndInitHero(classes, team, opposingTeam) {
@@ -195,7 +197,6 @@ function initiateEventListeners() {
     document.getElementById('team2-overlay').addEventListener('click', () => {
         document.getElementById('team2-overlay').classList.add('hidden');
         document.getElementById('teamAndBattleContainer').style = 'opacity: 1';
-        startBattle(team1, team2);
     });
     document.getElementById('battlefieldNavButton').addEventListener('click', () => openTab(event, 'battlefield'));
     document.getElementById('heroContentNavButton').addEventListener('click', () => openTab(event, 'heroContent'));
@@ -272,12 +273,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateStageDisplay();
 
     initializeHomeScreen();
-    await initializeDialogue(); // Ensure dialogue is initialized before other systems
+    await initializeDialogue();
 });
 
 export function loadNextStage() {
     if (currentStage < 10) {
         currentArea.stageNumber = currentStage + 1;
+        currentStage++; // Update currentStage
         document.getElementById('current-stage').textContent = `Stage ${currentStage}`;
         loadStage(currentArea.stageNumber, mobsClasses);
     }

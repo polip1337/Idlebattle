@@ -19,20 +19,26 @@ export function openTab(evt, tabName) {
     // Show the selected tab content
     document.getElementById(tabName).classList.add('active');
 
-    // Activate the clicked tab link
-    evt.currentTarget.classList.add('active');
-    if (tabName == 'battlefield') {
+    // Activate the tab link (if evt is provided)
+    if (evt && evt.currentTarget) {
+        evt.currentTarget.classList.add('active');
+    } else {
+        // Activate the map tab link by default
+        const mapNavButton = document.getElementById('mapNavButton');
+        if (mapNavButton) {
+            mapNavButton.classList.add('active');
+        }
+    }
+
+    if (tabName === 'battlefield') {
         battlePopup[0].style.display = 'block';
     }
-    if (tabName == 'battle-statistics') {
+    if (tabName === 'battle-statistics') {
         battleStatistics.updateBattleStatistics();
     }
-    if (tabName == 'heroContent') {
+    if (tabName === 'heroContent') {
         team1.members[0].skills.forEach(skill => {
             updateProgressBar(skill);
-        })
-    }
-    if(tabName =='map'){
+        });
     }
 }
-

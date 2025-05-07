@@ -1,0 +1,56 @@
+{
+  "hollowreach_Valley": {
+    "background": "Media/map/hollowreach_Valley.jpg",
+    "pois": [
+      {
+        "name": "Goblin Cave",
+        "x": 300,
+        "y": 550,
+        "icon": "Media/map/poi-gobilnCave.jpg",
+        "type": "combat"
+      },
+      {
+        "name": "Hollowreach",
+        "x": 600,
+        "y": 800,
+        "icon": "Media/map/poi-town.jpg",
+        "type": "travel",
+        "mapId": "hollowreach"
+      }
+    ]
+  },
+  "hollowreach": {
+    "background": "Media/map/hollowreach_town.png",
+    "pois": [
+      {
+        "name": "City Gates",
+        "x": 400,
+        "y": 600,
+        "icon": "Media/map/poi-gate.jpg",
+        "type": "travel",
+        "mapId": "hollowreach_Valley"
+
+      },
+      {
+        "name": "Tavern",
+        "x": 700,
+        "y": 300,
+        "icon": "Media/map/poi-tavern.png",
+        "type": "travel",
+        "mapId": "tavern"
+      }
+    ]
+  },
+  "mysticForest": {
+    "background": "Media/map/mysticForest.jpg",
+    "pois": [
+      {
+        "name": "Glowing Shrine",
+        "x": 500,
+        "y": 500,
+        "icon": "Media/map/poi-shrine.png",
+        "type": "combat"
+      }
+    ]
+  }
+}

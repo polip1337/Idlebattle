@@ -1,23 +1,64 @@
 import { openTab } from './navigation.js';
+import { startBattle, repeatStage } from './Battle.js';
+import { team1, team2, battleLog } from './initialize.js';
 
 export function initializeMap() {
     const mapContainer = document.getElementById('map-container');
     const poiList = document.getElementById('poi-list');
-    const addPoiButton = document.getElementById('add-poi-button');
 
-    // Sample points of interest (can be loaded from a JSON file later)
-    let pointsOfInterest = [
-        { name: "Goblin Plains", x: 200, y: 150, icon: "Media/map/poi-goblin.png" },
-        { name: "Mystic Forest", x: 400, y: 300, icon: "Media/map/poi-forest.png" },
-    ];
 
-    // Render existing POIs
+    // Map state
+    let currentMapId = 'hollowreach_Valley';
+    let mapHistory = [];
+    let currentLocation = null; // Tracks player's current POI
+    let mapsData = null;
+    let isProcessingClick = false; // Debounce flag
+
+    // Load map data
+    async function loadMapData() {
+        try {
+            const response = await fetch('Data/maps.json');
+            mapsData = await response.json();
+            loadMap(currentMapId);
+        } catch (error) {
+            console.error('Error loading map data:', error);
+        }
+    }
+
+    // Load a specific map
+    function loadMap(mapId) {
+        const map = mapsData[mapId];
+        if (!map) {
+            console.error(`Map ${mapId} not found`);
+            return;
+        }
+        currentMapId = mapId;
+        mapContainer.style.backgroundImage = `url(${map.background})`;
+        pointsOfInterest = map.pois.map(poi => ({
+            ...poi,
+            type: poi.type || 'combat' // Default to combat if type not specified
+        }));
+
+        // Set initial player location if none exists
+        if (!currentLocation && pointsOfInterest.length > 0) {
+            currentLocation = pointsOfInterest[0].name;
+        }
+
+        renderPOIs();
+    }
+
+    // Sample points of interest (overwritten by loadMap)
+    let pointsOfInterest = [];
+
+    // Render POIs
     function renderPOIs() {
         poiList.innerHTML = ''; // Clear existing POIs
+        mapContainer.querySelectorAll('.poi').forEach(el => el.remove()); // Clear map POIs
+
         pointsOfInterest.forEach((poi, index) => {
             // Create POI element on map
             const poiElement = document.createElement('div');
-            poiElement.classList.add('poi');
+            poiElement.classList.add('poi', poi.type);
             poiElement.style.left = `${poi.x}px`;
             poiElement.style.top = `${poi.y}px`;
             poiElement.dataset.index = index;
@@ -31,23 +72,49 @@ export function initializeMap() {
             poiName.classList.add('poi-name');
             poiName.textContent = poi.name;
 
+            // Highlight current location
+            if (poi.name === currentLocation) {
+                poiElement.classList.add('current-location');
+            }
+
             poiElement.appendChild(poiIcon);
             poiElement.appendChild(poiName);
             mapContainer.appendChild(poiElement);
 
+            // Add click listener to .poi element
+            poiElement.addEventListener('click', (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                if (isProcessingClick) return; // Debounce
+                isProcessingClick = true;
+                setTimeout(() => { isProcessingClick = false; }, 300); // Reset after 300ms
+
+                const poiIndex = poiElement.dataset.index;
+                const poi = pointsOfInterest[poiIndex];
+                if (poi.type === 'travel') {
+                    handleTravel(poi);
+                } else if (poi.type === 'combat') {
+                    handleCombat(poi);
+                }
+            });
+
             // Create POI list item
             const listItem = document.createElement('li');
-            listItem.classList.add('poi-list-item');
+            listItem.classList.add('poi-list-item', poi.type);
             listItem.dataset.index = index;
             listItem.textContent = poi.name;
+
+
+
             listItem.addEventListener('click', () => {
-                // Scroll to POI on map
                 poiElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
                 poiElement.classList.add('highlight');
                 setTimeout(() => poiElement.classList.remove('highlight'), 2000);
             });
             poiList.appendChild(listItem);
         });
+
+
     }
 
     // Add new POI
@@ -55,28 +122,54 @@ export function initializeMap() {
         const name = prompt("Enter the name of the new point of interest:");
         if (!name) return;
 
-        const icon = prompt("Enter the icon path (e.g., Media/map/poi-new.png):", "Media/map/poi-default.png");
+        const type = prompt("Enter the type (travel or combat):", "combat");
+        if (!['travel', 'combat'].includes(type)) {
+            alert("Invalid type. Use 'travel' or 'combat'.");
+            return;
+        }
+
+        const icon = prompt("Enter the icon path (e.g., Media/map/poi-default.png):", "Media/map/poi-default.png");
         const x = Math.floor(Math.random() * (mapContainer.offsetWidth - 100));
         const y = Math.floor(Math.random() * (mapContainer.offsetHeight - 100));
 
-        pointsOfInterest.push({ name, x, y, icon });
+        pointsOfInterest.push({ name, x, y, icon, type });
         renderPOIs();
     }
 
-    // Initialize map interactions
-    addPoiButton.addEventListener('click', addPOI);
-    mapContainer.addEventListener('click', (event) => {
-        if (event.target.classList.contains('poi-icon') || event.target.classList.contains('poi-name')) {
-            const poiIndex = event.target.closest('.poi').dataset.index;
-            const poi = pointsOfInterest[poiIndex];
-            alert(`Selected: ${poi.name}\nCoordinates: (${poi.x}, ${poi.y})`);
-            // Future: Trigger stage loading or other game logic
+    // Remove POI
+    function removePOI(index) {
+        if (pointsOfInterest[index].name === currentLocation) {
+            currentLocation = pointsOfInterest[0]?.name || null; // Move to first POI or clear
         }
-    });
+        pointsOfInterest.splice(index, 1);
+        renderPOIs();
+    }
 
-    // Initial render
-    renderPOIs();
+    // Handle travel POI
+    function handleTravel(poi) {
+        if (poi.mapId) {
+            mapHistory.push(currentMapId);
+            currentLocation = null; // Reset location for new map
+            loadMap(poi.mapId);
+            battleLog.log(`Traveled to ${poi.name}`);
+        } else {
+            alert(`No map defined for ${poi.name}`);
+        }
+    }
 
-    // Ensure map tab is accessible
-    document.getElementById('mapNavButton').addEventListener('click', () => openTab(event, 'map'));
+    // Handle combat POI
+    function handleCombat(poi) {
+        const confirmBattle = confirm(`Start battle at ${poi.name}?`);
+        if (confirmBattle) {
+            currentLocation = poi.name; // Update player location
+            renderPOIs(); // Re-render to show new location
+            battleLog.log(`Initiating battle at ${poi.name}`);
+            openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
+        }
+    }
+
+
+
+    // Initial load
+    loadMapData();
 }
