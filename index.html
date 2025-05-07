@@ -16,6 +16,8 @@
     <link href="style/glow.css" rel="stylesheet" type="text/css">
     <link href="style/home.css" rel="stylesheet" type="text/css">
     <link href="style/slideshow.css" rel="stylesheet" type="text/css">
+    <link href="style/library.css" rel="stylesheet" type="text/css">
+
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -296,16 +298,7 @@
     <div class="library-container">
         <div class="topic-list">
             <ul id="topics">
-                <li data-topic="topic1">Topic 1</li>
-                <li data-topic="topic2">Topic 2</li>
-                <li>
-                    <span class="expandable" onclick="toggleSubtopics(this)">Topic 3</span>
-                    <ul class="subtopics">
-                        <li data-topic="subtopic3-1">Subtopic 3.1</li>
-                        <li data-topic="subtopic3-2">Subtopic 3.2</li>
-                    </ul>
-                </li>
-                <li data-topic="topic4">Topic 4</li>
+                <!-- Dynamic content will be inserted here -->
             </ul>
         </div>
         <div class="content-area">
@@ -375,10 +368,7 @@
         <span class="statistic-value" id="skill-usage">0</span>
     </div>
 </div>
-<div class="tabcontent" id="options">
-    <h2>Options Section</h2>
-    <!-- Content for options section -->
-</div>
+
 <div id="footer" class="hidden">
     <div id="level-progress-container">
         <div id="level-progress-bar">
@@ -550,5 +540,6 @@
 <script src="navigation.js" type="module"></script>
 <script src="map.js" type="module"></script>
 <script src="home.js" type="module"></script>
+<script src="libraryLoader.js"></script>
 </body>
 </html>
