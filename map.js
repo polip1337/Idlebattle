@@ -95,6 +95,9 @@ export function initializeMap() {
                     handleTravel(poi);
                 } else if (poi.type === 'combat') {
                     handleCombat(poi);
+                } else if (poi.type === 'dialogue') {
+                   battleLog.log(`Interacting with ${poi.npcId} at ${poi.name}`);
+                   startDialogue(poi.npcId,poi.dialogueId)
                 }
             });
 

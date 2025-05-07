@@ -419,11 +419,14 @@
 
 #teamAndBattleContainer {
      height: 78vh;
-     opacity: 0.2;
 }
 #evolution-modal {
     z-index: 1000;
 
 }
+.opaque {
+ opacity: 0.2;
+}
+
 
 

@@ -21,8 +21,8 @@ export async function initializeDialogue() {
     // Load NPC and dialogue data
     async function loadDialogue(npcId, dialogueId) {
         try {
-            const npcModule = await import(`./Data/NPCs/SampleNPC/${npcId}.js`);
-            const dialogueModule = await import(`./Data/NPCs/SampleNPC/${dialogueId}.js`);
+            const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
+            const dialogueModule = await import(`./Data/NPCs/${npcId}/${dialogueId}.js`);
             currentNPC = npcModule.default;
             return {
                 name: npcModule.default.name,
@@ -184,7 +184,7 @@ export async function initializeDialogue() {
     // Start dialogue with an NPC
     async function startDialogue(npcId, dialogueId = null) {
         // If no dialogueId provided, use the first dialogue from NPC's dialogues array
-        const npcModule = await import(`./Data/NPCs/SampleNPC/${npcId}.js`);
+        const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
         const selectedDialogueId = dialogueId || npcModule.default.dialogues[0];
         currentDialogue = await loadDialogue(npcId, selectedDialogueId);
         if (currentDialogue) {

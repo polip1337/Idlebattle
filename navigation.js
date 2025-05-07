@@ -32,6 +32,9 @@ export function openTab(evt, tabName) {
 
     if (tabName === 'battlefield') {
         battlePopup[0].style.display = 'block';
+        document.getElementById('team2-overlay').classList.remove('hidden');
+        document.getElementById('teamAndBattleContainer').classList.add('opaque');
+
     }
     if (tabName === 'battle-statistics') {
         battleStatistics.updateBattleStatistics();

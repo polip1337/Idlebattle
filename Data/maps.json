@@ -6,7 +6,7 @@
         "name": "Goblin Cave",
         "x": 300,
         "y": 550,
-        "icon": "Media/map/poi-gobilnCave.jpg",
+        "icon": "Media/map/poi-goblinCave.jpg",
         "type": "combat"
       },
       {
@@ -16,6 +16,27 @@
         "icon": "Media/map/poi-town.jpg",
         "type": "travel",
         "mapId": "hollowreach"
+      },
+      {
+        "name": "Ashen Archive",
+        "x": 900,
+        "y": 200,
+        "icon": "Media/map/poi-ruin.png",
+        "type": "combat"
+      },
+      {
+        "name": "Vortex Reach",
+        "x": 1200,
+        "y": 600,
+        "icon": "Media/map/poi-vortex.png",
+        "type": "combat"
+      },
+      {
+        "name": "Shrine of Whispers",
+        "x": 400,
+        "y": 300,
+        "icon": "Media/map/poi-shrine.png",
+        "type": "combat"
       }
     ]
   },
@@ -29,7 +50,6 @@
         "icon": "Media/map/poi-gate.jpg",
         "type": "travel",
         "mapId": "hollowreach_Valley"
-
       },
       {
         "name": "Tavern",
@@ -38,19 +58,104 @@
         "icon": "Media/map/poi-tavern.png",
         "type": "travel",
         "mapId": "tavern"
+      },
+      {
+        "name": "Threadhall",
+        "x": 1000,
+        "y": 400,
+        "icon": "Media/map/poi-workshop.png",
+        "type": "travel",
+        "mapId": "threadhall"
+      },
+      {
+        "name": "Driftmoor",
+        "x": 300,
+        "y": 800,
+        "icon": "Media/map/poi-dock.png",
+        "type": "travel",
+        "mapId": "driftmoor"
+      },
+      {
+        "name": "Verdant Hollow",
+        "x": 600,
+        "y": 200,
+        "icon": "Media/map/poi-temple.png",
+        "type": "travel",
+        "mapId": "verdant_hollow"
       }
     ]
   },
-  "mysticForest": {
-    "background": "Media/map/mysticForest.jpg",
+  "threadhall": {
+    "background": "Media/map/threadhall_interior.png",
     "pois": [
       {
-        "name": "Glowing Shrine",
-        "x": 500,
+        "name": "Vrenna’s Loom",
+        "x": 800,
         "y": 500,
-        "icon": "Media/map/poi-shrine.png",
-        "type": "combat"
+        "icon": "Media/npc/vrenna_stoneweave.jpg",
+        "type": "dialogue",
+        "npcId": "vrenna_stoneweave",
+        "dialogueId": "base"
+      },
+      {
+        "name": "Korzog’s Station",
+        "x": 600,
+        "y": 300,
+        "icon": "Media/map/poi-npc.png",
+        "type": "dialogue",
+        "npcId": "korzog",
+        "dialogueId": "base"
       }
     ]
+  },
+  "driftmoor": {
+    "background": "Media/map/driftmoor_dockyard.png",
+    "pois": [
+      {
+        "name": "Sylvara’s Barge",
+        "x": 700,
+        "y": 400,
+        "icon": "Media/map/poi-npc.png",
+        "type": "dialogue",
+        "npcId": "sylvara_tidewalker",
+        "dialogueId": "base"
+      },
+      {
+        "name": "Joren’s Workshop",
+        "x": 900,
+        "y": 600,
+        "icon": "Media/map/poi-npc.png",
+        "type": "dialogue",
+        "npcId": "joren_halfhand",
+        "dialogueId": "base"
+      }
+    ]
+  },
+  "verdant_hollow": {
+    "background": "Media/map/verdant_hollow_temple.png",
+    "pois": [
+      {
+        "name": "Eryndor’s Altar",
+        "x": 600,
+        "y": 500,
+        "icon": "Media/map/poi-npc.png",
+        "type": "dialogue",
+        "npcId": "eryndor_vinesoul",
+        "dialogueId": "base"
+      },
+      {
+        "name": "Mira’s Garden",
+        "x": 800,
+        "y": 300,
+        "icon": "Media/map/poi-npc.png",
+        "type": "dialogue",
+        "npcId": "mira_solace",
+        "dialogueId": "base"
+      }
+    ]
+  },
+  "tavern": {
+    "background": "Media/map/tavern_interior.png",
+    "pois": []
   }
 }
