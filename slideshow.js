@@ -5,7 +5,7 @@ export function startSlideshow(onComplete) {
     const slideshow = document.getElementById('slideshow');
     const slides = document.querySelectorAll('.slide');
     let currentSlide = 0;
-    const slideDuration = 6000; // 8 seconds per slide
+    const slideDuration = 6; // 6 seconds per slide
     const fadeDuration = 1000; // 1 second for fade in/out
 
     // Show slideshow

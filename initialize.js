@@ -23,6 +23,7 @@ import BattleStatistics from './BattleStatistics.js';
 import {openTab} from './navigation.js';
 import {initializeMap} from './map.js';
 import {initializeHomeScreen} from './home.js';
+import {initializeDialogue} from './dialogue.js';
 
 export let battleStatistics = new BattleStatistics();
 export let evolutionService = new EvolutionService();
@@ -245,7 +246,7 @@ function setupSkillListeners() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const maxStage = 10;
     const minStage = 1;
 
@@ -270,7 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     updateStageDisplay();
 
-    initializeHomeScreen(); // Initialize home screen
+    initializeHomeScreen();
+    await initializeDialogue(); // Ensure dialogue is initialized before other systems
 });
 
 export function loadNextStage() {

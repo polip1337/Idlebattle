@@ -16,8 +16,8 @@
     <link href="style/glow.css" rel="stylesheet" type="text/css">
     <link href="style/home.css" rel="stylesheet" type="text/css">
     <link href="style/slideshow.css" rel="stylesheet" type="text/css">
-    <link href="style/library.css" rel="stylesheet" type="text/css">
-
+    <link href="style/dialogue.css" rel="stylesheet" type="text/css">
+    <link href="style/tooltip.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -31,33 +31,55 @@
         </div>
     </div>
 </div>
+
 <div class="slideshow hidden" id="slideshow">
-    <embed src="Media/TBD.mp3" width="180" height="90" loop="true" autostart="true" hidden="true" />
     <div class="slide">
-        <img src="Media/slideshow/slide1.jpeg" alt="Slide 1">
+        <img src="Media/slideshow/slide1.jpg" alt="Slide 1">
         <p>A thousand years ago, the human spread throughout the continent, its cities linked by a network of magical portals.</p>
     </div>
     <div class="slide">
-        <img src="Media/slideshow/slide2.jpeg" alt="Slide 2">
+        <img src="Media/slideshow/slide2.jpg" alt="Slide 2">
         <p>But it was not completely under their control. Monsters and other, darker, things made it dangerous to stray too far from civilization.</p>
     </div>
     <div class="slide">
-        <img src="Media/slideshow/slide3.jpeg" alt="Slide 3">
+        <img src="Media/slideshow/slide3.jpg" alt="Slide 3">
         <p>Grand expeditions founded new cities, spreading the empire’s glory through uncharted lands.</p>
     </div>
     <div class="slide">
-        <img src="Media/slideshow/slide4.jpeg" alt="Slide 4">
+        <img src="Media/slideshow/slide4.jpg" alt="Slide 4">
         <p>One day, the portals closed without warning, unleashing a deadly fog that severed all ties.</p>
     </div>
     <div class="slide">
-        <img src="Media/slideshow/slide5.jpeg" alt="Slide 5">
+        <img src="Media/slideshow/slide5.jpg" alt="Slide 5">
         <p>The wilderness became a maze of chaos. Travelers vanished, and cities stood alone.</p>
     </div>
     <div class="slide">
-        <img src="Media/slideshow/slide6.jpeg" alt="Slide 6">
+        <img src="Media/slideshow/slide6.jpg" alt="Slide 6">
         <p>Now, in the forgotten city of Hollowreach, a hero seeks a way to cross the forbidden lands.</p>
     </div>
 </div>
+
+<div class="dialogue-modal hidden" id="dialogue-modal">
+    <div class="dialogue-content">
+        <div class="npc-portrait">
+            <img id="npc-portrait-img" src="Media/npc/sampleNPC.jpg" alt="NPC Portrait">
+        </div>
+        <div class="dialogue-text">
+            <p id="npc-name">NPC Name</p>
+            <p id="dialogue-text">Dialogue text goes here.</p>
+        </div>
+        <div class="dialogue-options">
+            <button class="option-button" id="option-1" style="display: none;">Option 1</button>
+            <button class="option-button" id="option-2" style="display: none;">Option 2</button>
+            <button class="option-button" id="option-3" style="display: none;">Option 3</button>
+            <button class="option-button" id="option-4" style="display: none;">Option 4</button>
+        </div>
+        <div class="dialogue-actions">
+            <button class="action-button" id="trade-button" style="display: none;">Trade</button>
+        </div>
+    </div>
+</div>
+
 <div class="popup hidden" id="popup">
     <div class="popup-content">
         <h2 id="popupTitle">Victory!</h2>
@@ -79,13 +101,13 @@
     </div>
 </div>
 
-<div class="tabcontent battle-view" id="battlefield">
+<div class="tabcontent" id="battlefield">
     <div id="teamAndBattleContainer-overlay">
         <div id="teamAndBattleContainer">
             <div id="stage-controls">
-                <button id="decrease-stage">&lt;</button>
+                <button id="decrease-stage"><</button>
                 <span id="current-stage">Stage 1</span>
-                <button id="increase-stage">&gt;</button>
+                <button id="increase-stage">></button>
                 <input id="repeat" type="checkbox">Repeat</input>
             </div>
             <div id="teamContainer">
@@ -297,9 +319,7 @@
 <div class="tabcontent" id="library">
     <div class="library-container">
         <div class="topic-list">
-            <ul id="topics">
-                <!-- Dynamic content will be inserted here -->
-            </ul>
+            <ul id="topics"></ul>
         </div>
         <div class="content-area">
             <div id="content">
@@ -540,6 +560,8 @@
 <script src="navigation.js" type="module"></script>
 <script src="map.js" type="module"></script>
 <script src="home.js" type="module"></script>
-<script src="libraryLoader.js"></script>
+<script src="slideshow.js" type="module"></script>
+<script src="dialogue.js" type="module"></script>
+<script src="libraryLoader.js" type="module"></script>
 </body>
 </html>
