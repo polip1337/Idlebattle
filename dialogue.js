@@ -134,7 +134,7 @@ export async function initializeDialogue() {
         return option.conditions.every(condition => {
             switch (condition.type) {
                 case 'skill':
-                    const heroStat = hero[condition.stat] || 0; // Access hero stats dynamically
+                    const heroStat = hero[condition.stat] || 0;
                     return heroStat >= condition.value;
                 case 'item':
                     console.log(`Checking for item: ${condition.itemId}`);
@@ -174,6 +174,19 @@ export async function initializeDialogue() {
                 case 'giveItem':
                     console.log(`Giving item: ${option.action.itemId}`);
                     break;
+                case 'completeQuest':
+                    const quest = questSystem.quests.get(option.action.questId);
+                    if (quest && !quest.completed) {
+                        quest.currentStep = quest.steps.length;
+                        quest.completed = true;
+                        questSystem.activeQuests.delete(option.action.questId);
+                        questSystem.applyRewards(quest);
+                        console.log(`Completed quest: ${option.action.questId}`);
+                        if (window.updateQuestLog) {
+                            window.updateQuestLog();
+                        }
+                    }
+                    break;
                 default:
                     console.log('Unknown action:', option.action);
             }
@@ -186,10 +199,49 @@ export async function initializeDialogue() {
         alert(`Trade with ${currentNPC.name} (Items: ${currentDialogue.tradeInventory.join(', ')})`);
     }
 
+    // Select dialogue based on conditions
+    async function selectDialogue(npcId) {
+        const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
+        const npc = npcModule.default;
+
+        // Check for quests where the next step involves dialogue with this NPC
+        for (const questId of questSystem.activeQuests) {
+            const quest = questSystem.quests.get(questId);
+            if (quest.currentStep < quest.steps.length) {
+                const nextStep = quest.steps[quest.currentStep];
+                // Evaluate the condition to check if it involves dialogue with this NPC
+                const condition = nextStep.condition;
+                const sampleData = { npc: npc.name, dialogueId: 'any' }; // Temporary data to test condition
+                if (condition('dialogue', sampleData)) {
+                    // If the quest is on the final step, prioritize completion dialogue
+                    if (quest.currentStep === quest.steps.length - 1) {
+                        const dialogueId = npc.dialogues.find(d => d.includes('questComplete')) || npc.dialogues[0];
+                        return dialogueId;
+                    } else {
+                        // For non-final steps, select a quest-active dialogue if available
+                        const dialogueId = npc.dialogues.find(d => d.includes('questActive')) || npc.dialogues[0];
+                        return dialogueId;
+                    }
+                }
+            }
+        }
+
+        // Check for active quests given by this NPC (fallback)
+        for (const questId of questSystem.activeQuests) {
+            const quest = questSystem.quests.get(questId);
+            if (quest.giver === npc.name) {
+                const dialogueId = npc.dialogues.find(d => d.includes('questActive')) || npc.dialogues[0];
+                return dialogueId;
+            }
+        }
+
+        // Default to first dialogue
+        return npc.dialogues[0];
+    }
+
     // Start dialogue with an NPC
     async function startDialogue(npcId, dialogueId = null) {
-        const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
-        const selectedDialogueId = dialogueId || npcModule.default.dialogues[0];
+        const selectedDialogueId = await selectDialogue(npcId);
         currentDialogue = await loadDialogue(npcId, selectedDialogueId);
         if (currentDialogue) {
             const startNode = currentDialogue.nodes.find(node => node.id === 'start');

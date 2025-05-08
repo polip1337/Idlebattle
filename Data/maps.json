@@ -4,52 +4,52 @@
     "pois": [
       {
         "name": "Goblin Cave",
-        "x": 300,
-        "y": 550,
+        "x": 25.00,
+        "y": 45.83,
         "icon": "Media/map/poi-goblinCave.jpg",
         "type": "combat"
       },
       {
         "name": "Hollowreach",
-        "x": 600,
-        "y": 800,
+        "x": 50.00,
+        "y": 66.67,
         "icon": "Media/map/poi-town.jpg",
         "type": "travel",
         "mapId": "hollowreach"
       },
       {
         "name": "Ashen Archive",
-        "x": 900,
-        "y": 200,
+        "x": 75.00,
+        "y": 16.67,
         "icon": "Media/map/poi-ruin.png",
         "type": "combat"
       },
       {
         "name": "Vortex Reach",
-        "x": 1200,
-        "y": 600,
+        "x": 80.00,
+        "y": 50.00,
         "icon": "Media/map/poi-vortex.png",
         "type": "combat"
       },
       {
         "name": "Shrine of Whispers",
-        "x": 400,
-        "y": 300,
+        "x": 33.33,
+        "y": 25.00,
         "icon": "Media/map/poi-shrine.png",
         "type": "combat"
       },
       {
         "name": "Driftmoor",
-        "x": 300,
-        "y": 800,
-        "icon": "Media/map/poi-dock.png",
+        "x": 25.00,
+        "y": 66.67,
+        "icon": "Media/map/poi-dock.jpg",
         "type": "travel",
         "mapId": "driftmoor"
       },
       {
         "name": "Old Sage",
-        "x": 150,
-        "y": 200,
+        "x": 12.50,
+        "y": 16.67,
         "icon": "Media/map/poi-npc.png",
         "type": "talk",
         "npcId": "sampleNPC",
@@ -62,32 +62,32 @@
     "pois": [
       {
         "name": "City Gates",
-        "x": 400,
-        "y": 600,
+        "x": 33.33,
+        "y": 80.00,
         "icon": "Media/map/poi-gate.jpg",
         "type": "travel",
         "mapId": "hollowreach_Valley"
       },
       {
         "name": "Tavern",
-        "x": 700,
-        "y": 300,
+        "x": 59.33,
+        "y": 32.00,
         "icon": "Media/map/poi-tavern.png",
         "type": "travel",
         "mapId": "tavern"
       },
       {
         "name": "Threadhall",
-        "x": 1000,
-        "y": 400,
+        "x": 43.33,
+        "y": 43.33,
         "icon": "Media/map/poi-workshop.png",
         "type": "travel",
         "mapId": "threadhall"
       },
       {
         "name": "Verdant Hollow",
-        "x": 600,
-        "y": 200,
+        "x": 90.00,
+        "y": 56.67,
         "icon": "Media/map/poi-temple.png",
         "type": "travel",
         "mapId": "verdant_hollow"
@@ -99,8 +99,8 @@
     "pois": [
       {
         "name": "Vrenna’s Loom",
-        "x": 800,
-        "y": 500,
+        "x": 66.67,
+        "y": 41.67,
         "icon": "Media/npc/vrenna_stoneweave.jpg",
         "type": "dialogue",
         "npcId": "vrenna_stoneweave",
@@ -108,8 +108,8 @@
       },
       {
         "name": "Korzog’s Station",
-        "x": 600,
-        "y": 300,
+        "x": 50.00,
+        "y": 25.00,
         "icon": "Media/npc/kerzog.jpg",
         "type": "dialogue",
         "npcId": "korzog",
@@ -117,8 +117,8 @@
       },
       {
         "name": "Exit",
-        "x": 600,
-        "y": 800,
+        "x": 50.00,
+        "y": 66.67,
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
@@ -130,8 +130,8 @@
     "pois": [
       {
         "name": "Sylvara’s Barge",
-        "x": 700,
-        "y": 400,
+        "x": 58.33,
+        "y": 33.33,
         "icon": "Media/map/poi-npc.png",
         "type": "dialogue",
         "npcId": "sylvara_tidewalker",
@@ -139,8 +139,8 @@
       },
       {
         "name": "Joren’s Workshop",
-        "x": 900,
-        "y": 600,
+        "x": 75.00,
+        "y": 50.00,
         "icon": "Media/map/poi-npc.png",
         "type": "dialogue",
         "npcId": "joren_halfhand",
@@ -148,8 +148,8 @@
       },
       {
         "name": "Exit",
-        "x": 400,
-        "y": 600,
+        "x": 33.33,
+        "y": 50.00,
         "icon": "Media/map/poi-gate.jpg",
         "type": "travel",
         "mapId": "hollowreach_Valley"
@@ -161,8 +161,8 @@
     "pois": [
       {
         "name": "Eryndor’s Altar",
-        "x": 600,
-        "y": 500,
+        "x": 50.00,
+        "y": 41.67,
         "icon": "Media/map/poi-npc.png",
         "type": "dialogue",
         "npcId": "eryndor_vinesoul",
@@ -170,18 +170,17 @@
       },
       {
         "name": "Mira’s Garden",
-        "x": 800,
-        "y": 300,
+        "x": 66.67,
+        "y": 25.00,
         "icon": "Media/map/poi-npc.png",
         "type": "dialogue",
         "npcId": "mira_solace",
         "dialogueId": "base"
       },
-
       {
         "name": "Exit",
-        "x": 400,
-        "y": 600,
+        "x": 33.33,
+        "y": 50.00,
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
@@ -193,8 +192,8 @@
     "pois": [
       {
         "name": "Exit",
-        "x": 400,
-        "y": 600,
+        "x": 33.33,
+        "y": 50.00,
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"

@@ -1,9 +1,11 @@
 #map-container {
+position: relative;
     position: relative;
-    width: 100%;
-    height: 80vh;
-    background-size: cover;
+    width: 100vh;
+    height: 77vh;
+    background-size: 100% 100%; /* Stretch to fill container, may distort */
     background-position: center;
+    background-repeat: no-repeat;
     overflow: auto;
     border: 2px solid #4a3c2b;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
@@ -11,23 +13,21 @@
 
 .poi {
     position: absolute;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); /* Center the POI on its coordinates */
     text-align: center;
     cursor: pointer;
 }
 
-.poi.travel .poi-icon {
-    filter: brightness(1.2) hue-rotate(180deg);
-}
-
-.poi.combat .poi-icon {
-    filter: brightness(1.2) hue-rotate(0deg);
-}
-
+/* Ensure POI icons scale with the container */
 .poi-icon {
-    width: 50px;
-    height: 50px;
+    width: 4vw; /* Use viewport units or percentages for responsive sizing */
+    height: 4vw;
+    max-width: 50px; /* Cap the size for larger screens */
+    max-height: 50px;
     transition: transform 0.2s ease;
+    border: 2px solid #ffd700;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ffd700;
 }
 
 .poi:hover .poi-icon {
@@ -38,27 +38,36 @@
     display: block;
     color: #d4b68a;
     font-family: 'Cinzel', serif;
-    font-size: 14px;
+    font-size: clamp(12px, 1.2vw, 14px); /* Responsive font size */
     text-shadow: 1px 1px 2px #000;
     margin-top: 5px;
+}
+
+/* Rest of the styles remain unchanged */
+.poi.travel .poi-icon {
+    filter: brightness(1.2) hue-rotate(180deg);
+}
+
+.poi.combat .poi-icon {
+    filter: brightness(1.2) hue-rotate(0deg);
 }
 
 .poi.highlight {
     animation: highlight 2s ease;
 }
 
-.poi-icon {
-    border: 2px solid #ffd700;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #ffd700;
-}
-
 #poi-list {
     width: 100%;
+    height:100%;
     background: #1a1410;
+    margin 5px;
     padding: 5px;
     overflow-y: auto;
     border-right: 2px solid #4a3c2b;
+}
+#poi-list-container{
+        height: 77vh;
+        overflow:hidden;
 }
 
 .poi-list-item {

@@ -25,7 +25,11 @@ export function initializeMap() {
             console.error('Error loading map data:', error);
         }
     }
-
+    window.addEventListener('resize', () => {
+        if (mapsData && currentMapId) {
+            renderPOIs(); // Re-render to update pixel positions
+        }
+    });
     // Load a specific map
     function loadMap(mapId) {
         const map = mapsData[mapId];
@@ -52,72 +56,79 @@ export function initializeMap() {
     let pointsOfInterest = [];
 
     // Render POIs
-    function renderPOIs() {
-        poiList.innerHTML = ''; // Clear existing POIs
-        mapContainer.querySelectorAll('.poi').forEach(el => el.remove()); // Clear map POIs
+   function renderPOIs() {
+       poiList.innerHTML = ''; // Clear existing POIs
+       mapContainer.querySelectorAll('.poi').forEach(el => el.remove()); // Clear map POIs
 
-        pointsOfInterest.forEach((poi, index) => {
-            // Create POI element on map
-            const poiElement = document.createElement('div');
-            poiElement.classList.add('poi', poi.type);
-            poiElement.style.left = `${poi.x}px`;
-            poiElement.style.top = `${poi.y}px`;
-            poiElement.dataset.index = index;
+       // Get the current dimensions of the map container
+       const mapWidth = mapContainer.offsetWidth;
+       const mapHeight = mapContainer.offsetHeight;
 
-            const poiIcon = document.createElement('img');
-            poiIcon.src = poi.icon;
-            poiIcon.alt = poi.name;
-            poiIcon.classList.add('poi-icon');
+       pointsOfInterest.forEach((poi, index) => {
+           // Create POI element on map
+           const poiElement = document.createElement('div');
+           poiElement.classList.add('poi', poi.type);
 
-            const poiName = document.createElement('span');
-            poiName.classList.add('poi-name');
-            poiName.textContent = poi.name;
+           // Convert percentage coordinates to pixel positions
+           const posX = (poi.x / 100) * mapWidth;
+           const posY = (poi.y / 100) * mapHeight;
 
-            // Highlight current location
-            if (poi.name === currentLocation) {
-                poiElement.classList.add('current-location');
-            }
+           // Apply pixel positions, accounting for centering
+           poiElement.style.left = `${posX}px`;
+           poiElement.style.top = `${posY}px`;
+           poiElement.dataset.index = index;
 
-            poiElement.appendChild(poiIcon);
-            poiElement.appendChild(poiName);
-            mapContainer.appendChild(poiElement);
+           const poiIcon = document.createElement('img');
+           poiIcon.src = poi.icon;
+           poiIcon.alt = poi.name;
+           poiIcon.classList.add('poi-icon');
 
-            // Add click listener to .poi element
-            poiElement.addEventListener('click', (event) => {
-                event.stopPropagation();
-                event.preventDefault();
-                if (isProcessingClick) return; // Debounce
-                isProcessingClick = true;
-                setTimeout(() => { isProcessingClick = false; }, 300); // Reset after 300ms
+           const poiName = document.createElement('span');
+           poiName.classList.add('poi-name');
+           poiName.textContent = poi.name;
 
-                const poiIndex = poiElement.dataset.index;
-                const poi = pointsOfInterest[poiIndex];
-                if (poi.type === 'travel') {
-                    handleTravel(poi);
-                } else if (poi.type === 'combat') {
-                    handleCombat(poi);
-                } else if (poi.type === 'talk') {
-                    handleTalk(poi);
-                }
-            });
+           // Highlight current location
+           if (poi.name === currentLocation) {
+               poiElement.classList.add('current-location');
+           }
 
-            // Create POI list item
-            const listItem = document.createElement('li');
-            listItem.classList.add('poi-list-item', poi.type);
-            listItem.dataset.index = index;
-            listItem.textContent = poi.name;
+           poiElement.appendChild(poiIcon);
+           poiElement.appendChild(poiName);
+           mapContainer.appendChild(poiElement);
 
+           // Add click listener to .poi element
+           poiElement.addEventListener('click', (event) => {
+               event.stopPropagation();
+               event.preventDefault();
+               if (isProcessingClick) return; // Debounce
+               isProcessingClick = true;
+               setTimeout(() => { isProcessingClick = false; }, 300); // Reset after 300ms
 
+               const poiIndex = poiElement.dataset.index;
+               const poi = pointsOfInterest[poiIndex];
+               if (poi.type === 'travel') {
+                   handleTravel(poi);
+               } else if (poi.type === 'combat') {
+                   handleCombat(poi);
+               } else if (poi.type === 'talk') {
+                   handleTalk(poi);
+               }
+           });
 
-            listItem.addEventListener('click', () => {
-                poiElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-                poiElement.classList.add('highlight');
-                setTimeout(() => poiElement.classList.remove('highlight'), 2000);
-            });
-            poiList.appendChild(listItem);
-        });
+           // Create POI list item
+           const listItem = document.createElement('li');
+           listItem.classList.add('poi-list-item', poi.type);
+           listItem.dataset.index = index;
+           listItem.textContent = poi.name;
 
-    }
+           listItem.addEventListener('click', () => {
+               poiElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+               poiElement.classList.add('highlight');
+               setTimeout(() => poiElement.classList.remove('highlight'), 2000);
+           });
+           poiList.appendChild(listItem);
+       });
+   }
 
     // Add new POI
     function addPOI() {
@@ -131,8 +142,10 @@ export function initializeMap() {
         }
 
         const icon = prompt("Enter the icon path (e.g., Media/map/poi-default.png):", "Media/map/poi-default.png");
-        const x = Math.floor(Math.random() * (mapContainer.offsetWidth - 100));
-        const y = Math.floor(Math.random() * (mapContainer.offsetHeight - 100));
+
+        // Generate random percentage-based coordinates (0–100)
+        const x = Math.random() * 100; // Percentage of width
+        const y = Math.random() * 100; // Percentage of height
 
         const poi = { name, x, y, icon, type };
         if (type === 'talk') {
@@ -189,6 +202,8 @@ export function initializeMap() {
             renderPOIs(); // Re-render to show new location
             battleLog.log(`Initiating battle at ${poi.name}`);
             startBattle(team1, team2);
+            questSystem.updateQuestProgress('travel', { poiName: poi.name });
+
             openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
             // Simulate battle victory for testing
             setTimeout(() => {

@@ -17,7 +17,7 @@ export default {
         {
             description: 'Return to the Old Sage.',
             hint: 'Speak to the Old Sage via dialogue to report your success.',
-            condition: (event, data) => event === 'dialogue' && data.npc === 'Old Sage' && data.dialogueId === 'questComplete'
+            condition: (event, data) => event === 'dialogue' && data.npc === 'Old Sage'
         }
     ],
     rewards: {
