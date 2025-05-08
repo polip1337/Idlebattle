@@ -153,17 +153,7 @@ export async function initializeDialogue() {
 
     // Handle option selection
     function handleOption(option) {
-        if (option.nextId) {
-            const nextNode = currentDialogue.nodes.find(node => node.id === option.nextId);
-            if (nextNode) {
-                displayNode(nextNode);
-            } else {
-                console.error('Next node not found:', option.nextId);
-                hideDialogue();
-            }
-        } else {
-            hideDialogue();
-        }
+
 
         // Handle actions
         if (option.action) {
@@ -191,6 +181,17 @@ export async function initializeDialogue() {
                     console.log('Unknown action:', option.action);
             }
         }
+        if (option.nextId) {
+                    const nextNode = currentDialogue.nodes.find(node => node.id === option.nextId);
+                    if (nextNode) {
+                        displayNode(nextNode);
+                    } else {
+                        console.error('Next node not found:', option.nextId);
+                        hideDialogue();
+                    }
+                } else {
+                    hideDialogue();
+                }
     }
 
     // Handle trade action
@@ -226,14 +227,7 @@ export async function initializeDialogue() {
             }
         }
 
-        // Check for active quests given by this NPC (fallback)
-        for (const questId of questSystem.activeQuests) {
-            const quest = questSystem.quests.get(questId);
-            if (quest.giver === npc.name) {
-                const dialogueId = npc.dialogues.find(d => d.includes('questActive')) || npc.dialogues[0];
-                return dialogueId;
-            }
-        }
+
 
         // Default to first dialogue
         return npc.dialogues[0];

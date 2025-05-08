@@ -116,7 +116,6 @@ export async function loadGameData() {
     // Open map tab by default
     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
     // Start sample quest for testing
-    questSystem.startQuest('goblinSlayer');
 }
 
 function createAndInitHero(classes, team, opposingTeam) {

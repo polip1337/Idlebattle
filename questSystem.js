@@ -1,13 +1,28 @@
+/**
+ * Modified questSystem.js to hide quests that are not started yet.
+ * Updated getQuestData to only include quests that are active or completed.
+ */
 export class QuestSystem {
     constructor() {
         this.quests = new Map(); // Map of quest ID to quest data
         this.activeQuests = new Set(); // Track active quest IDs
+        this.maps = null; // Store maps.json data
+    }
+
+    // Load maps.json for POI-to-map mapping
+    async loadMaps() {
+        try {
+            const response = await fetch('../Data/maps.json');
+            this.maps = await response.json();
+        } catch (error) {
+            console.error('Error loading maps:', error);
+        }
     }
 
     // Load all quest files from Quests/ folder
     async loadQuests() {
         try {
-            // Assume a list of quest files is available (e.g., via a manifest or server endpoint)
+            // Assume a list of quest files is available
             const questFiles = ['Data/quests/sampleQuest.js'];
             for (const file of questFiles) {
                 const module = await import(`../${file}`);
@@ -18,6 +33,8 @@ export class QuestSystem {
                     completed: false
                 });
             }
+            // Load maps after quests
+            await this.loadMaps();
         } catch (error) {
             console.error('Error loading quests:', error);
         }
@@ -59,25 +76,41 @@ export class QuestSystem {
         if (quest.rewards) {
             console.log(`Applying rewards for ${quest.name}:`, quest.rewards);
             // Example: Add items to inventory, increase stats, etc.
-            // Integrate with game systems (e.g., inventory, hero stats)
         }
     }
 
-    // Get quest data for rendering
+    // Find the map containing a POI
+    getMapForPOI(poiName) {
+        if (!this.maps) return 'Unknown';
+        for (const [mapId, mapData] of Object.entries(this.maps)) {
+            if (mapData.pois.some(poi => poi.name === poiName)) {
+                return mapId;
+            }
+        }
+        return 'Unknown';
+    }
+
+    // Get quest data for rendering, including only active or completed quests
     getQuestData() {
         const questData = [];
-        this.activeQuests.forEach(questId => {
-            const quest = this.quests.get(questId);
-            questData.push({
-                id: quest.id,
-                name: quest.name,
-                giver: quest.giver,
-                description: quest.description,
-                currentStep: quest.currentStep,
-                totalSteps: quest.steps.length,
-                nextHint: quest.completed ? '' : quest.steps[quest.currentStep]?.hint || 'Quest complete',
-                completed: quest.completed
-            });
+        this.quests.forEach(quest => {
+            // Only include quests that are active or completed
+            if (this.activeQuests.has(quest.id) || quest.completed) {
+                const nextStep = quest.completed ? null : quest.steps[quest.currentStep];
+                const nextPOI = nextStep?.condition.toString().match(/poiName\s*===\s*'([^']+)'/)?.[1];
+                const mapId = quest.completed ? 'Completed' : (nextPOI ? this.getMapForPOI(nextPOI) : 'Unknown');
+                questData.push({
+                    id: quest.id,
+                    name: quest.name,
+                    giver: quest.giver,
+                    description: quest.description,
+                    currentStep: quest.currentStep,
+                    totalSteps: quest.steps.length,
+                    nextHint: quest.completed ? 'Quest complete' : nextStep?.hint || 'No hint available',
+                    completed: quest.completed,
+                    mapId: mapId
+                });
+            }
         });
         return questData;
     }

@@ -218,8 +218,8 @@ export function initializeMap() {
             currentLocation = poi.name; // Update player location
             renderPOIs(); // Re-render to show new location
             battleLog.log(`Speaking to ${poi.name}`);
-            window.startDialogue(poi.npcId, poi.dialogueId);
             questSystem.updateQuestProgress('talk', { poiName: poi.name, npcId: poi.npcId });
+            window.startDialogue(poi.npcId, poi.dialogueId);
         } else {
             alert(`No NPC or dialogue defined for ${poi.name}`);
         }

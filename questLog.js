@@ -1,3 +1,9 @@
+/**
+ * Updated questLog.js to:
+ * - Display both active and completed quests
+ * - Add expand/shrink toggle for quest details
+ * - Group quests by the map of the next step's POI (or 'Completed' for finished quests)
+ */
 import { questSystem } from './questSystem.js';
 
 export function initializeQuestLog() {
@@ -21,20 +27,55 @@ export function updateQuestLog() {
 
     const quests = questSystem.getQuestData();
     if (quests.length === 0) {
-        questList.innerHTML = '<p class="no-quests">No active quests.</p>';
+        questList.innerHTML = '<p class="no-quests">No active or completed quests.</p>';
         return;
     }
 
+    // Group quests by mapId
+    const questsByMap = {};
     quests.forEach(quest => {
-        const questElement = document.createElement('div');
-        questElement.classList.add('quest-item');
-        questElement.innerHTML = `
-            <h3>${quest.name}${quest.completed ? ' (Completed)' : ''}</h3>
-            <p><strong>Giver:</strong> ${quest.giver}</p>
-            <p><strong>Description:</strong> ${quest.description}</p>
-            <p><strong>Progress:</strong> Step ${quest.currentStep}/${quest.totalSteps}</p>
-            <p><strong>Next Step:</strong> ${quest.nextHint}</p>
-        `;
-        questList.appendChild(questElement);
+        const mapId = quest.mapId;
+        if (!questsByMap[mapId]) {
+            questsByMap[mapId] = [];
+        }
+        questsByMap[mapId].push(quest);
+    });
+
+    // Render each map group
+    Object.entries(questsByMap).forEach(([mapId, mapQuests]) => {
+        const mapGroup = document.createElement('div');
+        mapGroup.classList.add('map-group');
+        mapGroup.innerHTML = `<h2 class="map-title">${mapId === 'Completed' ? 'Completed Quests' : mapId.replace('_', ' ')}</h2>`;
+        const questContainer = document.createElement('div');
+        questContainer.classList.add('quest-container');
+
+        mapQuests.forEach(quest => {
+            const questElement = document.createElement('div');
+            questElement.classList.add('quest-item');
+            questElement.innerHTML = `
+                <div class="quest-header">
+                    <h3>${quest.name}${quest.completed ? ' (Completed)' : ''}</h3>
+                    <button class="toggle-details">${quest.completed ? '-' : '+'}</button>
+                </div>
+                <div class="quest-details" style="display: ${quest.completed ? 'block' : 'none'};">
+                    <p><strong>Giver:</strong> ${quest.giver}</p>
+                    <p><strong>Description:</strong> ${quest.description}</p>
+                    <p><strong>Progress:</strong> Step ${quest.currentStep}/${quest.totalSteps}</p>
+                    <p><strong>Next Step:</strong> ${quest.nextHint}</p>
+                </div>
+            `;
+            questContainer.appendChild(questElement);
+
+            // Add toggle event listener
+            const toggleButton = questElement.querySelector('.toggle-details');
+            const details = questElement.querySelector('.quest-details');
+            toggleButton.addEventListener('click', () => {
+                details.style.display = details.style.display === 'none' ? 'block' : 'none';
+                toggleButton.textContent = details.style.display === 'none' ? '+' : '-';
+            });
+        });
+
+        mapGroup.appendChild(questContainer);
+        questList.appendChild(mapGroup);
     });
 }
