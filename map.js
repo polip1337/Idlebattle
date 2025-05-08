@@ -1,6 +1,7 @@
 import { openTab } from './navigation.js';
 import { startBattle, repeatStage } from './Battle.js';
 import { team1, team2, battleLog } from './initialize.js';
+import { questSystem } from './questSystem.js';
 
 export function initializeMap() {
     const mapContainer = document.getElementById('map-container');
@@ -155,6 +156,8 @@ export function initializeMap() {
             currentLocation = null; // Reset location for new map
             loadMap(poi.mapId);
             battleLog.log(`Traveled to ${poi.name}`);
+            questSystem.updateQuestProgress('travel', { poiName: poi.name });
+
         } else {
             alert(`No map defined for ${poi.name}`);
         }

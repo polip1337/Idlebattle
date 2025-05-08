@@ -19,8 +19,7 @@ export function initializeHomeScreen() {
     newGameButton.addEventListener('click', () => {
         hideHomeScreen();
         startSlideshow(() => {
-            loadGameData();
-            openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
+            openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
         });
     });
 

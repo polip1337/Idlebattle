@@ -86,7 +86,7 @@
     ]
   },
   "threadhall": {
-    "background": "Media/map/threadhall_interior.png",
+    "background": "Media/map/threadhall_interior.jpg",
     "pois": [
       {
         "name": "Vrenna’s Loom",
@@ -110,7 +110,7 @@
         "name": "Exit",
         "x": 600,
         "y": 800,
-        "icon": "Media/map/poi-town.jpg",
+        "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
       }
@@ -173,7 +173,7 @@
         "name": "Exit",
         "x": 400,
         "y": 600,
-        "icon": "Media/map/poi-gate.jpg",
+        "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
       }
@@ -181,6 +181,15 @@
   },
   "tavern": {
     "background": "Media/map/tavern_interior.png",
-    "pois": []
+    "pois": [
+      {
+        "name": "Exit",
+        "x": 400,
+        "y": 600,
+        "icon": "Media/map/poi-exit.jpg",
+        "type": "travel",
+        "mapId": "hollowreach"
+      }
+    ]
   }
 }

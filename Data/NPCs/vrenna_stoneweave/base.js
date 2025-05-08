@@ -46,7 +46,7 @@ export default {
                 {
                     text: "I’ll find it.",
                     nextId: null,
-                    action: { type: "startQuest", questId: "lost_pattern" }
+                    action: { type: "startQuest", questId: "goblinSlayer" }
                 },
                 {
                     text: "Not now.",

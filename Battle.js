@@ -1,6 +1,7 @@
 import Member from './Member.js';
 import {battleLog, evolutionService, hero, isPaused, loadNextStage, reLoadStage, team1, team2} from './initialize.js';
 import Hero from './Hero.js';
+import { questSystem } from './questSystem.js';
 
 let battleStarted = false;
 
@@ -24,6 +25,8 @@ function startBattle(team1, team2) {
                 showPopup("Loss!", "Your team has been defeated.");
             } else {
                 showPopup("Victory!", "Your team has defeated the opposing team.");
+                questSystem.updateQuestProgress('combatComplete', { poiName: poi.name });
+
             }
             stopBattle(team1, team2);
             evolutionService.checkClassAvailability();

@@ -24,6 +24,8 @@ import {openTab} from './navigation.js';
 import {initializeMap} from './map.js';
 import {initializeHomeScreen} from './home.js';
 import {initializeDialogue} from './dialogue.js';
+import {questSystem} from './questSystem.js';
+import {initializeQuestLog} from './questLog.js';
 
 export let battleStatistics = new BattleStatistics();
 export let evolutionService = new EvolutionService();
@@ -108,9 +110,13 @@ export async function loadGameData() {
     createAndInitHero(heroClasses, team1, team2);
     loadStage(currentStage, mobsClasses);
     initiateEventListeners();
+    await questSystem.loadQuests();
+    initializeQuestLog();
     initializeMap();
     // Open map tab by default
     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
+    // Start sample quest for testing
+    questSystem.startQuest('goblinSlayer');
 }
 
 function createAndInitHero(classes, team, opposingTeam) {
@@ -196,8 +202,8 @@ export function renderTeamMembers(members, containerId, clear = true) {
 function initiateEventListeners() {
     document.getElementById('team2-overlay').addEventListener('click', () => {
         document.getElementById('team2-overlay').classList.add('hidden');
-        document.getElementById('teamAndBattleContainer').classList.remove('opaque');
-        startBattle(team1,team2);
+        document.getElementById('teamAndBattleContainer').style = 'opacity: 1';
+        startBattle(team1, team2);
     });
     document.getElementById('battlefieldNavButton').addEventListener('click', () => openTab(event, 'battlefield'));
     document.getElementById('heroContentNavButton').addEventListener('click', () => openTab(event, 'heroContent'));
@@ -275,12 +281,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initializeHomeScreen();
     await initializeDialogue();
+    await loadGameData();
 });
 
 export function loadNextStage() {
     if (currentStage < 10) {
         currentArea.stageNumber = currentStage + 1;
-        currentStage++; // Update currentStage
+        currentStage++;
         document.getElementById('current-stage').textContent = `Stage ${currentStage}`;
         loadStage(currentArea.stageNumber, mobsClasses);
     }

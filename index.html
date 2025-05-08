@@ -18,6 +18,7 @@
     <link href="style/slideshow.css" rel="stylesheet" type="text/css">
     <link href="style/dialogue.css" rel="stylesheet" type="text/css">
     <link href="style/library.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="style/questLog.css">
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -100,7 +101,9 @@
         </div>
     </div>
 </div>
-
+<div class="tabcontent" id="quests">
+    <div id="quest-list"></div>
+</div>
 <div class="tabcontent" id="battlefield" class="battle-view">
     <div id="teamAndBattleContainer-overlay" class="battle-view">
         <div id="teamAndBattleContainer">
@@ -538,7 +541,9 @@
             <div class="gridItem">
                 <button class="tablinks" id="battle-statisticsNavButton">Stats</button>
             </div>
-            <div class="gridItem"></div>
+            <div class="gridItem">
+                <button class="tablinks" id="questsNavButton">Quests</button>
+            </div>
             <div class="gridItem">
                 <button class="tablinks" id="homeNavButton">Home</button>
             </div>
