@@ -11,7 +11,7 @@
 #quests {
     display: none;
     width: 100vw;
-    height: 100vh;
+    height: 77vh;
     background: url('Media/parchment.jpg') no-repeat center/cover;
     position: fixed;
     top: 0;
@@ -38,8 +38,8 @@
 }
 
 #quest-list {
-    width: 80%;
-    margin: 30px auto;
+    width: 100%;
+    height:77vh;
     padding: 20px;
     background: rgba(26, 20, 16, 0.7);
     border: 2px solid #4a3c2b;

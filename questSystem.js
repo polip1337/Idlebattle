@@ -8,7 +8,7 @@ export class QuestSystem {
     async loadQuests() {
         try {
             // Assume a list of quest files is available (e.g., via a manifest or server endpoint)
-            const questFiles = ['Quests/sampleQuest.js'];
+            const questFiles = ['Data/quests/sampleQuest.js'];
             for (const file of questFiles) {
                 const module = await import(`../${file}`);
                 const quest = module.default;

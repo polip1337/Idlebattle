@@ -25,13 +25,13 @@
 }
 
 .poi-icon {
-    width: 90px;
-    height: 90px;
+    width: 50px;
+    height: 50px;
     transition: transform 0.2s ease;
 }
 
 .poi:hover .poi-icon {
-    transform: scale(1.2);
+    transform: scale(3);
 }
 
 .poi-name {

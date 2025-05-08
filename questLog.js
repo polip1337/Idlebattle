@@ -15,7 +15,7 @@ export function initializeQuestLog() {
     });
 }
 
-function updateQuestLog() {
+export function updateQuestLog() {
     const questList = document.getElementById('quest-list');
     questList.innerHTML = ''; // Clear existing quests
 

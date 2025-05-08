@@ -1,5 +1,6 @@
 import { openTab } from './navigation.js';
 import { hero } from './initialize.js';
+import { questSystem } from './questSystem.js';
 
 export async function initializeDialogue() {
     const dialogueModal = document.getElementById('dialogue-modal');
@@ -122,6 +123,9 @@ export async function initializeDialogue() {
         } else {
             tradeButton.style.display = 'none';
         }
+
+        // Trigger quest progress for reaching this node
+        questSystem.updateQuestProgress('dialogue', { npc: currentDialogue.name, dialogueId: node.id });
     }
 
     // Check conditions for dialogue options
@@ -130,14 +134,16 @@ export async function initializeDialogue() {
         return option.conditions.every(condition => {
             switch (condition.type) {
                 case 'skill':
-                    const heroStat =  0;
+                    const heroStat = hero[condition.stat] || 0; // Access hero stats dynamically
                     return heroStat >= condition.value;
                 case 'item':
                     console.log(`Checking for item: ${condition.itemId}`);
-                    return false;
-                case 'quest':
-                    console.log(`Checking quest status: ${condition.questId}`);
-                    return false;
+                    return false; // Placeholder: Implement inventory check
+                case 'questActive':
+                    return questSystem.activeQuests.has(condition.questId);
+                case 'questCompleted':
+                    const quest = questSystem.quests.get(condition.questId);
+                    return quest && quest.completed;
                 default:
                     console.warn('Unknown condition type:', condition.type);
                     return false;
@@ -163,7 +169,7 @@ export async function initializeDialogue() {
         if (option.action) {
             switch (option.action.type) {
                 case 'startQuest':
-                    console.log(`Starting quest: ${option.action.questId}`);
+                    questSystem.startQuest(option.action.questId);
                     break;
                 case 'giveItem':
                     console.log(`Giving item: ${option.action.itemId}`);
@@ -177,13 +183,11 @@ export async function initializeDialogue() {
     // Handle trade action
     function handleTrade() {
         console.log('Opening trade with NPC:', currentNPC.name, 'Inventory:', currentDialogue.tradeInventory);
-        // Placeholder: Implement trade interface
         alert(`Trade with ${currentNPC.name} (Items: ${currentDialogue.tradeInventory.join(', ')})`);
     }
 
     // Start dialogue with an NPC
     async function startDialogue(npcId, dialogueId = null) {
-        // If no dialogueId provided, use the first dialogue from NPC's dialogues array
         const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
         const selectedDialogueId = dialogueId || npcModule.default.dialogues[0];
         currentDialogue = await loadDialogue(npcId, selectedDialogueId);
@@ -198,7 +202,7 @@ export async function initializeDialogue() {
         }
     }
 
-    // Temporary: Expose startDialogue globally for testing
+    // Expose startDialogue globally for testing and map integration
     window.startDialogue = startDialogue;
 
     console.log('Dialogue system initialized. Use startDialogue("sampleNPC", "sampleDialogue") in console to test.');

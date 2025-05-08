@@ -96,9 +96,8 @@ export function initializeMap() {
                     handleTravel(poi);
                 } else if (poi.type === 'combat') {
                     handleCombat(poi);
-                } else if (poi.type === 'dialogue') {
-                   battleLog.log(`Interacting with ${poi.npcId} at ${poi.name}`);
-                   startDialogue(poi.npcId,poi.dialogueId)
+                } else if (poi.type === 'talk') {
+                    handleTalk(poi);
                 }
             });
 
@@ -118,7 +117,6 @@ export function initializeMap() {
             poiList.appendChild(listItem);
         });
 
-
     }
 
     // Add new POI
@@ -126,9 +124,9 @@ export function initializeMap() {
         const name = prompt("Enter the name of the new point of interest:");
         if (!name) return;
 
-        const type = prompt("Enter the type (travel or combat):", "combat");
-        if (!['travel', 'combat'].includes(type)) {
-            alert("Invalid type. Use 'travel' or 'combat'.");
+        const type = prompt("Enter the type (travel, combat, or talk):", "combat");
+        if (!['travel', 'combat', 'talk'].includes(type)) {
+            alert("Invalid type. Use 'travel', 'combat', or 'talk'.");
             return;
         }
 
@@ -136,7 +134,28 @@ export function initializeMap() {
         const x = Math.floor(Math.random() * (mapContainer.offsetWidth - 100));
         const y = Math.floor(Math.random() * (mapContainer.offsetHeight - 100));
 
-        pointsOfInterest.push({ name, x, y, icon, type });
+        const poi = { name, x, y, icon, type };
+        if (type === 'talk') {
+            const npcId = prompt("Enter the NPC ID for this talk POI:");
+            const dialogueId = prompt("Enter the dialogue ID for this talk POI:");
+            if (npcId && dialogueId) {
+                poi.npcId = npcId;
+                poi.dialogueId = dialogueId;
+            } else {
+                alert("NPC ID and dialogue ID are required for talk POIs.");
+                return;
+            }
+        } else if (type === 'travel') {
+            const mapId = prompt("Enter the map ID for this travel POI:");
+            if (mapId) {
+                poi.mapId = mapId;
+            } else {
+                alert("Map ID is required for travel POIs.");
+                return;
+            }
+        }
+
+        pointsOfInterest.push(poi);
         renderPOIs();
     }
 
@@ -157,7 +176,6 @@ export function initializeMap() {
             loadMap(poi.mapId);
             battleLog.log(`Traveled to ${poi.name}`);
             questSystem.updateQuestProgress('travel', { poiName: poi.name });
-
         } else {
             alert(`No map defined for ${poi.name}`);
         }
@@ -170,10 +188,27 @@ export function initializeMap() {
             currentLocation = poi.name; // Update player location
             renderPOIs(); // Re-render to show new location
             battleLog.log(`Initiating battle at ${poi.name}`);
+            startBattle(team1, team2);
             openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
+            // Simulate battle victory for testing
+            setTimeout(() => {
+                questSystem.updateQuestProgress('combatComplete', { poiName: poi.name });
+            }, 1000);
         }
     }
 
+    // Handle talk POI
+    function handleTalk(poi) {
+        if (poi.npcId && poi.dialogueId) {
+            currentLocation = poi.name; // Update player location
+            renderPOIs(); // Re-render to show new location
+            battleLog.log(`Speaking to ${poi.name}`);
+            window.startDialogue(poi.npcId, poi.dialogueId);
+            questSystem.updateQuestProgress('talk', { poiName: poi.name, npcId: poi.npcId });
+        } else {
+            alert(`No NPC or dialogue defined for ${poi.name}`);
+        }
+    }
 
 
     // Initial load

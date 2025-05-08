@@ -1,5 +1,6 @@
 import {battleStatistics, team1} from './initialize.js';
 import {updateProgressBar} from './Render.js';
+import {updateQuestLog} from './questLog.js';
 
 export function openTab(evt, tabName) {
     // Hide all tab contents
@@ -43,5 +44,8 @@ export function openTab(evt, tabName) {
         team1.members[0].skills.forEach(skill => {
             updateProgressBar(skill);
         });
+    }
+    if (tabName === 'quests') {
+        updateQuestLog();
     }
 }
