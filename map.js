@@ -201,7 +201,7 @@ export function initializeMap() {
             currentLocation = poi.name; // Update player location
             renderPOIs(); // Re-render to show new location
             battleLog.log(`Initiating battle at ${poi.name}`);
-            startBattle(team1, team2);
+            startBattle(team1, team2, poi.name);
             questSystem.updateQuestProgress('travel', { poiName: poi.name });
 
             openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');

@@ -452,7 +452,7 @@
   },
   "leadersFortitude": {
     "id": "leadersFortitude",
-    "name": "Leader's Fortitude",
+    "name": "Leaders Fortitude",
     "type": "passive",
     "damage": 0,
     "manaCost": 0,

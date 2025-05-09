@@ -5,7 +5,7 @@ import { questSystem } from './questSystem.js';
 
 let battleStarted = false;
 
-function startBattle(team1, team2) {
+function startBattle(team1, team2, poiName = null) {
     battleLog.log("Battle started");
     battleStarted = true;
     useSkillsForAllMembers(team2);
@@ -25,7 +25,7 @@ function startBattle(team1, team2) {
                 showPopup("Loss!", "Your team has been defeated.");
             } else {
                 showPopup("Victory!", "Your team has defeated the opposing team.");
-                questSystem.updateQuestProgress('combatComplete', { poiName: poi.name });
+                questSystem.updateQuestProgress('combatComplete', poiName);
 
             }
             stopBattle(team1, team2);

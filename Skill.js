@@ -112,14 +112,14 @@ class Skill {
     }
 
     pause() {
-        if (this.type == "active") {
+        if (this.type == "active" && this.div) {
             var overlay = this.div.querySelector(" .cooldown-overlay");
             overlay.classList.add('paused');
         }
     }
 
     unpause() {
-        if (this.type == "active") {
+        if (this.type == "active" && this.div) {
             var overlay = this.div.querySelector(" .cooldown-overlay");
             overlay.classList.remove('paused');
         }
@@ -154,35 +154,37 @@ class Skill {
     }
 
     updateCooldownAnimation(member) {
-        if (this.overlay == null) {
-            this.overlay = this.div.querySelector(" .cooldown-overlay");
-            this.overlay.addEventListener('animationend', () => {
-                this.finishCooldown(member, this.repeat);
-            });
+        if( this.div){
+            if (this.overlay == null) {
+                this.overlay = this.div.querySelector(" .cooldown-overlay");
+                this.overlay.addEventListener('animationend', () => {
+                    this.finishCooldown(member, this.repeat);
+                });
+            }
+            this.div.classList.add('disabled');
+            this.overlay.classList.remove('hidden');
+            this.overlay.style.animation = '';
+            this.overlay.offsetHeight;
+
+            const remainingPercentage = (this.remainingDuration / this.cooldown) * 100;
+            this.overlay.style.height = `${remainingPercentage}%`;
+            this.overlay.style.animation = `fill ${this.remainingDuration}s ease-in-out forwards`;
         }
-        this.div.classList.add('disabled');
-        this.overlay.classList.remove('hidden');
-        this.overlay.style.animation = '';
-        this.overlay.offsetHeight;
-
-        const remainingPercentage = (this.remainingDuration / this.cooldown) * 100;
-        this.overlay.style.height = `${remainingPercentage}%`;
-        this.overlay.style.animation = `fill ${this.remainingDuration}s ease-in-out forwards`;
-
-
     }
 
     finishCooldown(member, repeat = false) {
-        if (this.overlay == null) {
-            this.overlay = this.div.querySelector(" .cooldown-overlay");
-        }
-        this.remainingDuration = 0;
-        this.cooldownStartTime = null;
-        this.overlay.classList.add('hidden');  /* Hide the square */
-        this.div.classList.remove('disabled');  /* Enable pointer events */
-        this.onCooldown = false;
-        if (repeat != false) {
-            this.useSkill(member);
+        if( this.div){
+            if (this.overlay == null && this.div) {
+                this.overlay = this.div.querySelector(" .cooldown-overlay");
+            }
+            this.remainingDuration = 0;
+            this.cooldownStartTime = null;
+            this.overlay.classList.add('hidden');  /* Hide the square */
+            this.div.classList.remove('disabled');  /* Enable pointer events */
+            this.onCooldown = false;
+            if (repeat != false) {
+                this.useSkill(member);
+            }
         }
     }
 }
