@@ -1,6 +1,6 @@
 export default {
     name: "Old Sage",
-    portrait: "Media/npc/sampleNPC.jpg",
+    portrait: "Media/NPC/sampleNPC.jpg",
     dialogues: ["sampleDialogue", "questCompleteDialogue","questActiveDialogue"],
     tradeInventory: ["fogCharm", "healingPotion"]
 };

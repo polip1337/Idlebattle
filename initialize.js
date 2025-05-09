@@ -41,6 +41,7 @@ let currentArea = new Area("Data/Areas/goblinPlains.JSON");
 export let mobsClasses = null;
 let currentStage = 1;
 let clickTimeout;
+export const NPC_MEDIA_PATH = "Media/NPC/";
 
 battleStatistics.updateBattleStatistics();
 
