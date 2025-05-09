@@ -1,361 +1,381 @@
 /* Container for the entire team */
- .team {
-     display: flex;
-     justify-content: space-around;
-     flex-direction: column;
+.team {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
 }
 
 /* Name and class type */
- .name {
-     font-weight: bold;
+.name {
+    font-weight: bold;
 }
 /* Status message */
- .status {
-     margin-top: 10px;
-     font-style: italic;
+.status {
+    margin-top: 10px;
+    font-style: italic;
 }
 /* Stats display */
- .stats {
-     margin-top: 10px;
-     font-size: 12px;
-     text-align: left;
+.stats {
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: left;
 }
 /* Divider between teams */
- .team-divider {
-     border-top: 2px solid #000;
+.team-divider {
+    border-top: 2px solid #000;
 }
 
- .tabcontent {
-     display: none;
+.tabcontent {
+    display: none;
 }
 
- .tabcontent.active {
-     display: block;
+.tabcontent.active {
+    display: block;
 }
 /* Add styling for tabs */
- #tabs {
-     overflow: hidden;
-     border: 1px solid #ccc;
-     background-color: #f1f1f1;
+#tabs {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
 }
- .tablinks {
-     float: left;
-     border: none;
-     outline: none;
-     cursor: pointer;
-     padding: 14px 16px;
+.tablinks {
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
 }
 
- .iconRow {
-     display: flex;
-     justify-content: space-around;
-     align-items: center;
+.iconRow {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
- .upperRow {
-     transform: scale(0.85);
+.upperRow {
+    transform: scale(0.85);
     /* Make upper row 15% smaller */
 }
 /* Add styling for icons */
- .icon {
-     width: 50px;
-     height: 50px;
-     background-color: #ccc;
+.icon {
+    width: 50px;
+    height: 50px;
+    background-color: #ccc;
     /* Placeholder background color */
     /* Add more styling as needed */
 }
- .icon img{
-     width: 50px;
-     height: 50px;
-     background-color: #ccc;
+.icon img {
+    width: 50px;
+    height: 50px;
+    background-color: #ccc;
     /* Placeholder background color */
     /* Add more styling as needed */
 }
- .checkBox {
-     width: 20px;
-     height: 20px;
-     background-color: #00ff00;
+.checkBox {
+    width: 20px;
+    height: 20px;
+    background-color: #00ff00;
     /* Green color for checkmark icon */
     /* Add more styling as needed */
 }
- .iconGroup {
-     display: flex;
-     justify-content: space-around;
-     align-items: center;
+.iconGroup {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
- #heroContent {
-     background-color: #3a3a3a;
-     padding: 20px;
-     border: 2px solid #555;
-     border-radius: 10px;
-     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+#heroContent {
+    background-color: #3a3a3a;
+    padding: 20px;
+    border: 2px solid #555;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
- #heroInfoRow {
-     display: flex;
-     background-color: #4a4a4a;
-     padding: 20px;
-     border: 2px solid #666;
-     border-radius: 10px;
-     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+#heroInfoRow {
+    display: flex;
+    background-color: #4a4a4a;
+    padding: 20px;
+    border: 2px solid #666;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
- #heroPortrait {
-     flex: 0 0 150px;
-     margin-right: 20px;
+#heroPortrait {
+    flex: 0 0 150px;
+    margin-right: 20px;
 }
- #heroDetails {
-     display: flex;
-     flex-direction: column;
-     gap: 20px;
-     width: 100%;
+#heroDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
 }
- #heroClassesAndStats {
-     display: flex;
-     flex-direction: row;
-     gap: 20px;
-     background-color: #5a5a5a;
-     padding: 5px;
-     border: 2px solid #777;
-     border-radius: 10px;
-     box-shadow: 0 0 5px rgba(0,0,0,0.5);
+#heroClassesAndStats {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    background-color: #5a5a5a;
+    padding: 5px;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
- #heroClasses {
-     flex: 1;
+#heroClasses {
+    flex: 1;
 }
- #heroStats {
-     flex: 2;
-     display: grid;
-     grid-template-columns: repeat(4, 1fr);
-     grid-template-rows: repeat(2, auto);
-     gap: 10px;
-     justify-content: center;
+#heroStats {
+    flex: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 10px;
+    justify-content: center;
 }
- .skill {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
+.skill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     /* Center skill names */
-     gap: 5px;
-     margin: 5px 0;
+    gap: 5px;
+    margin: 5px 0;
     /* Increase space between skills */
-     width: calc(100% / 5) - 20px);
-     background-color: #444;
-     border: 2px solid #777;
-     border-radius: 5px;
-     padding: 5px;
-     box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    width: calc(100% / 5) - 20px);
+    background-color: #444;
+    border: 2px solid #777;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
- .progressBar {
-     width: 100%;
-     background-color: #777;
-     border-radius: 5px;
-     overflow: hidden;
-     margin-top: 5px;
+.progressBar {
+    width: 100%;
+    background-color: #777;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
 }
- .progress {
-     height: 10px;
-     background-color: #00ff00;
+.progress {
+    height: 10px;
+    background-color: #00ff00;
 }
- #heroSkills {
-     display: flex;
-     flex-direction: column;
-     gap: 10px;
-     background-color: #5a5a5a;
-     padding: 5px;
-     border: 2px solid #777;
-     border-radius: 10px;
-     box-shadow: 0 0 5px rgba(0,0,0,0.5);
+#heroSkills {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #5a5a5a;
+    padding: 5px;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
- #activeSkills, #passiveSkills {
-     display: grid;
-     grid-template-columns: repeat(4, 1fr);
-     grid-template-rows: repeat(2, auto);
-     gap: 5px;
+#activeSkills, #passiveSkills {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 5px;
     /* Increase gap between skills */
 }
- #inventory {
-     margin-top: 20px;
+#inventory {
+    margin-top: 20px;
 }
- #inventory h2 {
-     text-align: center;
-     margin-bottom: 20px;
+#inventory h2 {
+    text-align: center;
+    margin-bottom: 20px;
 }
- .iconGrid {
-     display: grid;
-     grid-template-columns: repeat(5, 1fr);
-     grid-template-rows: repeat(2, auto);
-     gap: 10px;
+.iconGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 10px;
     /* Increase gap between skills */
 }
- .inventorySlot {
-     width: 50px;
-     height: 50px;
-     background-color: #606060;
-     border: 2px solid #888;
-     border-radius: 5px;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     box-shadow: 0 0 5px rgba(0,0,0,0.5);
+.inventorySlot {
+    width: 50px;
+    height: 50px;
+    background-color: #606060;
+    border: 2px solid #888;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
- .inventorySlot:hover {
-     background-color: #777;
+.inventorySlot:hover {
+    background-color: #777;
 }
- #heroClassesAndStats h2 {
-     margin-top: 0;
-     border-bottom: 1px solid #777;
-     padding-bottom: 5px;
+#heroClassesAndStats h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #777;
+    padding-bottom: 5px;
 }
- #heroSkills h2 {
-     margin-top: 0;
-     border-bottom: 1px solid #777;
-     padding-bottom: 5px;
+#heroSkills h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #777;
+    padding-bottom: 5px;
 }
- #heroStats h2 {
-     grid-column: span 4;
-     margin: 0;
-     padding-bottom: 5px;
+#heroStats h2 {
+    grid-column: span 4;
+    margin: 0;
+    padding-bottom: 5px;
 }
- #heroPortrait img {
-     width: 150px;
-     height: 150px;
-     border: 2px solid #777;
-     border-radius: 10px;
-     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+#heroPortrait img {
+    width: 150px;
+    height: 150px;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
- #paperDoll {
-     display: grid;
-     grid-template-columns: repeat(3, 1fr);
-     grid-template-rows: repeat(4, 1fr);
-     gap: 10px;
-     padding: 10px;
-     background-color: #444;
-     border: 2px solid #777;
-     border-radius: 10px;
-     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+#paperDoll {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+    padding: 10px;
+    background-color: #444;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
- .slot {
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     width: 60px;
-     height: 60px;
-     background-color: #555;
-     border: 2px solid #777;
-     border-radius: 5px;
-     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-     text-align: center;
-     color: #fff;
-     font-size: 12px;
+.slot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background-color: #555;
+    border: 2px solid #777;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
 }
- #helmetSlot {
-     grid-area: 1 / 2 / 2 / 3;
+#helmetSlot {
+    grid-area: 1 / 2 / 2 / 3;
 }
- #cloakSlot {
-     grid-area: 1 / 3 / 2 / 4;
+#cloakSlot {
+    grid-area: 1 / 3 / 2 / 4;
 }
- #amuletSlot {
-     grid-area: 1 / 1 / 2 / 2;
+#amuletSlot {
+    grid-area: 1 / 1 / 2 / 2;
 }
- #weaponSlot {
-     grid-area: 2 / 1 / 3 / 2;
+#weaponSlot {
+    grid-area: 2 / 1 / 3 / 2;
 }
- #chestArmorSlot {
-     grid-area: 2 / 2 / 3 / 3;
+#chestArmorSlot {
+    grid-area: 2 / 2 / 3 / 3;
 }
- #shieldSlot {
-     grid-area: 2 / 3 / 3 / 4;
+#shieldSlot {
+    grid-area: 2 / 3 / 3 / 4;
 }
- #legArmorSlot {
-     grid-area: 3 / 2 / 4 / 3;
+#legArmorSlot {
+    grid-area: 3 / 2 / 4 / 3;
 }
- #glovesSlot {
-     grid-area: 4 / 1 / 4 / 2;
+#glovesSlot {
+    grid-area: 4 / 1 / 4 / 2;
 }
- #bootsSlot {
-     grid-area: 4 / 2 / 4 / 4;
+#bootsSlot {
+    grid-area: 4 / 2 / 4 / 4;
 }
- #ringSlot {
-     grid-area: 4 / 3 / 5 / 3;
+#ringSlot {
+    grid-area: 4 / 3 / 5 / 3;
 }
- .slot:hover {
-     background-color: #666;
+.slot:hover {
+    background-color: #666;
 }
- .statGrid {
-     display: grid;
-     grid-template-columns: 1fr 1fr;
-     gap: 10px;
+.statGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
- #heroPortraitAndPaperDoll {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     gap: 10px;
-     padding:5px;
+#heroPortraitAndPaperDoll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding:5px;
 }
- .class-container, .stats-container {
-     margin-top: 10px;
+.class-container, .stats-container {
+    margin-top: 10px;
 }
- .skills-container {
-     display: flex;
-     flex-direction: column;
-     width: 40%;
-     padding-right: 20px;
-     border-right: 1px solid #ddd;
+.skills-container {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding-right: 20px;
+    border-right: 1px solid #ddd;
 }
- .active-skills, .passive-skills {
-     display: grid;
-     grid-template-columns: repeat(5, 1fr);
-     gap: 5px;
-     margin-top: 10px;
+.active-skills, .passive-skills {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-top: 10px;
 }
- .skill-box {
-     padding: 3px;
-     text-align: center;
-     cursor: pointer;
-     position: relative;
-     background-color: #444;
-     border: 2px solid #777;
-     border-radius: 5px;
-     padding: 5px;
-     box-shadow: 0 0 5px rgba(0,0,0,0.5);
+.skill-box {
+    padding: 3px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    background-color: #444;
+    border: 2px solid #777;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
- .skill-box img {
-     width: 30px;
-     height: 30px;
-     margin-right: 5px;
+.skill-box img {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
 }
- .skill-box.selected {
-     border-color: green;
+.skill-box .tooltip {
+    visibility: hidden;
+    position: absolute;
+    width: 160px;
+    background-color: #fff;
+    color: #000;
+    text-align: left;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    z-index: 1;
+    transform: translate(-30px, -1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.skill-box:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+.skill-box.selected {
+    border-color: green;
 }
 
- #teamContainer{
-     width:80%
+#teamContainer {
+    width:80%
 }
- #teamAndBattleContainer{
-     display:flex;
+#teamAndBattleContainer {
+    display:flex;
 }
- .battle-view {
-     background: url('../Media/Backgrounds/goblin_Cave.png') no-repeat center center;
-     background-size: cover;
-     border: 2px solid #444;
-     border-radius: 10px;
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-     height:78vh;
+.battle-view {
+    background: url('../Media/Backgrounds/goblin_Cave.png') no-repeat center center;
+    background-size: cover;
+    border: 2px solid #444;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    height:78vh;
 }
 
- .iconDiv .tooltip {
-     visibility: hidden;
-     position:absolute;
-     width: 160px;
-     background-color: #fff;
-     color: #000;
-     text-align: left;
-     padding: 5px;
-     border-radius: 5px;
-     border: 1px solid #888;
-     position: absolute;
-     z-index: 1;
-     transform:translate(-30px,10px);
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+.iconDiv .tooltip {
+    visibility: hidden;
+    position:absolute;
+    width: 160px;
+    background-color: #fff;
+    color: #000;
+    text-align: left;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    position: absolute;
+    z-index: 1;
+    transform:translate(-30px,10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .teamContainer {
@@ -363,13 +383,13 @@
     flex-direction: column;
     justify-content: center;
 }
-#team1{
+#team1 {
     padding-top: 70px;
-    }
-#team2-overlay{
+}
+#team2-overlay {
     position: absolute;
-      left: 0;
-      right: 20%;
+    left: 0;
+    right: 20%;
     margin-left: auto;
     margin-right: auto;
     width:400px;
@@ -379,7 +399,6 @@
     display: flex;
     justify-content: center;
 }
-
 
 /* Basic styles for popup */
 .popup {
@@ -418,15 +437,11 @@
 }
 
 #teamAndBattleContainer {
-     height: 78vh;
+    height: 78vh;
 }
 #evolution-modal {
     z-index: 1000;
-
 }
 .opaque {
- opacity: 0.2;
+    opacity: 0.2;
 }
-
-
-

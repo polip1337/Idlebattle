@@ -114,9 +114,7 @@ export async function loadGameData() {
     await questSystem.loadQuests();
     initializeQuestLog();
     initializeMap();
-    // Open map tab by default
     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
-    // Start sample quest for testing
 }
 
 function createAndInitHero(classes, team, opposingTeam) {
@@ -228,16 +226,26 @@ function initiateEventListeners() {
 
 function setupSkillListeners() {
     for (let i = 1; i < 13; i++) {
-        document.getElementById("skill" + i).getElementsByTagName('img')[0].addEventListener('click', (event) => {
+        const skillElement = document.getElementById("skill" + i);
+        const skillImg = skillElement.getElementsByTagName('img')[0];
+        // Apply rainbow class only for active skills with repeat true
+        if (hero.selectedSkills[i - 1]?.repeat && hero.selectedSkills[i - 1]?.type === "active") {
+            skillElement.classList.add("rainbow");
+        } else {
+            skillElement.classList.remove("rainbow");
+        }
+        skillImg.addEventListener('click', (event) => {
             if (clickTimeout) {
                 clearTimeout(clickTimeout);
                 clickTimeout = null;
                 if (!event.target.parentNode.classList.contains("disabled")) {
                     hero.selectedSkills[i - 1].useSkill(hero);
                 }
-                let repeat = hero.getSkill(document.getElementById("skill" + i)).repeat;
-                hero.getSkill(document.getElementById("skill" + i)).repeat = !repeat;
-                event.target.parentNode.classList.toggle("rainbow");
+                let skill = hero.getSkill(document.getElementById("skill" + i));
+                if (skill.type === "active") { // Only toggle repeat for active skills
+                    skill.repeat = !skill.repeat;
+                    event.target.parentNode.classList.toggle("rainbow");
+                }
             } else {
                 clickTimeout = setTimeout(() => {
                     if (!event.target.parentNode.classList.contains("disabled")) {
