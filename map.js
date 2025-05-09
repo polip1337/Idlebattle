@@ -110,7 +110,7 @@ export function initializeMap() {
                    handleTravel(poi);
                } else if (poi.type === 'combat') {
                    handleCombat(poi);
-               } else if (poi.type === 'talk') {
+               } else if (poi.type === 'dialogue') {
                    handleTalk(poi);
                }
            });

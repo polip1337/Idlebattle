@@ -11,37 +11,17 @@
       },
       {
         "name": "Hollowreach",
-        "x": 50.00,
-        "y": 66.67,
+        "x": 56.00,
+        "y": 76.67,
         "icon": "Media/map/poi-town.jpg",
         "type": "travel",
         "mapId": "hollowreach"
       },
-      {
-        "name": "Ashen Archive",
-        "x": 75.00,
-        "y": 16.67,
-        "icon": "Media/map/poi-ruin.png",
-        "type": "combat"
-      },
-      {
-        "name": "Vortex Reach",
-        "x": 80.00,
-        "y": 50.00,
-        "icon": "Media/map/poi-vortex.png",
-        "type": "combat"
-      },
-      {
-        "name": "Shrine of Whispers",
-        "x": 33.33,
-        "y": 25.00,
-        "icon": "Media/map/poi-shrine.png",
-        "type": "combat"
-      },
+
       {
         "name": "Driftmoor",
-        "x": 25.00,
-        "y": 66.67,
+        "x": 33.00,
+        "y": 84.67,
         "icon": "Media/map/poi-dock.jpg",
         "type": "travel",
         "mapId": "driftmoor"
@@ -88,7 +68,7 @@
         "name": "Verdant Hollow",
         "x": 90.00,
         "y": 56.67,
-        "icon": "Media/map/poi-temple.png",
+        "icon": "Media/map/poi-temple.jpg",
         "type": "travel",
         "mapId": "verdant_hollow"
       }
@@ -188,15 +168,39 @@
     ]
   },
   "tavern": {
-    "background": "Media/map/tavern_interior.png",
+    "background": "Media/map/tavern_interior.jpg",
     "pois": [
       {
         "name": "Exit",
-        "x": 33.33,
-        "y": 50.00,
+        "x": 75.33,
+        "y": 60.00,
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
+      },{
+        "name": "Renn the Scribe",
+        "x": 65.67,
+        "y": 65.00,
+        "icon": "Media/npc/poi-npc.png",
+        "type": "dialogue",
+        "npcId": "scribe_base",
+        "dialogueId": "base"
+      },{
+        "name": "Talia Emberhearth",
+        "x": 87.67,
+        "y": 62.00,
+        "icon": "Media/npc/talia_emberhearth.jpg",
+        "type": "dialogue",
+        "npcId": "talia_emberhearth",
+        "dialogueId": "base"
+      },{
+        "name": "Varkis Ironblade",
+        "x": 43.67,
+        "y": 61.00,
+        "icon": "Media/npc/poi-npc.png",
+        "type": "dialogue",
+        "npcId": "varkis_ironblade",
+        "dialogueId": "base"
       }
     ]
   }
