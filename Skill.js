@@ -22,7 +22,7 @@ class Skill {
         this.extraTargets = skillData.extraTargets;
         this.effects = effects;
         this.div = element;
-        this.repeat = false;
+        this.repeat = true; // Set repeat to true by default for all skills
         this.level = 1;
         this.experience = 0;
         this.experienceToNextLevel = 100; // Example value for level 1
@@ -34,7 +34,6 @@ class Skill {
         this.div = element;
     }
 
-    // Calculate damage based on the member's stats and skill level
     calculateDamage(member) {
         let damage = this.damage * this.baseDamage * member.stats.damage;
         if (this.damageType === 'physical') {
@@ -45,9 +44,7 @@ class Skill {
         return damage;
     }
 
-    // Gain experience for the skill
     gainExperience(amount) {
-
         this.experience += amount;
         while (this.experience >= this.experienceToNextLevel) {
             this.levelUp();
@@ -55,14 +52,13 @@ class Skill {
         }
     }
 
-    // Level up the skill, increasing its potency
     levelUp() {
         this.experience -= this.experienceToNextLevel;
         this.level += 1;
-        this.experienceToNextLevel = Math.floor(this.experienceToNextLevel * 1.5); // Increase experience needed for next level
-        this.baseDamage = Math.floor(this.baseDamage * 1.05); // Increase base damage by 10% per level
-        if (this.effectValue) {
-            this.effectValue = Math.floor(this.effectValue * 1.05); // Increase effect value by 10% per level
+        this.experienceToNextLevel = Math.floor(this.experienceToNextLevel * 1.5);
+        this.baseDamage = Math.floor(this.baseDamage * 1.05);
+        if (this.effects && this.effects.value) {
+            this.effects.value = Math.floor(this.effects.value * 1.05);
         }
     }
 
@@ -103,6 +99,9 @@ class Skill {
                 targets.forEach(target => {
                     member.performAttack(member, target, this);
                 });
+
+                // Award experience for skill use, even if no damage/healing occurs
+                this.gainExperience(10); // Base experience for skill use
             } else {
                 this.retry = setTimeout(() => {
                     this.useSkill(member);
@@ -138,17 +137,10 @@ class Skill {
 
     reduceCooldown(amount, member) {
         const elapsedTime = (Date.now() - this.cooldownStartTime) / 1000;
-        console.log("Elapsed time: " + elapsedTime);
-        console.log("Total cooldown: " + this.cooldown);
-        console.log("Amount to change: " + amount);
-
         this.remainingDuration = Math.max(0, this.cooldown - elapsedTime - amount);
-        console.log("remainingDuration: " + this.remainingDuration);
-
         if (this.remainingDuration > 0) {
             this.updateCooldownAnimation(member);
         } else {
-            console.log("Finishing early for skill " + this.name);
             this.finishCooldown(member, this.repeat);
         }
     }
@@ -179,8 +171,8 @@ class Skill {
             }
             this.remainingDuration = 0;
             this.cooldownStartTime = null;
-            this.overlay.classList.add('hidden');  /* Hide the square */
-            this.div.classList.remove('disabled');  /* Enable pointer events */
+            this.overlay.classList.add('hidden');
+            this.div.classList.remove('disabled');
             this.onCooldown = false;
             if (repeat != false) {
                 this.useSkill(member);
@@ -190,4 +182,3 @@ class Skill {
 }
 
 export default Skill;
-

@@ -200,11 +200,7 @@ export function renderTeamMembers(members, containerId, clear = true) {
 }
 
 function initiateEventListeners() {
-    document.getElementById('team2-overlay').addEventListener('click', () => {
-        document.getElementById('team2-overlay').classList.add('hidden');
-        document.getElementById('teamAndBattleContainer').style = 'opacity: 1';
-        startBattle(team1, team2);
-    });
+
     document.getElementById('battlefieldNavButton').addEventListener('click', () => openTab(event, 'battlefield'));
     document.getElementById('heroContentNavButton').addEventListener('click', () => openTab(event, 'heroContent'));
     document.getElementById('mapNavButton').addEventListener('click', () => openTab(event, 'map'));

@@ -3,7 +3,6 @@ import {battleLog, battleStatistics, evolutionService, hero} from './initialize.
 import EffectClass from './EffectClass.js';
 import Skill from './Skill.js';
 
-
 class Member {
     constructor(name, classInfo, skills, level = 1, team = null, opposingTeam = null, isHero = false) {
         this.name = name;
@@ -19,7 +18,6 @@ class Member {
         this.positions = classInfo.positions;
         if (this.positions == undefined) {
             this.position = "Front";
-
         } else {
             this.position = classInfo.positions[0];
         }
@@ -47,7 +45,6 @@ class Member {
         this.memberId = `team2-member` + memberId;
         this.team = team2;
         this.opposingTeam = team1;
-
     }
 
     initializeDOMElements() {
@@ -75,12 +72,10 @@ class Member {
         const member = document.getElementById(memberId);
         const target = event.currentTarget;
 
-        // Ensure the member and target are valid nodes before inserting
         if (!this.isSameTeam(member, target)) {
             alert('No swapping teams!');
-            return; // Abort the drop operation
+            return;
         }
-        // Determine the index of the dragged element and the target element
         const memberIndex = Array.from(target.parentNode.children).indexOf(member);
         const targetIndex = Array.from(target.parentNode.children).indexOf(target);
 
@@ -96,15 +91,11 @@ class Member {
             }
             parent.insertBefore(member, parent.children[targetIndex]);
         }
-
     }
 
     isSameTeam(member, target) {
-        // Get the team (parent element) of both member and target
         const parentOfMember = member.parentNode;
         const parentOfTarget = target.parentNode;
-
-        // Check if both member and target belong to the same team
         return parentOfMember === parentOfTarget;
     }
 
@@ -112,9 +103,6 @@ class Member {
         var allSkills = [];
         skills.forEach(skill => {
             var skill = new Skill(skill, skill.effects, null);
-            if (!this.isHero) {
-                skill.repeat = true;
-            }
             allSkills.push(skill);
         });
         return allSkills;
@@ -130,7 +118,6 @@ class Member {
             hitChance += skillModifier;
         }
 
-
         const randomNumber = Math.floor(Math.random() * 101);
         if (randomNumber <= hitChance) {
             return true;
@@ -141,10 +128,9 @@ class Member {
 
     performAttack(member, target, skill, isHero = false) {
         if (this.calculateHitChance(target, skill.toHit)) {
-
-
             if (skill.effects) {
                 new EffectClass(target, skill.effects);
+                skill.gainExperience(10); // Award experience for effect application
             }
             this.currentMana -= skill.manaCost;
             updateMana(this);
@@ -162,12 +148,11 @@ class Member {
                 }
 
                 battleLog.log(this.name + ` used ${skill.name} on ${target.name} dealing ` + finalDamage + ' damage.');
-
             }
             if (skill.heal) {
                 skill.gainExperience(skill.heal);
                 target.healDamage(skill.heal);
-                battleLog.log(target.name + 'Healed for' + skill.heal);
+                battleLog.log(target.name + ' Healed for ' + skill.heal);
             }
         }
     }
@@ -183,13 +168,13 @@ class Member {
 
     applyBlock(damage) {
         if (Math.random() * 100 < this.stats.blockChance) {
-            return damage * 0.5; // Reduce damage by 50% if block succeeds
+            return damage * 0.5;
         }
         return damage;
     }
 
     applyArmor(damage) {
-        return Math.max(0, damage - this.stats.armor); // Reduce damage by armor amount
+        return Math.max(0, damage - this.stats.armor);
     }
 
     applyResistance(damage, damageType) {
@@ -203,7 +188,7 @@ class Member {
         if (this.currentHealth > this.maxHealth) {
             this.currentHealth = this.maxHealth;
         }
-        updateHealth(this); // Update the overlay to reflect new health
+        updateHealth(this);
     }
 
     takeDamage(damage) {
@@ -212,7 +197,7 @@ class Member {
             if (this.currentHealth < 0) {
                 this.handleDeath();
             }
-            updateHealth(this); // Update the overlay to reflect new health
+            updateHealth(this);
         }
     }
 
@@ -223,7 +208,6 @@ class Member {
         this.stopSkills();
         if (this.name != 'Hero') {
             hero.gainExperience(this.class.experience);
-
         }
     }
 
@@ -245,7 +229,6 @@ class Member {
             this.levelUp();
         }
         updateExp(this);
-
     }
 
     levelUp() {
@@ -266,29 +249,22 @@ class Member {
         }
         this.experience = 0;
         this.experienceToLevel = Math.floor(this.experienceToLevel * 1.1);
-
-
     }
 
     handleRegeneration() {
-        if (this.currentHealth <= 0) return; // Do not regenerate if the member is defeated
+        if (this.currentHealth <= 0) return;
 
-        // Regenerate mana
         this.currentMana = Math.min(this.stats.mana, this.currentMana + this.stats.manaRegen);
         updateMana(this);
 
-        // Regenerate stamina
         this.currentStamina = Math.min(this.stats.stamina, this.currentStamina + Math.floor(0.1 * this.stats.vitality));
         updateStamina(this);
 
-        // Regenerate health
         this.currentHealth = Math.min(this.maxHealth, parseFloat(this.currentHealth) + parseFloat((0.01 * this.stats.vitality)));
         this.currentHealth = this.currentHealth.toFixed(2);
         this.currentHealth = parseFloat(this.currentHealth.toString());
         updateHealth(this);
     }
-
-
 }
 
 export default Member;
