@@ -2,7 +2,7 @@
 export function updateSkillBar(skills) {
     for (let i = 0; i < 12; i++) {
         var element = document.querySelector("#skill" + (i + 1) + " img");
-        var tooltip = document.querySelector("#skill" + (i + 1) + " .tooltip");
+        var tooltip = document.querySelector("#skill" + (i + 1)).nextSibling;
         var skillElement = document.querySelector("#skill" + (i + 1));
 
         if (skills[i]) {
