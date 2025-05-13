@@ -114,6 +114,70 @@ export class QuestSystem {
         });
         return questData;
     }
+    getQuestData() {
+            // ... (existing method)
+            const questData = [];
+            this.quests.forEach(quest => {
+                if (this.activeQuests.has(quest.id) || quest.completed) {
+                    const nextStep = (quest.completed || quest.currentStep >= quest.steps.length) ? null : quest.steps[quest.currentStep];
+                    const nextPOI = nextStep?.condition.toString().match(/data\.poiName\s*===\s*'([^']+)'/)?.[1] ||
+                                    nextStep?.condition.toString().match(/data\.npcId\s*===\s*'([^']+)'/)?.[1]; // Simplified POI/NPC extraction
+                    const mapId = quest.completed ? 'Completed' : (nextPOI ? this.getMapForPOI(nextPOI) : 'Unknown');
+
+                    questData.push({
+                        id: quest.id,
+                        name: quest.name,
+                        giver: quest.giver,
+                        description: quest.description,
+                        currentStep: quest.currentStep,
+                        totalSteps: quest.steps.length,
+                        nextHint: quest.completed ? 'Quest complete' : (nextStep?.hint || 'No hint available'),
+                        completed: quest.completed,
+                        mapId: mapId
+                    });
+                }
+            });
+            return questData;
+        }
+
+        getSerializableData() {
+            const serializableQuestsState = {};
+            this.quests.forEach((questData, questId) => {
+                // Save only the dynamic state, not the whole quest definition
+                serializableQuestsState[questId] = {
+                    currentStep: questData.currentStep,
+                    completed: questData.completed,
+                };
+            });
+            return {
+                activeQuests: Array.from(this.activeQuests),
+                questsState: serializableQuestsState,
+            };
+        }
+
+        async restoreFromData(data) {
+            if (!data) return;
+
+            // Ensure base quest definitions are loaded first
+            if (this.quests.size === 0) {
+                await this.loadQuests(); // This also loads maps
+            }
+
+            this.activeQuests = new Set(data.activeQuests || []);
+
+            if (data.questsState) {
+                Object.entries(data.questsState).forEach(([questId, savedState]) => {
+                    if (this.quests.has(questId)) {
+                        const quest = this.quests.get(questId);
+                        quest.currentStep = savedState.currentStep;
+                        quest.completed = savedState.completed;
+                    } else {
+                        console.warn(`Quest ${questId} found in save data but not in definitions.`);
+                    }
+                });
+            }
+            if (window.updateQuestLog) window.updateQuestLog(); // Update UI
+        }
 }
 
 // Singleton instance

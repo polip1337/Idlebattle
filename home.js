@@ -1,39 +1,42 @@
 import { openTab } from './navigation.js';
-import { loadGameData } from './initialize.js';
+import { loadGameData } from './initialize.js'; // Correct path
 import { startSlideshow } from './slideshow.js';
+import { openLoadModal } from './saveLoad.js'; // For Load Game button
 
 export function initializeHomeScreen() {
     const homeScreen = document.getElementById('home-screen');
     const newGameButton = document.getElementById('new-game');
     const loadGameButton = document.getElementById('load-game');
-    const optionsButton = document.getElementById('options');
+    const optionsButton = document.getElementById('options'); // Assuming you have an options tab
     const exitButton = document.getElementById('exit');
     const homeNavButton = document.getElementById('homeNavButton');
 
-    function hideHomeScreen() {
+    function hideHomeScreenAndShowFooter() {
         homeScreen.classList.remove('active');
         homeScreen.classList.add('hidden');
         document.getElementById('footer').classList.remove('hidden');
     }
 
-    newGameButton.addEventListener('click', () => {
-        hideHomeScreen();
-        startSlideshow(() => {
+    newGameButton.addEventListener('click', async () => {
+        // No need to hide home screen here, slideshow will cover it.
+        // loadGameData(null) will eventually hide it after slideshow.
+        startSlideshow(async () => {
+            await loadGameData(null); // Start new game after slideshow
+            hideHomeScreenAndShowFooter();
             openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
+
         });
     });
 
     loadGameButton.addEventListener('click', () => {
-        // Placeholder for load game logic
-        alert('Load Game functionality not implemented yet.');
-        // Future: Load saved game state from localStorage or a file
-        // hideHomeScreen();
-        // loadGameData();
-        // openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
+        openLoadModal(); // This will handle game loading and navigation
+        // No need to hide home screen here, openLoadModal handles flow.
+        // If a game is successfully loaded from the modal, `initialize.js` `loadGameData`
+        // will then hide the home screen and open the map tab.
     });
 
     optionsButton.addEventListener('click', () => {
-        hideHomeScreen();
+        hideHomeScreenAndShowFooter();
         openTab({ currentTarget: document.getElementById('optionsNavButton') }, 'options');
     });
 

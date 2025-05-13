@@ -179,6 +179,14 @@ class Skill {
             }
         }
     }
+    applySavedState(data) {
+        this.level = data.level || 1;
+        this.experience = data.experience || 0;
+        this.experienceToNextLevel = data.experienceToNextLevel || 100; // Default if not saved
+        this.baseDamage = data.baseDamage || this.baseDamage; // Use existing baseDamage if not in save
+        // Note: effects modifications are not handled here for simplicity.
+        // They would reset to the skill's default effects.
+    }
 }
 
 export default Skill;

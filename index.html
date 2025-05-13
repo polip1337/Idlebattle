@@ -19,6 +19,7 @@
     <link href="style/dialogue.css" rel="stylesheet" type="text/css">
     <link href="style/library.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="style/questLog.css">
+    <link rel="stylesheet" href="style/saveLoadModal.css">
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -57,6 +58,19 @@
     <div class="slide">
         <img src="Media/slideshow/slide6.jpeg" alt="Slide 6">
         <p>Now, in the forgotten city of Hollowreach, a hero seeks a way to cross the forbidden lands.</p>
+    </div>
+</div>
+
+<div class="save-load-modal hidden" id="save-load-modal">
+    <div class="save-load-content">
+        <h2 id="save-load-title">Save/Load Game</h2>
+        <div id="save-load-slots-container">
+            <!-- Slots will be populated by JS -->
+        </div>
+        <div class="save-load-actions">
+            <button id="save-load-delete-button" class="hidden">Delete</button> <!-- Initially hidden, for future use -->
+            <button id="save-load-close-button">Close</button>
+        </div>
     </div>
 </div>
 
@@ -305,7 +319,7 @@
                 <div class="gridItem"><button class="tablinks" id="mapNavButton">Map</button></div>
                 <div class="gridItem"><button class="tablinks" id="libraryNavButton">Library</button></div>
                 <div class="gridItem"><button class="tablinks" id="optionsNavButton">Options</button></div>
-                <div class="gridItem"></div> <!-- Empty or for future use -->
+                <div class="gridItem"><button class="tablinks" id="saveGameNavButton">Save Game</button></div> <!-- Empty or for future use -->
                 <div class="gridItem"><button class="tablinks" id="battle-statisticsNavButton">Stats</button></div>
                 <div class="gridItem"><button class="tablinks" id="questsNavButton">Quests</button></div>
                 <div class="gridItem"><button class="tablinks" id="homeNavButton">Home</button></div>
@@ -478,7 +492,7 @@
 <script src="libraryLoader.js" type="module"></script>
 <script src="initialize.js" type="module"></script> <!-- Should be one of the last -->
 <script src="Main.js" type="module"></script> <!-- Main can be early if it only sets up global event listeners -->
-
+<script src="saveLoad.js" type="module"></script>
 
 </body>
 </html>

@@ -3,7 +3,11 @@ import Member from './Member.js';
 
 class Area {
     constructor(jsonPath) {
-
+        this.jsonPath = jsonPath; // CRITICAL: This must happen
+        this.name = "";
+        this.stages = [];
+        this.stageNumber = 1;
+        this.description = "";
         fetch(jsonPath)
             .then(response => response.json())
             .then(data => {

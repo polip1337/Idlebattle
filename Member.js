@@ -4,10 +4,11 @@ import EffectClass from './EffectClass.js';
 import Skill from './Skill.js';
 
 class Member {
-    constructor(name, classInfo, skills, level = 1, team = null, opposingTeam = null, isHero = false) {
+    constructor(name, classInfo, skillsSource, level = 1, team = null, opposingTeam = null, isHero = false) {
+
         this.name = name;
         this.classType = classInfo.name;
-        this.class = classInfo;
+        this.class = classInfo; // This should be the raw class definition object
         this.team = team;
         this.opposingTeam = opposingTeam;
         this.level = level;
@@ -16,13 +17,9 @@ class Member {
         this.statsPerLevel = classInfo.statsPerLevel;
         this.summons = 0;
         this.positions = classInfo.positions;
-        if (this.positions == undefined) {
-            this.position = "Front";
-        } else {
-            this.position = classInfo.positions[0];
-        }
+        this.position = this.positions ? this.positions[0] : "Front";
         this.dead = false;
-        this.goldDrop = classInfo.goldDrop || 0; // Initialize goldDrop
+        this.goldDrop = classInfo.goldDrop || 0;
 
         this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
@@ -30,15 +27,34 @@ class Member {
         this.currentStamina = this.stats.stamina;
 
         this.effects = [];
-        this.skills = this.createSkills(skills);
+
+        // Skill instantiation logic
+        if (Array.isArray(skillsSource) && skillsSource.length > 0) {
+            if (typeof skillsSource[0] === 'string' && allSkillsCache) { // Check if it's array of IDs and cache exists
+                this.skills = this.createSkillsFromIDs(skillsSource);
+            } else if (skillsSource[0] instanceof Skill) { // Check if it's already array of Skill instances
+                this.skills = skillsSource;
+            } else if (typeof skillsSource[0] === 'object' && skillsSource[0].name && skillsSource[0].icon) { // Assume array of skill data objects
+                this.skills = this.createSkills(skillsSource);
+            } else {
+                console.warn(`Unsupported skillsSource format for member ${this.name}:`, skillsSource);
+                this.skills = [];
+            }
+        } else {
+            this.skills = [];
+        }
+
         this.dragStartHandler = this.dragStartHandler.bind(this);
         this.dragOverHandler = this.dragOverHandler.bind(this);
         this.dropHandler = this.dropHandler.bind(this);
 
         this.experience = 0;
-        this.experienceToLevel = 100;
-        for (var i = 1; i < level; i++) {
-            this.levelUp();
+        this.experienceToLevel = 100; // Base for level 1
+        // Apply level-ups if initial level > 1
+        const initialLevel = this.level; // Store initial level
+        this.level = 0; // Reset level to 0 before leveling up
+        for (let i = 0; i < initialLevel; i++) { // Loop up to the original desired level
+            this.levelUp(false); // Pass false to prevent UI updates during initial setup for non-hero
         }
     }
 
@@ -100,13 +116,27 @@ class Member {
         return parentOfMember === parentOfTarget;
     }
 
-    createSkills(skills) {
-        var allSkills = [];
-        skills.forEach(skill => {
-            var skill = new Skill(skill, skill.effects, null);
-            allSkills.push(skill);
-        });
-        return allSkills;
+    createSkills(skillsDataArray) { // Assumes skillsDataArray contains full skill definition objects
+            return skillsDataArray.map(skillData => {
+                if (!skillData) return null;
+                return new Skill(skillData, skillData.effects, null);
+            }).filter(s => s !== null);
+        }
+
+    createSkillsFromIDs(skillIDs) { // Assumes skillIDs are strings
+        if (!allSkillsCache) {
+            console.error("allSkillsCache not available in Member to create skills from IDs");
+            return [];
+        }
+        return skillIDs.map(id => {
+            const skillData = allSkillsCache[id];
+            if (!skillData) {
+                console.warn(`Skill ID ${id} not found in allSkillsCache for member ${this.name}.`);
+                return null;
+            }
+            // skillData from allSkillsCache is an object: { name, icon, ..., effects: { ... } }
+            return new Skill(skillData, skillData.effects); // Pass the whole skillData and its effects part
+        }).filter(s => s !== null);
     }
 
     calculateHitChance(defender, skillModifier) {
@@ -246,34 +276,57 @@ class Member {
         updateExp(this);
     }
 
-    levelUp() { // This is primarily for the hero
+    levelUp(updateHeroUI = true) { // Added updateHeroUI flag
         this.level++;
-        for (const stat in this.statsPerLevel) {
-            this.stats[stat] += this.statsPerLevel[stat];
+        if (this.statsPerLevel) {
+            for (const stat in this.statsPerLevel) {
+                if (this.stats.hasOwnProperty(stat) && this.statsPerLevel.hasOwnProperty(stat)) {
+                    this.stats[stat] += this.statsPerLevel[stat];
+                }
+            }
         }
         this.maxHealth = this.stats.vitality * 10;
-        this.currentHealth = this.maxHealth; // Full heal on level up
+        this.currentHealth = this.maxHealth;
 
-        this.stats.mana = this.class.stats.mana + (this.statsPerLevel.mana ? (this.level-1) * this.statsPerLevel.mana : 0) ; // Recalculate max mana based on base and per level
+        // Recalculate max mana/stamina based on base from class and per level stats
+        if (this.class && this.class.stats) { // Ensure this.class.stats exists
+            this.stats.mana = (this.class.stats.mana || 0) + ((this.statsPerLevel?.mana || 0) * (this.level -1));
+            this.stats.stamina = (this.class.stats.stamina || 0) + ((this.statsPerLevel?.stamina || 0) * (this.level -1));
+        }
         this.currentMana = this.stats.mana;
-
-        this.stats.stamina = this.class.stats.stamina + (this.statsPerLevel.stamina ? (this.level-1) * this.statsPerLevel.stamina : 0) ; // Recalculate max stamina
         this.currentStamina = this.stats.stamina;
 
-        if (this.isHero) {
+
+        if (this.isHero && updateHeroUI) { // Only update UI if it's the hero and flag is true
             updateExpBarText(this.classType + " Level: " + this.level);
-            if ([2, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {
-                evolutionService.levelThresholdReached(1); // Assuming classIndex 1 for main class
+             if (evolutionService && [2, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {
+                evolutionService.levelThresholdReached();
             }
             updateHealth(this);
             updateMana(this);
             updateStamina(this);
         }
-        this.experience = this.experience - this.experienceToLevel; // Carry over excess exp
-        this.experienceToLevel = Math.floor(this.experienceToLevel * 1.1);
-        if (this.experience >= this.experienceToLevel) { // Handle multi-level ups
-            this.levelUp();
+
+        // Experience handling (relevant even if not hero, for internal consistency if needed)
+        if (this.experience >= this.experienceToLevel) {
+             this.experience -= this.experienceToLevel;
+        } else if (this.level > 1 && this.experience < 0) { // If XP was already used by prior level up in multi-level
+            // This case should be rare if experience is correctly deducted.
         }
+        this.experienceToLevel = Math.floor(this.experienceToLevel * 1.1);
+
+        if (this.experience >= this.experienceToLevel && this.level < 9999) { // Cap level for sanity
+            this.levelUp(updateHeroUI); // Recurse for multi-level up
+        }
+    }
+
+    gainExperience(exp) {
+        if (!this.isHero) return; // Only hero gains experience this way
+        this.experience += exp;
+        if (this.experience >= this.experienceToLevel) {
+            this.levelUp(); // Hero always updates UI on level up
+        }
+        updateExp(this);
     }
 
     handleRegeneration() {
@@ -301,6 +354,79 @@ class Member {
              updateHealth(this);
         }
     }
+        // --- SERIALIZATION (IF NEEDED FOR NON-HERO MEMBERS) ---
+        getSerializableData() {
+            // If you need to save non-hero members, it would be similar to Hero's,
+            // but likely simpler as they might not have multiple classes, detailed skill selections etc.
+            return {
+                name: this.name,
+                classType: this.classType, // Used to find base definition on load
+                level: this.level,
+                currentHealth: this.currentHealth,
+                currentMana: this.currentMana,
+                currentStamina: this.currentStamina,
+                // Store only what deviates from the base definition or is dynamic
+                // For enemies, usually only currentHealth/Mana/Stamina and active effects might matter mid-battle.
+                // For persistent NPC allies, it would be more like the Hero.
+                experience: this.experience, // If they gain XP
+                experienceToLevel: this.experienceToLevel,
+                stats: deepCopy(this.stats), // If their stats can change independently of level ups
+                skillProgression: this.isHero ? this.skills.map(s => ({ // Only save skill progression for hero
+                    name: s.name,
+                    level: s.level,
+                    experience: s.experience,
+                    experienceToNextLevel: s.experienceToNextLevel,
+                    baseDamage: s.baseDamage,
+                })) : [], // Non-heroes typically don't have skill progression saved this way
+                // No selected skills for non-heroes usually
+            };
+        }
+
+        restoreFromData(data, allMobClasses, allSkillsLookup) { // `allMobClasses` would be like `heroClasses`
+            // This would be called if you were restoring, for example, a specific enemy's state.
+            this.name = data.name;
+            // this.classType = data.classType; // Already set by constructor based on definition
+            // this.class = deepCopy(allMobClasses[this.classType]); // Base class info
+            this.level = data.level;
+
+            this.stats = deepCopy(data.stats); // Restore modified stats
+            this.maxHealth = this.stats.vitality * 10; // Recalculate based on restored vitality
+            this.currentHealth = Math.min(data.currentHealth, this.maxHealth);
+            this.currentMana = Math.min(data.currentMana, this.stats.mana);
+            this.currentStamina = Math.min(data.currentStamina, this.stats.stamina);
+
+            this.experience = data.experience || 0;
+            this.experienceToLevel = data.experienceToLevel || 100;
+
+            // If non-heroes have skill progression (uncommon for standard mobs)
+            if (data.skillProgression && data.skillProgression.length > 0 && allSkillsLookup) {
+                const baseSkillsFromClass = allMobClasses[this.classType].skills.map(skillId => deepCopy(allSkillsLookup[skillId]));
+                this.skills = baseSkillsFromClass.map(baseSkillData => {
+                     const skillInstance = new Skill(baseSkillData, baseSkillData.effects);
+                     const savedProg = data.skillProgression.find(sp => sp.name === skillInstance.name);
+                     if (savedProg) {
+                         skillInstance.applySavedState(savedProg);
+                     }
+                     return skillInstance;
+                });
+            } else if (allSkillsLookup) {
+                // If no saved progression, just ensure skills are instantiated from base class definition
+                const classDef = allMobClasses[this.classType];
+                if (classDef && classDef.skills) {
+                     this.skills = classDef.skills.map(skillId => {
+                         const skillData = allSkillsLookup[skillId];
+                         return new Skill(skillData, skillData.effects);
+                     });
+                }
+            }
+
+
+            // Note: For most enemy members, their `memberId`, `team`, `opposingTeam`, `element`
+            // would be re-initialized when they are added to a battle/stage.
+            // This `restoreFromData` would primarily be for stats and health if saved mid-combat.
+        }
+
+
 }
 
 export default Member;

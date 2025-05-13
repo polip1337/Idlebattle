@@ -4,6 +4,10 @@ import { team1, team2, battleLog, hero } from './initialize.js';
 import { questSystem } from './questSystem.js';
 import { updateHeroMapStats, renderHero, updateHealth, updateMana, updateStamina } from './Render.js';
 
+export let mapsData = null; // Exposed for saveLoad.js to read map names
+export let currentMapId = 'hollowreach_Valley'; // Exposed for saveLoad.js
+export let pointsOfInterest = []; // Exposed for saveLoad.js (though dynamic)
+
 export function initializeMap() {
     const mapContainer = document.getElementById('map-container');
     const poiList = document.getElementById('poi-list');
@@ -29,7 +33,7 @@ export function initializeMap() {
     }
 
     // Load map data
-    async function loadMapData() {
+    async function loadMapDataAndRender() {
         try {
             const response = await fetch('Data/maps.json');
             mapsData = await response.json();
@@ -38,6 +42,7 @@ export function initializeMap() {
         } catch (error) {
             console.error('Error loading map data:', error);
         }
+
     }
 
     window.addEventListener('resize', () => {
@@ -51,32 +56,35 @@ export function initializeMap() {
     });
 
     // Load a specific map
-    function loadMap(mapId) {
-        const map = mapsData[mapId];
-        if (!map) {
-            console.error(`Map ${mapId} not found`);
-            return;
+    function loadMap(mapIdToLoad) {
+            if (!mapsData) {
+                console.error("Maps data not loaded yet.");
+                return;
+            }
+            const map = mapsData[mapIdToLoad];
+            if (!map) {
+                console.error(`Map ${mapIdToLoad} not found`);
+                return;
+            }
+            currentMapId = mapIdToLoad; // Update module global
+            mapContainer.style.backgroundImage = `url(${map.background})`;
+            pointsOfInterest = map.pois.map(poi => ({ // Update module global
+                ...poi,
+                type: poi.type || 'combat',
+                cost: poi.cost || 0
+            }));
+
+            const currentPoiExistsOnNewMap = pointsOfInterest.some(poi => poi.name === currentLocation);
+            if (!currentLocation || !currentPoiExistsOnNewMap) {
+                const startingPoi = pointsOfInterest.find(poi => poi.isStartingLocation) || (pointsOfInterest.length > 0 ? pointsOfInterest[0] : null);
+                currentLocation = startingPoi ? startingPoi.name : null;
+            }
+
+            renderPOIs();
+            renderHeroPortrait();
+            if (hero) updateHeroMapStats(hero);
         }
-        currentMapId = mapId;
-        mapContainer.style.backgroundImage = `url(${map.background})`;
-        pointsOfInterest = map.pois.map(poi => ({
-            ...poi,
-            type: poi.type || 'combat',
-            cost: poi.cost || 0
-        }));
 
-        const currentPoiExistsOnNewMap = pointsOfInterest.some(poi => poi.name === currentLocation);
-        if (!currentLocation || !currentPoiExistsOnNewMap) {
-            const startingPoi = pointsOfInterest.find(poi => poi.isStartingLocation) || (pointsOfInterest.length > 0 ? pointsOfInterest[0] : null);
-            currentLocation = startingPoi ? startingPoi.name : null;
-        }
-
-        renderPOIs();
-        renderHeroPortrait(); // Re-render portrait when map changes
-        if (hero) updateHeroMapStats(hero);
-    }
-
-    let pointsOfInterest = [];
 
     function renderPOIs() {
         poiList.innerHTML = '';
@@ -273,5 +281,37 @@ export function initializeMap() {
         }
     }
 
-    loadMapData();
-}
+    loadMapDataAndRender();
+    // --- Save/Load specific functions ---
+        window.getMapStateForSave = () => { // Expose to global for saveLoad.js
+            return {
+                currentMapId: currentMapId,
+                currentLocation: currentLocation,
+                mapHistory: [...mapHistory] // shallow copy
+            };
+        };
+
+        window.setMapStateFromLoad = (state) => { // Expose to global
+            if (!mapsData) {
+                console.warn("Attempted to set map state before mapsData loaded. Deferring.");
+                // Try again after a short delay, assuming mapsData will be loaded by then.
+                // This is a bit of a hack; a more robust solution would use promises or callbacks.
+                setTimeout(() => setMapStateFromLoad(state), 500);
+                return;
+            }
+            currentMapId = state.currentMapId || 'hollowreach_Valley';
+            currentLocation = state.currentLocation || null;
+            mapHistory = [...(state.mapHistory || [])];
+
+            loadMap(currentMapId); // This will re-render POIs and set currentLocation if needed
+            // Ensure currentLocation from save is respected if valid on the new map
+            if (state.currentLocation && pointsOfInterest.some(poi => poi.name === state.currentLocation)) {
+                currentLocation = state.currentLocation;
+            }
+            renderPOIs(); // Explicitly call renderPOIs again to ensure currentLocation highlight
+            if (hero) updateHeroMapStats(hero);
+        };
+    }
+    // Export new functions if saveLoad.js imports them directly (preferred over global window)
+    export const getMapStateForSave = () => window.getMapStateForSave();
+    export const setMapStateFromLoad = (state) => window.setMapStateFromLoad(state);
