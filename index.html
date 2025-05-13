@@ -19,36 +19,6 @@
     <link href="style/dialogue.css" rel="stylesheet" type="text/css">
     <link href="style/library.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="style/questLog.css">
-    <style>
-        /* Style for paused overlay */
-        .paused-overlay::after {
-            content: "PAUSED";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            color: rgba(255, 255, 255, 0.7);
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 10000; /* Ensure it's on top */
-        }
-        #hero-map-stats {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: rgba(0,0,0,0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: Arial, sans-serif;
-            z-index: 100; /* Above map background but below POIs if necessary */
-        }
-         #hero-map-stats p {
-            margin: 5px 0;
-        }
-    </style>
 </head>
 <body>
 <div class="home-screen active" id="home-screen">

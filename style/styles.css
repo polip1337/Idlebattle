@@ -324,20 +324,24 @@
     margin-right: 5px;
 }
 .skill-box .tooltip {
-    visibility: hidden;
-    position: absolute;
-    width: 160px;
-    background-color: #fff;
-    color: #000;
-    text-align: left;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #888;
-    z-index: 1;
-    transform: translate(-30px, -1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transition: opacity 0.3s;
+	visibility: hidden;
+	position: absolute;
+	width: 160px;
+	background-color: #fff;
+	color: #000;
+	text-align: left;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid #888;
+	z-index: 1000; /* High z-index to appear above all elements */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.skill-box:hover .tooltip {
+	visibility: visible;
+	opacity: 1;
 }
 .skill-box:hover .tooltip {
     visibility: visible;

@@ -561,8 +561,8 @@ export function showTooltip(event, contentElement) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    let top = targetRect.top - tooltipRect.height - 5; // Position above element
-    let left = targetRect.left + (targetRect.width - tooltipRect.width) / 2; // Center horizontally
+    let top =    5; // Position above element
+    let left = (targetRect.width - tooltipRect.width) / 2; // Center horizontally
 
     // Adjust if off-screen
     if (left + tooltipRect.width > viewportWidth) {
@@ -581,6 +581,9 @@ export function showTooltip(event, contentElement) {
     contentElement.style.top = `${top}px`;
     contentElement.style.left = `${left}px`;
     contentElement.style.visibility = 'visible';
+    contentElement.style.position = 'absolute';
+    contentElement.style.zIndex = '100';
+    contentElement.style.overflow ='visible';
 }
 
 export function updateHeroMapStats(heroInstance) {

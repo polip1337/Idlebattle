@@ -133,26 +133,6 @@ border-radius:50%;
     transition: opacity 0.3s;
 }
 
-
-/* Tooltip styling */
-.tooltip {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; /* Position above the icon */
-    left: 50%;
-    margin-left: -60px;
-    width: 150px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-
-}
-
 .tooltip::after {
     content: "";
     position: absolute;
@@ -312,15 +292,7 @@ flex-direction:row}
     border-style: solid;
 }
 
-.tooltip::after {
-    top: 100%;
-    border-color: #333 transparent transparent transparent;
-}
 
-.effectTooltip::after {
-    top: 100%;
-    border-color: #333 transparent transparent transparent;
-}
 
 .memberPortrait:hover .tooltip,
 .iconDiv:hover .tooltip,
