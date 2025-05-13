@@ -245,7 +245,6 @@ flex-direction:row}
      position: fixed; /* Use fixed to avoid container offsets */
      z-index: 100; /* Higher z-index to ensure visibility */
      width: 150px;
-     opacity: 0;
      transition: opacity 0.3s;
      pointer-events: none;
      display: none;

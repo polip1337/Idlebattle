@@ -560,29 +560,38 @@ export function showTooltip(event, contentElement) {
     const tooltipRect = contentElement.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
+    let top = 0;
+    let left = 0;
+    if(target.id.includes("skill")){
+        top = -tooltipRect.height + 100;
+        left = targetRect.left + ((targetRect.width - tooltipRect.width) / 2);
+    }
+    else{
+        top =    5; // Position above element
+        left = (targetRect.width - tooltipRect.width) / 2; // Center horizontally
 
-    let top =    5; // Position above element
-    let left = (targetRect.width - tooltipRect.width) / 2; // Center horizontally
+        // Adjust if off-screen
+        if (left + tooltipRect.width > viewportWidth) {
+            left = viewportWidth - tooltipRect.width - 5;
+        }
+        if (left < 0) {
+            left = 5;
+        }
+        if (top < 0) {
+            top = targetRect.bottom + 5; // Flip to below if no space above
+        }
+        if (top + tooltipRect.height > viewportHeight) {
+            top = viewportHeight - tooltipRect.height - 5;
+        }
+    }
 
-    // Adjust if off-screen
-    if (left + tooltipRect.width > viewportWidth) {
-        left = viewportWidth - tooltipRect.width - 5;
-    }
-    if (left < 0) {
-        left = 5;
-    }
-    if (top < 0) {
-        top = targetRect.bottom + 5; // Flip to below if no space above
-    }
-    if (top + tooltipRect.height > viewportHeight) {
-        top = viewportHeight - tooltipRect.height - 5;
-    }
+
 
     contentElement.style.top = `${top}px`;
     contentElement.style.left = `${left}px`;
     contentElement.style.visibility = 'visible';
     contentElement.style.position = 'absolute';
-    contentElement.style.zIndex = '100';
+    contentElement.style.zIndex = '99999999';
     contentElement.style.overflow ='visible';
 }
 

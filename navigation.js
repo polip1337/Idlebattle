@@ -15,6 +15,7 @@ export function openTab(evt, tabName) {
     for (let link of tabLinks) {
         link.classList.remove('active');
     }
+    const footer = document.getElementById('footer');
 
     // Show the selected tab content
     document.getElementById(tabName).classList.add('active');
@@ -31,6 +32,7 @@ export function openTab(evt, tabName) {
     }
 
     if (tabName === 'battlefield') {
+        footer.classList.remove('hidden'); // Show footer for other views
 
     }
     if (tabName === 'battle-statistics') {
@@ -48,5 +50,7 @@ export function openTab(evt, tabName) {
         if (hero) { // Ensure hero is initialized
             updateHeroMapStats(hero);
         }
+        footer.classList.add('hidden'); // Hide footer for map view
+
     }
 }

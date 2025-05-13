@@ -326,7 +326,7 @@ function setupSkillListeners() {
         if (!skillElement) continue;
 
         const skillImg = skillElement.querySelector('img');
-        const tooltip = skillElement.querySelector('.tooltip'); // Ensure tooltip exists
+        const tooltip = skillElement.nextSibling; // Ensure tooltip exists
         if (!skillImg || !tooltip) continue;
 
         // Update rainbow class and tooltip content
