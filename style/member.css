@@ -28,14 +28,12 @@
     height: 100%;
     transition: width 0.2s;
     background: linear-gradient(to top, yellow 0%, yellow var(--stamina-percentage), transparent var(--stamina-percentage), transparent 100%);
-
 }
 .mana-overlay
 {
     height: 100%;
     transition: width 0.2s;
     background: linear-gradient(to top, blue 0%, blue var(--mana-percentage), transparent var(--mana-percentage), transparent 100%);
-
 }
 
 /* Member portrait */
@@ -43,7 +41,6 @@
     order: 1; /* Move the portrait to the second position in the flex container */
     margin-top: 10px; /* Add margin to the right */
     margin-left: 10px; /* Add margin to the right */
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,15 +48,13 @@
     height: 100px;
     border-radius: 50%;
     position: relative; /* Ensure the overlay is confined to this container */
-
 }
 .memberPortraitImage{
-width:100px;
-height:100px;
-border-radius:50%;
+    width:100px;
+    height:100px;
+    border-radius:50%;
     border: 2px solid darkred;
     margin-right: 5px; /* Add margin to the right */
-
 }
 .health-overlay {
     position:absolute;
@@ -73,12 +68,10 @@ border-radius:50%;
     z-index: 1;
     opacity:50%;
     margin-right: 5px; /* Add margin to the right */
-
 }
 /* Container for details (bars and skills) */
 .details-container {
     order: 2; /* Move the details container to the first position in the flex container */
-
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Align items to the start */
@@ -98,7 +91,6 @@ border-radius:50%;
 /* Buff icon */
 .buff {
     display: inline-block;
-
     border: 1px solid green;
     background-color: #e0ffe0;
     border-radius: 50%;
@@ -111,7 +103,6 @@ border-radius:50%;
 /* Debuff icon */
 .debuff {
     display: inline-block;
-
     border: 1px solid red;
     background-color: #ffe0e0;
     border-radius: 50%;
@@ -120,20 +111,20 @@ border-radius:50%;
     text-align: center;
     line-height: 20px;
 }
- .effectTooltip {
+.effectTooltip {
     background-color: #333;
     color: #fff;
     text-align: center;
     border-radius: 5px;
     position: absolute;
-    z-index: 1;
-
-    width: 120px;
+    z-index: 1000;
+    width: 150px;
     opacity: 0;
     transition: opacity 0.3s;
+    padding: 5px;
 }
 
-.tooltip::after {
+.tooltip::after, .effectTooltip::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -146,13 +137,11 @@ border-radius:50%;
 .buff:hover .effectTooltip, .debuff:hover .effectTooltip {
     visibility: visible;
     opacity: 1;
-
 }
-.iconDiv:hover .tooltip, .memberPortrait:hover .tooltip , .battleSkillIcon:hover .tooltip{
+.iconDiv:hover .tooltip, .memberPortrait:hover .tooltip, .battleSkillIcon:hover .tooltip {
     visibility: visible;
     opacity: 1;
 }
-
 .icon-container {
     display: flex;
     flex-direction: column;
@@ -169,7 +158,6 @@ border-radius:50%;
     height: 45px;
     width: 45px;
 }
-
 .icon {
     width: 45px;
     height: 45px;
@@ -177,37 +165,35 @@ border-radius:50%;
     border-radius: 5px;
     border: 1px solid darkgrey;
 }
-.icon-row{
-display:flex;
-flex-direction:row}
-
+.icon-row {
+    display:flex;
+    flex-direction:row
+}
 #stage-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background-color: #333;
-  color: #fff;
-  font-size: 20px;
-  height: 45px;
-  position:absolute;
-  left:35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    font-size: 20px;
+    height: 45px;
+    position:absolute;
+    left:35%;
 }
-
 #stage-controls button {
-  background-color: #555;
-  border: none;
-  color: #fff;
-  padding: 5px 10px;
-  cursor: pointer;
-  margin: 0 10px;
-  font-size: 20px;
+    background-color: #555;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 0 10px;
+    font-size: 20px;
 }
-
 #stage-controls button:hover {
-  background-color: #777;
+    background-color: #777;
 }
-.paused{
+.paused {
     -webkit-animation-play-state:paused !important;
     -moz-animation-play-state:paused !important;
     -o-animation-play-state:paused !important;
@@ -220,7 +206,7 @@ flex-direction:row}
     border-radius: 5px;
     padding: 5px;
     position: absolute;
-    z-index: 10; /* Ensure tooltip is above other elements */
+    z-index: 1000; /* Ensure tooltip is above other elements */
     bottom: 80px; /* Position above the skill icon */
     left: 50%;
     transform: translateX(-50%);
@@ -230,31 +216,29 @@ flex-direction:row}
     pointer-events: none;
     display: none; /* Hidden by default */
 }
-
 .battleSkillIcon:hover .tooltip {
     visibility: visible;
     opacity: 1;
     display: block;
 }
 .tooltip, .effectTooltip {
-     background-color: #333;
-     color: #fff;
-     text-align: center;
-     border-radius: 5px;
-     padding: 5px;
-     position: fixed; /* Use fixed to avoid container offsets */
-     z-index: 100; /* Higher z-index to ensure visibility */
-     width: 150px;
-     transition: opacity 0.3s;
-     pointer-events: none;
-     display: none;
- }
-
- .tooltip::after, .effectTooltip::after {
-     content: "";
-     position: absolute;
-     left: 50%;
-     margin-left: -5px;
-     border-width: 5px;
-     border-style: solid;
- }
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: fixed; /* Use fixed to avoid container offsets */
+    z-index: 1000; /* Higher z-index to ensure visibility */
+    width: 150px;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    display: none;
+}
+.tooltip::after, .effectTooltip::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+}

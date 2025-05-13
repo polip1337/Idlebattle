@@ -1,4 +1,3 @@
-
 export function updateSkillBar(skills) {
     for (let i = 0; i < 12; i++) {
         var element = document.querySelector("#skill" + (i + 1) + " img");
@@ -74,7 +73,7 @@ export function updatePassiveSkillTooltip(tooltip, skill) {
             ${effectToDisplay.stat ? `Stat: ${effectToDisplay.stat}<br>` : ''}
             ${effectToDisplay.value !== undefined && effectToDisplay.value !== 0 ? `Value: ${effectToDisplay.value}<br>` : ''}
             ${effectToDisplay.subType ? `Type: ${effectToDisplay.subType}<br>` : ''}
-            ${effectToDisplay.description ? `Description: ${effectToDisplay.description}<br>`:''}
+            ${effectToDisplay.description ? `Description: ${effectToDisplay.description}<br>` : ''}
         `;
     }
 
@@ -157,7 +156,6 @@ export function renderLevelProgress(member) {
     progressBar.style.width = `${progressPercentage}%`;
     classNameText.textContent = member.classType + " Level: " + member.level;
 }
-
 
 export function updateHealth(member) {
     if (!member.element) return;
@@ -461,7 +459,8 @@ export function renderMember(member) { // For non-hero members
     var effectsElement = document.createElement('div');
     effectsElement.className = 'effects';
     memberDiv.appendChild(effectsElement);
-// Add hover listeners for skill icons
+
+    // Add hover listeners for skill icons
     const iconDivs = memberDiv.querySelectorAll('.iconDiv');
     iconDivs.forEach(iconDiv => {
         const tooltip = iconDiv.querySelector('.tooltip');
@@ -472,11 +471,11 @@ export function renderMember(member) { // For non-hero members
             tooltip.style.display = 'none';
         });
     });
+
     member.element = memberDiv; // Assign the created element to the member instance
 
     return memberDiv;
 }
-
 
 export function renderLevelUp(skill) {
     const battlefield = document.querySelector(`#battlefield`);
@@ -562,37 +561,38 @@ export function showTooltip(event, contentElement) {
     const viewportHeight = window.innerHeight;
     let top = 0;
     let left = 0;
-    if(target.id.includes("skill")){
-        top = -tooltipRect.height + 100;
-        left = targetRect.left + ((targetRect.width - tooltipRect.width) / 2);
-    }
-    else{
-        top =    5; // Position above element
-        left = (targetRect.width - tooltipRect.width) / 2; // Center horizontally
 
-        // Adjust if off-screen
-        if (left + tooltipRect.width > viewportWidth) {
-            left = viewportWidth - tooltipRect.width - 5;
-        }
-        if (left < 0) {
-            left = 5;
-        }
-        if (top < 0) {
-            top = targetRect.bottom + 5; // Flip to below if no space above
-        }
-        if (top + tooltipRect.height > viewportHeight) {
-            top = viewportHeight - tooltipRect.height - 5;
-        }
+    if (target.classList.contains('battleSkillIcon') || target.classList.contains('iconDiv')) {
+        top = targetRect.top - tooltipRect.height - 10; // Above the skill icon
+        left = targetRect.left + (targetRect.width - tooltipRect.width) / 2; // Center horizontally
+    } else if (target.classList.contains('buff') || target.classList.contains('debuff')) {
+        top = targetRect.bottom + 5; // Below the effect icon
+        left = targetRect.left + (targetRect.width - tooltipRect.width) / 2; // Center horizontally
+    } else {
+        top = targetRect.top - tooltipRect.height - 5; // Above portrait
+        left = targetRect.left + (targetRect.width - tooltipRect.width) / 2; // Center horizontally
     }
 
-
+    // Adjust if off-screen
+    if (left + tooltipRect.width > viewportWidth) {
+        left = viewportWidth - tooltipRect.width - 5;
+    }
+    if (left < 0) {
+        left = 5;
+    }
+    if (top < 0) {
+        top = targetRect.bottom + 5; // Flip to below if no space above
+    }
+    if (top + tooltipRect.height > viewportHeight) {
+        top = viewportHeight - tooltipRect.height - 5;
+    }
 
     contentElement.style.top = `${top}px`;
     contentElement.style.left = `${left}px`;
     contentElement.style.visibility = 'visible';
-    contentElement.style.position = 'absolute';
+    contentElement.style.position = 'fixed'; // Use fixed positioning
     contentElement.style.zIndex = '99999999';
-    contentElement.style.overflow ='visible';
+    contentElement.style.overflow = 'visible';
 }
 
 export function updateHeroMapStats(heroInstance) {

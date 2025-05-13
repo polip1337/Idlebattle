@@ -260,7 +260,6 @@ class Member {
         this.stats.stamina = this.class.stats.stamina + (this.statsPerLevel.stamina ? (this.level-1) * this.statsPerLevel.stamina : 0) ; // Recalculate max stamina
         this.currentStamina = this.stats.stamina;
 
-
         if (this.isHero) {
             updateExpBarText(this.classType + " Level: " + this.level);
             if ([2, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {

@@ -1,4 +1,3 @@
-
 import {nextStage, repeatStage, startBattle, returnToMap, attemptFlee} from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
@@ -83,7 +82,6 @@ async function loadSkills(effects, path) {
             }
         }
 
-
         skills[skillKey] = new Skill(skill, skill.effects);
     });
 
@@ -116,9 +114,6 @@ async function loadClasses(skills) {
 
 // Helper function to ensure Area data is loaded and awaited
 async function loadAreaInstance(jsonPath) {
-    // Area constructor's fetch is fire-and-forget. We need to manage awaiting its data.
-    // Since we cannot modify Area.js to return a promise or have a ready state,
-    // we re-fetch the data here to ensure it's available.
     const area = new Area(jsonPath); // Original constructor call (still fires its own fetch)
     try {
         const response = await fetch(jsonPath);
@@ -132,7 +127,6 @@ async function loadAreaInstance(jsonPath) {
     return area;
 }
 
-
 export async function loadGameData() {
     const effects = await loadEffects();
     let skills = await loadSkills(effects, 'Data/skills.json');
@@ -143,7 +137,6 @@ export async function loadGameData() {
 
     // Load currentArea and wait for its data
     currentArea = await loadAreaInstance("Data/Areas/goblinPlains.JSON");
-
 
     initiateBattleLog();
     createAndInitHero(heroClasses, team1, team2);
@@ -211,7 +204,6 @@ function selectInitialSkills() {
     }
 }
 
-
 function initiateBattleLog() {
     const logContainer = document.getElementById('battle-log');
     battleLog = new BattleLog(logContainer);
@@ -269,7 +261,6 @@ export function renderTeamMembers(members, containerId, clear = true) {
 }
 
 function initiateEventListeners() {
-
     document.getElementById('heroContentNavButton').addEventListener('click', (event) => openTab(event, 'heroContent'));
     document.getElementById('mapNavButton').addEventListener('click', (event) => openTab(event, 'map'));
     document.getElementById('libraryNavButton').addEventListener('click', (event) => openTab(event, 'library'));
@@ -280,7 +271,6 @@ function initiateEventListeners() {
     document.getElementById('repeat-popup').addEventListener('click', () => { hidePopupForBattleActions(); repeatStage(); });
     document.getElementById('nextStage-popup').addEventListener('click', () => { hidePopupForBattleActions(); nextStage();});
     document.getElementById('return-to-map-popup').addEventListener('click', () => { hidePopupForBattleActions(); returnToMap();});
-
 
     const fleeButton = document.getElementById('flee-battle');
     if (fleeButton) {
@@ -295,30 +285,36 @@ function initiateEventListeners() {
         }
     });
 
-    // Tooltips for dynamically created members are best handled when members are rendered
-    // Or use event delegation on a static parent if preferred.
-    // For simplicity, if renderTeamMembers ensures elements exist before this, it's okay.
-    // However, a more robust way is event delegation or adding listeners in renderMember/renderHero.
-    // For now, this might work if called after initial rendering.
-    // Consider moving this logic or using delegation.
-    document.getElementById('teamAndBattleContainer').addEventListener('mouseenter', (event) => {
-        const targetPortrait = event.target.closest('.memberPortrait');
-        if (targetPortrait) {
-            const tooltipContent = targetPortrait.querySelector('.tooltip');
-            if (tooltipContent) {
-                showTooltip(event, tooltipContent);
+    // Use event delegation for tooltips on teamAndBattleContainer
+    const teamAndBattleContainer = document.getElementById('teamAndBattleContainer');
+    teamAndBattleContainer.addEventListener('mouseover', (event) => {
+        const target = event.target.closest('.memberPortrait, .iconDiv, .battleSkillIcon, .buff, .debuff');
+        if (target) {
+            const tooltip = target.querySelector('.tooltip, .effectTooltip');
+            if (tooltip) {
+                showTooltip(event, tooltip);
             }
         }
-    }, true); // Use capture phase to catch events on dynamically added children
+    }, true);
+
+    teamAndBattleContainer.addEventListener('mouseout', (event) => {
+        const target = event.target.closest('.memberPortrait, .iconDiv, .battleSkillIcon, .buff, .debuff');
+        if (target) {
+            const tooltip = target.querySelector('.tooltip, .effectTooltip');
+            if (tooltip) {
+                tooltip.style.display = 'none';
+                tooltip.style.visibility = 'hidden';
+            }
+        }
+    }, true);
 
     setupSkillListeners();
 }
-// Helper to hide popup for battle actions, assumes hidePopup is globally available or imported
+
 function hidePopupForBattleActions() {
     const popup = document.getElementById('popup');
     if (popup) popup.classList.add('hidden');
 }
-
 
 function setupSkillListeners() {
     for (let i = 1; i <= 12; i++) {
@@ -384,7 +380,6 @@ function setupSkillListeners() {
         });
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', async () => {
     const maxStage = 10; // This could be loaded from area data
@@ -453,6 +448,5 @@ function togglePause() {
         // Resume skills
         team1.getAllAliveMembers().forEach(member => member.startSkills());
         team2.getAllAliveMembers().forEach(member => member.startSkills());
-
     }
 }
