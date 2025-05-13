@@ -17,6 +17,7 @@ class Hero extends Member {
         this.class1Evolve = false;
         this.class2Evolve = false;
         this.class3Evolve = false;
+        this.gold = 0; // Initialize gold
     }
 
     selectSkill(skill, skillBox, isPassive = false) {
@@ -64,6 +65,18 @@ class Hero extends Member {
         });
     }
 
-}
+    addGold(amount) {
+        this.gold += amount;
+        // Future: Update UI if gold is displayed somewhere permanently.
+        // For now, map screen stats will reflect this when map is opened/updated.
+    }
 
+    spendGold(amount) {
+        if (this.gold >= amount) {
+            this.gold -= amount;
+            return true;
+        }
+        return false;
+    }
+}
 export default Hero;

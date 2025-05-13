@@ -39,11 +39,11 @@ class EvolutionService {
     }
 
     meetsRequirements(requirements) {
-        for (let key in requirements) {
+       /* for (let key in requirements) {
             if (typeof requirements[key] === 'object') {
                 for (let subKey in requirements[key]) {
                     if ((battleStatistics[key][subKey] || 0) < requirements[key][subKey]) {
-                        return false; 
+                        return false;
                     }
                 }
             } else {
@@ -51,7 +51,7 @@ class EvolutionService {
                     return false;
                 }
             }
-        }
+        }*/
         return true;
     }
 }

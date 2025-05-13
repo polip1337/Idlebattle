@@ -1,19 +1,32 @@
 import { openTab } from './navigation.js';
 import { startBattle, repeatStage } from './Battle.js';
-import { team1, team2, battleLog } from './initialize.js';
+import { team1, team2, battleLog, hero } from './initialize.js';
 import { questSystem } from './questSystem.js';
+import { updateHeroMapStats, renderHero, updateHealth, updateMana, updateStamina } from './Render.js';
 
 export function initializeMap() {
     const mapContainer = document.getElementById('map-container');
     const poiList = document.getElementById('poi-list');
-
+    const heroPortraitContainer = document.getElementById('hero-portrait-container');
 
     // Map state
     let currentMapId = 'hollowreach_Valley';
     let mapHistory = [];
-    let currentLocation = null; // Tracks player's current POI
+    let currentLocation = null;
     let mapsData = null;
-    let isProcessingClick = false; // Debounce flag
+    let isProcessingClick = false;
+
+    // Render hero portrait
+    function renderHeroPortrait() {
+        if (!hero || !heroPortraitContainer) return;
+        heroPortraitContainer.innerHTML = ''; // Clear existing content
+        const heroElement = renderHero(hero); // Use renderHero from Render.js
+        heroPortraitContainer.appendChild(heroElement);
+        hero.initializeDOMElements(); // Ensure DOM elements are set
+        updateHealth(hero); // Update health bar
+        updateMana(hero); // Update mana bar
+        updateStamina(hero); // Update stamina bar
+    }
 
     // Load map data
     async function loadMapData() {
@@ -21,15 +34,22 @@ export function initializeMap() {
             const response = await fetch('Data/maps.json');
             mapsData = await response.json();
             loadMap(currentMapId);
+            renderHeroPortrait(); // Render portrait after map data is loaded
         } catch (error) {
             console.error('Error loading map data:', error);
         }
     }
+
     window.addEventListener('resize', () => {
         if (mapsData && currentMapId) {
             renderPOIs(); // Re-render to update pixel positions
+            if (hero) {
+                renderHeroPortrait(); // Re-render portrait to ensure proper scaling
+                updateHeroMapStats(hero);
+            }
         }
     });
+
     // Load a specific map
     function loadMap(mapId) {
         const map = mapsData[mapId];
@@ -41,121 +61,119 @@ export function initializeMap() {
         mapContainer.style.backgroundImage = `url(${map.background})`;
         pointsOfInterest = map.pois.map(poi => ({
             ...poi,
-            type: poi.type || 'combat' // Default to combat if type not specified
+            type: poi.type || 'combat',
+            cost: poi.cost || 0
         }));
 
-        // Set initial player location if none exists
-        if (!currentLocation && pointsOfInterest.length > 0) {
-            currentLocation = pointsOfInterest[0].name;
+        const currentPoiExistsOnNewMap = pointsOfInterest.some(poi => poi.name === currentLocation);
+        if (!currentLocation || !currentPoiExistsOnNewMap) {
+            const startingPoi = pointsOfInterest.find(poi => poi.isStartingLocation) || (pointsOfInterest.length > 0 ? pointsOfInterest[0] : null);
+            currentLocation = startingPoi ? startingPoi.name : null;
         }
 
         renderPOIs();
+        renderHeroPortrait(); // Re-render portrait when map changes
+        if (hero) updateHeroMapStats(hero);
     }
 
-    // Sample points of interest (overwritten by loadMap)
     let pointsOfInterest = [];
 
-    // Render POIs
-   function renderPOIs() {
-       poiList.innerHTML = ''; // Clear existing POIs
-       mapContainer.querySelectorAll('.poi').forEach(el => el.remove()); // Clear map POIs
+    function renderPOIs() {
+        poiList.innerHTML = '';
+        mapContainer.querySelectorAll('.poi').forEach(el => el.remove());
 
-       // Get the current dimensions of the map container
-       const mapWidth = mapContainer.offsetWidth;
-       const mapHeight = mapContainer.offsetHeight;
+        const mapWidth = mapContainer.offsetWidth;
+        const mapHeight = mapContainer.offsetHeight;
 
-       pointsOfInterest.forEach((poi, index) => {
-           // Create POI element on map
-           const poiElement = document.createElement('div');
-           poiElement.classList.add('poi', poi.type);
+        pointsOfInterest.forEach((poi, index) => {
+            const poiElement = document.createElement('div');
+            poiElement.classList.add('poi', poi.type);
 
-           // Convert percentage coordinates to pixel positions
-           const posX = (poi.x / 100) * mapWidth;
-           const posY = (poi.y / 100) * mapHeight;
+            const posX = (poi.x / 100) * mapWidth;
+            const posY = (poi.y / 100) * mapHeight;
 
-           // Apply pixel positions, accounting for centering
-           poiElement.style.left = `${posX}px`;
-           poiElement.style.top = `${posY}px`;
-           poiElement.dataset.index = index;
+            poiElement.style.left = `${posX}px`;
+            poiElement.style.top = `${posY}px`;
+            poiElement.dataset.index = index;
 
-           const poiIcon = document.createElement('img');
-           poiIcon.src = poi.icon;
-           poiIcon.alt = poi.name;
-           poiIcon.classList.add('poi-icon');
+            const poiIcon = document.createElement('img');
+            poiIcon.src = poi.icon;
+            poiIcon.alt = poi.name;
+            poiIcon.classList.add('poi-icon');
 
-           const poiName = document.createElement('span');
-           poiName.classList.add('poi-name');
-           poiName.textContent = poi.name;
+            const poiName = document.createElement('span');
+            poiName.classList.add('poi-name');
+            poiName.textContent = poi.name;
 
-           // Highlight current location
-           if (poi.name === currentLocation) {
-               poiElement.classList.add('current-location');
-           }
+            if (poi.name === currentLocation) {
+                poiElement.classList.add('current-location');
+            }
 
-           poiElement.appendChild(poiIcon);
-           poiElement.appendChild(poiName);
-           mapContainer.appendChild(poiElement);
+            poiElement.appendChild(poiIcon);
+            poiElement.appendChild(poiName);
+            mapContainer.appendChild(poiElement);
 
-           // Add click listener to .poi element
-           poiElement.addEventListener('click', (event) => {
-               event.stopPropagation();
-               event.preventDefault();
-               if (isProcessingClick) return; // Debounce
-               isProcessingClick = true;
-               setTimeout(() => { isProcessingClick = false; }, 300); // Reset after 300ms
+            poiElement.addEventListener('click', (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                if (isProcessingClick) return;
+                isProcessingClick = true;
+                setTimeout(() => { isProcessingClick = false; }, 300);
 
-               const poiIndex = poiElement.dataset.index;
-               const poi = pointsOfInterest[poiIndex];
-               if (poi.type === 'travel') {
-                   handleTravel(poi);
-               } else if (poi.type === 'combat') {
-                   handleCombat(poi);
-               } else if (poi.type === 'dialogue') {
-                   handleTalk(poi);
-               }
-           });
+                const clickedPoi = pointsOfInterest[poiElement.dataset.index];
+                if (clickedPoi.type === 'travel') {
+                    handleTravel(clickedPoi);
+                } else if (clickedPoi.type === 'combat') {
+                    handleCombat(clickedPoi);
+                } else if (clickedPoi.type === 'dialogue') {
+                    handleTalk(clickedPoi);
+                } else if (clickedPoi.type === 'tavern') {
+                    handleTavern(clickedPoi);
+                }
+            });
 
-           // Create POI list item
-           const listItem = document.createElement('li');
-           listItem.classList.add('poi-list-item', poi.type);
-           listItem.dataset.index = index;
-           listItem.textContent = poi.name;
+            const listItem = document.createElement('li');
+            listItem.classList.add('poi-list-item', poi.type);
+            listItem.dataset.index = index;
+            listItem.textContent = poi.name;
+            if (poi.type === 'tavern' && poi.cost) {
+                listItem.textContent += ` (Cost: ${poi.cost}g)`;
+            }
 
-           listItem.addEventListener('click', () => {
-               poiElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-               poiElement.classList.add('highlight');
-               setTimeout(() => poiElement.classList.remove('highlight'), 2000);
-           });
-           poiList.appendChild(listItem);
-       });
-   }
+            listItem.addEventListener('click', () => {
+                poiElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                poiElement.classList.add('highlight');
+                setTimeout(() => poiElement.classList.remove('highlight'), 2000);
+            });
+            poiList.appendChild(listItem);
+        });
+        if (hero) updateHeroMapStats(hero);
+    }
 
-    // Add new POI
     function addPOI() {
         const name = prompt("Enter the name of the new point of interest:");
         if (!name) return;
 
-        const type = prompt("Enter the type (travel, combat, or talk):", "combat");
-        if (!['travel', 'combat', 'talk'].includes(type)) {
-            alert("Invalid type. Use 'travel', 'combat', or 'talk'.");
+        const type = prompt("Enter the type (travel, combat, talk, or tavern):", "combat");
+        if (!['travel', 'combat', 'talk', 'tavern'].includes(type)) {
+            alert("Invalid type. Use 'travel', 'combat', 'talk', or 'tavern'.");
             return;
         }
 
         const icon = prompt("Enter the icon path (e.g., Media/map/poi-default.png):", "Media/map/poi-default.png");
 
-        // Generate random percentage-based coordinates (0–100)
-        const x = Math.random() * 100; // Percentage of width
-        const y = Math.random() * 100; // Percentage of height
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
 
         const poi = { name, x, y, icon, type };
         if (type === 'talk') {
             const npcId = prompt("Enter the NPC ID for this talk POI:");
-            const dialogueId = prompt("Enter the dialogue ID for this talk POI:");
-            if (npcId && dialogueId) {
+            const dialogueId = prompt("Enter the dialogue ID for this talk POI (optional, will pick default if empty):");
+            if (npcId) {
                 poi.npcId = npcId;
-                poi.dialogueId = dialogueId;
+                if (dialogueId) poi.dialogueId = dialogueId;
             } else {
-                alert("NPC ID and dialogue ID are required for talk POIs.");
+                alert("NPC ID is required for talk POIs.");
                 return;
             }
         } else if (type === 'travel') {
@@ -166,66 +184,95 @@ export function initializeMap() {
                 alert("Map ID is required for travel POIs.");
                 return;
             }
+        } else if (type === 'tavern') {
+            const cost = parseInt(prompt("Enter the gold cost for resting at this tavern:", "10"));
+            if (!isNaN(cost) && cost >= 0) {
+                poi.cost = cost;
+            } else {
+                alert("Invalid cost for tavern.");
+                return;
+            }
         }
 
         pointsOfInterest.push(poi);
         renderPOIs();
     }
 
-    // Remove POI
     function removePOI(index) {
         if (pointsOfInterest[index].name === currentLocation) {
-            currentLocation = pointsOfInterest[0]?.name || null; // Move to first POI or clear
+            currentLocation = pointsOfInterest[0]?.name || null;
         }
         pointsOfInterest.splice(index, 1);
         renderPOIs();
     }
 
-    // Handle travel POI
     function handleTravel(poi) {
         if (poi.mapId) {
             mapHistory.push(currentMapId);
-            currentLocation = null; // Reset location for new map
+            const fromPoiName = poi.name;
             loadMap(poi.mapId);
-            battleLog.log(`Traveled to ${poi.name}`);
-            questSystem.updateQuestProgress('travel', { poiName: poi.name });
+            const entryPoiForNewMap = pointsOfInterest.find(p => p.leadsFrom === currentMapId && p.originalEntryPoiName === fromPoiName) ||
+                                      pointsOfInterest.find(p => p.isStartingLocation) ||
+                                      (pointsOfInterest.length > 0 ? pointsOfInterest[0].name : null);
+            currentLocation = entryPoiForNewMap ? (typeof entryPoiForNewMap === 'string' ? entryPoiForNewMap : entryPoiForNewMap.name) : null;
+
+            battleLog.log(`Traveled to ${poi.name} (new map: ${poi.mapId})`);
+            questSystem.updateQuestProgress('travel', { poiName: poi.name, mapId: poi.mapId });
+            renderPOIs();
+            renderHeroPortrait(); // Re-render portrait for new map
         } else {
             alert(`No map defined for ${poi.name}`);
         }
     }
 
-    // Handle combat POI
     function handleCombat(poi) {
         const confirmBattle = confirm(`Start battle at ${poi.name}?`);
         if (confirmBattle) {
-            currentLocation = poi.name; // Update player location
-            renderPOIs(); // Re-render to show new location
+            currentLocation = poi.name;
+            renderPOIs();
+            renderHeroPortrait(); // Update portrait after location change
             battleLog.log(`Initiating battle at ${poi.name}`);
             startBattle(team1, team2, poi.name);
-            questSystem.updateQuestProgress('travel', { poiName: poi.name });
-
             openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
-            // Simulate battle victory for testing
-            setTimeout(() => {
-                questSystem.updateQuestProgress('combatComplete', { poiName: poi.name });
-            }, 1000);
         }
     }
 
-    // Handle talk POI
     function handleTalk(poi) {
-        if (poi.npcId && poi.dialogueId) {
-            currentLocation = poi.name; // Update player location
-            renderPOIs(); // Re-render to show new location
-            battleLog.log(`Speaking to ${poi.name}`);
+        if (poi.npcId) {
+            currentLocation = poi.name;
+            renderPOIs();
+            renderHeroPortrait(); // Update portrait after location change
+            battleLog.log(`Speaking at ${poi.name} (NPC: ${poi.npcId})`);
             questSystem.updateQuestProgress('talk', { poiName: poi.name, npcId: poi.npcId });
             window.startDialogue(poi.npcId, poi.dialogueId);
         } else {
-            alert(`No NPC or dialogue defined for ${poi.name}`);
+            alert(`No NPC defined for ${poi.name}`);
         }
     }
 
+    function handleTavern(poi) {
+        currentLocation = poi.name;
+        renderPOIs();
+        renderHeroPortrait(); // Update portrait after location change
+        battleLog.log(`Visiting tavern: ${poi.name}`);
 
-    // Initial load
+        const cost = poi.cost || 0;
+        const confirmRest = confirm(`Rest at ${poi.name} for ${cost} gold? This will fully restore HP, Mana, and Stamina.`);
+
+        if (confirmRest) {
+            if (hero.spendGold(cost)) {
+                hero.currentHealth = hero.maxHealth;
+                hero.currentMana = hero.stats.mana;
+                hero.currentStamina = hero.stats.stamina;
+                battleLog.log(`Rested at ${poi.name}. HP, Mana, and Stamina fully restored.`);
+                updateHeroMapStats(hero);
+                renderHeroPortrait(); // Update portrait to reflect new stats
+            } else {
+                battleLog.log(`Not enough gold to rest at ${poi.name}. Required: ${cost}g, Have: ${hero.gold}g`);
+                alert(`Not enough gold. You need ${cost} gold to rest here.`);
+            }
+        }
+    }
+
     loadMapData();
 }

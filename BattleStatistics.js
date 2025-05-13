@@ -5,24 +5,25 @@ class BattleStatistics {
         this.enemiesDefeated = {};
         this.successfulDodges = 0;
         this.successfulBlocks = 0;
-        this.healingDone = 0;
-        this.manaUsed = 0;
-        this.staminaUsed = 0;
+        this.healingDone = 0; // Healing done by the player to others
+        this.manaUsed = 0; // Generic mana used, more specific below
+        this.staminaUsed = 0; // Generic stamina used, more specific below
         this.criticalHits = 0;
         this.criticalDamage = 0;
         this.misses = 0;
         this.skillUsage = {};
-        this.totalDamageBySkill = {};
-        this.multiHits = 0;
+        this.totalDamageBySkill = {}; // Could be implemented if needed
+        this.multiHits = 0; // Renamed from multiKills for clarity if it means multi-hit attacks
         this.dotDamage = 0;
         this.manaRegenerated = 0;
         this.staminaRegenerated = 0;
-        this.manaSpent = 0;
-        this.staminaSpent = 0;
-        this.totalHealingReceived = 0;
-        this.totalBuffsApplied = 0;
-        this.totalDebuffsApplied = 0;
-
+        this.manaSpent = 0; // Specifically mana spent by hero on skills
+        this.staminaSpent = 0; // Specifically stamina spent by hero on skills
+        this.totalHealingReceived = 0; // Healing received by the player
+        this.totalBuffsApplied = 0; // Buffs applied by the player
+        this.totalDebuffsApplied = 0; // Debuffs applied by the player
+        this.successfulFlees = 0; // New: Track successful flees
+        this.goldCollected = 0; // New: Track gold collected
     }
 
     addDamageDealt(type, amount) {
@@ -31,6 +32,7 @@ class BattleStatistics {
         } else {
             this.damageDealt[type] = amount;
         }
+        this.damageDealt['Total'] = (this.damageDealt['Total'] || 0) + amount;
     }
 
     addDamageReceived(type, amount) {
@@ -39,6 +41,7 @@ class BattleStatistics {
         } else {
             this.damageReceived[type] = amount;
         }
+        this.damageReceived['Total'] = (this.damageReceived['Total'] || 0) + amount;
     }
 
     addEnemyDefeated(enemyType) {
@@ -61,13 +64,13 @@ class BattleStatistics {
         this.healingDone += amount;
     }
 
-    addManaUsed(amount) {
+    addManaUsed(amount) { // Potentially deprecated by addManaSpent
         this.manaUsed += amount;
     }
 
-    addCriticalHit(damage) {
+    addCriticalHit(damageAmount) { // Pass the extra damage from crit, or total crit damage
         this.criticalHits++;
-        this.criticalDamage += damage;
+        this.criticalDamage += damageAmount; // Assuming damageAmount is the full critical hit damage
     }
 
     addSkillUsage(skillName) {
@@ -91,74 +94,75 @@ class BattleStatistics {
     }
 
     addManaRegenerated(amount) {
-        this.manaRegenerated += amount;
+        this.manaRegenerated += Math.round(amount);
     }
 
     addStaminaRegenerated(amount) {
-        this.staminaRegenerated += amount;
+        this.staminaRegenerated += Math.round(amount);
     }
 
     addStaminaSpent(amount) {
-        if (this.staminaSpent) {
+        if (amount > 0) {
             this.staminaSpent += amount;
-        } else {
-            this.staminaSpent = amount;
         }
     }
 
     addManaSpent(amount) {
-        if (this.manaSpent) {
+        if (amount > 0) {
             this.manaSpent += amount;
-        } else {
-            this.manaSpent = amount;
         }
     }
 
-    addMultiHit() {
-        this.multiHit++;
-    }
-
-    addCriticalHit(damage) {
-        this.criticalHits++;
-        this.criticalDamage += damage;
+    addMultiHit() { // If this refers to multi-target skills or rapid hits
+        this.multiHits++;
     }
 
     addMiss() {
         this.misses++;
     }
 
-    addSkillUsage(skillName) {
-        if (this.skillUsage[skillName]) {
-            this.skillUsage[skillName]++;
-        } else {
-            this.skillUsage[skillName] = 1;
-        }
+    addSuccessfulFlee() {
+        this.successfulFlees++;
+    }
+
+    addGoldCollected(amount) {
+        this.goldCollected += amount;
     }
 
     updateBattleStatistics() {
-        let damageDataString = Object.keys(this.damageDealt)
-            .map(key => `${key}: ${this.damageDealt[key]}`)
+        let damageDealtString = Object.entries(this.damageDealt)
+            .map(([key, value]) => `${key}: ${Math.round(value)}`)
             .join('<br>');
+        if (!this.damageDealt || Object.keys(this.damageDealt).length === 0) damageDealtString = "0";
 
-        let damageReceivedDataString = Object.keys(this.damageReceived)
-            .map(key => `${key}: ${this.damageReceived[key]}`)
-            .join(', ');
 
-        document.getElementById('total-damage-dealt').innerHTML = damageDataString;
+        let damageReceivedString = Object.entries(this.damageReceived)
+            .map(([key, value]) => `${key}: ${Math.round(value)}`)
+            .join('<br>');
+        if (!this.damageReceived || Object.keys(this.damageReceived).length === 0) damageReceivedString = "0";
 
-        document.getElementById('total-damage-received').innerHTML = damageReceivedDataString;
-        document.getElementById('total-healing-received').innerText = this.totalHealingReceived;
+        let skillUsageString = Object.entries(this.skillUsage)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join('<br>');
+        if (!this.skillUsage || Object.keys(this.skillUsage).length === 0) skillUsageString = "None";
+
+
+        document.getElementById('total-damage-dealt').innerHTML = damageDealtString;
+        document.getElementById('total-damage-received').innerHTML = damageReceivedString;
+        document.getElementById('total-healing-received').innerText = Math.round(this.totalHealingReceived);
         document.getElementById('total-buffs-applied').innerText = this.totalBuffsApplied;
         document.getElementById('total-debuffs-applied').innerText = this.totalDebuffsApplied;
-        document.getElementById('mana-regenerated').innerText = this.manaRegenerated;
-        document.getElementById('stamina-regenerated').innerText = this.staminaRegenerated;
+        document.getElementById('mana-regenerated').innerText = Math.round(this.manaRegenerated);
+        document.getElementById('stamina-regenerated').innerText = Math.round(this.staminaRegenerated);
         document.getElementById('stamina-spent').innerText = this.staminaSpent;
         document.getElementById('mana-spent').innerText = this.manaSpent;
-        document.getElementById('multi-kills').innerText = this.multiKills;
+        document.getElementById('multi-kills').innerText = this.multiHits; // Assuming multi-kills was meant as multi-hits
         document.getElementById('critical-hits').innerText = this.criticalHits;
-        document.getElementById('critical-damage').innerText = this.criticalDamage;
+        document.getElementById('critical-damage').innerText = Math.round(this.criticalDamage);
         document.getElementById('misses').innerText = this.misses;
-        document.getElementById('skill-usage').innerText = this.skillUsage;
+        document.getElementById('skill-usage').innerHTML = skillUsageString;
+        document.getElementById('successful-flees').innerText = this.successfulFlees;
+        document.getElementById('gold-collected').innerText = this.goldCollected;
     }
 }
 

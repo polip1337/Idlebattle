@@ -1,5 +1,5 @@
-import {battleStatistics, team1} from './initialize.js';
-import {updateProgressBar} from './Render.js';
+import {battleStatistics, team1, hero} from './initialize.js';
+import {updateProgressBar, updateHeroMapStats} from './Render.js';
 import {updateQuestLog} from './questLog.js';
 
 export function openTab(evt, tabName) {
@@ -43,5 +43,10 @@ export function openTab(evt, tabName) {
     }
     if (tabName === 'quests') {
         updateQuestLog();
+    }
+    if (tabName === 'map') {
+        if (hero) { // Ensure hero is initialized
+            updateHeroMapStats(hero);
+        }
     }
 }

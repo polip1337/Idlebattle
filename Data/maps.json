@@ -201,6 +201,14 @@
         "type": "dialogue",
         "npcId": "varkis_ironblade",
         "dialogueId": "base"
+      },
+      {
+        "name": "Tavern",
+        "x": 50,
+        "y": 50,
+        "icon": "Media/map/tavern.png",
+        "cost": 5,
+        "type": "tavern"
       }
     ]
   }

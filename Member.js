@@ -22,6 +22,7 @@ class Member {
             this.position = classInfo.positions[0];
         }
         this.dead = false;
+        this.goldDrop = classInfo.goldDrop || 0; // Initialize goldDrop
 
         this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
@@ -123,6 +124,7 @@ class Member {
             return true;
         }
         battleLog.log(this.name + " Missed " + defender.name + "! Hit chance was: " + hitChance + '%');
+        battleStatistics.addMiss();
         return false;
     }
 
@@ -139,11 +141,11 @@ class Member {
                 const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
 
                 target.takeDamage(finalDamage);
-                if (isHero) {
+                if (isHero) { // Check if the attacker is the hero
                     skill.gainExperience(finalDamage);
                     battleStatistics.addDamageDealt(skill.damageType, finalDamage);
                 }
-                if (target.name == 'Hero') {
+                if (target.isHero) { // Check if the target is the hero
                     battleStatistics.addDamageReceived(skill.damageType, finalDamage);
                 }
 
@@ -168,6 +170,8 @@ class Member {
 
     applyBlock(damage) {
         if (Math.random() * 100 < this.stats.blockChance) {
+            battleStatistics.addSuccessfulBlock();
+            battleLog.log(`${this.name} blocked part of the attack!`);
             return damage * 0.5;
         }
         return damage;
@@ -184,9 +188,10 @@ class Member {
     }
 
     healDamage(heal) {
-        this.currentHealth += heal;
-        if (this.currentHealth > this.maxHealth) {
-            this.currentHealth = this.maxHealth;
+        const actualHeal = Math.min(heal, this.maxHealth - this.currentHealth);
+        this.currentHealth += actualHeal;
+        if (this.isHero) {
+            battleStatistics.addTotalHealingReceived(actualHeal);
         }
         updateHealth(this);
     }
@@ -195,6 +200,9 @@ class Member {
         if (!this.dead) {
             this.currentHealth -= damage;
             if (this.currentHealth < 0) {
+                this.currentHealth = 0; // Ensure health doesn't go negative before death check
+            }
+            if (this.currentHealth <= 0) {
                 this.handleDeath();
             }
             updateHealth(this);
@@ -203,11 +211,17 @@ class Member {
 
     handleDeath() {
         this.currentHealth = 0;
-        this.element.querySelector(".memberPortrait img").src = "Media/UI/dead.jpg";
+        if (this.element) {
+            this.element.querySelector(".memberPortrait img").src = "Media/UI/dead.jpg";
+        }
         this.dead = true;
         this.stopSkills();
-        if (this.name != 'Hero') {
-            hero.gainExperience(this.class.experience);
+        if (!this.isHero) { // Only hero gains exp from mob deaths
+            hero.gainExperience(this.class.experience || 0); // Ensure experience exists
+            battleStatistics.addEnemyDefeated(this.classType);
+        } else {
+            battleLog.log("Hero has been defeated!");
+            // Game over logic or revival logic could go here
         }
     }
 
@@ -224,6 +238,7 @@ class Member {
     }
 
     gainExperience(exp) {
+        if (!this.isHero) return; // Only hero gains experience this way
         this.experience += exp;
         if (this.experience >= this.experienceToLevel) {
             this.levelUp();
@@ -231,39 +246,61 @@ class Member {
         updateExp(this);
     }
 
-    levelUp() {
+    levelUp() { // This is primarily for the hero
         this.level++;
         for (const stat in this.statsPerLevel) {
             this.stats[stat] += this.statsPerLevel[stat];
         }
-        this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
-        this.maxMana = this.stats.mana;
+        this.currentHealth = this.maxHealth; // Full heal on level up
+
+        this.stats.mana = this.class.stats.mana + (this.statsPerLevel.mana ? (this.level-1) * this.statsPerLevel.mana : 0) ; // Recalculate max mana based on base and per level
         this.currentMana = this.stats.mana;
-        if (this.name == 'Hero') {
+
+        this.stats.stamina = this.class.stats.stamina + (this.statsPerLevel.stamina ? (this.level-1) * this.statsPerLevel.stamina : 0) ; // Recalculate max stamina
+        this.currentStamina = this.stats.stamina;
+
+
+        if (this.isHero) {
             updateExpBarText(this.classType + " Level: " + this.level);
             if ([2, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {
-                evolutionService.levelThresholdReached(1);
-                return true;
+                evolutionService.levelThresholdReached(1); // Assuming classIndex 1 for main class
             }
+            updateHealth(this);
+            updateMana(this);
+            updateStamina(this);
         }
-        this.experience = 0;
+        this.experience = this.experience - this.experienceToLevel; // Carry over excess exp
         this.experienceToLevel = Math.floor(this.experienceToLevel * 1.1);
+        if (this.experience >= this.experienceToLevel) { // Handle multi-level ups
+            this.levelUp();
+        }
     }
 
     handleRegeneration() {
         if (this.currentHealth <= 0) return;
 
-        this.currentMana = Math.min(this.stats.mana, this.currentMana + this.stats.manaRegen);
-        updateMana(this);
+        const manaRegenAmount = this.stats.manaRegen || 0;
+        if (this.currentMana < this.stats.mana) {
+            this.currentMana = Math.min(this.stats.mana, this.currentMana + manaRegenAmount);
+            if (this.isHero && manaRegenAmount > 0) battleStatistics.addManaRegenerated(manaRegenAmount);
+            updateMana(this);
+        }
 
-        this.currentStamina = Math.min(this.stats.stamina, this.currentStamina + Math.floor(0.1 * this.stats.vitality));
-        updateStamina(this);
+        const staminaRegenAmount = Math.floor(0.1 * this.stats.vitality) || 0;
+        if (this.currentStamina < this.stats.stamina) {
+            this.currentStamina = Math.min(this.stats.stamina, this.currentStamina + staminaRegenAmount);
+            if (this.isHero && staminaRegenAmount > 0) battleStatistics.addStaminaRegenerated(staminaRegenAmount);
+            updateStamina(this);
+        }
 
-        this.currentHealth = Math.min(this.maxHealth, parseFloat(this.currentHealth) + parseFloat((0.01 * this.stats.vitality)));
-        this.currentHealth = this.currentHealth.toFixed(2);
-        this.currentHealth = parseFloat(this.currentHealth.toString());
-        updateHealth(this);
+        // Health regen (if any, e.g. 1% of vitality)
+        const healthRegenAmount = parseFloat((0.01 * this.stats.vitality).toFixed(2)) || 0;
+        if (this.currentHealth < this.maxHealth && healthRegenAmount > 0) {
+             this.currentHealth = Math.min(this.maxHealth, this.currentHealth + healthRegenAmount);
+             this.currentHealth = parseFloat(this.currentHealth.toFixed(2));
+             updateHealth(this);
+        }
     }
 }
 

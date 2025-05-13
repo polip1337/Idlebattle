@@ -5,6 +5,7 @@
     "portrait": "Media/Mobs/Goblin/warrior.jpeg",
     "positions": [ "Front"],
     "experience":15,
+    "goldDrop": 5,
     "skills": ["slash","shieldBash","battleCry","warriorsEndurance","staminaSurge","toughSkin"],
     "stats": {
       "strength": 25,
@@ -113,6 +114,7 @@
       "Back"
     ],
     "experience":10,
+    "goldDrop": 5,
     "skills": ["quickStrike","poisonDart","sneakAttack","agilityBoost","camouflage","keenEyes"],
     "stats": {
       "strength": 12,

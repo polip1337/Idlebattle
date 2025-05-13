@@ -19,6 +19,36 @@
     <link href="style/dialogue.css" rel="stylesheet" type="text/css">
     <link href="style/library.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="style/questLog.css">
+    <style>
+        /* Style for paused overlay */
+        .paused-overlay::after {
+            content: "PAUSED";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 10000; /* Ensure it's on top */
+        }
+        #hero-map-stats {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            z-index: 100; /* Above map background but below POIs if necessary */
+        }
+         #hero-map-stats p {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -88,6 +118,7 @@
         <p>Note: You can auto repeat by clicking the checkbox at the top of the battle screen.</p>
         <button id="repeat-popup">Repeat stage</button>
         <button id="nextStage-popup">NextStage</button>
+        <button id="return-to-map-popup">Return to Map</button>
     </div>
 </div>
 
@@ -103,13 +134,14 @@
     <div id="quest-list"></div>
 </div>
 <div class="tabcontent" id="battlefield" class="battle-view">
-    <div id="teamAndBattleContainer-overlay" class="battle-view">
+    <div id="teamAndBattleContainer-overlay" class="battle-view"> <!-- Added for pause overlay -->
         <div id="teamAndBattleContainer">
             <div id="stage-controls">
                 <button id="decrease-stage"><</button>
                 <span id="current-stage">Stage 1</span>
                 <button id="increase-stage">></button>
                 <input id="repeat" type="checkbox">Repeat</input>
+                <button id="flee-battle">Flee</button> <!-- Flee Button -->
             </div>
             <div id="teamContainer">
                 <div class="team" id="team1">
@@ -125,7 +157,7 @@
             <div id="battle-log-container">
                 <button id="toggle-log">Hide Log</button>
                 <div id="battle-log">
-                    <div id="anchor"></div>
+                    <div id="anchor"></div> <!-- Used for scrolling -->
                 </div>
             </div>
         </div>
@@ -156,43 +188,33 @@
                 <div id="inventory">
                     <h2>Inventory</h2>
                     <div class="iconGrid">
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
-                        <div class="inventorySlot"></div>
+                        <!-- 20 inventory slots -->
+                        <div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div>
+                        <div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div><div class="inventorySlot"></div>
                     </div>
                 </div>
-                <div id="heroClasses"></div>
-                <div id="heroStats">
+                <div id="heroClasses"> <!-- For displaying class info -->
                     <h2>Classes</h2>
-                    <p>Warrior</p>
-                    <p>Mage</p>
-                    <p>Healer</p>
+                    <!-- Dynamically populated or static examples -->
+                    <p id="heroClass1">Novice</p>
+                    <p id="heroClass2">-</p>
+                    <p id="heroClass3">-</p>
+                </div>
+                <div id="heroStats">
                     <h2>Statistics</h2>
-                    <p>Strength: <span id="heroStrength">15</span></p>
-                    <p>Speed: <span id="heroSpeed">6</span></p>
-                    <p>Dexterity: <span id="heroDexterity">8</span></p>
-                    <p>Vitality: <span id="heroVitality">20</span></p>
-                    <p>Magic Power: <span id="heroMagicPower">5</span></p>
-                    <p>Mana: <span id="heroMana">0</span></p>
+                    <!-- Values will be updated by JS -->
+                    <p>Strength: <span id="heroStrength">0</span></p>
+                    <p>Speed: <span id="heroSpeed">0</span></p>
+                    <p>Dexterity: <span id="heroDexterity">0</span></p>
+                    <p>Vitality: <span id="heroVitality">0</span></p>
+                    <p>Magic Power: <span id="heroMagicPower">0</span></p>
+                    <p>Mana: <span id="heroMana">0/0</span></p>
                     <p>Mana Regen: <span id="heroManaRegen">0</span></p>
-                    <p>Magic Control: <span id="heroMagicControl">5</span></p>
+                    <p>Magic Control: <span id="heroMagicControl">0</span></p>
+                    <p>Gold: <span id="heroGold">0</span></p>
                 </div>
                 <div id="heroSkills">
                     <h2>Active Skills</h2>
@@ -304,8 +326,16 @@
 </div>
 
 <div class="tabcontent" id="map">
-    <div style="display: flex;">
-        <div id="map-container"></div>
+    <div id="hero-portrait-container"></div>
+
+    <div id="hero-map-stats">
+        <p>HP: 0/0</p>
+        <p>Mana: 0/0</p>
+        <p>Stamina: 0/0</p>
+        <p>Gold: 0</p>
+    </div>
+    <div style="display: flex; height: 100%;">
+    <div id="map-container"></div>
         <div id="poi-list-container">
             <h3>Points of Interest</h3>
             <ul id="poi-list"></ul>
@@ -365,7 +395,7 @@
         <span class="statistic-value" id="mana-spent">0</span>
     </div>
     <div class="statistic-item">
-        <span class="statistic-name">Multi-Kills:</span>
+        <span class="statistic-name">Multi-Kills/Hits:</span> <!-- Clarified name -->
         <span class="statistic-value" id="multi-kills">0</span>
     </div>
     <div class="statistic-item">
@@ -384,183 +414,104 @@
         <span class="statistic-name">Skill Usage:</span>
         <span class="statistic-value" id="skill-usage">0</span>
     </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Successful Flees:</span>
+        <span class="statistic-value" id="successful-flees">0</span>
+    </div>
+    <div class="statistic-item">
+        <span class="statistic-name">Gold Collected:</span>
+        <span class="statistic-value" id="gold-collected">0</span>
+    </div>
 </div>
 
 <div id="footer" class="hidden">
     <div id="level-progress-container">
         <div id="level-progress-bar">
             <span id="class-name">Novice</span>
+            <div class="tooltip-text">EXP: 0/100</div> <!-- Added tooltip div -->
         </div>
     </div>
     <div id="bottomContainer">
         <div class="iconContainer">
-            <div class="iconRow upperRow">
+            <div class="iconRow upperRow"> <!-- Passive Skills -->
                 <div class="iconGroup">
-                    <div class="battleSkillIcon" id="passiveSkill1">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill2">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill3">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill4">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
+                    <div class="battleSkillIcon" id="passiveSkill1"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill2"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill3"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill4"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
                 </div>
                 <div class="iconGroup">
-                    <div class="battleSkillIcon" id="passiveSkill5">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill6">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill7">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill8">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
+                    <div class="battleSkillIcon" id="passiveSkill5"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill6"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill7"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill8"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
                 </div>
                 <div class="iconGroup">
-                    <div class="battleSkillIcon" id="passiveSkill9">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill10">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill11">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="passiveSkill12">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                    </div>
+                    <div class="battleSkillIcon" id="passiveSkill9"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill10"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill11"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                    <div class="battleSkillIcon" id="passiveSkill12"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
                 </div>
             </div>
-            <div class="iconRow lowerRow">
+            <div class="iconRow lowerRow"> <!-- Active Skills -->
                 <div class="iconGroup">
-                    <div class="battleSkillIcon" id="skill1">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill2">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill3">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill4">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
+                    <div class="battleSkillIcon" id="skill1"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill2"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill3"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill4"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
                 </div>
                 <div class="iconGroup">
-                    <div class="battleSkillIcon" id="skill5">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill6">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill7">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill8">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
+                    <div class="battleSkillIcon" id="skill5"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill6"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill7"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill8"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
                 </div>
                 <div class="iconGroup">
-                    <div class="battleSkillIcon" id="skill9">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill10">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill11">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
-                    <div class="battleSkillIcon" id="skill12">
-                        <img src="Media/UI/defaultSkill.jpeg">
-                        <div class="tooltip"></div>
-                        <div class="cooldown-overlay"></div>
-                    </div>
+                    <div class="battleSkillIcon" id="skill9"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill10"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill11"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
+                    <div class="battleSkillIcon" id="skill12"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div><div class="cooldown-overlay hidden"></div></div>
                 </div>
             </div>
         </div>
-        <div id="gridContainer">
-            <div class="gridItem">
-                <button class="tablinks" id="battlefieldNavButton">Battle</button>
-            </div>
-            <div class="gridItem">
-                <button class="tablinks" id="heroContentNavButton">Hero</button>
-            </div>
-            <div class="gridItem">
-                <button class="tablinks" id="mapNavButton">Map</button>
-            </div>
-            <div class="gridItem">
-                <button class="tablinks" id="libraryNavButton">Library</button>
-            </div>
-            <div class="gridItem">
-                <button class="tablinks" id="optionsNavButton">Options</button>
-            </div>
-            <div class="gridItem"></div>
-            <div class="gridItem">
-                <button class="tablinks" id="battle-statisticsNavButton">Stats</button>
-            </div>
-            <div class="gridItem">
-                <button class="tablinks" id="questsNavButton">Quests</button>
-            </div>
-            <div class="gridItem">
-                <button class="tablinks" id="homeNavButton">Home</button>
-            </div>
+        <div id="gridContainer"> <!-- Navigation Buttons -->
+            <div class="gridItem"><button class="tablinks" id="battlefieldNavButton">Battle</button></div>
+            <div class="gridItem"><button class="tablinks" id="heroContentNavButton">Hero</button></div>
+            <div class="gridItem"><button class="tablinks" id="mapNavButton">Map</button></div>
+            <div class="gridItem"><button class="tablinks" id="libraryNavButton">Library</button></div>
+            <div class="gridItem"><button class="tablinks" id="optionsNavButton">Options</button></div>
+            <div class="gridItem"></div> <!-- Empty or for future use -->
+            <div class="gridItem"><button class="tablinks" id="battle-statisticsNavButton">Stats</button></div>
+            <div class="gridItem"><button class="tablinks" id="questsNavButton">Quests</button></div>
+            <div class="gridItem"><button class="tablinks" id="homeNavButton">Home</button></div>
         </div>
     </div>
 </div>
-<script src="Hero.js" type="module"></script>
-<script src="Member.js" type="module"></script>
+<!-- Module Scripts -->
 <script src="EffectClass.js" type="module"></script>
-<script src="Render.js" type="module"></script>
+<script src="Skill.js" type="module"></script>
+<script src="Member.js" type="module"></script>
+<script src="Hero.js" type="module"></script>
 <script src="Team.js" type="module"></script>
+<script src="BattleLog.js" type="module"></script>
+<script src="BattleStatistics.js" type="module"></script>
+<script src="EvolutionService.js" type="module"></script>
+<script src="Render.js" type="module"></script>
+<script src="Targeting.js" type="module"></script>
+<script src="Area.js" type="module"></script>
 <script src="Battle.js" type="module"></script>
-<script src="Main.js" type="module"></script>
-<script src="initialize.js" type="module"></script>
+<script src="questSystem.js" type="module"></script>
+<script src="questLog.js" type="module"></script>
 <script src="navigation.js" type="module"></script>
 <script src="map.js" type="module"></script>
 <script src="home.js" type="module"></script>
 <script src="slideshow.js" type="module"></script>
 <script src="dialogue.js" type="module"></script>
 <script src="libraryLoader.js" type="module"></script>
+<script src="initialize.js" type="module"></script> <!-- Should be one of the last -->
+<script src="Main.js" type="module"></script> <!-- Main can be early if it only sets up global event listeners -->
+<script src="evolutionTest.mjs" type="module"></script> <!-- Main can be early if it only sets up global event listeners -->
+
+
 </body>
 </html>

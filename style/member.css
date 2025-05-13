@@ -233,3 +233,101 @@ flex-direction:row}
     -o-animation-play-state:paused !important;
     animation-play-state:paused !important;
 }
+.battleSkillIcon {
+    width: 70px;
+    height: 70px;
+    position: relative;
+}
+
+.battleSkillIcon img {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 15%;
+    border: 2px solid #000;
+    z-index: 1;
+}
+
+.battleSkillIcon .tooltip {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 10; /* Ensure tooltip is above other elements */
+    bottom: 80px; /* Position above the skill icon */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    display: none; /* Hidden by default */
+}
+
+.battleSkillIcon:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+}
+
+.rainbow {
+    /* Ensure rainbow animation doesn't affect tooltip */
+    animation: rainbow 2s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rainbow {
+    0% { border-color: red; }
+    14% { border-color: orange; }
+    28% { border-color: yellow; }
+    42% { border-color: green; }
+    57% { border-color: blue; }
+    71% { border-color: indigo; }
+    85% { border-color: violet; }
+    100% { border-color: red; }
+}
+.tooltip, .effectTooltip {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: fixed; /* Use fixed to avoid container offsets */
+    z-index: 100; /* Higher z-index to ensure visibility */
+    width: 150px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    display: none;
+}
+
+.tooltip::after, .effectTooltip::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+}
+
+.tooltip::after {
+    top: 100%;
+    border-color: #333 transparent transparent transparent;
+}
+
+.effectTooltip::after {
+    top: 100%;
+    border-color: #333 transparent transparent transparent;
+}
+
+.memberPortrait:hover .tooltip,
+.iconDiv:hover .tooltip,
+.battleSkillIcon:hover .tooltip,
+.buff:hover .effectTooltip,
+.debuff:hover .effectTooltip {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+}
