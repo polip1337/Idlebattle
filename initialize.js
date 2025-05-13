@@ -270,7 +270,6 @@ export function renderTeamMembers(members, containerId, clear = true) {
 
 function initiateEventListeners() {
 
-    document.getElementById('battlefieldNavButton').addEventListener('click', (event) => openTab(event, 'battlefield'));
     document.getElementById('heroContentNavButton').addEventListener('click', (event) => openTab(event, 'heroContent'));
     document.getElementById('mapNavButton').addEventListener('click', (event) => openTab(event, 'map'));
     document.getElementById('libraryNavButton').addEventListener('click', (event) => openTab(event, 'library'));

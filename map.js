@@ -147,7 +147,6 @@ export function initializeMap() {
             });
             poiList.appendChild(listItem);
         });
-        if (hero) updateHeroMapStats(hero);
     }
 
     function addPOI() {

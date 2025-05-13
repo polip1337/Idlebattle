@@ -1,3 +1,4 @@
+
 export function updateSkillBar(skills) {
     for (let i = 0; i < 12; i++) {
         var element = document.querySelector("#skill" + (i + 1) + " img");
@@ -583,13 +584,50 @@ export function showTooltip(event, contentElement) {
 }
 
 export function updateHeroMapStats(heroInstance) {
-    const statsContainer = document.getElementById('hero-map-stats');
-    if (!statsContainer || !heroInstance) return;
+    const statsContainer = document.getElementById('hero-portrait-container');
 
-    statsContainer.innerHTML = `
-        <p>HP: ${Math.round(heroInstance.currentHealth)} / ${heroInstance.maxHealth}</p>
-        <p>Mana: ${heroInstance.currentMana} / ${heroInstance.stats.mana}</p>
-        <p>Stamina: ${heroInstance.currentStamina} / ${heroInstance.stats.stamina}</p>
-        <p>Gold: ${heroInstance.gold}</p>
-    `;
+    const healthOverlay = statsContainer.querySelector('.health-overlay');
+    const manaOverlay = statsContainer.querySelector('.mana-overlay');
+    const staminaOverlay = statsContainer.querySelector('.stamina-overlay');
+    const tooltip = statsContainer.querySelector('.tooltip');
+    const goldSpan = statsContainer.querySelector('#hero-gold');
+
+    if (healthOverlay) {
+        const healthPercentage = (100 - (heroInstance.currentHealth / heroInstance.maxHealth) * 100) + '%';
+        healthOverlay.style.setProperty('--health-percentage', healthPercentage);
+    }
+
+    if (manaOverlay) {
+        const manaPercentage = ((heroInstance.currentMana / heroInstance.stats.mana) * 100) + '%';
+        manaOverlay.style.setProperty('--mana-percentage', manaPercentage);
+    }
+
+    if (staminaOverlay) {
+        const staminaPercentage = ((heroInstance.currentStamina / heroInstance.stats.stamina) * 100) + '%';
+        staminaOverlay.style.setProperty('--stamina-percentage', staminaPercentage);
+    }
+
+    if (tooltip) {
+        tooltip.innerHTML = `
+            <strong>${heroInstance.name}</strong><br>
+            Health: ${Math.round(heroInstance.currentHealth)}/${heroInstance.maxHealth}<br>
+            Mana: ${heroInstance.currentMana}/${heroInstance.stats.mana}<br>
+            Stamina: ${heroInstance.currentStamina}/${heroInstance.stats.stamina}<br>
+        `;
+    }
+
+    if (goldSpan) {
+        goldSpan.textContent = heroInstance.gold;
+    }
+
+    // Add hover event listeners for tooltip
+    const portrait = statsContainer.querySelector('.stats-portrait');
+    if (portrait && tooltip) {
+        portrait.addEventListener('mouseenter', (event) => {
+            showTooltip(event, tooltip);
+        }, { once: true });
+        portrait.addEventListener('mouseleave', () => {
+            tooltip.style.display = 'none';
+        }, { once: true });
+    }
 }

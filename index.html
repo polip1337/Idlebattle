@@ -326,16 +326,24 @@
 </div>
 
 <div class="tabcontent" id="map">
-    <div id="hero-portrait-container"></div>
 
-    <div id="hero-map-stats">
-        <p>HP: 0/0</p>
-        <p>Mana: 0/0</p>
-        <p>Stamina: 0/0</p>
-        <p>Gold: 0</p>
-    </div>
+
     <div style="display: flex; height: 100%;">
-    <div id="map-container"></div>
+        <div><div id="hero-portrait-container"></div>
+            <div id="gridContainer"> <!-- Navigation Buttons -->
+                <div class="gridItem"><button class="tablinks" id="heroContentNavButton">Hero</button></div>
+                <div class="gridItem"><button class="tablinks" id="mapNavButton">Map</button></div>
+                <div class="gridItem"><button class="tablinks" id="libraryNavButton">Library</button></div>
+                <div class="gridItem"><button class="tablinks" id="optionsNavButton">Options</button></div>
+                <div class="gridItem"></div> <!-- Empty or for future use -->
+                <div class="gridItem"><button class="tablinks" id="battle-statisticsNavButton">Stats</button></div>
+                <div class="gridItem"><button class="tablinks" id="questsNavButton">Quests</button></div>
+                <div class="gridItem"><button class="tablinks" id="homeNavButton">Home</button></div>
+            </div>
+        </div>
+
+
+        <div id="map-container"></div>
         <div id="poi-list-container">
             <h3>Points of Interest</h3>
             <ul id="poi-list"></ul>
@@ -474,17 +482,7 @@
                 </div>
             </div>
         </div>
-        <div id="gridContainer"> <!-- Navigation Buttons -->
-            <div class="gridItem"><button class="tablinks" id="battlefieldNavButton">Battle</button></div>
-            <div class="gridItem"><button class="tablinks" id="heroContentNavButton">Hero</button></div>
-            <div class="gridItem"><button class="tablinks" id="mapNavButton">Map</button></div>
-            <div class="gridItem"><button class="tablinks" id="libraryNavButton">Library</button></div>
-            <div class="gridItem"><button class="tablinks" id="optionsNavButton">Options</button></div>
-            <div class="gridItem"></div> <!-- Empty or for future use -->
-            <div class="gridItem"><button class="tablinks" id="battle-statisticsNavButton">Stats</button></div>
-            <div class="gridItem"><button class="tablinks" id="questsNavButton">Quests</button></div>
-            <div class="gridItem"><button class="tablinks" id="homeNavButton">Home</button></div>
-        </div>
+
     </div>
 </div>
 <!-- Module Scripts -->
