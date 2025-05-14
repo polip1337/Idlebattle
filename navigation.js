@@ -9,36 +9,49 @@ export function openTab(evt, tabName) {
         content.classList.remove('active');
     }
 
-
     // Deactivate all tab links
     const tabLinks = document.getElementsByClassName('tablinks');
     for (let link of tabLinks) {
         link.classList.remove('active');
     }
-    const footer = document.getElementById('footer');
 
     // Show the selected tab content
-    document.getElementById(tabName).classList.add('active');
+    const currentTab = document.getElementById(tabName);
+    if (currentTab) {
+        currentTab.classList.add('active');
+    } else {
+        console.error(`Tab with ID "${tabName}" not found.`);
+        return; // Exit if tab not found
+    }
 
-    // Activate the tab link (if evt is provided)
+    // Activate the tab link
     if (evt && evt.currentTarget) {
         evt.currentTarget.classList.add('active');
     } else {
-        // Activate the map tab link by default
-        const mapNavButton = document.getElementById('mapNavButton');
-        if (mapNavButton) {
-            mapNavButton.classList.add('active');
+        // If called programmatically (e.g., by back buttons), try to find a corresponding nav button
+        const correspondingNavLink = document.getElementById(`${tabName}NavButton`) || // e.g. mapNavButton
+                                  document.querySelector(`.tablinks[onclick*="'${tabName}'"]`); // Fallback
+        if (correspondingNavLink) {
+            correspondingNavLink.classList.add('active');
+        } else if (tabName === 'map') { // Default to mapNavButton if opening map specifically
+             const mapNavButton = document.getElementById('mapNavButton');
+             if (mapNavButton) mapNavButton.classList.add('active');
         }
     }
 
+    // Footer visibility
+    const footer = document.getElementById('footer');
     if (tabName === 'battlefield') {
-        footer.classList.remove('hidden'); // Show footer for other views
-
+        footer.classList.remove('hidden'); // Show footer for battlefield
+    } else {
+        footer.classList.add('hidden'); // Hide footer for ALL other tabs
     }
+
+    // Tab-specific updates
     if (tabName === 'battle-statistics') {
         battleStatistics.updateBattleStatistics();
     }
-    if (tabName === 'heroContent') {
+    if (tabName === 'heroContent' && team1 && team1.members[0]) {
         team1.members[0].skills.forEach(skill => {
             updateProgressBar(skill);
         });
@@ -50,7 +63,5 @@ export function openTab(evt, tabName) {
         if (hero) { // Ensure hero is initialized
             updateHeroMapStats(hero);
         }
-        footer.classList.add('hidden'); // Hide footer for map view
-
     }
 }

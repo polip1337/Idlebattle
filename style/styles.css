@@ -1,3 +1,25 @@
+/* Global Font Definitions */
+@font-face {
+    font-family: 'Cinzel';
+    src: url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+}
+
+@font-face {
+    font-family: 'IM Fell English';
+    src: url('https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap');
+}
+
+/* Basic body styling (optional, can be expanded) */
+body {
+    font-family: 'IM Fell English', serif; /* Default game font */
+    background-color: #1c1c1c; /* Dark background for areas outside main content */
+    color: #ccc; /* Default text color */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrollbars often caused by full-width elements */
+}
+
+
 /* Container for the entire team */
 .team {
     display: flex;
@@ -26,25 +48,34 @@
 }
 
 .tabcontent {
-    display: none;
+    display: none; /* Default: hidden */
+    position: relative; /* For potential absolute positioned children like back buttons */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .tabcontent.active {
-    display: block;
+    display: block; /* Default display for active tabs, can be overridden by more specific rules */
 }
+
 /* Add styling for tabs */
-#tabs {
+#tabs { /* This ID is not in the HTML structure provided, but if used for tab buttons container */
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
 }
-.tablinks {
+.tablinks { /* General styling for tablinks, specific overrides in map.css for #gridContainer */
     float: left;
     border: none;
     outline: none;
     cursor: pointer;
     padding: 14px 16px;
 }
+.tablinks.active {
+    /* Add a general active style for tablinks if not handled by specific components */
+    /* Example: background-color: #ddd; */
+}
+
 
 .iconRow {
     display: flex;
@@ -82,13 +113,20 @@
     justify-content: space-around;
     align-items: center;
 }
-#heroContent {
-    background-color: #3a3a3a;
+
+/* Hero Content Specific Styles */
+#heroContent { /* This is a .tabcontent */
+    background-color: #3a3a3a; /* Dark theme for hero screen */
     padding: 20px;
     border: 2px solid #555;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    height: 78vh; /* Consistent height */
+    overflow-y: auto; /* Scroll if content overflows */
+    color: #fff; /* Light text for dark background */
 }
+/* #heroContent.active will get display: block from .tabcontent.active, which is fine. */
+
 #heroInfoRow {
     display: flex;
     background-color: #4a4a4a;
@@ -132,11 +170,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center skill names */
     gap: 5px;
     margin: 5px 0;
-    /* Increase space between skills */
-    width: calc(100% / 5) - 20px);
+    /* width: calc(100% / 5) - 20px); Typo fixed to: */
+    width: calc((100% / 5) - 20px); /* Or consider flex-basis for grid children */
     background-color: #444;
     border: 2px solid #777;
     border-radius: 5px;
@@ -169,7 +206,6 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, auto);
     gap: 5px;
-    /* Increase gap between skills */
 }
 #inventory {
     margin-top: 20px;
@@ -183,7 +219,6 @@
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(2, auto);
     gap: 10px;
-    /* Increase gap between skills */
 }
 .inventorySlot {
     width: 50px;
@@ -199,20 +234,17 @@
 .inventorySlot:hover {
     background-color: #777;
 }
-#heroClassesAndStats h2 {
+#heroClassesAndStats h2, #heroSkills h2 {
     margin-top: 0;
     border-bottom: 1px solid #777;
     padding-bottom: 5px;
-}
-#heroSkills h2 {
-    margin-top: 0;
-    border-bottom: 1px solid #777;
-    padding-bottom: 5px;
+    font-family: 'Cinzel', serif; /* Thematic headers */
 }
 #heroStats h2 {
     grid-column: span 4;
     margin: 0;
     padding-bottom: 5px;
+    font-family: 'Cinzel', serif; /* Thematic headers */
 }
 #heroPortrait img {
     width: 150px;
@@ -246,206 +278,60 @@
     color: #fff;
     font-size: 12px;
 }
-#helmetSlot {
-    grid-area: 1 / 2 / 2 / 3;
-}
-#cloakSlot {
-    grid-area: 1 / 3 / 2 / 4;
-}
-#amuletSlot {
-    grid-area: 1 / 1 / 2 / 2;
-}
-#weaponSlot {
-    grid-area: 2 / 1 / 3 / 2;
-}
-#chestArmorSlot {
-    grid-area: 2 / 2 / 3 / 3;
-}
-#shieldSlot {
-    grid-area: 2 / 3 / 3 / 4;
-}
-#legArmorSlot {
-    grid-area: 3 / 2 / 4 / 3;
-}
-#glovesSlot {
-    grid-area: 4 / 1 / 4 / 2;
-}
-#bootsSlot {
-    grid-area: 4 / 2 / 4 / 4;
-}
-#ringSlot {
-    grid-area: 4 / 3 / 5 / 3;
-}
-.slot:hover {
-    background-color: #666;
-}
-.statGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-#heroPortraitAndPaperDoll {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding:5px;
-}
-.class-container, .stats-container {
-    margin-top: 10px;
-}
-.skills-container {
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    padding-right: 20px;
-    border-right: 1px solid #ddd;
-}
-.active-skills, .passive-skills {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-    margin-top: 10px;
-}
-.skill-box {
-    padding: 3px;
-    text-align: center;
-    cursor: pointer;
-    position: relative;
-    background-color: #444;
-    border: 2px solid #777;
-    border-radius: 5px;
-    padding: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-.skill-box img {
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
-}
-.skill-box .tooltip {
-	visibility: hidden;
-	position: absolute;
-	width: 160px;
-	background-color: #fff;
-	color: #000;
-	text-align: left;
-	padding: 5px;
-	border-radius: 5px;
-	border: 1px solid #888;
-	z-index: 1000; /* High z-index to appear above all elements */
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-	opacity: 0;
-	transition: opacity 0.3s;
-}
+#helmetSlot { grid-area: 1 / 2 / 2 / 3; }
+#cloakSlot { grid-area: 1 / 3 / 2 / 4; }
+#amuletSlot { grid-area: 1 / 1 / 2 / 2; }
+#weaponSlot { grid-area: 2 / 1 / 3 / 2; }
+#chestArmorSlot { grid-area: 2 / 2 / 3 / 3; }
+#shieldSlot { grid-area: 2 / 3 / 3 / 4; }
+#legArmorSlot { grid-area: 3 / 2 / 4 / 3; }
+#glovesSlot { grid-area: 4 / 1 / 4 / 2; }
+#bootsSlot { grid-area: 4 / 2 / 5 / 3; } /* Corrected grid area */
+#ringSlot { grid-area: 4 / 3 / 5 / 4; } /* Corrected grid area */
 
-.skill-box:hover .tooltip {
-	visibility: visible;
-	opacity: 1;
-}
-.skill-box:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
-}
-.skill-box.selected {
-    border-color: green;
-}
+.slot:hover { background-color: #666; }
+.statGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#heroPortraitAndPaperDoll { display: flex; flex-direction: column; align-items: center; gap: 10px; padding:5px; }
+.class-container, .stats-container { margin-top: 10px; }
+.skills-container { display: flex; flex-direction: column; width: 40%; padding-right: 20px; border-right: 1px solid #ddd; }
+.active-skills, .passive-skills { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 10px; }
+.skill-box { padding: 3px; text-align: center; cursor: pointer; position: relative; background-color: #444; border: 2px solid #777; border-radius: 5px; padding: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+.skill-box img { width: 30px; height: 30px; margin-right: 5px; }
+.skill-box .tooltip { visibility: hidden; position: absolute; width: 160px; background-color: #fff; color: #000; text-align: left; padding: 5px; border-radius: 5px; border: 1px solid #888; z-index: 1000; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); opacity: 0; transition: opacity 0.3s; }
+.skill-box:hover .tooltip { visibility: visible; opacity: 1; }
+.skill-box.selected { border-color: green; }
 
-#teamContainer {
-    width:80%
+/* Battle View Specific Styles */
+#battlefield { /* This is a .tabcontent */
+    height:78vh; /* Consistent height for main views */
 }
-#teamAndBattleContainer {
-    display:flex;
-}
-.battle-view {
+/* #battlefield.active gets display:block, which is fine. The .battle-view class handles background etc. */
+.battle-view { /* Applied to #battlefield and its overlay child */
     background: url('../Media/Backgrounds/goblin_Cave.png') no-repeat center center;
     background-size: cover;
     border: 2px solid #444;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    height:78vh;
 }
-
-.iconDiv .tooltip {
-    visibility: hidden;
-    position:absolute;
-    width: 160px;
-    background-color: #fff;
-    color: #000;
-    text-align: left;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #888;
-    position: absolute;
-    z-index: 1;
-    transform:translate(-30px,10px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-.teamContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-#team1 {
-    padding-top: 70px;
-}
-#team2-overlay {
-    position: absolute;
-    left: 0;
-    right: 20%;
-    margin-left: auto;
-    margin-right: auto;
-    width:400px;
-    z-index:1;
-}
-.team-row {
-    display: flex;
-    justify-content: center;
-}
+#teamContainer { width:80% }
+#teamAndBattleContainer { display:flex; height: 100%;} /* Takes full height of .battle-view / #battlefield */
+.iconDiv .tooltip { visibility: hidden; position:absolute; width: 160px; background-color: #fff; color: #000; text-align: left; padding: 5px; border-radius: 5px; border: 1px solid #888; z-index: 1; transform:translate(-30px,10px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }
+#team1 { padding-top: 70px; }
+.team-row { display: flex; justify-content: center; }
 
 /* Basic styles for popup */
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    background-color: white;
-    padding: 20px;
-    border: 2px solid black;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 300px;
-    text-align: center;
-}
-.startBattlePopup {
-    display:none;
-    position: fixed;
-    top: 20%;
-    left: 35%;
-    z-index: 1000;
-    text-align: center;
-}
-.popup-content {
-    margin: 10px 0;
-}
+.popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background-color: white; padding: 20px; border: 2px solid black; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); width: 300px; text-align: center; }
+.popup-content { margin: 10px 0; }
+.popup.hidden { display: none; }
+#evolution-modal { z-index: 1000; } /* Ensure modal.css handles its display */
+.opaque { opacity: 0.2; }
 
-.popup.hidden {
-    display: none;
-}
+/* Themed Scrollbar for Webkit Browsers */
+.themed-scrollbar::-webkit-scrollbar { width: 10px; }
+.themed-scrollbar::-webkit-scrollbar-track { background: #1a1410; border-radius: 5px; }
+.themed-scrollbar::-webkit-scrollbar-thumb { background: #4a3c2b; border-radius: 5px; border: 1px solid #6b5a3e; }
+.themed-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b5a3e; }
 
-#close-popup {
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-#teamAndBattleContainer {
-    height: 78vh;
-}
-#evolution-modal {
-    z-index: 1000;
-}
-.opaque {
-    opacity: 0.2;
-}
+/* Back to Map Button Style */
+.back-to-map-button { background-color: #4a3c2b; color: #ffd700; border: 1px solid #ffd700; border-radius: 6px; padding: 8px 15px; font-family: 'Cinzel', serif; font-size: 14px; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; margin: 10px; display: inline-block; }
+.back-to-map-button:hover { background-color: #6b5a3e; color: #fff; }

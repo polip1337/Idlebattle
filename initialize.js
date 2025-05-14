@@ -652,7 +652,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize core UI elements first
     initializeHomeScreen(); // This should set up home screen buttons and potentially call loadGameData
     await initializeDialogue();
-
+    const backToMapButtons = document.querySelectorAll('.back-to-map-button');
+        backToMapButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Assuming your openTab function can be called like this:
+                // If openTab is part of a module, you'd import and call it.
+                if (typeof openTab === 'function') {
+                    openTab(event, 'map');
+                } else {
+                    console.error('openTab function is not available for back buttons.');
+                }
+            });
+        });
     // Stage navigation controls - ensure they are set up after DOM is ready
     const decreaseStageButton = document.getElementById('decrease-stage');
     const increaseStageButton = document.getElementById('increase-stage');

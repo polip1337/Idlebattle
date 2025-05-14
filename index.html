@@ -116,7 +116,12 @@
     </div>
 </div>
 <div class="tabcontent" id="quests">
-    <div id="quest-list"></div>
+    <button class="back-to-map-button">Back to Map</button>
+
+    <div id="quest-list" class="themed-scrollbar">
+        <button class="back-to-map-button">Back to Map</button>
+        <!-- Quest items will be populated here -->
+    </div>
 </div>
 <div class="tabcontent" id="battlefield" class="battle-view">
     <div id="teamAndBattleContainer-overlay" class="battle-view"> <!-- Added for pause overlay -->
@@ -150,6 +155,7 @@
 </div>
 
 <div class="tabcontent" id="heroContent">
+    <button class="back-to-map-button">Back to Map</button>
     <div id="heroInfoRow">
         <div id="heroPortraitAndPaperDoll">
             <div id="heroPortrait">
@@ -311,37 +317,42 @@
 </div>
 
 <div class="tabcontent" id="map">
-
-
-    <div style="display: flex; height: 100%;">
-        <div><div id="hero-portrait-container"></div>
-            <div id="gridContainer"> <!-- Navigation Buttons -->
-                <div class="gridItem"><button class="tablinks" id="heroContentNavButton">Hero</button></div>
+    <!-- This div is the flex container for the map's 3-column layout -->
+    <div style="display: flex; width: 100%; height: 100%; gap: 10px;">
+        <!-- Column 1: Hero Portrait & Nav -->
+        <div style="flex: 0 0 220px; display: flex; flex-direction: column; gap: 10px; background-color: rgba(26, 20, 16, 0.5); padding: 10px; border-radius: 8px; border: 1px solid #4a3c2b;">
+            <div id="hero-portrait-container">
+                <!-- Hero portrait img can be added here by JS -->
+            </div>
+            <div id="gridContainer" class="themed-scrollbar"> <!-- Navigation Buttons -->
+                <div class="gridItem"><button class="tablinks" id="heroContentNavButton">Party</button></div>
                 <div class="gridItem"><button class="tablinks" id="mapNavButton">Map</button></div>
                 <div class="gridItem"><button class="tablinks" id="libraryNavButton">Library</button></div>
-                <div class="gridItem"><button class="tablinks" id="optionsNavButton">Options</button></div>
-                <div class="gridItem"><button class="tablinks" id="saveGameNavButton">Save Game</button></div> <!-- Empty or for future use -->
-                <div class="gridItem"><button class="tablinks" id="battle-statisticsNavButton">Stats</button></div>
                 <div class="gridItem"><button class="tablinks" id="questsNavButton">Quests</button></div>
+                <div class="gridItem"><button class="tablinks" id="battle-statisticsNavButton">Stats</button></div>
+                <div class="gridItem"><button class="tablinks" id="saveGameNavButton">Save Game</button></div>
                 <div class="gridItem"><button class="tablinks" id="homeNavButton">Home</button></div>
             </div>
         </div>
 
-
+        <!-- Column 2: Main Map Area -->
         <div id="map-container"></div>
+
+        <!-- Column 3: Points of Interest List -->
         <div id="poi-list-container">
             <h3>Points of Interest</h3>
-            <ul id="poi-list"></ul>
+            <ul id="poi-list" class="themed-scrollbar"></ul>
         </div>
     </div>
 </div>
 
 <div class="tabcontent" id="library">
     <div class="library-container">
-        <div class="topic-list">
+        <button class="back-to-map-button" style="position: absolute; top: 15px; right: 15px; z-index: 2;">Back to Map</button>
+        <div class="topic-list themed-scrollbar">
             <ul id="topics"></ul>
         </div>
-        <div class="content-area">
+        <div class="content-area themed-scrollbar">
             <div id="content">
                 <h2>Welcome to the Library</h2>
                 <p>Select a topic to view its content.</p>
@@ -350,6 +361,7 @@
     </div>
 </div>
 <div class="tabcontent statistics-page" id="battle-statistics">
+    <button class="back-to-map-button">Back to Map</button>
     <h1>Battle Statistics</h1>
     <div class="statistic-item">
         <span class="statistic-name">Total Damage Dealt:</span>

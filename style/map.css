@@ -1,143 +1,145 @@
-#map-container {
-position: relative;
-    position: relative;
-    width: 100vh;
-    height: 77vh;
-    background-size: 100% 100%; /* Stretch to fill container, may distort */
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: auto;
-    border: 2px solid #4a3c2b;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
+#map { /* This is the .tabcontent div for the map view */
+    height: 78vh; /* Consistent height with other main views */
+    background: url('../Media/parchment.jpg') no-repeat center/cover; /* Thematic background */
+    border: 2px solid #4a3c2b; /* Consistent border */
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9); /* Consistent shadow */
+    /* padding: 10px; /* Moved to #map.active */
+    box-sizing: border-box;
+    /* display: flex; /* Moved to #map.active */
+    overflow: hidden; /* Moved to #map.active to prevent scrollbars on the tab itself when content fits */
 }
 
-.poi {
-    position: absolute;
-    transform: translate(-50%, -50%); /* Center the POI on its coordinates */
-    text-align: center;
-    cursor: pointer;
+#map.active {
+    display: flex;
+    padding: 10px; /* Overall padding for the map view content */
+    overflow: hidden; /* Ensure the 3-column layout doesn't cause scrollbars on #map itself */
 }
 
-/* Ensure POI icons scale with the container */
-.poi-icon {
-    width: 4vw; /* Use viewport units or percentages for responsive sizing */
-    height: 4vw;
-    max-width: 50px; /* Cap the size for larger screens */
-    max-height: 50px;
-    transition: transform 0.2s ease;
-    border: 2px solid #ffd700;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #ffd700;
-}
 
-.poi:hover .poi-icon {
-    transform: scale(3);
-}
-
-.poi-name {
-    display: block;
-    color: #d4b68a;
-    font-family: 'Cinzel', serif;
-    font-size: clamp(12px, 1.2vw, 14px); /* Responsive font size */
-    text-shadow: 1px 1px 2px #000;
-    margin-top: 5px;
-}
-
-/* Rest of the styles remain unchanged */
-.poi.travel .poi-icon {
-    filter: brightness(1.2) hue-rotate(180deg);
-}
-
-.poi.combat .poi-icon {
-    filter: brightness(1.2) hue-rotate(0deg);
-}
-
-.poi.highlight {
-    animation: highlight 2s ease;
-}
-
-#poi-list {
+/* The direct child div (from index.html) that holds the three columns.
+   It was inlined in HTML, targeting it like this for clarity */
+#map.active > div:first-child { /* Target the flex container only when map is active */
+    display: flex;
     width: 100%;
-    height:100%;
-    background: #1a1410;
-    margin 5px;
-    padding: 5px;
-    overflow-y: auto;
-    border-right: 2px solid #4a3c2b;
-}
-#poi-list-container{
-        height: 77vh;
-        overflow:hidden;
-}
-
-.poi-list-item {
-    padding: 10px;
-    color: #d4b68a;
-    font-family: 'Cinzel', serif;
-    font-size: 14px;
-    cursor: pointer;
-    border-bottom: 1px solid #4a3c2b;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.poi-list-item.travel {
-    background: rgba(0, 128, 128, 0.2);
-}
-
-.poi-list-item.combat {
-    background: rgba(128, 0, 0, 0.2);
-}
-
-.poi-list-item:hover {
-    background: #3a2c1b;
-    color: #ffd700;
-}
-
-.remove-poi-button {
-    background: #4a3c2b;
-    color: #fff;
-    border: 1px solid #ffd700;
-    border-radius: 4px;
-    padding: 2px 6px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.remove-poi-button:hover {
-    background: #6b5a3e;
-}
-
-#map-controls {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: flex;
+    height: 100%;
     gap: 10px;
 }
 
-#back-map-button, #add-poi-button {
-    background: #4a3c2b;
-    color: #fff;
-    border: 1px solid #ffd700;
-    border-radius: 6px;
-    padding: 8px 12px;
+/* Column 1: Hero Portrait & Nav - Styled by inline styles in HTML for structure,
+   children #hero-portrait-container and #gridContainer styled below */
+#map.active > div:first-child > div:first-child {
+    /* This targets the first child of the inline-styled div, which is the left column container */
+    /* flex: 0 0 220px; display: flex; ... -- These are set inline in HTML */
+    /* Adding themed background to the left column */
+    background-color: rgba(26, 20, 16, 0.6);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #4a3c2b;
+    box-sizing: border-box;
+    display: flex; /* Ensure this is flex if not set inline */
+    flex-direction: column; /* Ensure this is column if not set inline */
+    gap: 10px; /* Ensure this is set if not set inline */
+}
+
+
+#hero-portrait-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 180px;
+    margin: 0 auto 10px auto;
+    background-color: #2a1f14;
+    border: 2px solid #4a3c2b;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#hero-portrait-container img { width: 100%; height: 100%; object-fit: cover; }
+
+#gridContainer { /* This is a .themed-scrollbar */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+#gridContainer .tablinks {
+    background-color: #4a3c2b;
+    color: #d4b68a;
+    border: 1px solid #6b5a3e;
+    border-radius: 5px;
+    padding: 10px;
     font-family: 'Cinzel', serif;
     font-size: 14px;
+    text-align: center;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
 }
 
-#back-map-button:hover, #add-poi-button:hover {
-    background: #6b5a3e;
+#gridContainer .tablinks:hover { background-color: #6b5a3e; color: #ffd700; }
+#gridContainer .tablinks.active { background-color: #6b5a3e; color: #ffd700; border-color: #ffd700; }
+
+/* Column 2: Main Map Area */
+#map-container {
+    flex: 1 1 auto;
+    position: relative;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: auto; /* This is a .themed-scrollbar */
+    border: 2px solid #4a3c2b;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
 }
 
-#back-map-button {
-    display: none;
+/* Column 3: Points of Interest List */
+#poi-list-container {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(26, 20, 16, 0.85);
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid #4a3c2b;
+    overflow: hidden;
 }
 
-@keyframes highlight {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.3); }
+#poi-list-container h3 { color: #ffd700; font-family: 'Cinzel', serif; font-size: 18px; text-align: center; margin: 0 0 10px 0; padding-bottom: 10px; border-bottom: 1px solid #4a3c2b; }
+
+#poi-list { /* This is a .themed-scrollbar */
+    flex-grow: 1;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0 5px 0 0;
+    margin: 0;
 }
+
+/* POI (Point of Interest) on map styling */
+.poi { position: absolute; transform: translate(-50%, -50%); text-align: center; cursor: pointer; }
+.poi-icon { width: 3.5vw; height: 3.5vw; max-width: 45px; max-height: 45px; min-width: 25px; min-height: 25px; transition: transform 0.2s ease; border: 2px solid #ffd700; border-radius: 50%; box-shadow: 0 0 10px #ffd700; background-color: rgba(0,0,0,0.3); }
+.poi:hover .poi-icon { transform: scale(2.5) translate(-20%, -20%); }
+.poi-name { display: block; color: #d4b68a; font-family: 'Cinzel', serif; font-size: clamp(10px, 1vw, 13px); text-shadow: 1px 1px 2px #000; margin-top: 5px; background-color: rgba(0,0,0,0.5); padding: 2px 4px; border-radius: 3px; }
+.poi.travel .poi-icon { filter: brightness(1.2) hue-rotate(180deg); }
+.poi.combat .poi-icon { filter: brightness(1.2) hue-rotate(0deg); }
+.poi.highlight .poi-icon { animation: highlight-poi 1.5s infinite alternate; }
+@keyframes highlight-poi { from { box-shadow: 0 0 10px #ffd700; transform: scale(1); } to { box-shadow: 0 0 20px #fff, 0 0 30px #ffd700; transform: scale(1.2); } }
+
+/* POI List Item Styling */
+.poi-list-item { padding: 10px; color: #d4b68a; font-family: 'Cinzel', serif; font-size: 14px; cursor: pointer; border-bottom: 1px solid #4a3c2b; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.2s ease, color 0.2s ease; }
+.poi-list-item:last-child { border-bottom: none; }
+.poi-list-item:hover { background: #3a2c1b; color: #ffd700; }
+.remove-poi-button { background: #4a3c2b; color: #fff; border: 1px solid #ffd700; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px; }
+.remove-poi-button:hover { background: #6b5a3e; }
+
+/* Map Controls - Not in provided HTML, but styled if added */
+#map-controls { position: absolute; top: 10px; left: 10px; z-index: 10; display: flex; gap: 10px; }
+#back-map-button, #add-poi-button { background: #4a3c2b; color: #fff; border: 1px solid #ffd700; border-radius: 6px; padding: 8px 12px; font-family: 'Cinzel', serif; font-size: 14px; cursor: pointer; transition: background 0.2s ease; }
+#back-map-button:hover, #add-poi-button:hover { background: #6b5a3e; }
+#back-map-button { display: none; }
