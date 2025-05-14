@@ -438,30 +438,44 @@ class Hero extends Member {
 
         this.recalculateHeroStats(false); // false: don't update UI immediately if part of larger load sequence
         }
-    selectSkill(skillInstance, slotIndex, isPassive = false) {
-            if (!skillInstance || !(skillInstance instanceof Skill)) {
-                console.error("Invalid skill instance provided to selectSkill", skillInstance);
-                return false;
-            }
-
-            const targetArray = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
-            const maxSlots = targetArray.length;
-
-            if (slotIndex < 0 || slotIndex >= maxSlots) {
-                console.error(`Invalid slotIndex ${slotIndex} for ${isPassive ? 'passive' : 'active'} skills. Max slots: ${maxSlots}`);
-                return false;
-            }
-
-            targetArray[slotIndex] = skillInstance;
-
+    selectSkill(skill, skillBox, isPassive = false) {
+            const selectedSkills = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
+            const maxSkills = 4;
+            const index = selectedSkills.indexOf(skill);
+            const skillBarUpdateMethod = isPassive ? updatePassiveSkillBar : updateSkillBar;
             if (isPassive) {
-                if (typeof updatePassiveSkillBar === "function") updatePassiveSkillBar(this.selectedPassiveSkills);
-            } else {
-                if (typeof updateSkillBar === "function") updateSkillBar(this.selectedSkills);
-            }
-            return true;
-        }
+                skill.setElement(document.querySelector("#passiveSkill" + index));
 
+
+            } else {
+                skill.setElement(document.querySelector("#skill" + index));
+
+            }
+
+            if (index === -1 && selectedSkills.length < maxSkills) {
+                if (!isPassive) {
+                    const targetingSelect = skillBox.querySelector('.targeting-modes');
+                    skill.targetingMode = targetingSelect.value;
+                } else {
+
+                }
+                selectedSkills.push(skill);
+                skillBox.classList.add('selected');
+            } else if (index !== -1) {
+                selectedSkills.splice(index, 1);
+                skillBox.classList.remove('selected');
+            }
+
+            skillBarUpdateMethod(selectedSkills);
+        }
+triggerRepeatSkills() {
+        var activeSkills = this.selectedSkills.filter(skill => skill.type == "active");
+        activeSkills.forEach(skill => {
+            if (skill.repeat && !skill.onCooldown) {
+                skill.useSkill(this);
+            }
+        });
+    }
         unselectSkill(slotIndex, isPassive = false) {
             const targetArray = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
             const maxSlots = targetArray.length;
