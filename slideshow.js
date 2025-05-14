@@ -2,21 +2,24 @@
 import { openTab } from './navigation.js';
 import { loadGameData } from './initialize.js';
 
-let slides = []; // Keep slides accessible in the module scope for calculations
-let defaultSlideDuration = 6000; // Default duration if not specified
+let slides = [];
+let defaultSlideDuration = 6000;
+const fadeOutDuration = 1000; // Duration for the final fade-out in ms (e.g., 1 second)
 let slideTimeout;
+let audioFadeInterval;
 let currentSlideIndex = 0;
 let audioElement;
-let onSlideshowCompleteCallback; // To store the onComplete callback
+let onSlideshowCompleteCallback;
+let isFadingOut = false; // Flag to prevent multiple fade-outs
 
 function calculateAudioTimestamp(targetSlideIndex) {
     let cumulativeTimeMs = 0;
     for (let i = 0; i < targetSlideIndex; i++) {
-        if (slides[i]) { // Check if slide exists
+        if (slides[i]) {
             cumulativeTimeMs += parseInt(slides[i].dataset.duration, 10) || defaultSlideDuration;
         }
     }
-    return cumulativeTimeMs / 1000; // Convert to seconds
+    return cumulativeTimeMs / 1000;
 }
 
 function syncAudioToSlide(slideIndex) {
@@ -25,21 +28,24 @@ function syncAudioToSlide(slideIndex) {
     const targetTime = calculateAudioTimestamp(slideIndex);
 
     const attemptSync = () => {
-        if (audioElement.readyState >= 1) { // HAVE_METADATA or more, so duration is known
-            // Ensure targetTime is within audio duration if not looping
-            // For simplicity, we'll let it try to seek. If it goes beyond, it usually stops or goes to end.
-            audioElement.currentTime = targetTime;
-            if (audioElement.paused) {
-                audioElement.play().catch(error => console.warn("Slideshow audio play failed during sync:", error));
+        if (audioElement.readyState >= 1) { // HAVE_METADATA or more
+            try {
+                if (targetTime < audioElement.duration) {
+                    audioElement.currentTime = targetTime;
+                } else {
+                    // If target time is beyond duration, could play from start or do nothing
+                    // For now, let's just log it, actual behavior depends on browser
+                    console.warn("Target audio time is beyond duration.");
+                }
+                if (audioElement.paused) {
+                    audioElement.play().catch(error => console.warn("Slideshow audio play failed during sync:", error));
+                }
+            } catch (e) {
+                console.error("Error setting audio current time:", e);
             }
-        } else {
-            // If audio is not ready, try again shortly or wait for 'canplay'
-            // This is a simplified retry, a more robust solution would use 'canplay' event
-            // console.warn("Audio not ready for sync, will try on canplay.");
         }
     };
 
-    // If audio is still loading, wait for 'canplay' to set currentTime
     if (audioElement.readyState < 1) {
         const canPlayListener = () => {
             attemptSync();
@@ -52,78 +58,135 @@ function syncAudioToSlide(slideIndex) {
 }
 
 function showSlide(index) {
+    if (isFadingOut) return; // Don't show new slides if already fading out
+
     slides.forEach((slide, i) => {
         slide.classList.toggle('active', i === index);
     });
 
     if (index >= slides.length) {
-        endSlideshow();
+        endSlideshow(); // This will now initiate the fade-out
         return;
     }
 
     currentSlideIndex = index;
     const currentSlideElement = slides[index];
-    syncAudioToSlide(index); // Sync audio to the start of this slide
+    if (!isFadingOut) { // Only sync if not already in the process of ending
+      syncAudioToSlide(index);
+    }
+
 
     const duration = parseInt(currentSlideElement.dataset.duration, 10) || defaultSlideDuration;
-    clearTimeout(slideTimeout); // Clear previous timeout
+    clearTimeout(slideTimeout);
     slideTimeout = setTimeout(advanceSlide, duration);
 }
 
 function advanceSlide() {
+    if (isFadingOut) return;
     showSlide(currentSlideIndex + 1);
 }
 
 function endSlideshow() {
+    if (isFadingOut) return; // Prevent multiple calls
+    isFadingOut = true;
+
     clearTimeout(slideTimeout);
+    clearInterval(audioFadeInterval); // Clear any existing audio fade
+
     const slideshow = document.getElementById('slideshow');
-    slideshow.classList.remove('active');
-    slideshow.classList.add('hidden');
-    slideshow.removeEventListener('click', handleSkip);
+    slideshow.classList.add('fading-out'); // Trigger visual fade via CSS
 
-    if (audioElement) {
-        audioElement.pause();
-        // audioElement.currentTime = 0; // Optional: reset audio to beginning
+    // Fade out audio
+    if (audioElement && !audioElement.paused) {
+        let currentVolume = audioElement.volume;
+        const volumeStep = currentVolume / (fadeOutDuration / 50); // Adjust 50ms interval for smoothness
+
+        audioFadeInterval = setInterval(() => {
+            currentVolume -= volumeStep;
+            if (currentVolume <= 0) {
+                audioElement.volume = 0;
+                audioElement.pause();
+                clearInterval(audioFadeInterval);
+            } else {
+                audioElement.volume = currentVolume;
+            }
+        }, 50);
     }
 
-    if (typeof onSlideshowCompleteCallback === 'function') {
-        onSlideshowCompleteCallback();
-    }
-    // Reset for next time
-    slides = [];
-    currentSlideIndex = 0;
-    audioElement = null;
-    onSlideshowCompleteCallback = null;
+    // After fadeOutDuration, completely hide and clean up
+    setTimeout(() => {
+        slideshow.classList.remove('active');
+        slideshow.classList.remove('fading-out'); // Clean up class
+        slideshow.classList.add('hidden');
+        slideshow.removeEventListener('click', handleSkip);
+
+        if (audioElement) {
+            audioElement.pause(); // Ensure it's paused
+            // Consider resetting volume if you plan to reuse the audio element immediately
+            // audioElement.volume = 1;
+        }
+
+        if (typeof onSlideshowCompleteCallback === 'function') {
+            onSlideshowCompleteCallback();
+        }
+
+        // Reset for next time
+        slides = [];
+        currentSlideIndex = 0;
+        audioElement = null;
+        onSlideshowCompleteCallback = null;
+        isFadingOut = false; // Reset flag
+    }, fadeOutDuration);
 }
 
 function handleSkip() {
-    // When skipping, we advance to the next slide, and showSlide will handle audio sync
-    advanceSlide();
+    if (isFadingOut) return; // Don't allow skip if already fading out
+
+    clearTimeout(slideTimeout); // Stop current slide's timer
+    clearInterval(audioFadeInterval); // Stop any ongoing audio fade (shouldn't be needed here but safe)
+
+    // If it's the last slide, skipping it should trigger the end sequence
+    if (currentSlideIndex >= slides.length - 1) {
+        // Ensure current active slide is visually removed before global fade
+        if (slides[currentSlideIndex]) {
+            slides[currentSlideIndex].classList.remove('active');
+        }
+        endSlideshow();
+    } else {
+        advanceSlide(); // Advance to next slide, syncAudioToSlide will handle audio
+    }
 }
 
 export function startSlideshow(onComplete) {
+    isFadingOut = false; // Ensure flag is reset at start
+    clearTimeout(slideTimeout);
+    clearInterval(audioFadeInterval);
+
     const slideshow = document.getElementById('slideshow');
     slides = Array.from(slideshow.querySelectorAll('.slide'));
     audioElement = document.getElementById('slideshow-audio');
     onSlideshowCompleteCallback = onComplete;
-    currentSlideIndex = 0; // Reset index
+    currentSlideIndex = 0;
 
     if (slides.length === 0) {
-        endSlideshow();
+        if (typeof onSlideshowCompleteCallback === 'function') {
+            onSlideshowCompleteCallback(); // Call immediately if no slides
+        }
         return;
     }
 
-    slideshow.classList.remove('hidden');
+    slideshow.classList.remove('hidden', 'fading-out'); // Ensure it's not hidden or mid-fade
     slideshow.classList.add('active');
+    slideshow.style.opacity = '1'; // Explicitly set opacity to 1 before starting
     slideshow.addEventListener('click', handleSkip);
 
     if (audioElement) {
-        audioElement.currentTime = 0; // Start audio from the beginning
+        audioElement.currentTime = 0;
+        audioElement.volume = 1; // Ensure audio starts at full volume
         audioElement.play().catch(error => {
-            console.warn("Slideshow audio autoplay failed. User interaction might be required or audio source issue.", error);
-            // Fallback or UI notification could be added here
+            console.warn("Slideshow audio autoplay failed.", error);
         });
     }
 
-    showSlide(0); // Start with the first slide
+    showSlide(0);
 }
