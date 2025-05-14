@@ -368,6 +368,8 @@ class Hero extends Member {
         for (const slot in this.equipment) {
             data.equipment[slot] = this.equipment[slot] ? this.equipment[slot].id : null;
         }
+        data.selectedSkillIds = this.selectedSkills.map(s => s ? s.id : null);
+        data.selectedPassiveSkillIds = this.selectedPassiveSkills.map(s => s ? s.id : null);
         data.baseStats = deepCopy(this.baseStats);
         data.consumableToolbar = this.consumableToolbar.map(item => item ? item.id : null); // Serialize
         return data;
@@ -435,9 +437,11 @@ class Hero extends Member {
                 }
             });
         }
-
+        this._savedSelectedSkillIds = data.selectedSkillIds || [];
+                this._savedSelectedPassiveSkillIds = data.selectedPassiveSkillIds || [];
         this.recalculateHeroStats(false); // false: don't update UI immediately if part of larger load sequence
         }
+
         addGold(amount) {
                 this.gold += amount;
                 // Future: Update UI if gold is displayed somewhere permanently.
@@ -526,23 +530,50 @@ class Hero extends Member {
         }
 
         reselectSkillsAfterLoad() {
-            // Initialize/clear selected skills arrays (assuming 4 slots each)
-            this.selectedSkills = [null, null, null, null];
-            this.selectedPassiveSkills = [null, null, null, null];
+                const DEFAULT_NUM_SLOTS = 12; // Corresponds to HTML skill bar slots
 
-            let activeSelectedCount = 0;
-            let passiveSelectedCount = 0;
-            const maxActive = this.selectedSkills.length;
-            const maxPassive = this.selectedPassiveSkills.length;
+                const numActiveSlots = (this._savedSelectedSkillIds && this._savedSelectedSkillIds.length > 0)
+                                       ? this._savedSelectedSkillIds.length
+                                       : DEFAULT_NUM_SLOTS;
+                const numPassiveSlots = (this._savedSelectedPassiveSkillIds && this._savedSelectedPassiveSkillIds.length > 0)
+                                        ? this._savedSelectedPassiveSkillIds.length
+                                        : DEFAULT_NUM_SLOTS;
 
-            if (!this.skills || this.skills.length === 0) {
-                console.warn("Hero has no skills available to select.");
-                // Update bars with empty selections
+                this.selectedSkills = new Array(numActiveSlots).fill(null);
+                this.selectedPassiveSkills = new Array(numPassiveSlots).fill(null);
+
+                if (this._savedSelectedSkillIds) {
+                    this._savedSelectedSkillIds.forEach((skillId, index) => {
+                        if (skillId && index < this.selectedSkills.length) {
+                            const skillInstance = this.skills.find(s => s.id === skillId);
+                            if (skillInstance) {
+                                this.selectedSkills[index] = skillInstance;
+                            } else {
+                                console.warn(`Saved selected active skill ID ${skillId} not found in hero's available skills.`);
+                            }
+                        }
+                    });
+                }
+
+                if (this._savedSelectedPassiveSkillIds) {
+                    this._savedSelectedPassiveSkillIds.forEach((skillId, index) => {
+                        if (skillId && index < this.selectedPassiveSkills.length) {
+                            const skillInstance = this.skills.find(s => s.id === skillId); // Passives are also in this.skills
+                            if (skillInstance) {
+                                this.selectedPassiveSkills[index] = skillInstance;
+                            } else {
+                                console.warn(`Saved selected passive skill ID ${skillId} not found in hero's available skills.`);
+                            }
+                        }
+                    });
+                }
+
+                delete this._savedSelectedSkillIds;
+                delete this._savedSelectedPassiveSkillIds;
+
                 if (typeof updateSkillBar === "function") updateSkillBar(this.selectedSkills);
                 if (typeof updatePassiveSkillBar === "function") updatePassiveSkillBar(this.selectedPassiveSkills);
-                return;
             }
-        }
 }
 
 export default Hero;

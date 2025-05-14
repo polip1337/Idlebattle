@@ -268,15 +268,6 @@ class Member {
         });
     }
 
-    gainExperience(exp) {
-        if (!this.isHero) return; // Only hero gains experience this way
-        this.experience += exp;
-        if (this.experience >= this.experienceToLevel) {
-            this.levelUp();
-        }
-        updateExp(this);
-    }
-
     levelUp(updateHeroUI = true) { // Added updateHeroUI flag
         this.level++;
         if (this.statsPerLevel) {
