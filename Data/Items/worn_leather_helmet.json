@@ -3,7 +3,7 @@
     "name": "Worn Leather Helmet",
     "type": "armor",
     "slot": "helmetSlot",
-    "icon": "Media/Items/Armor/helmet_leather_common.png",
+    "icon": "Media/Items/Armor/helmet_leather_common.svg",
     "description": "Offers minor protection for the head.",
     "rarity": "common",
     "value": 5,

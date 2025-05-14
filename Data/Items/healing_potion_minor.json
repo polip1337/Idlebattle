@@ -3,7 +3,7 @@
     "name": "Minor Healing Potion",
     "type": "consumable",
     "slot": "inventory", 
-    "icon": "Media/Items/Potions/potion_red_minor.png",
+    "icon": "Media/Items/Potions/health_minor.svg",
     "description": "Heals a small amount of health.",
     "rarity": "common",
     "value": 15,
