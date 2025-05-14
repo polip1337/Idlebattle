@@ -104,9 +104,10 @@ class Skill {
                 // Award experience for skill use, even if no damage/healing occurs
                 this.gainExperience(10); // Base experience for skill use
             } else {
-                this.retry = setTimeout(() => {
+                if(this.retry){
+                setTimeout(() => {
                     this.useSkill(member);
-                }, 1000);
+                }, 1000);}
             }
         }
     }

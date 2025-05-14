@@ -438,36 +438,55 @@ class Hero extends Member {
 
         this.recalculateHeroStats(false); // false: don't update UI immediately if part of larger load sequence
         }
-    selectSkill(skill, skillBox, isPassive = false) {
-            const selectedSkills = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
-            const maxSkills = 4;
-            const index = selectedSkills.indexOf(skill);
-            const skillBarUpdateMethod = isPassive ? updatePassiveSkillBar : updateSkillBar;
-            if (isPassive) {
-                skill.setElement(document.querySelector("#passiveSkill" + index));
-
-
-            } else {
-                skill.setElement(document.querySelector("#skill" + index));
-
+        addGold(amount) {
+                this.gold += amount;
+                // Future: Update UI if gold is displayed somewhere permanently.
+                // For now, map screen stats will reflect this when map is opened/updated.
             }
 
-            if (index === -1 && selectedSkills.length < maxSkills) {
-                if (!isPassive) {
-                    const targetingSelect = skillBox.querySelector('.targeting-modes');
-                    skill.targetingMode = targetingSelect.value;
-                } else {
-
+            spendGold(amount) {
+                if (this.gold >= amount) {
+                    this.gold -= amount;
+                    return true;
                 }
-                selectedSkills.push(skill);
-                skillBox.classList.add('selected');
-            } else if (index !== -1) {
-                selectedSkills.splice(index, 1);
-                skillBox.classList.remove('selected');
+                return false;
             }
+    selectSkill(skill, skillBox, isPassive = false) {
+        const selectedSkills = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
+        const maxSkills = 4;
+        // Find the index of the skill instance if it's already selected
+        const existingSkillIndex = selectedSkills.findIndex(s => s === skill);
 
-            skillBarUpdateMethod(selectedSkills);
+        const skillBarUpdateMethod = isPassive ? updatePassiveSkillBar : updateSkillBar;
+
+        // The skillBox might not be directly tied to selectedSkills index if skills are added/removed non-sequentially
+        // For setting skill element, we need to derive its intended slot in the UI bar if it's being added.
+        // If it's already selected, skill.div should already be set.
+
+        if (existingSkillIndex === -1 && selectedSkills.length < maxSkills) { // Adding new skill
+            if (!isPassive) {
+                const targetingSelect = skillBox.querySelector('.targeting-modes');
+                if (targetingSelect) { // Ensure targetingSelect exists
+                    skill.targetingMode = targetingSelect.value;
+                }
+            }
+            selectedSkills.push(skill);
+            skillBox.classList.add('selected');
+            // Set the element after adding to selectedSkills, using its new index in the bar
+            const newIndexInBar = selectedSkills.length -1; // 0-indexed
+            const skillBarElementId = isPassive ? "#passiveSkill" + (newIndexInBar + 1) : "#skill" + (newIndexInBar + 1);
+            const skillDiv = document.querySelector(skillBarElementId);
+            if (skillDiv) {
+                skill.setElement(skillDiv);
+            }
+        } else if (existingSkillIndex !== -1) { // Removing skill
+            selectedSkills.splice(existingSkillIndex, 1);
+            skillBox.classList.remove('selected');
+            skill.setElement(null); // Clear element association
         }
+
+        skillBarUpdateMethod(selectedSkills);
+    }
         triggerRepeatSkills() {
             // Filter for actual skill instances in selectedSkills, not null slots
             const activeSelectedSkills = this.selectedSkills.filter(skill => skill && skill.type === "active");
