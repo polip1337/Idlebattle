@@ -9,6 +9,7 @@
     justify-content: center;
     align-items: center;
     z-index: 2000;
+    cursor: pointer; /* Indicate that it's clickable for skipping */
 }
 
 .slideshow.hidden {
@@ -25,10 +26,12 @@
     align-items: center;
     opacity: 0;
     transition: opacity 1s ease-in-out;
+    pointer-events: none; /* Clicks on slide itself should go to parent slideshow for skip */
 }
 
 .slide.active {
     opacity: 1;
+    pointer-events: auto; /* Allow interaction if needed for future elements on a slide */
 }
 
 .slide img {
@@ -41,15 +44,10 @@
 }
 
 .slide p {
-
-    /* other styles */
-}
-.slide p {
     position: absolute;
     top: 90%;
     left: 50%;
     transform: translate(-50%, -50%);
-
     color: #fff;
     font-size: 24px;
     text-align: center;
