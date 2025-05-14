@@ -8,6 +8,7 @@ class Member {
 
         this.name = name;
         this.classType = classInfo.name;
+        this.classId = classInfo.id;
         this.class = classInfo; // This should be the raw class definition object
         this.team = team;
         this.opposingTeam = opposingTeam;
@@ -361,6 +362,7 @@ class Member {
             return {
                 name: this.name,
                 classType: this.classType, // Used to find base definition on load
+                classId: this.classId,
                 level: this.level,
                 currentHealth: this.currentHealth,
                 currentMana: this.currentMana,
@@ -400,7 +402,7 @@ class Member {
 
             // If non-heroes have skill progression (uncommon for standard mobs)
             if (data.skillProgression && data.skillProgression.length > 0 && allSkillsLookup) {
-                const baseSkillsFromClass = allMobClasses[this.classType].skills.map(skillId => deepCopy(allSkillsLookup[skillId]));
+                const baseSkillsFromClass = allMobClasses[this.classId].skills.map(skillId => deepCopy(allSkillsLookup[skillId]));
                 this.skills = baseSkillsFromClass.map(baseSkillData => {
                      const skillInstance = new Skill(baseSkillData, baseSkillData.effects);
                      const savedProg = data.skillProgression.find(sp => sp.name === skillInstance.name);

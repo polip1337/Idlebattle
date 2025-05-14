@@ -1,6 +1,6 @@
 // Hero.js
 import Member from './Member.js';
-import {updatePassiveSkillBar, updateSkillBar,deepCopy, updateStatsDisplay, renderSkills, renderPassiveSkills, renderHeroInventory, renderEquippedItems, renderWeaponSkills, updateHealth, updateMana, updateStamina} from './Render.js';
+import {updatePassiveSkillBar,renderHeroConsumableToolbar, renderBattleConsumableBar, updateSkillBar,deepCopy, updateStatsDisplay, renderSkills, renderPassiveSkills, renderHeroInventory, renderEquippedItems, renderWeaponSkills, updateHealth, updateMana, updateStamina} from './Render.js';
 import Skill from './Skill.js';
 import Item from './Item.js'; // Add this
 import EffectClass from './EffectClass.js'; // Add this
@@ -39,17 +39,11 @@ class Hero extends Member {
             cloakSlot: null
         };
         this.inventory = []; // Array of Item instances
-
-        // --- ENSURE THESE ARE INITIALIZED ---
+        this.consumableToolbar = [null, null, null];
         this.itemStatBonuses = {}; // Stores cumulative stat bonuses from items
         this.itemEffects = [];     // Stores active EffectClass instances from items (not directly used in recalculateHeroStats for stats.mana)
-        // ------------------------------------
-
-        // baseStats should be a deep copy of the stats derived from class + level ups, *before* item effects.
-        // The Member constructor already sets this.stats based on classInfo and initial level ups.
 
         this.baseStats = deepCopy(this.stats);
-
     }
 
     addItemToInventory(itemInstance) {
@@ -70,9 +64,91 @@ class Hero extends Member {
         }
         return false;
     }
+    equipConsumable(itemInstance, slotIndex) {
+            if (!(itemInstance instanceof Item) || itemInstance.type !== "consumable") {
+                console.error("Cannot equip non-consumable or invalid item to consumable toolbar:", itemInstance);
+                return false;
+            }
+            if (slotIndex < 0 || slotIndex >= this.consumableToolbar.length) {
+                console.error("Invalid consumable toolbar slot index:", slotIndex);
+                return false;
+            }
 
+            // If an item is already in the slot, unequip it first (move to inventory)
+            if (this.consumableToolbar[slotIndex]) {
+                this.unequipConsumable(slotIndex, true); // true to move to inventory
+            }
+
+            // Remove from inventory (if it's there)
+            this.removeItemFromInventory(itemInstance);
+
+            this.consumableToolbar[slotIndex] = itemInstance;
+
+            if (typeof renderHeroConsumableToolbar === "function") renderHeroConsumableToolbar(this);
+            if (typeof renderBattleConsumableBar === "function") renderBattleConsumableBar(this);
+            return true;
+        }
+
+        unequipConsumable(slotIndex, moveToInventory = true) {
+            if (slotIndex < 0 || slotIndex >= this.consumableToolbar.length) {
+                console.error("Invalid consumable toolbar slot index for unequip:", slotIndex);
+                return false;
+            }
+
+            const itemToUnequip = this.consumableToolbar[slotIndex];
+            if (!itemToUnequip) return false;
+
+            this.consumableToolbar[slotIndex] = null;
+
+            if (moveToInventory) {
+                this.addItemToInventory(itemToUnequip); // addItemToInventory handles its own UI update
+            }
+
+            if (typeof renderHeroConsumableToolbar === "function") renderHeroConsumableToolbar(this);
+            if (typeof renderBattleConsumableBar === "function") renderBattleConsumableBar(this);
+            return itemToUnequip;
+        }
+
+        useConsumableFromToolbar(slotIndex, target) {
+            if (slotIndex < 0 || slotIndex >= this.consumableToolbar.length) {
+                console.error("Invalid consumable toolbar slot index for use:", slotIndex);
+                return false;
+            }
+            const item = this.consumableToolbar[slotIndex];
+            if (!item || item.type !== "consumable") {
+                console.error("No consumable item in slot or item is not a consumable:", slotIndex, item);
+                return false;
+            }
+            if (!target || !(target instanceof Member)) { // Ensure target is a Member instance
+                console.error("Invalid target for consumable:", target);
+                return false;
+            }
+
+            const success = item.use(target); // Item.use will apply effects
+
+            if (success) {
+                console.log(`${this.name} used ${item.name} on ${target.name}.`);
+                this.consumableToolbar[slotIndex] = null; // Remove from toolbar after use
+
+                // Update UIs
+                if (typeof renderHeroConsumableToolbar === "function") renderHeroConsumableToolbar(this);
+                if (typeof renderBattleConsumableBar === "function") renderBattleConsumableBar(this);
+
+                // Effects applied by item.use() should ideally trigger their own UI updates on the target.
+                // For example, EffectClass for 'heal' calls target.healDamage(), which calls updateHealth().
+                // If an effect directly modifies stats of the hero, a stats recalculation might be needed.
+                if (target === this) { // If hero used on self and stats might have changed
+                    // Check if any effect modified a base stat directly that requires full recalc
+                    // For now, assume effects handle their direct consequences (like currentHealth)
+                    // If a consumable directly changes maxHP/Mana via stats, then:
+                    // this.recalculateHeroStats();
+                }
+                return true;
+            }
+            return false;
+        }
     _applyItemStats(item) {
-        if (!item || !item.stats) return;
+        if (!item || !item.stats || item.type === "consumable") return;
         for (const stat in item.stats) {
             this.stats[stat] = (this.stats[stat] || 0) + item.stats[stat];
             this.itemStatBonuses[stat] = (this.itemStatBonuses[stat] || 0) + item.stats[stat];
@@ -80,7 +156,7 @@ class Hero extends Member {
     }
 
     _unapplyItemStats(item) {
-        if (!item || !item.stats) return;
+        if (!item || !item.stats || item.type === "consumable") return;
         for (const stat in item.stats) {
             this.stats[stat] = (this.stats[stat] || 0) - item.stats[stat];
             this.itemStatBonuses[stat] = (this.itemStatBonuses[stat] || 0) - item.stats[stat];
@@ -285,30 +361,29 @@ class Hero extends Member {
 
     // SERIALIZATION
     getSerializableData() {
-        const data = super.getSerializableData(); // Gets Member's data
+        const data = super.getSerializableData();
         data.gold = this.gold;
         data.inventory = this.inventory.map(item => item.id);
         data.equipment = {};
         for (const slot in this.equipment) {
             data.equipment[slot] = this.equipment[slot] ? this.equipment[slot].id : null;
         }
-        // No need to save itemStatBonuses or itemEffects directly, they are derived
         data.baseStats = deepCopy(this.baseStats);
+        data.consumableToolbar = this.consumableToolbar.map(item => item ? item.id : null); // Serialize
         return data;
     }
 
-    restoreFromData(data, allHeroClasses, allSkillsLookup, allItemsCacheInstance) { // Added allItemsCacheInstance
-        super.restoreFromData(data, allHeroClasses, allSkillsLookup); // Member's restoration
+    restoreFromData(data, allHeroClasses, allSkillsLookup, allItemsCacheInstance) {
+        super.restoreFromData(data, allHeroClasses, allSkillsLookup);
         this.gold = data.gold || 0;
-
-        this.baseStats = data.baseStats ? deepCopy(data.baseStats) : deepCopy(this.stats); // Fallback for older saves
+        this.baseStats = data.baseStats ? deepCopy(data.baseStats) : deepCopy(this.stats);
 
         this.inventory = [];
         if (data.inventory && allItemsCacheInstance) {
             data.inventory.forEach(itemId => {
-                const itemInstance = allItemsCacheInstance[itemId];
-                if (itemInstance) {
-                    this.inventory.push(itemInstance);
+                const itemData = allItemsCacheInstance[itemId]; // Get raw item data
+                if (itemData) {
+                    this.inventory.push(new Item(itemData)); // Create Item instance
                 } else {
                     console.warn(`Item ID ${itemId} not found in allItemsCache during hero inventory restoration.`);
                 }
@@ -320,11 +395,10 @@ class Hero extends Member {
             for (const slot in data.equipment) {
                 const itemId = data.equipment[slot];
                 if (itemId) {
-                    const itemInstance = allItemsCacheInstance[itemId];
-                    if (itemInstance) {
-                        // Directly place item, stats/effects will be recalculated
+                    const itemData = allItemsCacheInstance[itemId];
+                    if (itemData) {
+                        const itemInstance = new Item(itemData);
                         this.equipment[slot] = itemInstance;
-                         // Apply stats and effects (without moving from inventory, as it's being restored directly)
                         this._applyItemStats(itemInstance);
                         this._applyItemEffects(itemInstance);
                         if (itemInstance.type === "weapon" && itemInstance.weaponSkills.length > 0) {
@@ -336,16 +410,34 @@ class Hero extends Member {
                         }
                     } else {
                         this.equipment[slot] = null;
-                        console.warn(`Item ID ${itemId} for slot ${slot} not found in allItemsCache during hero equipment restoration.`);
+                        console.warn(`Item ID ${itemId} for slot ${slot} not found in allItemsCache for equipment.`);
                     }
                 } else {
                     this.equipment[slot] = null;
                 }
             }
         }
-        this.recalculateHeroStats(); // Crucial to apply all bonuses correctly
-        // reselectSkillsAfterLoad should be called after this to handle skills potentially added by weapons
-    }
+
+        this.consumableToolbar = [null, null, null]; // Deserialize
+        if (data.consumableToolbar && allItemsCacheInstance) {
+            data.consumableToolbar.forEach((itemId, index) => {
+                if (itemId) {
+                    const itemData = allItemsCacheInstance[itemId];
+                    if (itemData && itemData.type === "consumable") {
+                        this.consumableToolbar[index] = new Item(itemData);
+                    } else if (itemData) {
+                        console.warn(`Item ID ${itemId} for consumable slot ${index} is not a consumable.`);
+                        // Optional: Add to inventory if it's not a consumable but was in a consumable slot
+                        // this.inventory.push(new Item(itemData));
+                    } else {
+                         console.warn(`Item ID ${itemId} for consumable slot ${index} not found.`);
+                    }
+                }
+            });
+        }
+
+        this.recalculateHeroStats(false); // false: don't update UI immediately if part of larger load sequence
+        }
     selectSkill(skillInstance, slotIndex, isPassive = false) {
             if (!skillInstance || !(skillInstance instanceof Skill)) {
                 console.error("Invalid skill instance provided to selectSkill", skillInstance);

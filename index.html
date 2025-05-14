@@ -1,3 +1,4 @@
+--- START OF FILE index.html ---
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +21,7 @@
     <link href="style/library.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="style/questLog.css">
     <link rel="stylesheet" href="style/saveLoadModal.css">
+    <link href="style/announcements.css" rel="stylesheet" type="text/css"> <!-- ADDED THIS LINE -->
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -32,6 +34,25 @@
             <button id="exit"><img src="Media/UI/exit.png" alt="Exit"></button>
         </div>
     </div>
+
+    <!-- ANNOUNCEMENTS BOX START -->
+    <div id="announcements-box">
+        <h2>Announcements</h2>
+        <div id="announcements-content" class="themed-scrollbar">
+
+            <div class="announcement-item">
+                <p class="announcement-date">2025-05-11</p>
+                <p class="announcement-text">Welcome to RPG Battle! The adventure begins now. Explore the world and conquer your foes!</p>
+            </div>
+
+            <div class="announcement-item">
+                Current version: 0.0.1
+            </div>
+        </div>
+
+    </div>
+    <!-- ANNOUNCEMENTS BOX END -->
+
 </div>
 
 <div class="slideshow hidden" id="slideshow">
@@ -223,6 +244,15 @@
                     <p>Gold: <span id="heroGold">0</span></p>
                 </div>
                 <div id="heroSkills">
+                    <div id="heroConsumableToolbarContainer">
+                        <h2>Consumable Toolbar</h2>
+                        <div id="heroConsumableToolbar" class="iconGrid">
+                            <!-- Slots will be populated by JS. These are placeholders for structure -->
+                            <div class="consumable-toolbar-slot inventorySlot" data-slot-index="0"></div>
+                            <div class="consumable-toolbar-slot inventorySlot" data-slot-index="1"></div>
+                            <div class="consumable-toolbar-slot inventorySlot" data-slot-index="2"></div>
+                        </div>
+                    </div>
                     <h2>Active Skills</h2>
                     <div id="activeSkills">
                         <div class="skill">
@@ -452,6 +482,8 @@
         </div>
     </div>
     <div id="bottomContainer">
+        <div id="battleConsumableBar">
+        </div>
         <div class="iconContainer">
             <div class="iconRow upperRow"> <!-- Passive Skills -->
                 <div class="iconGroup">
@@ -524,3 +556,4 @@
 
 </body>
 </html>
+--- END OF FILE index.html ---

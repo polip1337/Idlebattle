@@ -32,7 +32,74 @@ export function updateSkillBar(skills) {
         }
     }
 }
+export function renderHeroConsumableToolbar(heroInstance) {
+    const toolbarElement = document.getElementById('heroConsumableToolbar');
+    if (!toolbarElement) {
+        console.error("Hero consumable toolbar element not found!");
+        return;
+    }
+    // Clear existing slots, then repopulate based on current state
+    // This ensures data-attributes and event listeners are fresh.
+    const slotPlaceholders = toolbarElement.querySelectorAll('.consumable-toolbar-slot');
 
+    for (let i = 0; i < heroInstance.consumableToolbar.length; i++) {
+        const item = heroInstance.consumableToolbar[i];
+        const slotDiv = slotPlaceholders[i]; // Use existing placeholder divs
+        if (!slotDiv) {
+            console.error(`Consumable toolbar slot placeholder ${i} not found.`);
+            continue;
+        }
+        slotDiv.innerHTML = ''; // Clear previous content
+        slotDiv.dataset.slotType = "consumableToolbarHero"; // For drop handler
+        slotDiv.dataset.slotIndex = i; // Keep index
+
+        // Remove old listeners before adding new ones to prevent duplicates
+        slotDiv.removeEventListener('dragstart', handleDragStart);
+        slotDiv.removeEventListener('dragover', handleDragOver);
+        slotDiv.removeEventListener('drop', handleDrop);
+        slotDiv.removeEventListener('dblclick', handleHeroConsumableDoubleClick); // Use named handler
+        slotDiv.onmouseenter = null;
+        slotDiv.onmouseleave = null;
+
+        if (item) {
+            slotDiv.dataset.itemId = item.id;
+            slotDiv.dataset.itemSource = "consumableToolbarHero";
+            slotDiv.draggable = true;
+
+            const img = document.createElement('img');
+            img.src = item.icon;
+            img.alt = item.name;
+            img.style.width = "45px"; img.style.height = "45px";
+            img.draggable = false;
+
+            const tooltip = createItemTooltipElement(item);
+            slotDiv.appendChild(img);
+            slotDiv.appendChild(tooltip);
+
+            slotDiv.addEventListener('dragstart', handleDragStart);
+            slotDiv.addEventListener('dblclick', handleHeroConsumableDoubleClick);
+
+            slotDiv.onmouseenter = (event) => showGeneralTooltip(event, tooltip);
+            slotDiv.onmouseleave = () => hideGeneralTooltip(tooltip);
+        } else {
+            slotDiv.draggable = false; // Cannot drag empty slot
+            delete slotDiv.dataset.itemId;
+            delete slotDiv.dataset.itemSource;
+        }
+
+        // Always allow dropping onto consumable toolbar slots
+        slotDiv.addEventListener('dragover', handleDragOver);
+        slotDiv.addEventListener('drop', handleDrop);
+    }
+}
+
+// Named handler for double click to avoid issues with anonymous functions & removeEventListener
+function handleHeroConsumableDoubleClick(event) {
+    const slotIndex = parseInt(event.currentTarget.dataset.slotIndex);
+    if (!isNaN(slotIndex) && hero) { // hero from initialize.js
+        hero.useConsumableFromToolbar(slotIndex, hero); // Use on self
+    }
+}
 export function updateSkillTooltip(tooltip, skill) {
     if (!tooltip || !skill) return;
     let tooltipContent = `
@@ -245,6 +312,8 @@ export function updateStatsDisplay(heroInstance) { // Renamed parameter
     renderHeroInventory(heroInstance);
     renderEquippedItems(heroInstance);
     renderWeaponSkills(heroInstance);
+    renderHeroConsumableToolbar(heroInstance);
+
 }
 
 export function renderSkills(heroInstance) {
@@ -440,7 +509,31 @@ export function renderMember(member) { // For non-hero battle members
     portraitDiv.onmouseenter = (event) => { updateMemberTooltip(member); showGeneralTooltip(event, portraitTooltip);};
     portraitDiv.onmouseleave = () => hideGeneralTooltip(portraitTooltip);
 
+    memberDiv.addEventListener('dragover', handleDragOver); // Allow drop
+        memberDiv.addEventListener('drop', (event) => {
+            event.preventDefault();
+            event.stopPropagation(); // Prevent event from bubbling to other general drop handlers
 
+            if (!draggedItem || !hero || draggedItemElement.dataset.itemSource !== "battleConsumableBar") {
+                console.warn("Drop on member: Invalid dragged item or source is not battleConsumableBar.");
+                draggedItem = null; draggedItemElement = null; // Clean up drag state
+                return;
+            }
+
+            const itemToUse = draggedItem; // Item instance from handleDragStart
+            const sourceSlotIndex = parseInt(draggedItemElement.dataset.slotIndex);
+
+            if (itemToUse && itemToUse.type === "consumable" && !isNaN(sourceSlotIndex)) {
+                console.log(`Attempting to use ${itemToUse.name} from battle bar (slot ${sourceSlotIndex}) on ${member.name}`);
+                hero.useConsumableFromToolbar(sourceSlotIndex, member); // 'member' is the target instance
+            } else {
+                console.warn("Drop on member: Dragged item is not a consumable, or slot index invalid.");
+            }
+
+            // Clean up drag state after handling the drop
+            draggedItem = null;
+            draggedItemElement = null;
+        });
     portraitDetailsDiv.appendChild(portraitDiv);
     if (detailsDiv.hasChildNodes()) portraitDetailsDiv.appendChild(detailsDiv);
     memberDiv.appendChild(portraitDetailsDiv);
@@ -719,7 +812,17 @@ function handleDragStart(event) {
                 break;
             }
         }
-    }
+    }else if (itemSource === "consumableToolbarHero") { // NEW SOURCE
+         const slotIndex = parseInt(draggedItemElement.dataset.slotIndex);
+         if (!isNaN(slotIndex) && hero.consumableToolbar[slotIndex] && hero.consumableToolbar[slotIndex].id === itemId) {
+             draggedItem = hero.consumableToolbar[slotIndex];
+         }
+     } else if (itemSource === "battleConsumableBar") { // Will be added later
+          const slotIndex = parseInt(draggedItemElement.dataset.slotIndex);
+         if (!isNaN(slotIndex) && hero.consumableToolbar[slotIndex] && hero.consumableToolbar[slotIndex].id === itemId) {
+             draggedItem = hero.consumableToolbar[slotIndex];
+         }
+     }
 
     if (draggedItem) {
         event.dataTransfer.setData('text/plain', itemId); // Store item ID
@@ -754,41 +857,148 @@ function handleDrop(event) {
     // if (draggedItemElement) draggedItemElement.classList.remove('dragging'); // Optional visual
 
     const targetElement = event.currentTarget; // The slot where item is dropped
-    const targetSlotId = targetElement.dataset.slotId || targetElement.id; // e.g., "weaponSlot" or "inventory_0"
+    const targetSlotType = targetElement.dataset.slotType ||
+                               (targetElement.classList.contains('inventorySlot') ? 'inventory' : null) ||
+                               (targetElement.id && hero.equipment.hasOwnProperty(targetElement.id) ? 'equipment' : null);
 
-    const sourceIsEquipped = draggedItemElement.dataset.itemSource === "equipped";
-    const sourceSlotIdIfEquipped = sourceIsEquipped ? draggedItemElement.id : null;
+    const targetSlotId = targetElement.dataset.slotId || targetElement.id;
+    const targetSlotIndex = parseInt(targetElement.dataset.slotIndex);
+
+    const sourceItemSource = draggedItemElement.dataset.itemSource;
+    const sourceSlotIdIfEquipped = sourceItemSource === "equipped" ? draggedItemElement.id : null;
+    const sourceSlotIndexIfConsumableToolbar = (sourceItemSource === "consumableToolbarHero" || sourceItemSource === "battleConsumableBar")
+                                             ? parseInt(draggedItemElement.dataset.slotIndex) : -1;
+
+    // Prevent dropping items from battle bar onto hero sheet elements other than inventory
+    if (sourceItemSource === "battleConsumableBar" && targetSlotType !== "inventory") {
+        console.log("Items from battle bar can only be dropped into inventory (or used on members).");
+        draggedItem = null; draggedItemElement = null; return;
+    }
+
 
     // Case 1: Dropping onto an equipment slot (Paper Doll)
-    if (hero.equipment.hasOwnProperty(targetSlotId)) { // Check if targetSlotId is a valid equipment slot key
-        if (draggedItem.slot === targetSlotId) { // Item's designated slot matches target
-             // If item came from another equipment slot, unequip it first (it will go to inventory)
-            if (sourceIsEquipped && sourceSlotIdIfEquipped !== targetSlotId) {
-                 hero.unequipItem(sourceSlotIdIfEquipped, true); // true to move to inventory
+    if (targetSlotType === "equipment" && hero.equipment.hasOwnProperty(targetSlotId)) {
+        if (draggedItem.type === "consumable") {
+            console.warn("Cannot equip a consumable item to an equipment slot.");
+        } else if (draggedItem.slot === targetSlotId) {
+            if (sourceItemSource === "equipped" && sourceSlotIdIfEquipped !== targetSlotId) {
+                hero.unequipItem(sourceSlotIdIfEquipped, true);
+            } else if (sourceItemSource === "consumableToolbarHero" || sourceItemSource === "battleConsumableBar") {
+                // This should not happen due to the check above, but as a safeguard:
+                console.warn("Consumables cannot be equipped.");
+                draggedItem = null; draggedItemElement = null; return;
             }
-            hero.equipItem(draggedItem, targetSlotId); // equipItem removes from inventory
+            hero.equipItem(draggedItem, targetSlotId);
         } else {
             console.warn(`Item ${draggedItem.name} (slot: ${draggedItem.slot}) cannot be placed in equipment slot ${targetSlotId}.`);
         }
     }
-    // Case 2: Dropping onto an inventory slot (or general inventory area)
-    else if (targetElement.classList.contains('inventorySlot') || targetElement.closest('#inventory .iconGrid')) {
-        if (sourceIsEquipped) { // Item came from equipment
-            hero.unequipItem(sourceSlotIdIfEquipped, true); // true to move to inventory
+    // Case 2: Dropping onto an inventory slot (main inventory grid)
+    else if (targetSlotType === "inventory" && targetElement.classList.contains('inventorySlot') && !targetElement.classList.contains('consumable-toolbar-slot')) {
+        if (sourceItemSource === "equipped") {
+            hero.unequipItem(sourceSlotIdIfEquipped, true);
+        } else if (sourceItemSource === "consumableToolbarHero" && !isNaN(sourceSlotIndexIfConsumableToolbar)) {
+            hero.unequipConsumable(sourceSlotIndexIfConsumableToolbar, true); // true to move to inventory
+        } else if (sourceItemSource === "battleConsumableBar" && !isNaN(sourceSlotIndexIfConsumableToolbar)) {
+             hero.unequipConsumable(sourceSlotIndexIfConsumableToolbar, true); // Move from (logical) toolbar to inventory
         }
-        // If item came from inventory and dropped on inventory, no specific action for now (reordering not implemented)
-        // The item is already in inventory. If it was dragged from one inv slot to another,
-        // renderHeroInventory will redraw it in its current position.
-    } else {
-        console.warn("Item dropped on an invalid target area.");
+        // If from inventory to inventory, renderHeroInventory will update.
+    }
+    // Case 3: Dropping onto a Hero View Consumable Toolbar slot
+    else if (targetSlotType === "consumableToolbarHero" && !isNaN(targetSlotIndex)) {
+        if (draggedItem.type === "consumable") {
+            if (sourceItemSource === "consumableToolbarHero" && sourceSlotIndexIfConsumableToolbar !== targetSlotIndex) {
+                // Swap items within the hero consumable toolbar
+                const itemFromSource = hero.consumableToolbar[sourceSlotIndexIfConsumableToolbar];
+                const itemFromTarget = hero.consumableToolbar[targetSlotIndex];
+                hero.consumableToolbar[targetSlotIndex] = itemFromSource;
+                hero.consumableToolbar[sourceSlotIndexIfConsumableToolbar] = itemFromTarget;
+                renderHeroConsumableToolbar(hero); // Re-render both toolbars
+                renderBattleConsumableBar(hero);
+            } else if (sourceItemSource === "inventory") {
+                hero.equipConsumable(draggedItem, targetSlotIndex); // equipConsumable handles UI
+            } else if (sourceItemSource === "consumableToolbarHero" && sourceSlotIndexIfConsumableToolbar === targetSlotIndex) {
+                // Dropped on itself, do nothing.
+            } else {
+                 console.warn("Invalid source for hero consumable toolbar slot or item not consumable.");
+            }
+        } else {
+            console.warn(`Cannot place non-consumable item ${draggedItem.name} in consumable toolbar.`);
+        }
+    }
+    // Case 4: Dropping onto a battle member (handled by renderMember's event listener)
+    // This main handleDrop is for the Hero Sheet.
+    else if (targetElement.classList.contains('member') && sourceItemSource === "battleConsumableBar") {
+        // This drop should be handled by the specific listener on the member element in battle.
+        // If it somehow reaches here, it's an issue. For safety, do nothing.
+        console.log("Drop on member element detected in general handler, should be handled by member's own listener.");
+    }
+     else {
+        console.warn("Item dropped on an unrecognized or invalid target area.", targetElement);
     }
 
     draggedItem = null;
     draggedItemElement = null;
-    // UI updates are handled by equipItem/unequipItem -> updateStatsDisplay -> renderHeroInventory/EquippedItems
 }
 
+export function renderBattleConsumableBar(heroInstance) {
+    const barContainer = document.getElementById('battleConsumableBar');
+    if (!barContainer) {
+        // This might not be an error if the footer/bar isn't always expected.
+        // console.warn("Battle consumable bar container not found!");
+        return;
+    }
+    barContainer.innerHTML = ''; // Clear previous items
 
+    for (let i = 0; i < heroInstance.consumableToolbar.length; i++) {
+        const item = heroInstance.consumableToolbar[i];
+        const slotDiv = document.createElement('div');
+        slotDiv.classList.add('battle-consumable-slot');
+        // slotDiv.dataset.slotType = "battleConsumableBarSlot"; // Not a drop target itself
+        slotDiv.dataset.slotIndex = i;
+
+        // Remove old listeners to prevent accumulation if re-rendered frequently
+        slotDiv.removeEventListener('dragstart', handleDragStart);
+        slotDiv.removeEventListener('dblclick', handleBattleConsumableDoubleClick); // Named handler
+        slotDiv.onmouseenter = null;
+        slotDiv.onmouseleave = null;
+
+        if (item) {
+            slotDiv.dataset.itemId = item.id;
+            slotDiv.dataset.itemSource = "battleConsumableBar";
+            slotDiv.draggable = true;
+
+            const img = document.createElement('img');
+            img.src = item.icon;
+            img.alt = item.name;
+            // Img styling via CSS
+
+            const tooltip = createItemTooltipElement(item);
+            slotDiv.appendChild(img);
+            slotDiv.appendChild(tooltip);
+
+            slotDiv.addEventListener('dragstart', handleDragStart);
+            slotDiv.addEventListener('dblclick', handleBattleConsumableDoubleClick);
+
+            slotDiv.onmouseenter = (event) => showGeneralTooltip(event, tooltip);
+            slotDiv.onmouseleave = () => hideGeneralTooltip(tooltip);
+        } else {
+            slotDiv.draggable = false;
+            delete slotDiv.dataset.itemId;
+            delete slotDiv.dataset.itemSource;
+            // Optionally, add a placeholder visual for empty slot via CSS :empty selector
+        }
+        barContainer.appendChild(slotDiv);
+    }
+}
+
+// Named handler for double click on battle bar consumables
+function handleBattleConsumableDoubleClick(event) {
+    const slotIndex = parseInt(event.currentTarget.dataset.slotIndex);
+    if (!isNaN(slotIndex) && hero) { // hero from initialize.js
+        hero.useConsumableFromToolbar(slotIndex, hero); // Use on self
+    }
+}
 // --- GENERAL TOOLTIP FUNCTIONS (for items, skills in hero sheet, etc.) ---
 export function showGeneralTooltip(event, tooltipElement) {
     if (!tooltipElement || !tooltipElement.innerHTML.trim()) return;

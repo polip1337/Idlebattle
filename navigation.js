@@ -1,5 +1,5 @@
 import {battleStatistics, team1, hero} from './initialize.js';
-import {updateProgressBar, updateHeroMapStats,updateStatsDisplay} from './Render.js';
+import {updateProgressBar, updateHeroMapStats,renderBattleConsumableBar,renderSkills, updateStatsDisplay} from './Render.js';
 import {updateQuestLog} from './questLog.js';
 
 export function openTab(evt, tabName) {
@@ -43,6 +43,7 @@ export function openTab(evt, tabName) {
     const footer = document.getElementById('footer');
     if (tabName === 'battlefield') {
         footer.classList.remove('hidden'); // Show footer for battlefield
+         if (hero) renderBattleConsumableBar(hero);
     } else {
         footer.classList.add('hidden'); // Hide footer for ALL other tabs
     }

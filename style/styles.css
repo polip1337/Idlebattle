@@ -386,3 +386,48 @@ body {
     opacity: 0.5;
     border: 2px dashed #fff;
 } */
+/* styles.css */
+/* ... existing styles ... */
+
+#heroConsumableToolbarContainer {
+    margin-top: 20px;
+    background-color: #4a4a4a; /* Slightly different from #5a5a5a of heroSkills for distinction */
+    padding: 15px;
+    border: 2px solid #666; /* Darker border */
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.6);
+}
+
+#heroConsumableToolbarContainer h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #777;
+    padding-bottom: 10px;
+    font-family: 'Cinzel', serif;
+    color: #eee; /* Lighter text for header */
+}
+
+#heroConsumableToolbar {
+    /* .iconGrid styling (display: grid, gap) is applied via classList in JS */
+    grid-template-columns: repeat(3, minmax(50px, 1fr)); /* 3 columns for 3 slots */
+    justify-content: center; /* Center the slots if the container is wider */
+    max-width: 240px; /* Approx 3 * (50px slot + 10px gap) + padding */
+    margin: 0 auto; /* Center the grid itself */
+}
+
+.consumable-toolbar-slot {
+    /* .inventorySlot styling is applied (width, height, background, border, etc.) */
+    /* Specific overrides for consumable slots if needed: */
+    background-color: #3e3e3e; /* Slightly different background for these slots */
+    border: 2px solid #5e5e5e;
+}
+
+.consumable-toolbar-slot:hover {
+    background-color: #4f4f4f;
+    border-color: #7f7f7f;
+}
+
+.consumable-toolbar-slot img {
+    pointer-events: none;
+}

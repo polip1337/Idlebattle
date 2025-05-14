@@ -95,3 +95,73 @@
     visibility: visible;
     opacity: 1;
 }
+/* bottomBar.css or similar */
+/* ... existing #footer, #bottomContainer styles ... */
+
+#bottomContainer {
+    background: black;
+    opacity: 0.9; /* Standard opacity syntax */
+    padding: 10px;
+    margin: 15px; /* This margin might make it not touch screen edges, adjust if needed */
+    display: flex;
+    height: calc(100% - 20px); /* Account for padding */
+    box-sizing: border-box;
+    align-items: stretch; /* Make children stretch to full height of bottomContainer */
+}
+
+#battleConsumableBar {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: space-around; /* Distribute space between the 3 items */
+    align-items: center; /* Center items horizontally within the bar */
+    /* height: 100%; /* Children will determine height based on their size and justify-content */
+    min-height: 100%; /* Ensure it tries to fill */
+    margin-right: 15px;
+    padding: 5px 2px; /* Small padding */
+    /* border-right: 1px solid #444; /* Optional visual separator */
+    flex-shrink: 0; /* Prevent bar from shrinking */
+}
+
+.battle-consumable-slot {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(50, 50, 50, 0.7); /* Dark, slightly transparent */
+    border: 1px solid #666;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    position: relative; /* For tooltip */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.battle-consumable-slot:hover {
+    background-color: rgba(70, 70, 70, 0.8);
+    border-color: #888;
+}
+
+.battle-consumable-slot:empty { /* Style for empty slots */
+    background-color: rgba(30, 30, 30, 0.6);
+    border-color: #444;
+    cursor: default;
+    box-shadow: none;
+}
+
+.battle-consumable-slot img {
+    width: 40px; /* Slightly smaller than slot for padding */
+    height: 40px;
+    object-fit: contain;
+    pointer-events: none; /* Drag events on the slot div */
+}
+
+/* Adjust skill icon container width if battleConsumableBar takes up space */
+#bottomContainer .iconContainer {
+    /* display: block; */ /* Already set */
+    /* width: 80%; */ /* Commented out if using flex-grow */
+    flex-grow: 1; /* Allows skill container to take remaining space */
+    display: flex; /* To allow its children (iconRow) to align properly */
+    flex-direction: column;
+    justify-content: space-around;
+}
