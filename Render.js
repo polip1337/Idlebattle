@@ -420,6 +420,9 @@ export function renderHero(member) { // For map portrait or general hero display
     portraitDiv.addEventListener('mouseleave', () => {
         hideGeneralTooltip(portraitTooltip);
     });
+    const effectsElement = document.createElement('div');
+    effectsElement.className = 'effects';
+    memberDiv.appendChild(effectsElement);
 
     member.element = memberDiv;
     updateMana(member); // Call to set initial bar values

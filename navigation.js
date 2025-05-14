@@ -1,5 +1,5 @@
 import {battleStatistics, team1, hero} from './initialize.js';
-import {updateProgressBar, updateHeroMapStats,renderBattleConsumableBar,renderSkills, updateStatsDisplay} from './Render.js';
+import {updateProgressBar, updateHeroMapStats,renderBattleConsumableBar,renderSkills,renderPassiveSkills, updateStatsDisplay} from './Render.js';
 import {updateQuestLog} from './questLog.js';
 
 export function openTab(evt, tabName) {

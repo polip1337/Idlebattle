@@ -38,7 +38,6 @@
 
 /* Member portrait */
 .memberPortrait {
-    order: 1; /* Move the portrait to the second position in the flex container */
     margin-top: 10px; /* Add margin to the right */
     margin-left: 10px; /* Add margin to the right */
     display: flex;
