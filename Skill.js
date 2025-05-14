@@ -8,6 +8,7 @@ class Skill {
         this.name = skillData.name;
         this.icon = skillData.icon;
         this.type = skillData.type;
+        this.id = skillData.id;
         this.description = skillData.description;
         this.damage = skillData.damage;
         this.heal = skillData.heal;

@@ -335,3 +335,54 @@ body {
 /* Back to Map Button Style */
 .back-to-map-button { background-color: #4a3c2b; color: #ffd700; border: 1px solid #ffd700; border-radius: 6px; padding: 8px 15px; font-family: 'Cinzel', serif; font-size: 14px; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; margin: 10px; display: inline-block; }
 .back-to-map-button:hover { background-color: #6b5a3e; color: #fff; }
+/* styles.css */
+/* ... existing styles ... */
+
+.inventorySlot img, .slot img {
+    pointer-events: none; /* So drag events are primarily on the slot div */
+}
+
+.tooltip { /* General tooltip, if not already styled well enough */
+    visibility: hidden;
+    background-color: #222; /* Darker background */
+    color: #fff;
+    text-align: left; /* For item details */
+    border-radius: 6px;
+    padding: 8px;
+    position: fixed; /* Changed from absolute for better screen edge handling */
+    z-index: 1001; /* Higher than other elements */
+    opacity: 0;
+    transition: opacity 0.3s;
+    border: 1px solid #555;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 250px; /* Prevent very wide tooltips */
+}
+
+.tooltip strong { color: #ffd700; } /* Gold color for item name/rarity */
+.tooltip em { color: #aaa; font-size: 0.9em; }
+.tooltip hr { border-color: #444; margin: 5px 0; }
+
+
+/* Style for #heroWeaponSkills if needed */
+#heroWeaponSkills {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #5a5a5a; /* Similar to other hero sections */
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+#heroWeaponSkills h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #777;
+    padding-bottom: 5px;
+    font-family: 'Cinzel', serif;
+}
+
+/* When an item is being dragged (optional visual feedback) */
+/* .dragging {
+    opacity: 0.5;
+    border: 2px dashed #fff;
+} */

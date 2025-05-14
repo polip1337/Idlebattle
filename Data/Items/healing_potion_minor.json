@@ -1,0 +1,21 @@
+{
+    "id": "healing_potion_minor_001",
+    "name": "Minor Healing Potion",
+    "type": "consumable",
+    "slot": "inventory", 
+    "icon": "Media/Items/Potions/potion_red_minor.png",
+    "description": "Heals a small amount of health.",
+    "rarity": "common",
+    "value": 15,
+    "stats": {},
+    "effects": [
+        {
+            "name": "Minor Heal",
+            "type": "buff",
+            "subType": "heal",
+            "value": 25,
+            "duration": 0, 
+            "icon": "Media/UI/heal_effect.png"
+        }
+    ]
+}

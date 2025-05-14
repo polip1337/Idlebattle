@@ -1,0 +1,83 @@
+/* --- START OF FILE style/announcements.css --- */
+#announcements-box {
+    position: absolute; /* Positioned relative to its parent, .home-screen */
+    bottom: 20px;
+    left: 20px;
+    width: 320px; /* Adjusted width */
+    max-height: 280px; /* Adjusted max height */
+    background: rgba(30, 30, 30, 0.88); /* Darker, slightly more opaque */
+    padding: 15px;
+    border: 1px solid #4a3c2b; /* Consistent border with home-menu */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    color: #e0e0e0; /* Light text color */
+    z-index: 1001; /* Ensure it's above home-screen background */
+    display: flex;
+    flex-direction: column;
+}
+
+#announcements-box h2 {
+    color: #ffd700; /* Gold color for title, consistent with home menu */
+    font-size: 20px;
+    text-shadow: 1px 1px 2px #000;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: center;
+    border-bottom: 1px solid #4a3c2b;
+    padding-bottom: 8px;
+    flex-shrink: 0; /* Prevent title from shrinking */
+}
+
+#announcements-content {
+    overflow-y: auto;
+    flex-grow: 1; /* Allow content to take available space and scroll */
+    padding-right: 5px; /* Space for scrollbar */
+}
+
+/*
+    Assuming .themed-scrollbar is defined globally (e.g., in styles.css or similar)
+    If not, here's a basic fallback (remove or adjust if .themed-scrollbar handles it):
+*/
+#announcements-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+#announcements-content::-webkit-scrollbar-track {
+    background: #2c2c2c;
+    border-radius: 4px;
+}
+
+#announcements-content::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+#announcements-content::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+
+.announcement-item {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #4a3c2b; /* Dashed separator for items */
+}
+
+.announcement-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.announcement-date {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-bottom: 4px;
+}
+
+.announcement-text {
+    font-size: 0.95em;
+    line-height: 1.4;
+    margin: 0;
+    word-wrap: break-word; /* Ensure long words don't overflow */
+}
+/* --- END OF FILE style/announcements.css --- */

@@ -7,6 +7,7 @@ import Area from './Area.js'; // Make sure Area.js defines the Area class
 import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
 import BattleLog from './BattleLog.js';
+import Item from './Item.js';
 import {
     deepCopy,
     openEvolutionModal,
@@ -17,6 +18,7 @@ import {
     renderSkills,
     showTooltip,
     updateSkillTooltip,
+    updateStatsDisplay,
     updateHealth,
     updateMana,
     updateStamina,
@@ -46,7 +48,7 @@ let currentStage = 1;
 let clickTimeout;
 export const NPC_MEDIA_PATH = "Media/NPC/";
 export let allSkillsCache = null;
-
+export let allItemsCache = null;
 
 async function loadJSON(url) {
     const response = await fetch(url);
@@ -72,6 +74,10 @@ async function loadSkills(effects, path) {
         const skills = {};
         Object.keys(data).forEach(skillKey => {
             const skillData = data[skillKey];
+            // Ensure skillData has an ID, if not, use the key
+            if (!skillData.id) {
+                skillData.id = skillKey;
+            }
             let processedEffects = null;
             if (skillData.effects) {
                 if (Array.isArray(skillData.effects) && skillData.effects.length > 0 && skillData.effects[0].id && effects) {
@@ -89,6 +95,35 @@ async function loadSkills(effects, path) {
         return skills;
     } catch (error) {
         console.error(`Failed to load skills from ${path}:`, error);
+        return {};
+    }
+}
+
+async function loadItems() {
+    try {
+        const manifestResponse = await fetch('Data/items_manifest.json');
+        if (!manifestResponse.ok) {
+            throw new Error(`HTTP error ${manifestResponse.status} for items_manifest.json`);
+        }
+        const itemFiles = await manifestResponse.json();
+        const loadedItems = {};
+
+        for (const fileName of itemFiles) {
+            const itemResponse = await fetch(`Data/Items/${fileName}`);
+            if (!itemResponse.ok) {
+                console.warn(`Failed to load item file ${fileName}. Status: ${itemResponse.status}`);
+                continue;
+            }
+            const itemData = await itemResponse.json();
+            if (itemData.id) {
+                loadedItems[itemData.id] = new Item(itemData); // Item constructor handles skill instantiation
+            } else {
+                console.warn(`Item in ${fileName} is missing an 'id'. Skipping.`);
+            }
+        }
+        return loadedItems;
+    } catch (error) {
+        console.error("Failed to load items:", error);
         return {};
     }
 }
@@ -178,6 +213,8 @@ export async function loadGameData(savedGameState = null) {
         const passiveSkillsFromFile = await loadSkills(effects, 'Data/passives.json');
         allSkillsCache = {...skillsFromFile, ...passiveSkillsFromFile};
 
+        allItemsCache = await loadItems();
+
         mobsClasses = await loadMobs(allSkillsCache);
         heroClasses = await loadClasses(allSkillsCache);
 
@@ -232,7 +269,7 @@ export async function loadGameData(savedGameState = null) {
             }).filter(Boolean);
 
             hero = new Hero("Placeholder", tempClassInfo, tempHeroSkills , 1, team1, team2);
-            hero.restoreFromData(savedGameState.heroData, heroClasses, allSkillsCache);
+            hero.restoreFromData(savedGameState.heroData, heroClasses, allSkillsCache, allItemsCache);
             team1.addMember(hero);
 
             battleStatistics = new BattleStatistics();
@@ -248,12 +285,13 @@ export async function loadGameData(savedGameState = null) {
 
             renderLevelProgress(hero);
             renderTeamMembers(team1.members, 'team1', true);
+
+            hero.reselectSkillsAfterLoad();
             if (document.getElementById('heroContent')) {
+                updateStatsDisplay(hero);
                  renderSkills(hero);
                  renderPassiveSkills(hero);
             }
-            hero.reselectSkillsAfterLoad();
-
             const homeScreen = document.getElementById('home-screen');
             if (homeScreen && homeScreen.classList.contains('active')) {
                 homeScreen.classList.remove('active');
@@ -274,7 +312,7 @@ export async function loadGameData(savedGameState = null) {
                  alert("Fatal Error: Could not load initial game area. Check console.");
                  return false;
             }
-            currentStage = 1;
+           currentStage = 1;
             team1 = new Team('Team1', 'team1-members');
             team2 = new Team('Team2', 'team2-members');
             createAndInitHero(heroClasses, team1, team2); // This might return false if it fails
@@ -282,6 +320,10 @@ export async function loadGameData(savedGameState = null) {
                 console.error("Hero creation failed. Cannot proceed with new game.");
                 return false;
             }
+             if (allItemsCache['simple_sword_001']) hero.addItemToInventory(allItemsCache['simple_sword_001']);
+            if (allItemsCache['worn_leather_helmet_001']) hero.addItemToInventory(allItemsCache['worn_leather_helmet_001']);
+            if (allItemsCache['healing_potion_minor_001']) hero.addItemToInventory(allItemsCache['healing_potion_minor_001']);
+
             loadStage(currentStage, mobsClasses);
         }
 
@@ -339,6 +381,11 @@ function createAndInitHero(classes, team, opposingTeam) {
     }
 
     team1.addMember(hero);
+    if (document.getElementById('heroContent')) { // Check if hero tab elements are ready
+        updateStatsDisplay(hero); // Initial render of inventory/equipment
+        renderSkills(hero);
+        renderPassiveSkills(hero);
+    }
     renderLevelProgress(hero);
     renderTeamMembers(team1.members, 'team1', true);
     if (document.getElementById('heroContent')) {

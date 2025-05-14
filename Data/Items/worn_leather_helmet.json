@@ -1,0 +1,15 @@
+{
+    "id": "worn_leather_helmet_001",
+    "name": "Worn Leather Helmet",
+    "type": "armor",
+    "slot": "helmetSlot",
+    "icon": "Media/Items/Armor/helmet_leather_common.png",
+    "description": "Offers minor protection for the head.",
+    "rarity": "common",
+    "value": 5,
+    "stats": {
+        "armor": 3,
+        "vitality": 1
+    },
+    "effects": []
+}

@@ -1,5 +1,5 @@
 import {battleStatistics, team1, hero} from './initialize.js';
-import {updateProgressBar, updateHeroMapStats} from './Render.js';
+import {updateProgressBar, updateHeroMapStats,updateStatsDisplay} from './Render.js';
 import {updateQuestLog} from './questLog.js';
 
 export function openTab(evt, tabName) {
@@ -55,6 +55,9 @@ export function openTab(evt, tabName) {
         team1.members[0].skills.forEach(skill => {
             updateProgressBar(skill);
         });
+        updateStatsDisplay(hero); // This will call item rendering functions
+        renderSkills(hero);
+        renderPassiveSkills(hero);
     }
     if (tabName === 'quests') {
         updateQuestLog();

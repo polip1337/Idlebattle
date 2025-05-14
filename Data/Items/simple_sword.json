@@ -1,0 +1,16 @@
+{
+    "id": "simple_sword_001",
+    "name": "Simple Sword",
+    "type": "weapon",
+    "slot": "weaponSlot",
+    "icon": "Media/Items/Weapons/sword_common.png",
+    "description": "A basic sword, better than fists.",
+    "rarity": "common",
+    "value": 10,
+    "stats": {
+        "strength": 1,
+        "damage": 2
+    },
+    "effects": [],
+    "weaponSkillIds": ["basic_slash", "guard_stance"]
+}

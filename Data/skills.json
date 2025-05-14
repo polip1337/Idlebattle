@@ -16,6 +16,19 @@
       "Lowest HP"
     ]
   },
+  "basic_slash": {
+    "id": "basic_slash",
+    "name": "Basic Slash",
+    "icon": "Media/Skills/slash_basic.png",
+    "type": "active",
+    "description": "A quick slash with your weapon.",
+    "damage": 5,
+    "manaCost": 0,
+    "staminaCost": 10,
+    "cooldown": 3,
+    "damageType": "physical",
+    "targetingModes": ["Random Front"]
+  },
   "block": {
     "id": "block",
     "name": "Block",
