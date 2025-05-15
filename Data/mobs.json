@@ -392,6 +392,99 @@
       "dodge": 1,
       "magicControl": 1
     }
+  },
+
+  "GiantRat": {
+    "id": "giantRat",
+    "name": "Giant Rat",
+    "portrait": "Media/Mobs/Beast/rat.jpeg",
+    "positions": ["Front", "Any"],
+    "experience": 5,
+    "goldDrop": 2,
+    "skills": ["viciousBite", "scurry"],
+    "stats": {
+      "strength": 8,
+      "dexterity": 15,
+      "stamina": 10,
+      "vitality": 12,
+      "magicPower": 0,
+      "magicControl": 0,
+      "mana": 0,
+      "manaRegen": 0,
+      "armor": 2,
+      "resistances": {"pierce": -5, "poison": 10, "blunt": 5},
+      "dodge": 12,
+      "accuracy": 5,
+      "damage": 1
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "dexterity": 2,
+      "vitality": 2,
+      "dodge": 1
+    }
+  },
+  "FogTouchedScavenger": {
+    "id": "fogTouchedScavenger",
+    "name": "Fog-Touched Scavenger",
+    "portrait": "Media/Mobs/Humanoid/fog_scavenger.png",
+    "positions": ["Front", "Back"],
+    "experience": 12,
+    "goldDrop": 8,
+    "skills": ["wildSwing", "erraticMovement", "desperateLunge", "plantSpit"],
+    "stats": {
+      "strength": 12,
+      "dexterity": 14,
+      "stamina": 15,
+      "vitality": 18,
+      "magicPower": 5,
+      "magicControl": 5,
+      "mana": 20,
+      "manaRegen": 1,
+      "armor": 5,
+      "resistances": {"poison": 15, "fire": -10},
+      "dodge": 8,
+      "accuracy": 3,
+      "damage": 1
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "dexterity": 2,
+      "vitality": 3,
+      "magicPower": 1,
+      "mana": 2
+    }
+  },
+  "RuneEtchedSentry": {
+    "id": "runeEtchedSentry",
+    "name": "Rune-Etched Sentry",
+    "portrait": "Media/Mobs/Construct/rune_sentry.png",
+    "positions": ["Front"],
+    "experience": 25,
+    "goldDrop": 15,
+    "skills": ["energyBolt", "stoneSlam", "fortifiedPlating", "guardianProtocol"],
+    "stats": {
+      "strength": 20,
+      "dexterity": 5,
+      "stamina": 100,
+      "vitality": 35,
+      "magicPower": 18,
+      "magicControl": 12,
+      "mana": 50,
+      "manaRegen": 2,
+      "armor": 18,
+      "resistances": {"physical": 10, "slash": 15, "pierce": 15, "blunt": 5, "fire": -15, "lightning": 25, "energy": 20},
+      "dodge": 1,
+      "accuracy": 8,
+      "damage": 1
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "vitality": 5,
+      "magicPower": 3,
+      "mana": 5,
+      "armor": 2
+    }
   }
 
 }

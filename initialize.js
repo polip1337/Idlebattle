@@ -8,6 +8,8 @@ import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
 import BattleLog from './BattleLog.js';
 import Item from './item.js';
+import { currentMapId } from './map.js';
+
 import {
     deepCopy,
     openEvolutionModal,
@@ -44,7 +46,7 @@ export let classTiers;
 export let heroClasses;
 export let currentArea;
 export let mobsClasses = null;
-let currentStage = 1;
+export let currentStage = 1;
 let clickTimeout;
 export const NPC_MEDIA_PATH = "Media/NPC/";
 export let allSkillsCache = null;
@@ -142,7 +144,7 @@ async function loadMobs(skills) {
                 }
                 return new Skill(skillData, skillData.effects);
             }).filter(Boolean);
-            loadedMobs[mobDef.id] = new Member(mobDef.name, mobDef, mobSkills, mobDef.level || 1);
+            loadedMobs[mobDef.id] = mobDef;
         }
         return loadedMobs;
     } catch (error) {
@@ -229,9 +231,13 @@ export async function loadGameData(savedGameState = null) {
         await evolutionService.init();
 
         if (savedGameState) {
-            if (!savedGameState.heroData || !savedGameState.currentAreaIdentifier || !savedGameState.currentAreaIdentifier.jsonPath) {
-                console.error("CRITICAL: Saved game state is missing heroData or currentAreaIdentifier.jsonPath.", savedGameState);
-                alert("Error: Save data is corrupted (missing hero or area path). Cannot load game.");
+            // CRITICAL: Validate savedGameState.heroData and savedGameState.mapStateData
+            if (!savedGameState.heroData ||
+                !savedGameState.mapStateData ||
+                !savedGameState.mapStateData.currentMapId ||
+                typeof savedGameState.mapStateData.stageNumber !== 'number') {
+                console.error("CRITICAL: Saved game state is missing heroData or essential mapStateData (currentMapId, stageNumber).", savedGameState);
+                alert("Error: Save data is corrupted (missing hero or map/stage info). Cannot load game.");
                 return false;
             }
 
@@ -259,6 +265,7 @@ export async function loadGameData(savedGameState = null) {
                 }
             }
 
+            // Skill instantiation for temp hero before full restoration
             const tempHeroSkills = (tempClassInfo.skills || []).map(id => {
                 const skillData = allSkillsCache[id];
                 if (!skillData) {
@@ -268,7 +275,8 @@ export async function loadGameData(savedGameState = null) {
                 return new Skill(skillData, skillData.effects);
             }).filter(Boolean);
 
-            hero = new Hero("Placeholder", tempClassInfo, tempHeroSkills , 1, team1, team2);
+
+            hero = new Hero("Placeholder", tempClassInfo, tempHeroSkills, 1, team1, team2);
             hero.restoreFromData(savedGameState.heroData, heroClasses, allSkillsCache, allItemsCache);
             team1.addMember(hero);
 
@@ -277,11 +285,26 @@ export async function loadGameData(savedGameState = null) {
 
             await globalQuestSystem.restoreFromData(savedGameState.questSystemData);
 
-            currentArea = await loadAreaInstance(savedGameState.currentAreaIdentifier.jsonPath);
-            if (!currentArea || currentArea.jsonPath === "error/no_path_provided.json" || (currentArea.stages.length === 0 && currentArea.jsonPath !== "Data/Areas/emptyPlaceholder.json")) {
-                 console.warn(`Current area '${savedGameState.currentAreaIdentifier.jsonPath}' loaded with issues or is empty. Game might not function correctly for this area.`);
+            // Initialize map module FIRST, then set its state from save.
+            initMapModule();
+            if (typeof setMapStateFromLoad === 'function' && savedGameState.mapStateData) {
+                setMapStateFromLoad(savedGameState.mapStateData);
+            } else {
+                 console.warn("setMapStateFromLoad function not available or mapStateData missing. Map state may not be fully restored.");
             }
-            currentStage = savedGameState.currentAreaIdentifier.stageNumber || 1;
+
+
+            currentArea = await loadAreaInstance(currentMapId);
+            if (!currentArea || currentArea.name.toLowerCase().includes("error")) { // Check if area loading failed
+                 console.warn(`Current area '${currentMapId}' loaded with issues or is an error area. Game might not function correctly.`);
+            }
+
+            // Set currentStage from the saved mapStateData
+            currentStage = savedGameState.mapStateData.stageNumber || 1;
+            if(currentArea && !currentArea.name.toLowerCase().includes("error")) { // only set if area is valid
+                currentArea.stageNumber = currentStage;
+            }
+
 
             renderLevelProgress(hero);
             renderTeamMembers(team1.members, 'team1', true);
@@ -299,24 +322,18 @@ export async function loadGameData(savedGameState = null) {
                 const footer = document.getElementById('footer');
                 if (footer) footer.classList.remove('hidden');
             }
-            openTab(null, 'map');
+            openTab(null, 'map'); // Default to map view after load
+
 
         } else {
             // New Game
             battleStatistics = new BattleStatistics();
             await globalQuestSystem.loadQuests();
 
-            currentArea = await loadAreaInstance("Data/Areas/goblinPlains.JSON");
-            if (!currentArea || currentArea.stages.length === 0) {
-                 console.error("CRITICAL: Initial area 'goblinPlains.JSON' failed to load or is empty. Cannot start new game.");
-                 alert("Fatal Error: Could not load initial game area. Check console.");
-                 return false;
-            }
-           currentStage = 1;
             team1 = new Team('Team1', 'team1-members');
             team2 = new Team('Team2', 'team2-members');
-            createAndInitHero(heroClasses, team1, team2); // This might return false if it fails
-            if (!hero) { // If createAndInitHero failed to set hero
+            createAndInitHero(heroClasses, team1, team2);
+            if (!hero) {
                 console.error("Hero creation failed. Cannot proceed with new game.");
                 return false;
             }
@@ -324,15 +341,22 @@ export async function loadGameData(savedGameState = null) {
             if (allItemsCache['worn_leather_helmet_001']) hero.addItemToInventory(allItemsCache['worn_leather_helmet_001']);
             if (allItemsCache['healing_potion_minor_001']) hero.addItemToInventory(allItemsCache['healing_potion_minor_001']);
 
-            loadStage(currentStage, mobsClasses);
+            // For a new game, currentArea might be set to a default starting area
+            // Or map.js handles the default mapId, and initialize.js loads it.
+            initMapModule(); // Initialize map for new game (loads default map in map.js)
+            currentStage = 1; // Default stage for new game
+            if (currentArea) currentArea.stageNumber = currentStage;
+
+
         }
 
-        initiateEventListeners(); // General listeners not dependent on specific stage elements
+        initiateEventListeners();
         initializeQuestLog();
-        initMapModule(); // Initializes map DOM elements and base map logic
+        // initMapModule(); // Moved earlier for saved games, also called for new game.
 
         battleStatistics.updateBattleStatistics();
-        updateStageDisplay(); // Update stage display after everything is loaded
+        updateStageDisplay();
+
         return true;
 
     } catch (error) {
@@ -341,7 +365,6 @@ export async function loadGameData(savedGameState = null) {
         return false;
     }
 }
-
 function createAndInitHero(classes, team, opposingTeam) {
     const baseClassId = 'novice';
     let baseClassInfo;
@@ -397,12 +420,7 @@ function createAndInitHero(classes, team, opposingTeam) {
 }
 
 export function loadStage(stageNumToLoad, mobs) {
-    if (!currentArea || !currentArea.stages || currentArea.stages.length === 0) {
-        console.error("Area data, stages not loaded, or no stages defined. Cannot load stage.", currentArea);
-        const stageDisplay = document.getElementById('current-stage');
-        if (stageDisplay) stageDisplay.textContent = "Error: Area not loaded";
-        return;
-    }
+
     if (stageNumToLoad < 1 || stageNumToLoad > currentArea.stages.length) {
         console.warn(`Attempted to load invalid stage number: ${stageNumToLoad}. Max stages: ${currentArea.stages.length}. Defaulting to 1 or max.`);
         stageNumToLoad = Math.max(1, Math.min(stageNumToLoad, currentArea.stages.length));
@@ -600,30 +618,25 @@ function setupSkillListeners() {
         if (!skillElement) continue;
 
         const skillImg = skillElement.querySelector('img');
-        // Tooltip is often nextElementSibling if it's a direct sibling div/span
         const tooltip = skillElement.querySelector('.tooltip') || skillElement.nextElementSibling;
-        
+
         if (!skillImg) {
             console.warn(`Skill image not found for #skill${i}`);
             continue;
         }
-        if (!tooltip || !tooltip.classList || (!tooltip.classList.contains('tooltip') && !tooltip.classList.contains('skill-tooltip'))) {
-             // console.warn(`Tooltip not found or invalid for #skill${i}. Expected sibling or child with class 'tooltip' or 'skill-tooltip'. Current nextSibling:`, skillElement.nextSibling);
-             // For now, we'll just skip tooltip logic if not found correctly
-        }
+        // Tooltip warning removed for brevity, original logic for it stands
 
-
-        const skillInSlot = hero.selectedSkills[i - 1]; // Get skill from hero's selected skills array
+        const skillInSlot = hero.selectedSkills[i - 1];
 
         if (skillInSlot) {
-            skillImg.src = skillInSlot.icon || "Media/UI/defaultSkill.jpeg"; // Set icon
-            skillElement.classList.remove("empty-skill-slot"); // Or similar class for empty
+            skillImg.src = skillInSlot.icon || "Media/UI/defaultSkill.jpeg";
+            skillElement.classList.remove("empty-skill-slot");
             if (skillInSlot.repeat && skillInSlot.type === "active") {
                 skillElement.classList.add("rainbow");
             } else {
                 skillElement.classList.remove("rainbow");
             }
-            if (tooltip) { // Only update if tooltip element is valid
+            if (tooltip) {
                 if (skillInSlot.type === "passive") {
                     updatePassiveSkillTooltip(tooltip, skillInSlot);
                 } else {
@@ -632,47 +645,45 @@ function setupSkillListeners() {
             }
         } else {
             skillElement.classList.remove("rainbow");
-            skillElement.classList.add("empty-skill-slot"); // Mark as empty
-            skillImg.src = "Media/UI/defaultSkill.jpeg"; // Default empty icon
+            skillElement.classList.add("empty-skill-slot");
+            skillImg.src = "Media/UI/defaultSkill.jpeg";
             if (tooltip) tooltip.innerHTML = "Empty Slot";
         }
 
-        // Remove old listeners before adding new ones to prevent accumulation if this function is called multiple times
-        // A more robust way is to use a named function and remove it, or AbortController
-        // For simplicity here, we'll rely on this function being called once after hero is ready,
-        // or hero.reselectSkillsAfterLoad handling updates to the skill bar items.
-        // If skills are dynamically re-assigned to slots, a more complex update logic is needed.
+        skillImg.onclick = (event) => {
+            if (!hero || !skillInSlot) return;
 
-        skillImg.onclick = (event) => { // Use onclick for simplicity to replace existing, or manage listeners carefully
-            if (!hero || !skillInSlot) return; // Check skillInSlot directly
+            const currentSkill = skillInSlot;
 
-            const currentSkill = skillInSlot; // Use the skill from the slot
-
-            if (clickTimeout) {
+            if (clickTimeout) { // Double click detected
                 clearTimeout(clickTimeout);
                 clickTimeout = null;
-                if (!skillElement.classList.contains("disabled")) {
-                    if (currentSkill.type === "active") {
-                        currentSkill.repeat = !currentSkill.repeat;
+
+                if (currentSkill.type === "active") { // Only active skills can repeat
+                    if (skillElement.classList.contains("disabled")) { // If the skill IS on cooldown (UI is disabled)
+                        currentSkill.repeat = false; // Disable repeat
+                        skillElement.classList.remove("rainbow"); // Remove visual indicator
+                    } else { // Skill is NOT on cooldown (UI is enabled)
+                        currentSkill.repeat = !currentSkill.repeat; // Toggle repeat as before
                         skillElement.classList.toggle("rainbow", currentSkill.repeat);
                     }
                 }
-            } else {
+            } else { // Single click
                 clickTimeout = setTimeout(() => {
-                    if (!skillElement.classList.contains("disabled")) {
+                    if (!skillElement.classList.contains("disabled")) { // Check if skill UI is not disabled (i.e., not on cooldown)
                         currentSkill.useSkill(hero);
                     }
                     clickTimeout = null;
                 }, 300);
             }
         };
-        
-        skillElement.onmouseenter = (event) => { // Use onmouseenter
+
+        skillElement.onmouseenter = (event) => {
             if (tooltip && tooltip.innerHTML && tooltip.innerHTML !== "Empty Slot") {
                  showTooltip(event, tooltip);
             }
         };
-        skillElement.onmouseleave = () => { // Use onmouseleave
+        skillElement.onmouseleave = () => {
             if (tooltip) {
                 tooltip.style.display = 'none';
                 tooltip.style.visibility = 'hidden';

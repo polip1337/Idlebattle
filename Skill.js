@@ -101,12 +101,12 @@ class Skill {
                     member.performAttack(member, target, this);
                 });
 
-                // Award experience for skill use, even if no damage/healing occurs
-                this.gainExperience(10); // Base experience for skill use
             } else {
-                if(this.retry){
+                if(this.repeat){
                 setTimeout(() => {
-                    this.useSkill(member);
+                    if (battleStarted && member.currentHealth > 0 && !this.onCooldown) {
+                        this.useSkill(member);
+                    }
                 }, 1000);}
             }
         }

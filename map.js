@@ -1,90 +1,89 @@
 import { openTab } from './navigation.js';
-import { startBattle, repeatStage } from './Battle.js';
+import { startBattle, repeatStage } from './Battle.js'; // repeatStage might not be used here directly
 import { team1, team2, battleLog, hero } from './initialize.js';
 import { questSystem } from './questSystem.js';
 import { updateHeroMapStats, renderHero, updateHealth, updateMana, updateStamina } from './Render.js';
 
-export let mapsData = null; // Exposed for saveLoad.js to read map names
-export let currentMapId = 'hollowreach_Valley'; // Exposed for saveLoad.js
-export let pointsOfInterest = []; // Exposed for saveLoad.js (though dynamic)
+export let mapsData = null;
+export let currentMapId = 'hollowreach_Valley';
+export let pointsOfInterest = [];
+let unlockedPredefinedPois = new Set(); // MODIFIED: To track unlocked POIs from maps.json
 
 export function initializeMap() {
     const mapContainer = document.getElementById('map-container');
     const poiList = document.getElementById('poi-list');
     const heroPortraitContainer = document.getElementById('hero-portrait-container');
 
-    // Map state
-    let currentMapId = 'hollowreach_Valley';
     let mapHistory = [];
     let currentLocation = null;
-    let mapsData = null;
     let isProcessingClick = false;
 
-    // Render hero portrait
     function renderHeroPortrait() {
         if (!hero || !heroPortraitContainer) return;
-        heroPortraitContainer.innerHTML = ''; // Clear existing content
-        const heroElement = renderHero(hero); // Use renderHero from Render.js
+        heroPortraitContainer.innerHTML = '';
+        const heroElement = renderHero(hero);
         heroPortraitContainer.appendChild(heroElement);
-        hero.initializeDOMElements(); // Ensure DOM elements are set
-        updateHealth(hero); // Update health bar
-        updateMana(hero); // Update mana bar
-        updateStamina(hero); // Update stamina bar
+        hero.initializeDOMElements();
+        updateHealth(hero);
+        updateMana(hero);
+        updateStamina(hero);
     }
 
-    // Load map data
     async function loadMapDataAndRender() {
         try {
             const response = await fetch('Data/maps.json');
             mapsData = await response.json();
+            // Ensure unlockedPredefinedPois is initialized before first loadMap if loading from save
+            // This is handled by setMapStateFromLoad, for new game it's an empty set
             loadMap(currentMapId);
-            renderHeroPortrait(); // Render portrait after map data is loaded
+            renderHeroPortrait();
         } catch (error) {
             console.error('Error loading map data:', error);
         }
-
     }
 
     window.addEventListener('resize', () => {
         if (mapsData && currentMapId) {
-            renderPOIs(); // Re-render to update pixel positions
+            renderPOIs();
             if (hero) {
-                renderHeroPortrait(); // Re-render portrait to ensure proper scaling
+                renderHeroPortrait();
                 updateHeroMapStats(hero);
             }
         }
     });
 
-    // Load a specific map
     function loadMap(mapIdToLoad) {
-            if (!mapsData) {
-                console.error("Maps data not loaded yet.");
-                return;
-            }
-            const map = mapsData[mapIdToLoad];
-            if (!map) {
-                console.error(`Map ${mapIdToLoad} not found`);
-                return;
-            }
-            currentMapId = mapIdToLoad; // Update module global
-            mapContainer.style.backgroundImage = `url(${map.background})`;
-            pointsOfInterest = map.pois.map(poi => ({ // Update module global
-                ...poi,
-                type: poi.type || 'combat',
-                cost: poi.cost || 0
-            }));
+        if (!mapsData) {
+            console.error("Maps data not loaded yet.");
+            return;
+        }
+        const map = mapsData[mapIdToLoad];
+        if (!map) {
+            console.error(`Map ${mapIdToLoad} not found`);
+            return;
+        }
+        currentMapId = mapIdToLoad;
+        mapContainer.style.backgroundImage = `url(${map.background})`;
 
-            const currentPoiExistsOnNewMap = pointsOfInterest.some(poi => poi.name === currentLocation);
-            if (!currentLocation || !currentPoiExistsOnNewMap) {
-                const startingPoi = pointsOfInterest.find(poi => poi.isStartingLocation) || (pointsOfInterest.length > 0 ? pointsOfInterest[0] : null);
-                currentLocation = startingPoi ? startingPoi.name : null;
-            }
+        // MODIFIED: Incorporate locked status
+        pointsOfInterest = map.pois.map(poi => ({
+            ...poi,
+            type: poi.type || 'combat', // default type
+            cost: poi.cost || 0,       // default cost
+            isEffectivelyLocked: poi.initiallyLocked && !unlockedPredefinedPois.has(poi.id)
+        }));
 
-            renderPOIs();
-            renderHeroPortrait();
-            if (hero) updateHeroMapStats(hero);
+        const currentPoiExistsOnNewMap = pointsOfInterest.some(poi => !poi.isEffectivelyLocked && poi.name === currentLocation);
+        if (!currentLocation || !currentPoiExistsOnNewMap) {
+            const startingPoi = pointsOfInterest.find(poi => !poi.isEffectivelyLocked && poi.isStartingLocation) ||
+                                pointsOfInterest.find(poi => !poi.isEffectivelyLocked); // first available unlocked POI
+            currentLocation = startingPoi ? startingPoi.name : null;
         }
 
+        renderPOIs();
+        renderHeroPortrait();
+        if (hero) updateHeroMapStats(hero);
+    }
 
     function renderPOIs() {
         poiList.innerHTML = '';
@@ -94,6 +93,11 @@ export function initializeMap() {
         const mapHeight = mapContainer.offsetHeight;
 
         pointsOfInterest.forEach((poi, index) => {
+            // MODIFIED: Do not render or interact with effectively locked POIs
+            if (poi.isEffectivelyLocked) {
+                return;
+            }
+
             const poiElement = document.createElement('div');
             poiElement.classList.add('poi', poi.type);
 
@@ -102,7 +106,7 @@ export function initializeMap() {
 
             poiElement.style.left = `${posX}px`;
             poiElement.style.top = `${posY}px`;
-            poiElement.dataset.index = index;
+            poiElement.dataset.index = index; // Store original index in pointsOfInterest for click handler
 
             const poiIcon = document.createElement('img');
             poiIcon.src = poi.icon;
@@ -121,20 +125,24 @@ export function initializeMap() {
             poiElement.appendChild(poiName);
             mapContainer.appendChild(poiElement);
 
-            poiElement.addEventListener('click', (event) => {
+            poiElement.addEventListener('click', async (event) => { // MODIFIED to be async for handleCombat
                 event.stopPropagation();
                 event.preventDefault();
                 if (isProcessingClick) return;
                 isProcessingClick = true;
                 setTimeout(() => { isProcessingClick = false; }, 300);
 
+                // Find the POI from the master list using the original index
+                // This ensures we're getting the correct POI even if some are filtered out by locking
                 const clickedPoi = pointsOfInterest[poiElement.dataset.index];
+                if (!clickedPoi || clickedPoi.isEffectivelyLocked) return; // Double check if somehow a locked POI was clicked
+
                 if (clickedPoi.type === 'travel') {
                     handleTravel(clickedPoi);
                 } else if (clickedPoi.type === 'combat') {
-                    handleCombat(clickedPoi);
+                    await handleCombat(clickedPoi); // MODIFIED: await combat handling
                 } else if (clickedPoi.type === 'dialogue') {
-                    handleTalk(clickedPoi);
+                    await handleTalk(clickedPoi); // MODIFIED: make handleTalk async if startDialogue is awaited
                 } else if (clickedPoi.type === 'tavern') {
                     handleTavern(clickedPoi);
                 }
@@ -157,101 +165,102 @@ export function initializeMap() {
         });
     }
 
-    function addPOI() {
-        const name = prompt("Enter the name of the new point of interest:");
-        if (!name) return;
+    // This function is no longer for adding new POI data, but for unlocking existing ones.
+    function unlockMapPOI(targetMapId, poiIdToUnlock) {
+        if (!mapsData || !mapsData[targetMapId]) {
+            console.error(`Map ${targetMapId} not found in mapsData for unlocking POI.`);
+            return;
+        }
+        const poiDefinition = mapsData[targetMapId].pois.find(p => p.id === poiIdToUnlock);
 
-        const type = prompt("Enter the type (travel, combat, talk, or tavern):", "combat");
-        if (!['travel', 'combat', 'talk', 'tavern'].includes(type)) {
-            alert("Invalid type. Use 'travel', 'combat', 'talk', or 'tavern'.");
+        if (!poiDefinition) {
+            console.error(`POI definition with ID ${poiIdToUnlock} not found on map ${targetMapId}.`);
             return;
         }
 
-        const icon = prompt("Enter the icon path (e.g., Media/map/poi-default.png):", "Media/map/poi-default.png");
-
-        const x = Math.random() * 100;
-        const y = Math.random() * 100;
-
-        const poi = { name, x, y, icon, type };
-        if (type === 'talk') {
-            const npcId = prompt("Enter the NPC ID for this talk POI:");
-            const dialogueId = prompt("Enter the dialogue ID for this talk POI (optional, will pick default if empty):");
-            if (npcId) {
-                poi.npcId = npcId;
-                if (dialogueId) poi.dialogueId = dialogueId;
-            } else {
-                alert("NPC ID is required for talk POIs.");
-                return;
-            }
-        } else if (type === 'travel') {
-            const mapId = prompt("Enter the map ID for this travel POI:");
-            if (mapId) {
-                poi.mapId = mapId;
-            } else {
-                alert("Map ID is required for travel POIs.");
-                return;
-            }
-        } else if (type === 'tavern') {
-            const cost = parseInt(prompt("Enter the gold cost for resting at this tavern:", "10"));
-            if (!isNaN(cost) && cost >= 0) {
-                poi.cost = cost;
-            } else {
-                alert("Invalid cost for tavern.");
-                return;
-            }
+        if (!poiDefinition.initiallyLocked) {
+            console.warn(`POI ${poiIdToUnlock} on map ${targetMapId} is not an initially locked POI. Nothing to change.`);
+            // If it wasn't initially locked, it should already be visible.
+            // If it was dynamically added previously (old system), this function isn't for that.
+            return;
         }
 
-        pointsOfInterest.push(poi);
-        renderPOIs();
-    }
-
-    function removePOI(index) {
-        if (pointsOfInterest[index].name === currentLocation) {
-            currentLocation = pointsOfInterest[0]?.name || null;
+        if (unlockedPredefinedPois.has(poiIdToUnlock)) {
+            console.warn(`POI ${poiIdToUnlock} is already unlocked.`);
+            return;
         }
-        pointsOfInterest.splice(index, 1);
-        renderPOIs();
+
+        unlockedPredefinedPois.add(poiIdToUnlock);
+        console.log(`POI ${poiIdToUnlock} on map ${targetMapId} has been unlocked.`);
+
+        if (currentMapId === targetMapId) {
+            // Re-calculate effective lock state for all POIs on the current map
+            pointsOfInterest = pointsOfInterest.map(poi => ({
+                ...poi,
+                isEffectivelyLocked: poi.initiallyLocked && !unlockedPredefinedPois.has(poi.id)
+            }));
+            renderPOIs(); // Re-render the map with the newly unlocked POI visible
+            console.log(`Current map ${currentMapId} refreshed. POI: ${poiIdToUnlock} should now be visible if it was locked.`);
+        }
     }
+    window.unlockMapPOI = unlockMapPOI;
+
 
     function handleTravel(poi) {
         if (poi.mapId) {
             mapHistory.push(currentMapId);
-            const fromPoiName = poi.name;
-            loadMap(poi.mapId);
-            const entryPoiForNewMap = pointsOfInterest.find(p => p.leadsFrom === currentMapId && p.originalEntryPoiName === fromPoiName) ||
-                                      pointsOfInterest.find(p => p.isStartingLocation) ||
-                                      (pointsOfInterest.length > 0 ? pointsOfInterest[0].name : null);
-            currentLocation = entryPoiForNewMap ? (typeof entryPoiForNewMap === 'string' ? entryPoiForNewMap : entryPoiForNewMap.name) : null;
+            const fromPoiName = poi.name; // Store current POI name before changing map
+            loadMap(poi.mapId); // This will update pointsOfInterest and currentLocation for the new map
 
-            battleLog.log(`Traveled to ${poi.name} (new map: ${poi.mapId})`);
+            // Try to set currentLocation more intelligently if the new map has an entry point from the old one
+            const entryPoiForNewMap = pointsOfInterest.find(p =>
+                !p.isEffectivelyLocked && (
+                   (p.leadsFrom === mapHistory[mapHistory.length-1] && p.originalEntryPoiName === fromPoiName) ||
+                   p.name === fromPoiName // If a POI with the same name exists on the new map
+                )
+            ) || pointsOfInterest.find(p => !p.isEffectivelyLocked && p.isStartingLocation) ||
+                 pointsOfInterest.find(p => !p.isEffectivelyLocked); // First available unlocked POI
+
+            currentLocation = entryPoiForNewMap ? entryPoiForNewMap.name : null;
+
+            battleLog.log(`Traveled via ${fromPoiName} to map: ${poi.mapId}. New location: ${currentLocation || 'Default'}`);
             questSystem.updateQuestProgress('travel', { poiName: poi.name, mapId: poi.mapId });
-            renderPOIs();
-            renderHeroPortrait(); // Re-render portrait for new map
+            renderPOIs(); // Re-render POIs which also updates currentLocation highlight
+            renderHeroPortrait();
         } else {
             alert(`No map defined for ${poi.name}`);
         }
     }
 
-    function handleCombat(poi) {
+    async function handleCombat(poi) { // MODIFIED: async
         const confirmBattle = confirm(`Start battle at ${poi.name}?`);
         if (confirmBattle) {
             currentLocation = poi.name;
             renderPOIs();
-            renderHeroPortrait(); // Update portrait after location change
+            renderHeroPortrait();
             battleLog.log(`Initiating battle at ${poi.name}`);
-            startBattle(team1, team2, poi.name);
+
+            const battleDialogueOptions = {};
+            if (poi.dialogueNpcId) {
+                battleDialogueOptions.npcId = poi.dialogueNpcId;
+                if (poi.combatStartDialogueId) battleDialogueOptions.startDialogueId = poi.combatStartDialogueId;
+                if (poi.combatEndWinDialogueId) battleDialogueOptions.endWinDialogueId = poi.combatEndWinDialogueId;
+                if (poi.combatEndLossDialogueId) battleDialogueOptions.endLossDialogueId = poi.combatEndLossDialogueId;
+            }
+
+            await startBattle(team1, team2, poi.name, battleDialogueOptions); // MODIFIED: await and pass dialogue options
             openTab({ currentTarget: document.getElementById('battlefieldNavButton') }, 'battlefield');
         }
     }
 
-    function handleTalk(poi) {
+    async function handleTalk(poi) { // MODIFIED: async
         if (poi.npcId) {
             currentLocation = poi.name;
             renderPOIs();
-            renderHeroPortrait(); // Update portrait after location change
+            renderHeroPortrait();
             battleLog.log(`Speaking at ${poi.name} (NPC: ${poi.npcId})`);
             questSystem.updateQuestProgress('talk', { poiName: poi.name, npcId: poi.npcId });
-            window.startDialogue(poi.npcId, poi.dialogueId);
+            await window.startDialogue(poi.npcId, poi.dialogueId); // MODIFIED: await dialogue
         } else {
             alert(`No NPC defined for ${poi.name}`);
         }
@@ -260,7 +269,7 @@ export function initializeMap() {
     function handleTavern(poi) {
         currentLocation = poi.name;
         renderPOIs();
-        renderHeroPortrait(); // Update portrait after location change
+        renderHeroPortrait();
         battleLog.log(`Visiting tavern: ${poi.name}`);
 
         const cost = poi.cost || 0;
@@ -273,7 +282,7 @@ export function initializeMap() {
                 hero.currentStamina = hero.stats.stamina;
                 battleLog.log(`Rested at ${poi.name}. HP, Mana, and Stamina fully restored.`);
                 updateHeroMapStats(hero);
-                renderHeroPortrait(); // Update portrait to reflect new stats
+                renderHeroPortrait();
             } else {
                 battleLog.log(`Not enough gold to rest at ${poi.name}. Required: ${cost}g, Have: ${hero.gold}g`);
                 alert(`Not enough gold. You need ${cost} gold to rest here.`);
@@ -282,36 +291,37 @@ export function initializeMap() {
     }
 
     loadMapDataAndRender();
-    // --- Save/Load specific functions ---
-        window.getMapStateForSave = () => { // Expose to global for saveLoad.js
-            return {
-                currentMapId: currentMapId,
-                currentLocation: currentLocation,
-                mapHistory: [...mapHistory] // shallow copy
-            };
-        };
 
-        window.setMapStateFromLoad = (state) => { // Expose to global
-            if (!mapsData) {
-                console.warn("Attempted to set map state before mapsData loaded. Deferring.");
-                // Try again after a short delay, assuming mapsData will be loaded by then.
-                // This is a bit of a hack; a more robust solution would use promises or callbacks.
-                setTimeout(() => setMapStateFromLoad(state), 500);
-                return;
-            }
-            currentMapId = state.currentMapId || 'hollowreach_Valley';
-            currentLocation = state.currentLocation || null;
-            mapHistory = [...(state.mapHistory || [])];
-
-            loadMap(currentMapId); // This will re-render POIs and set currentLocation if needed
-            // Ensure currentLocation from save is respected if valid on the new map
-            if (state.currentLocation && pointsOfInterest.some(poi => poi.name === state.currentLocation)) {
-                currentLocation = state.currentLocation;
-            }
-            renderPOIs(); // Explicitly call renderPOIs again to ensure currentLocation highlight
-            if (hero) updateHeroMapStats(hero);
+    window.getMapStateForSave = () => {
+        return {
+            currentMapId: currentMapId,
+            currentLocation: currentLocation,
+            mapHistory: [...mapHistory],
+            unlockedPredefinedPois: Array.from(unlockedPredefinedPois) // MODIFIED: Save unlocked POI IDs
         };
-    }
-    // Export new functions if saveLoad.js imports them directly (preferred over global window)
-    export const getMapStateForSave = () => window.getMapStateForSave();
-    export const setMapStateFromLoad = (state) => window.setMapStateFromLoad(state);
+    };
+
+    window.setMapStateFromLoad = (state) => {
+        if (!mapsData) {
+            setTimeout(() => window.setMapStateFromLoad(state), 500); // MODIFIED: use window.setMapStateFromLoad
+            return;
+        }
+        currentMapId = state.currentMapId || 'hollowreach_Valley';
+        currentLocation = state.currentLocation || null;
+        mapHistory = [...(state.mapHistory || [])];
+        // MODIFIED: Load unlocked POI IDs
+        unlockedPredefinedPois = new Set(state.unlockedPredefinedPois || []);
+
+        loadMap(currentMapId);
+        if (state.currentLocation && pointsOfInterest.some(poi => !poi.isEffectivelyLocked && poi.name === state.currentLocation)) {
+            currentLocation = state.currentLocation;
+        } else if (!currentLocation && pointsOfInterest.length > 0) { // If currentLocation is null after loadMap, set a default
+             const firstUnlockedPoi = pointsOfInterest.find(poi => !poi.isEffectivelyLocked);
+             if(firstUnlockedPoi) currentLocation = firstUnlockedPoi.name;
+        }
+        renderPOIs();
+        if (hero) updateHeroMapStats(hero);
+    };
+}
+export const getMapStateForSave = () => window.getMapStateForSave();
+export const setMapStateFromLoad = (state) => window.setMapStateFromLoad(state);

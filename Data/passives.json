@@ -775,5 +775,19 @@
       "Self"
     ],
     "icon": "Media/Skills/Passive/LightArmorExpertise.jpg"
+  },
+  "guardianProtocol": {
+    "id": "guardianProtocol",
+    "name": "Guardian Protocol",
+    "icon": "Media/Skills/Buff/guardian_protocol.png",
+    "type": "passive",
+    "description": "When critically damaged, the Sentry initiates a last-stand defense, boosting its power.",
+    "trigger": "onLowHealth",
+    "lowHealthThreshold": 0.3,
+    "effects": [
+      {"id": "increaseDamagePercentage", "value": 20, "duration": -1 },
+      {"id": "increaseArmorFlat", "value": 15, "duration": -1 }
+    ],
+    "targetingModes": ["Self"]
   }
 }

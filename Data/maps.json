@@ -71,6 +71,29 @@
         "icon": "Media/map/poi-temple.jpg",
         "type": "travel",
         "mapId": "verdant_hollow"
+      },
+
+      {
+        "name": "Renn Quickfingers",
+        "x": 55.00,
+        "y": 65.00,
+        "icon": "Media/NPC/renn_quickfingers.jpg",
+        "type": "dialogue",
+        "npcId": "renn_quickfingers",
+        "dialogueId": "renn_base"
+      },
+      {
+        "id": "rustmarketSewersPOI",
+        "name": "Rustmarket Sewers",
+        "x": 50.00,
+        "y": 70.00,
+        "icon": "Media/map/poi-hollowreach_sewers.jpg",
+        "type": "combat",
+        "combatId": "rustmarketSewers",
+        "initiallyLocked": true,
+        "dialogueNpcId": "renn_quickfingers",
+        "combatStartDialogueId": "renn_sewer_enter",
+        "combatEndWinDialogueId": "renn_sewer_complete"
       }
     ]
   },

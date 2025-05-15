@@ -1216,10 +1216,133 @@
       "Single Enemy"
     ],
     "icon": "Media/Skills/Utility/TrickShot.jpg"
+  },
+  "viciousBite": {
+    "id": "viciousBite",
+    "name": "Vicious Bite",
+    "icon": "Media/Skills/Beast/vicious_bite.svg",
+    "type": "active",
+    "description": "A nasty bite that aims to make the target bleed.",
+    "damage": 8,
+    "manaCost": 0,
+    "staminaCost": 5,
+    "cooldown": 4,
+    "damageType": "pierce",
+    "effects": [{ "id": "bleed", "duration": 3, "damagePerTurn": 2, "tickDamageType": "pierce" }],
+    "targetingModes": ["Random Front"]
+  },
+  "scurry": {
+    "id": "scurry",
+    "name": "Scurry",
+    "icon": "Media/Skills/Beast/scurry.svg",
+    "type": "active",
+    "description": "A quick dash to avoid attacks.",
+    "damage": 0,
+    "manaCost": 0,
+    "staminaCost": 3,
+    "cooldown": 8,
+    "damageType": "none",
+    "effects": [{ "id": "increaseDodgeFlat", "value": 20, "duration": 2 }],
+    "targetingModes": ["Self"]
+  },
+  "wildSwing": {
+    "id": "wildSwing",
+    "name": "Wild Swing",
+    "icon": "Media/Skills/Physical/wild_swing.png",
+    "type": "active",
+    "description": "A clumsy but forceful swing with a scavenged weapon.",
+    "damage": 12,
+    "manaCost": 0,
+    "staminaCost": 8,
+    "cooldown": 5,
+    "damageType": "blunt",
+    "toHit": -10,
+    "targetingModes": ["Random Front"]
+  },
+  "erraticMovement": {
+    "id": "erraticMovement",
+    "name": "Erratic Movement",
+    "icon": "Media/Skills/Utility/erratic_movement.png",
+    "type": "active",
+    "description": "Unpredictable movement makes the scavenger harder to hit.",
+    "damage": 0,
+    "manaCost": 0,
+    "staminaCost": 5,
+    "cooldown": 10,
+    "damageType": "none",
+    "effects": [{ "id": "increaseDodgePercentage", "value": 25, "duration": 2 }],
+    "targetingModes": ["Self"]
+  },
+  "desperateLunge": {
+    "id": "desperateLunge",
+    "name": "Desperate Lunge",
+    "icon": "Media/Skills/Physical/desperate_lunge.png",
+    "type": "active",
+    "description": "A reckless, powerful attack that leaves the scavenger exposed.",
+    "damage": 18,
+    "manaCost": 0,
+    "staminaCost": 12,
+    "cooldown": 8,
+    "damageType": "pierce",
+    "toHit": -15,
+    "effects": [{"id": "reduceDodgeFlat", "target": "Self", "value": -15, "duration": 1}],
+    "targetingModes": ["Random Front"]
+  },
+  "plantSpit": {
+    "id": "plantSpit",
+    "name": "Plant Spit",
+    "icon": "Media/Skills/Debuff/plant_spit.png",
+    "type": "active",
+    "description": "Spits a glob of psychoactive plant matter, attempting to disorient.",
+    "damage": 3,
+    "manaCost": 8,
+    "staminaCost": 0,
+    "cooldown": 6,
+    "damageType": "poison",
+    "effects": [{ "id": "reduceAccuracyFlat", "value": -15, "duration": 2 }],
+    "targetingModes": ["Random"]
+  },
+  "energyBolt": {
+    "id": "energyBolt",
+    "name": "Energy Bolt",
+    "icon": "Media/Skills/Magic/energy_bolt.png",
+    "type": "active",
+    "description": "Fires a bolt of crackling arcane energy.",
+    "damage": 15,
+    "manaCost": 10,
+    "staminaCost": 0,
+    "cooldown": 4,
+    "damageType": "energy",
+    "targetingModes": ["Random"]
+  },
+  "stoneSlam": {
+    "id": "stoneSlam",
+    "name": "Stone Slam",
+    "icon": "Media/Skills/Physical/stone_slam.png",
+    "type": "active",
+    "description": "Slams a heavy stone limb into the target with concussive force.",
+    "damage": 20,
+    "manaCost": 0,
+    "staminaCost": 10,
+    "cooldown": 6,
+    "damageType": "blunt",
+    "effects": [{"id": "stun", "chance": 0.25, "duration": 1}],
+    "targetingModes": ["Random Front"]
+  },
+  "fortifiedPlating": {
+    "id": "fortifiedPlating",
+    "name": "Fortified Plating",
+    "icon": "Media/Skills/Buff/fortified_plating.png",
+    "type": "active",
+    "description": "Activates reinforced plating, significantly increasing armor.",
+    "damage": 0,
+    "manaCost": 15,
+    "staminaCost": 0,
+    "cooldown": 12,
+    "damageType": "none",
+    "effects": [{ "id": "increaseArmorFlat", "value": 25, "duration": 3 }],
+    "targetingModes": ["Self"]
   }
-
-
-
 }
 
 

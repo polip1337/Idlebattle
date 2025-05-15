@@ -87,20 +87,7 @@ body {
     /* Make upper row 15% smaller */
 }
 /* Add styling for icons */
-.icon {
-    width: 50px;
-    height: 50px;
-    background-color: #ccc;
-    /* Placeholder background color */
-    /* Add more styling as needed */
-}
-.icon img {
-    width: 50px;
-    height: 50px;
-    background-color: #ccc;
-    /* Placeholder background color */
-    /* Add more styling as needed */
-}
+
 .checkBox {
     width: 20px;
     height: 20px;

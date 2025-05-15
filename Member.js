@@ -1,5 +1,5 @@
 import {deepCopy, updateExp, updateExpBarText, updateHealth, updateMana, updateStamina} from './Render.js';
-import {battleLog, battleStatistics, evolutionService, hero} from './initialize.js';
+import {battleLog, battleStatistics, evolutionService, hero, allSkillsCache} from './initialize.js';
 import EffectClass from './EffectClass.js';
 import Skill from './Skill.js';
 

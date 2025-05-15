@@ -4,9 +4,13 @@
  */
 export class QuestSystem {
     constructor() {
+        this.QUEST_PATH ="Data/quests";
         this.quests = new Map(); // Map of quest ID to quest data
         this.activeQuests = new Set(); // Track active quest IDs
         this.maps = null; // Store maps.json data
+        this.questFiles = [
+        'Data/quests/fogscarHeist.js'];
+
     }
 
     // Load maps.json for POI-to-map mapping
@@ -23,8 +27,8 @@ export class QuestSystem {
     async loadQuests() {
         try {
             // Assume a list of quest files is available
-            const questFiles = ['Data/quests/sampleQuest.js'];
-            for (const file of questFiles) {
+
+            for (const file of this.questFiles) {
                 const module = await import(`../${file}`);
                 const quest = module.default;
                 this.quests.set(quest.id, {

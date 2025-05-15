@@ -1,6 +1,7 @@
-import { hero, battleStatistics, currentArea, loadGameData as initializeAndLoadGame } from './initialize.js';
+
+import { hero, battleStatistics, currentArea, loadGameData as initializeAndLoadGame, currentStage as initializeCurrentStage } from './initialize.js';
 import { questSystem } from './questSystem.js';
-import { getMapStateForSave, setMapStateFromLoad, mapsData as mapDataRef, currentMapId as currentMapIdRef, pointsOfInterest as poiRef } from './map.js';
+import { getMapStateForSave, setMapStateFromLoad, mapsData as mapDataRef, currentMapId, pointsOfInterest as poiRef } from './map.js';
 // deepCopy might not be needed here if all serializable data is primitive or handled by component methods
 // import { deepCopy } from './Render.js'; 
 
@@ -16,11 +17,10 @@ const closeButton = document.getElementById('save-load-close-button');
 // const deleteButton = document.getElementById('save-load-delete-button');
 
 function getGameState() {
-    // CRITICAL: Add checks here to ensure hero and currentArea are valid before trying to access their properties.
     if (!hero) {
         console.error("getGameState: Hero object is not initialized. Cannot save hero data.");
         alert("Error: Cannot save game because hero data is missing. Please try again after the game has fully loaded.");
-        return null; // Prevent saving incomplete state
+        return null; 
     }
     if (!hero.getSerializableData) {
         console.error("getGameState: hero.getSerializableData is not a function. Hero object might be corrupted.", hero);
@@ -28,36 +28,31 @@ function getGameState() {
         return null;
     }
 
-    if (!currentArea) {
-        console.error("getGameState: currentArea object is not initialized. Cannot save area data.");
-        alert("Error: Cannot save game because current area information is missing.");
-        return null;
-    }
-    if (typeof currentArea.jsonPath !== 'string' || currentArea.jsonPath.trim() === "") {
-         console.error("getGameState: currentArea.jsonPath is invalid. Cannot save area path.", currentArea);
-         alert("Error: Cannot save game because the current area's path is invalid.");
-         return null;
-    }
-
     const heroData = hero.getSerializableData();
-    if (!heroData || !heroData.classId) { // Add a check for a key field in heroData
+    if (!heroData || !heroData.classId) { 
         console.error("getGameState: hero.getSerializableData() returned invalid or incomplete data.", heroData);
         alert("Error: Failed to gather complete hero data for saving.");
         return null;
     }
 
     const mapState = getMapStateForSave ? getMapStateForSave() : null;
+    if (!mapState || typeof mapState.currentMapId !== 'string') {
+        console.error("getGameState: mapState is invalid or missing currentMapId.", mapState);
+        alert("Error: Cannot save game because map information is missing or invalid.");
+        return null;
+    }
+
+    // Augment mapState with the current stage number from initialize.js
+    mapState.stageNumber = initializeCurrentStage || 1;
+
 
     const gameState = {
         timestamp: new Date().toISOString(),
         heroData: heroData,
-        currentAreaIdentifier: {
-            jsonPath: currentArea.jsonPath,
-            stageNumber: currentArea.stageNumber || 1
-        },
+        // currentAreaIdentifier is removed
         battleStatisticsData: battleStatistics ? battleStatistics.getSerializableData() : null,
         questSystemData: questSystem ? questSystem.getSerializableData() : null,
-        mapStateData: mapState,
+        mapStateData: mapState, // This now includes stageNumber
         gameVersion: '0.1.0' // Example version
     };
     return gameState;
@@ -88,10 +83,12 @@ export async function loadGame(slotIndex) {
         }
         const savedGameState = JSON.parse(savedStateJSON);
 
-        if (!savedGameState.heroData ||
-            !savedGameState.currentAreaIdentifier ||
-            !savedGameState.currentAreaIdentifier.jsonPath) {
-            console.error("Saved game state is critically incomplete (missing heroData or currentAreaIdentifier.jsonPath).", savedGameState);
+        // Validate essential parts of mapStateData now
+        if (!savedGameState.heroData || 
+            !savedGameState.mapStateData ||
+            !savedGameState.mapStateData.currentMapId ||
+            typeof savedGameState.mapStateData.stageNumber !== 'number') {
+            console.error("Saved game state is critically incomplete (missing heroData or essential mapStateData fields like currentMapId or stageNumber).", savedGameState);
             alert("Failed to load game. Save data is corrupted (missing essential info). Please try another slot or start a new game.");
             return false;
         }
@@ -107,11 +104,14 @@ export async function loadGame(slotIndex) {
 
         console.log(`Game loaded from slot ${slotIndex + 1}`);
         
-        if (typeof setMapStateFromLoad === 'function' && savedGameState.mapStateData) {
-            setMapStateFromLoad(savedGameState.mapStateData);
-        } else if (typeof setMapStateFromLoad !== 'function' && savedGameState.mapStateData) {
-            console.warn("setMapStateFromLoad function not found, but mapStateData exists in save. Map state cannot be restored.");
-        }
+        // setMapStateFromLoad is called within initializeAndLoadGame or immediately after
+        // if it needs to be deferred until more systems are up.
+        // For now, assuming initializeAndLoadGame handles calling setMapStateFromLoad correctly.
+        // If map.js's setMapStateFromLoad is called from initialize.js, this explicit call might be redundant or handled there.
+        // The current structure seems to be: initialize.js calls initializeMap, which then makes setMapStateFromLoad available globally.
+        // Then saveLoad.js can call it if initializeAndLoadGame doesn't.
+        // Let's ensure initializeAndLoadGame calls it, or if not, call it here.
+        // Based on initialize.js, setMapStateFromLoad is expected to be called by the `loadGameData` function.
 
         return true;
     } catch (error) {
@@ -190,28 +190,28 @@ function handleImportAction(slotIndex, slotHasData) {
                     const fileContent = e.target.result;
                     const importedData = JSON.parse(fileContent);
 
-                    // CRUCIAL VALIDATION - similar to loadGame initial checks
-                    if (!importedData.timestamp || // Ensure a timestamp exists
+                    // CRUCIAL VALIDATION
+                    if (!importedData.timestamp || 
                         !importedData.heroData || 
-                        !importedData.heroData.name || // Basic hero data integrity
+                        !importedData.heroData.name || 
                         typeof importedData.heroData.level !== 'number' ||
-                        !importedData.currentAreaIdentifier ||
-                        !importedData.currentAreaIdentifier.jsonPath) {
-                        alert('Import failed: The selected file is not a valid game save or is corrupted (missing essential data like timestamp, hero info, or area path).');
+                        !importedData.mapStateData || // Check for mapStateData object
+                        !importedData.mapStateData.currentMapId || // Check for mapId within mapStateData
+                        typeof importedData.mapStateData.stageNumber !== 'number' // Check for stageNumber within mapStateData
+                        ) {
+                        alert('Import failed: The selected file is not a valid game save or is corrupted (missing essential data like timestamp, hero info, map ID, or stage number).');
                         console.error("Import validation failed. Critical data missing. Data:", importedData);
                         return;
                     }
-                    // Optionally, more specific checks on heroData properties, mapStateData etc. can be added here.
 
                     localStorage.setItem(`${SAVE_KEY_PREFIX}${slotIndex}`, JSON.stringify(importedData));
                     console.log(`Game data imported into slot ${slotIndex + 1}`);
                     alert(`File imported successfully into Slot ${slotIndex + 1}.`);
-                    populateSlots(); // Refresh UI
+                    populateSlots(); 
                 } catch (error) {
                     console.error("Error processing imported file:", error);
                     alert(`Failed to import file. It might not be a valid JSON or game save. Error: ${error.message}`);
                 } finally {
-                     // Ensure file input is removed even if an error occurs during processing
                     if (fileInput.parentNode) {
                         document.body.removeChild(fileInput);
                     }
@@ -226,7 +226,6 @@ function handleImportAction(slotIndex, slotHasData) {
             };
             reader.readAsText(file);
         } else {
-            // No file selected or dialog cancelled
             if (fileInput.parentNode) {
                 document.body.removeChild(fileInput);
             }
@@ -235,7 +234,6 @@ function handleImportAction(slotIndex, slotHasData) {
 
     document.body.appendChild(fileInput);
     fileInput.click();
-    // fileInput is removed by its own event handlers
 }
 
 
@@ -256,27 +254,28 @@ function populateSlots() {
                 const heroName = slotData.heroData?.name || 'N/A';
                 const heroLevel = slotData.heroData?.level || 'N/A';
                 const heroClass = slotData.heroData?.classType || (slotData.heroData?.classId || 'N/A');
-                const mapName = slotData.mapStateData?.currentMapId?.split('/').pop().replace(/\.json$/i, '') || 
-                                (slotData.currentAreaIdentifier?.jsonPath?.split('/').pop().replace(/\.(JSON|json)$/i, '') || 'Unknown Area');
+                // Use mapStateData for location display
+                const mapName = slotData.mapStateData?.currentMapId?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Unknown Area';
+
 
                 slotElement.innerHTML = `
                     <div class="save-slot-info">
                         <p><strong>Slot ${i + 1}</strong></p>
                         <p>Hero: ${heroName} (Lvl ${heroLevel})</p>
                         <p>Class: ${heroClass}</p>
-                        <p>Location: ${mapName}</p>
+                        <p>Location: ${mapName} (Stage ${slotData.mapStateData?.stageNumber || 'N/A'})</p>
                     </div>
                     <p class="save-slot-timestamp">${formatTimestamp(slotData.timestamp)}</p>
                 `;
-                 if (!slotData.heroData || !slotData.currentAreaIdentifier?.jsonPath) {
+                 if (!slotData.heroData || !slotData.mapStateData?.currentMapId || typeof slotData.mapStateData?.stageNumber !== 'number') {
                     slotElement.classList.add('corrupted-preview'); 
                     const originalHTML = slotElement.innerHTML;
                     slotElement.innerHTML = originalHTML + `<p style="color:red; font-size:0.8em; margin-top: 5px;">Warning: May be corrupted</p>`;
                 }
 
             } catch (e) {
-                slotElement.classList.add('empty'); // Treat as empty if corrupted during parse
-                slotElement.classList.add('corrupted-preview'); // Also mark as corrupted
+                slotElement.classList.add('empty'); 
+                slotElement.classList.add('corrupted-preview'); 
                 slotElement.innerHTML = `<p>Slot ${i + 1}</p><p class="save-slot-timestamp" style="color:red;">Corrupted Data</p>`;
             }
         } else {
@@ -284,7 +283,6 @@ function populateSlots() {
             slotElement.innerHTML = `<p>Slot ${i + 1}</p><p class="save-slot-timestamp">Empty</p>`;
         }
 
-        // Add Import/Export/Clear buttons
         const actionsContainer = document.createElement('div');
         actionsContainer.classList.add('save-slot-actions');
 
@@ -309,7 +307,6 @@ function populateSlots() {
             if (slotDataJSON) {
                 handleExportAction(i);
             } else {
-                // Button should be disabled, but as a fallback:
                 alert("Slot is empty, nothing to export.");
             }
         });
@@ -326,7 +323,6 @@ function populateSlots() {
             if (slotDataJSON) {
                 handleClearAction(i);
             } else {
-                 // Button should be disabled, but as a fallback:
                 alert("Slot is empty, nothing to clear.");
             }
         });
@@ -339,7 +335,6 @@ function populateSlots() {
 
         slotElement.addEventListener('click', async () => { 
             if (currentMode === 'save') {
-                // Check if slot is marked corrupted, but allow overwriting if user confirms
                 let proceedSave = true;
                 if (slotElement.classList.contains('corrupted-preview') && slotDataJSON) {
                      proceedSave = confirm('This slot contains data that might be corrupted. Overwrite anyway?');
@@ -354,7 +349,11 @@ function populateSlots() {
                 if (slotDataJSON) {
                     try {
                         const tempSlotData = JSON.parse(slotDataJSON);
-                        if (!tempSlotData.heroData || !tempSlotData.currentAreaIdentifier?.jsonPath) {
+                        // Validate essential parts of mapStateData for loading
+                        if (!tempSlotData.heroData || 
+                            !tempSlotData.mapStateData ||
+                            !tempSlotData.mapStateData.currentMapId ||
+                            typeof tempSlotData.mapStateData.stageNumber !== 'number') {
                              alert("This save slot appears to be corrupted (missing essential data). Cannot load.");
                              return;
                         }

@@ -1,16 +1,22 @@
 import Member from './Member.js';
-import {battleLog, evolutionService, hero, isPaused, loadNextStage, reLoadStage, team1, team2, battleStatistics} from './initialize.js';
-import Hero from './Hero.js'; // Assuming Hero might be used for type checks or specific hero logic
+import {battleLog, evolutionService,renderTeamMembers, hero, isPaused,
+ team1, team2, battleStatistics, mobsClasses, loadStage} from './initialize.js'; // MODIFIED: Removed loadNextStage, reLoadStage, Added mobClasses
+import Hero from './Hero.js';
+import Area from './Area.js';
 import { questSystem } from './questSystem.js';
 import { openTab } from './navigation.js';
+import { renderMember } from './Render.js'; // MODIFIED: Added renderMember for team2 setup
 
 let battleStarted = false;
 let battleInterval = null;
 let isFleeOnCooldown = false;
 const FLEE_COOLDOWN_SECONDS = 10;
-let currentPoiName = null; // To store poiName for the current battle
+let currentPoiName = null;
+let currentBattleDialogueOptions = null;
+let isBattlePausedForDialogue = false;
 
-// --- Battle Initialization and State ---
+let currentBattleArea = null; // MODIFIED: Store the Area instance for the current battle
+let currentBattleStageNumber = 1; // MODIFIED: Store the current stage number for the battle
 
 function resetFleeButtonState() {
     const fleeButton = document.getElementById('flee-battle');
@@ -18,49 +24,50 @@ function resetFleeButtonState() {
         fleeButton.disabled = false;
         fleeButton.textContent = "Flee";
     }
-    isFleeOnCooldown = false; // Reset cooldown state flag
+    isFleeOnCooldown = false;
 }
 
 function initializeBattle(poiName = null) {
-    battleLog.log("Battle started");
-    battleStarted = true;
     currentPoiName = poiName;
     resetFleeButtonState();
+    isBattlePausedForDialogue = false;
 }
 
-// --- Core Battle Loop ---
-
-function gameTick() {
-    if (isPaused || !battleStarted) return;
+async function gameTick() {
+    if (isPaused || !battleStarted || isBattlePausedForDialogue) return;
 
     team1.members.forEach(member => member.handleRegeneration());
     team2.members.forEach(member => member.handleRegeneration());
 
-    checkBattleOutcome();
+    await checkBattleOutcome();
 }
 
-function checkBattleOutcome() {
+async function checkBattleOutcome() {
     const team1Alive = team1.members.some(member => member.currentHealth > 0);
     const team2Alive = team2.members.some(member => member.currentHealth > 0);
 
     if (!team1Alive || !team2Alive) {
-        clearInterval(battleInterval);
-        battleInterval = null; // Clear interval ID
-        battleStarted = false;
+        if (battleInterval) clearInterval(battleInterval);
+        battleInterval = null;
+
+        const wasBattleStarted = battleStarted;
+        battleStarted = false; // Prevent further gameTicks during post-battle
 
         if (!team1Alive) {
-            handleBattleLoss();
+            await handleBattleLoss();
         } else {
-            handleBattleWin();
+            await handleBattleWin();
         }
-        // Common post-battle actions (excluding flee navigation)
+
         stopAllSkills(team1, team2);
         evolutionService.checkClassAvailability();
-        checkAndHandleRepeatStage();
+
+        const popup = document.getElementById('popup');
+        if (wasBattleStarted && (!popup || popup.classList.contains('hidden'))) {
+             checkAndHandleRepeatStage();
+        }
     }
 }
-
-// --- Battle Outcome Handling ---
 
 function calculateGoldDrop() {
     let totalGoldDropped = 0;
@@ -72,45 +79,60 @@ function calculateGoldDrop() {
     return totalGoldDropped;
 }
 
-function handleBattleWin() {
+async function handleBattleWin() {
     const totalGoldDropped = calculateGoldDrop();
     if (totalGoldDropped > 0) {
         hero.addGold(totalGoldDropped);
         battleLog.log(`Collected ${totalGoldDropped} gold!`);
         battleStatistics.addGoldCollected(totalGoldDropped);
     }
+    questSystem.updateQuestProgress('combatComplete', { poiName: currentPoiName });
+
+    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.endWinDialogueId) {
+        isBattlePausedForDialogue = true;
+        battleLog.log(`Starting post-battle (win) dialogue: ${currentBattleDialogueOptions.endWinDialogueId}`);
+        await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endWinDialogueId);
+        battleLog.log("Post-battle (win) dialogue finished.");
+        isBattlePausedForDialogue = false;
+    }
     showPopup("Victory!", "Your team has defeated the opposing team.");
-    questSystem.updateQuestProgress('combatComplete', currentPoiName);
 }
 
-function handleBattleLoss() {
+async function handleBattleLoss() {
+    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.endLossDialogueId) {
+        isBattlePausedForDialogue = true;
+        battleLog.log(`Starting post-battle (loss) dialogue: ${currentBattleDialogueOptions.endLossDialogueId}`);
+        await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endLossDialogueId);
+        battleLog.log("Post-battle (loss) dialogue finished.");
+        isBattlePausedForDialogue = false;
+    }
     showPopup("Loss!", "Your team has been defeated.");
 }
 
 function checkAndHandleRepeatStage() {
     const repeatCheckbox = document.getElementById('repeat');
-    if (repeatCheckbox && repeatCheckbox.checked) {
-        setTimeout(() => {
-            repeatStage(); // repeatStage handles popup hiding and restarting
+    const popup = document.getElementById('popup');
+    if (repeatCheckbox && repeatCheckbox.checked && popup && !popup.classList.contains('hidden')) {
+        setTimeout(async () => {
+            await repeatStage();
         }, 1000);
     }
 }
 
-// --- Skill Management ---
-
 function useTeamSkills(team) {
     team.members.forEach(member => {
-        member.skills.forEach(skill => {
-            // Assuming skill.useSkill exists and is appropriate here
-            // (e.g., for initial buffs or one-time enemy skills at battle start)
-            skill.useSkill(member);
-        });
+        // Only use skills if member is alive
+        if (member.currentHealth > 0) {
+            member.skills.forEach(skill => {
+                // Consider adding logic here if not all skills should be auto-used
+                // e.g., if skill.autoCastAtStart or similar flag
+                skill.useSkill(member);
+            });
+        }
     });
 }
 
 function stopHeroActiveSkills() {
-    // Assumes hero is team1.members[0] or direct hero import is the player character
-    // Using imported hero for clarity on whose skills are being stopped if it's always the main player
     if (hero && hero.skills) {
         const activeSkills = hero.skills.filter(skill => skill.type === "active");
         activeSkills.forEach(skill => {
@@ -130,14 +152,11 @@ function stopTeamMemberSkills(team) {
 }
 
 function stopAllSkills(playerTeam, enemyTeam) {
-    stopHeroActiveSkills(); // Specifically for hero's active/toggle skills
-    stopTeamMemberSkills(enemyTeam); // Generic skill stop for enemies
-    // If playerTeam has other members with skills needing stopping:
-    // stopTeamMemberSkills(playerTeam); // (excluding hero if already handled)
+    stopHeroActiveSkills();
+    stopTeamMemberSkills(enemyTeam); // Only stop enemy team skills, player skills might persist if designed so
+    // If player team members also have skills that need stopping:
+    // stopTeamMemberSkills(playerTeam);
 }
-
-
-// --- Flee Mechanism ---
 
 function calculateFleeChance() {
     let heroDex = hero.stats.dexterity || 0;
@@ -149,18 +168,18 @@ function calculateFleeChance() {
     }
 
     let fleeChance = 50 + Math.floor(heroDex / 5) - Math.floor(avgEnemyDex / 5);
-    return Math.max(10, Math.min(90, fleeChance)); // Clamp between 10% and 90%
+    return Math.max(10, Math.min(90, fleeChance));
 }
 
 function handleSuccessfulFlee(fleeChance, randomRoll) {
     battleLog.log(`Successfully fled from battle! (Chance: ${fleeChance.toFixed(0)}%, Rolled: ${randomRoll.toFixed(0)})`);
     battleStatistics.addSuccessfulFlee();
-    stopBattle(team1, team2, true); // true indicates fled
+    stopBattle(team1, team2, true);
+    questSystem.updateQuestProgress('escape', { poiName: currentPoiName});
 }
 
 function handleFailedFlee(fleeChance, randomRoll) {
     battleLog.log(`Failed to flee! (Chance: ${fleeChance.toFixed(0)}%, Rolled: ${randomRoll.toFixed(0)})`);
-    // Cooldown is managed after the attempt
 }
 
 function startFleeCooldownVisuals() {
@@ -172,7 +191,6 @@ function startFleeCooldownVisuals() {
 
     const cooldownInterval = setInterval(() => {
         cooldownTimeLeft--;
-        // Re-fetch button in case it becomes invalid (e.g., UI changes)
         const currentFleeButton = document.getElementById('flee-battle');
         if (currentFleeButton) {
             currentFleeButton.textContent = `Flee (${cooldownTimeLeft}s)`;
@@ -180,11 +198,11 @@ function startFleeCooldownVisuals() {
 
         if (cooldownTimeLeft <= 0) {
             clearInterval(cooldownInterval);
-            isFleeOnCooldown = false; // Actual cooldown ends
-            if (currentFleeButton && battleStarted) { // Only re-enable if battle is still ongoing
+            isFleeOnCooldown = false;
+            if (currentFleeButton && battleStarted) {
                 currentFleeButton.disabled = false;
                 currentFleeButton.textContent = "Flee";
-            } else if (currentFleeButton) { // If battle ended, just reset text
+            } else if (currentFleeButton) {
                  currentFleeButton.textContent = "Flee";
             }
         }
@@ -205,25 +223,22 @@ export function attemptFlee() {
     if (fleeButton) {
         fleeButton.disabled = true;
     }
-    isFleeOnCooldown = true; // Mark cooldown active immediately
+    isFleeOnCooldown = true;
 
     const fleeChance = calculateFleeChance();
     const randomRoll = Math.random() * 100;
 
     if (randomRoll < fleeChance) {
         handleSuccessfulFlee(fleeChance, randomRoll);
-        // Cooldown still applies but user navigates away. Visuals might not complete on battle screen.
-        // isFleeOnCooldown flag remains true for FLEE_COOLDOWN_SECONDS.
     } else {
         handleFailedFlee(fleeChance, randomRoll);
     }
-    startFleeCooldownVisuals(); // Manages button text and re-enables it after cooldown
+    startFleeCooldownVisuals();
 }
 
-
-// --- UI Interaction & Navigation ---
-
 function showPopup(title, message) {
+    if (isBattlePausedForDialogue) return;
+
     const popup = document.getElementById('popup');
     const titleDiv = document.getElementById('popupTitle');
     const messageDiv = document.getElementById('popupText');
@@ -246,13 +261,59 @@ export function returnToMap() {
     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
 }
 
-// --- Main Battle Control Functions ---
+// MODIFIED: Added areaInstance, stageNum. Removed poiName as it's derived from areaInstance.
+async function startBattle(currentTeam1, currentTeam2, areaName = null, dialogueOptions = null, stageNum = 1) {
+    const battlePoiName = areaName ? areaName.name : 'Unknown Area';
+    initializeBattle(battlePoiName); // Sets currentPoiName internally
 
-function startBattle(currentTeam1, currentTeam2, poiName = null) {
-    initializeBattle(poiName);
+    currentBattleDialogueOptions = dialogueOptions;
+    currentBattleArea = new Area(areaName);
+    currentBattleStageNumber = stageNum;
 
-    useTeamSkills(currentTeam2); // Enemies use initial skills
-    if (hero) hero.triggerRepeatSkills(); // Hero triggers their passive/repeat skills
+
+
+    if (currentBattleArea) {
+        if (!currentBattleArea.isLoaded) {
+            battleLog.log(`Area ${currentBattleArea.name} data is not loaded. Attempting to load...`);
+            await currentBattleArea.loadData(); // Ensure area data is loaded
+            if (!currentBattleArea.isLoaded) {
+                console.error(`Failed to load data for area: ${currentBattleArea.name}. Cannot start battle.`);
+                battleLog.log(`Error: Could not load enemy team for ${currentBattleArea.name}.`);
+                return; // Exit if area data failed to load
+            }
+        }
+
+        // Populate team2 with mobs from the area and stage
+        currentTeam2.members = []; // Clear existing members
+        const mobs = currentBattleArea.spawnMobs(mobsClasses, currentTeam2, currentBattleStageNumber);
+
+        mobs.forEach((mob, index) => {
+            mob.team = currentTeam2;
+            mob.opposingTeam = currentTeam1;
+            mob.memberId = `team2-member-${index}`; // Assign a unique ID for DOM element
+        });
+        currentTeam2.members = mobs;
+
+        renderTeamMembers(currentTeam2.members, 'team2', true);
+
+    } else {
+        battleLog.log("Battle started without a specific area. Assuming team2 is pre-populated.");
+    }
+
+    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId) {
+        isBattlePausedForDialogue = true;
+        battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
+        await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
+        battleLog.log("Pre-battle dialogue finished.");
+        isBattlePausedForDialogue = false;
+    }
+
+    battleLog.log(`Battle started at ${currentPoiName}`); // currentPoiName is now set by initializeBattle
+
+    battleStarted = true; // MODIFIED: Set battleStarted to true BEFORE triggering initial skills
+
+    useTeamSkills(currentTeam2);
+    if (hero) hero.triggerRepeatSkills();
 
     if (battleInterval) {
         clearInterval(battleInterval);
@@ -261,36 +322,65 @@ function startBattle(currentTeam1, currentTeam2, poiName = null) {
 }
 
 function stopBattle(currentTeam1, currentTeam2, fled = false) {
-    // battleStarted and battleInterval are cleared in checkBattleOutcome or if fled directly
-    if (battleInterval) { // Ensure interval is cleared if stopBattle is called directly (e.g. flee)
+    if (battleInterval) {
         clearInterval(battleInterval);
         battleInterval = null;
     }
     battleStarted = false;
+    isBattlePausedForDialogue = false;
 
     stopAllSkills(currentTeam1, currentTeam2);
 
     if (fled) {
-        hidePopup(); // Ensure no popups linger if fleeing
-        returnToMap(); // Navigate away
+        hidePopup();
+        returnToMap();
     }
-    // If not fled, win/loss popups are handled by checkBattleOutcome's flow.
+    // currentBattleArea = null; // Clear area context if battle fully stops and isn't just paused/reloaded
+    // currentBattleStageNumber = 1;
 }
 
-// --- Stage Progression ---
-
-function repeatStage() {
+// MODIFIED: Uses currentBattleArea and currentBattleStageNumber
+async function repeatStage() {
     hidePopup();
-    reLoadStage(); // Assumes reLoadStage prepares team1 and team2
-    startBattle(team1, team2, currentPoiName); // Restart battle with potentially new instances from reLoadStage
+    if (!currentBattleArea) {
+        console.error("Cannot repeat stage: currentBattleArea not set.");
+        battleLog.log("Error: No area context to repeat the stage.");
+        return;
+    }
+    // Dialogue options typically remain the same for a POI/Area unless specifically changed
+    await startBattle(team1, team2, currentBattleDialogueOptions, currentBattleArea, currentBattleStageNumber);
 }
 
-function nextStage() {
+// MODIFIED: Uses currentBattleArea to advance stage
+async function nextStage() {
     hidePopup();
-    loadNextStage(); // Assumes loadNextStage prepares team1 and team2 for the new stage
-    startBattle(team1, team2); // Start battle with new instances
+    if (!currentBattleArea) {
+        console.error("Cannot advance to next stage: currentBattleArea not set.");
+        battleLog.log("Error: No area context for next stage.");
+        // Potentially fall back to a global "next stage" system if needed,
+        // for now, it's an error if no battle-specific area is set.
+        return;
+    }
+    if (!currentBattleArea.isLoaded) {
+        console.error(`Cannot advance to next stage: currentBattleArea ${currentBattleArea.name} is not loaded.`);
+        battleLog.log(`Error: Area data not loaded for ${currentBattleArea.name}.`);
+        return;
+    }
+
+    const nextStageNum = currentBattleStageNumber + 1;
+
+    if (nextStageNum > currentBattleArea.stages.length) {
+        battleLog.log(`All stages in ${currentBattleArea.name} cleared!`);
+        showPopup("Area Cleared!", `You have completed all stages in ${currentBattleArea.name}.`);
+        // Consider calling stopBattle() or specific logic for area completion.
+        // Example: returnToMap();
+        return;
+    }
+
+    // Assuming dialogue options and POI name (area name) remain consistent for stages within an area.
+    // If per-stage dialogue/details are needed, Area class or a new system would provide them.
+    await startBattle(team1, team2, currentBattleArea, currentBattleDialogueOptions, nextStageNum);
+
 }
 
-// --- Exports ---
 export {startBattle, stopBattle, hidePopup, battleStarted, repeatStage, nextStage};
-// attemptFlee and returnToMap are already exported by their definition
