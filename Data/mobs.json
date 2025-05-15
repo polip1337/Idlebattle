@@ -1,5 +1,5 @@
 {
-  "GoblinWarrior": {
+  "goblinWarrior": {
     "id": "goblinWarrior",
     "name": "Goblin Warrior",
     "portrait": "Media/Mobs/Goblin/warrior.jpeg",
@@ -106,7 +106,7 @@
       "magicControl": 2
     }
   },
-  "GoblinScout": {
+  "goblinScout": {
     "id": "goblinScout",
     "name": "Goblin Scout",
     "portrait": "Media/Mobs/Goblin/scout.jpeg",
@@ -394,7 +394,7 @@
     }
   },
 
-  "GiantRat": {
+  "giantRat": {
     "id": "giantRat",
     "name": "Giant Rat",
     "portrait": "Media/Mobs/Beast/rat.jpeg",

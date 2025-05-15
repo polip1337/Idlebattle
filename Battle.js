@@ -1,22 +1,23 @@
 import Member from './Member.js';
 import {battleLog, evolutionService,renderTeamMembers, hero, isPaused,
- team1, team2, battleStatistics, mobsClasses, loadStage} from './initialize.js'; // MODIFIED: Removed loadNextStage, reLoadStage, Added mobClasses
+ team1, team2, battleStatistics, mobsClasses } from './initialize.js';
 import Hero from './Hero.js';
 import Area from './Area.js';
 import { questSystem } from './questSystem.js';
 import { openTab } from './navigation.js';
-import { renderMember } from './Render.js'; // MODIFIED: Added renderMember for team2 setup
+// renderMember is not explicitly used here anymore as renderTeamMembers from initialize handles it.
+// If Battle.js were to add individual members, it might need it.
 
 let battleStarted = false;
 let battleInterval = null;
 let isFleeOnCooldown = false;
 const FLEE_COOLDOWN_SECONDS = 10;
-let currentPoiName = null;
+let currentPoiName = null; // The name of the Area (e.g., "Goblin Cave")
 let currentBattleDialogueOptions = null;
 let isBattlePausedForDialogue = false;
 
-let currentBattleArea = null; // MODIFIED: Store the Area instance for the current battle
-let currentBattleStageNumber = 1; // MODIFIED: Store the current stage number for the battle
+let currentBattleArea = null; // Stores the Area instance for the current battle
+let currentBattleStageNumber = 1; // Stores the current stage number for the battle
 
 function resetFleeButtonState() {
     const fleeButton = document.getElementById('flee-battle');
@@ -27,8 +28,10 @@ function resetFleeButtonState() {
     isFleeOnCooldown = false;
 }
 
-function initializeBattle(poiName = null) {
+function initializeBattleState(poiName = null, stageNum = 1) { // Renamed and takes stageNum
     currentPoiName = poiName;
+    currentBattleStageNumber = stageNum;
+    currentBattleArea = null; // Reset area, will be loaded in startBattle
     resetFleeButtonState();
     isBattlePausedForDialogue = false;
 }
@@ -51,7 +54,7 @@ async function checkBattleOutcome() {
         battleInterval = null;
 
         const wasBattleStarted = battleStarted;
-        battleStarted = false; // Prevent further gameTicks during post-battle
+        battleStarted = false;
 
         if (!team1Alive) {
             await handleBattleLoss();
@@ -86,7 +89,7 @@ async function handleBattleWin() {
         battleLog.log(`Collected ${totalGoldDropped} gold!`);
         battleStatistics.addGoldCollected(totalGoldDropped);
     }
-    questSystem.updateQuestProgress('combatComplete', { poiName: currentPoiName });
+    questSystem.updateQuestProgress('combatComplete', { poiName: currentPoiName, stage: currentBattleStageNumber });
 
     if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.endWinDialogueId) {
         isBattlePausedForDialogue = true;
@@ -95,7 +98,12 @@ async function handleBattleWin() {
         battleLog.log("Post-battle (win) dialogue finished.");
         isBattlePausedForDialogue = false;
     }
-    showPopup("Victory!", "Your team has defeated the opposing team.");
+    // Check if there's a next stage before showing generic victory
+    if (currentBattleArea && currentBattleStageNumber < currentBattleArea.stages.length) {
+        showPopup("Stage Cleared!", `Your team has cleared stage ${currentBattleStageNumber}.`);
+    } else {
+        showPopup("Victory!", `Your team has defeated all enemies in ${currentPoiName}.`);
+    }
 }
 
 async function handleBattleLoss() {
@@ -106,26 +114,27 @@ async function handleBattleLoss() {
         battleLog.log("Post-battle (loss) dialogue finished.");
         isBattlePausedForDialogue = false;
     }
-    showPopup("Loss!", "Your team has been defeated.");
+    showPopup("Defeat!", "Your team has been defeated.");
 }
 
 function checkAndHandleRepeatStage() {
     const repeatCheckbox = document.getElementById('repeat');
     const popup = document.getElementById('popup');
     if (repeatCheckbox && repeatCheckbox.checked && popup && !popup.classList.contains('hidden')) {
-        setTimeout(async () => {
-            await repeatStage();
-        }, 1000);
+        // Only repeat if not advancing to a next stage automatically or something similar
+        const canAdvance = currentBattleArea && currentBattleStageNumber < currentBattleArea.stages.length;
+        if (!canAdvance || (popup && popup.querySelector('#popupTitle').textContent.includes("Victory!"))) { // Only repeat on final victory or if explicitly chosen
+            setTimeout(async () => {
+                await repeatStage();
+            }, 1000);
+        }
     }
 }
 
 function useTeamSkills(team) {
     team.members.forEach(member => {
-        // Only use skills if member is alive
         if (member.currentHealth > 0) {
             member.skills.forEach(skill => {
-                // Consider adding logic here if not all skills should be auto-used
-                // e.g., if skill.autoCastAtStart or similar flag
                 skill.useSkill(member);
             });
         }
@@ -153,9 +162,7 @@ function stopTeamMemberSkills(team) {
 
 function stopAllSkills(playerTeam, enemyTeam) {
     stopHeroActiveSkills();
-    stopTeamMemberSkills(enemyTeam); // Only stop enemy team skills, player skills might persist if designed so
-    // If player team members also have skills that need stopping:
-    // stopTeamMemberSkills(playerTeam);
+    stopTeamMemberSkills(enemyTeam);
 }
 
 function calculateFleeChance() {
@@ -174,7 +181,7 @@ function calculateFleeChance() {
 function handleSuccessfulFlee(fleeChance, randomRoll) {
     battleLog.log(`Successfully fled from battle! (Chance: ${fleeChance.toFixed(0)}%, Rolled: ${randomRoll.toFixed(0)})`);
     battleStatistics.addSuccessfulFlee();
-    stopBattle(team1, team2, true);
+    stopBattle(true); // fled = true
     questSystem.updateQuestProgress('escape', { poiName: currentPoiName});
 }
 
@@ -242,9 +249,21 @@ function showPopup(title, message) {
     const popup = document.getElementById('popup');
     const titleDiv = document.getElementById('popupTitle');
     const messageDiv = document.getElementById('popupText');
+    const nextStageButton = document.getElementById('nextStage-popup'); // Battle's next stage button
+
     if (popup && titleDiv && messageDiv) {
         titleDiv.textContent = title;
         messageDiv.textContent = message;
+
+        // Show/hide battle's "Next Stage" button based on context
+        if (nextStageButton) {
+            const canAdvance = currentBattleArea && currentBattleArea.isLoaded && currentBattleStageNumber < currentBattleArea.stages.length;
+            if (title.includes("Stage Cleared!") && canAdvance) {
+                nextStageButton.style.display = 'inline-block';
+            } else {
+                nextStageButton.style.display = 'none';
+            }
+        }
         popup.classList.remove('hidden');
     }
 }
@@ -256,49 +275,57 @@ function hidePopup() {
     }
 }
 
-export function returnToMap() {
+export function returnToMap() { // This is called by the "Return to Map" button on the popup
     hidePopup();
+    stopBattle(false); // fled = false, just ending the battle sequence
     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
 }
 
-// MODIFIED: Added areaInstance, stageNum. Removed poiName as it's derived from areaInstance.
-async function startBattle(currentTeam1, currentTeam2, areaName = null, dialogueOptions = null, stageNum = 1) {
-    const battlePoiName = areaName ? areaName.name : 'Unknown Area';
-    initializeBattle(battlePoiName); // Sets currentPoiName internally
+// poiData is the POI object from maps.json, stageNum is the stage to fight.
+async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
+    if (!poiData || !poiData.name) {
+        console.error("startBattle called without valid POI data or POI name.");
+        battleLog.log("Error: Battle cannot start without area information.");
+        return;
+    }
+    const areaNameString = poiData.name;
+    initializeBattleState(areaNameString, stageNum); // Sets currentPoiName and currentBattleStageNumber
 
     currentBattleDialogueOptions = dialogueOptions;
-    currentBattleArea = new Area(areaName);
-    currentBattleStageNumber = stageNum;
+    currentBattleArea = new Area(areaNameString); // Area instance for this battle
 
+    battleLog.log(`Attempting to load area: ${areaNameString} for battle.`);
+    await currentBattleArea.loadData();
 
-
-    if (currentBattleArea) {
-        if (!currentBattleArea.isLoaded) {
-            battleLog.log(`Area ${currentBattleArea.name} data is not loaded. Attempting to load...`);
-            await currentBattleArea.loadData(); // Ensure area data is loaded
-            if (!currentBattleArea.isLoaded) {
-                console.error(`Failed to load data for area: ${currentBattleArea.name}. Cannot start battle.`);
-                battleLog.log(`Error: Could not load enemy team for ${currentBattleArea.name}.`);
-                return; // Exit if area data failed to load
-            }
-        }
-
-        // Populate team2 with mobs from the area and stage
-        currentTeam2.members = []; // Clear existing members
-        const mobs = currentBattleArea.spawnMobs(mobsClasses, currentTeam2, currentBattleStageNumber);
-
-        mobs.forEach((mob, index) => {
-            mob.team = currentTeam2;
-            mob.opposingTeam = currentTeam1;
-            mob.memberId = `team2-member-${index}`; // Assign a unique ID for DOM element
-        });
-        currentTeam2.members = mobs;
-
-        renderTeamMembers(currentTeam2.members, 'team2', true);
-
-    } else {
-        battleLog.log("Battle started without a specific area. Assuming team2 is pre-populated.");
+    if (!currentBattleArea.isLoaded) {
+        console.error(`Failed to load data for area: ${areaNameString}. Cannot start battle.`);
+        battleLog.log(`Error: Could not load enemy team for ${areaNameString}.`);
+        showPopup("Battle Error", `Could not load battle area: ${areaNameString}.`);
+        setTimeout(returnToMap, 2000); // Go back to map after showing error
+        return;
     }
+    battleLog.log(`Area ${areaNameString} loaded. Spawning mobs for stage ${currentBattleStageNumber}.`);
+
+    team2.clearMembers(); // Clear battle team2 members
+    const mobs = currentBattleArea.spawnMobs(mobsClasses, team2, currentBattleStageNumber);
+
+    if (!mobs || mobs.length === 0) {
+        console.warn(`No mobs spawned for ${areaNameString}, stage ${currentBattleStageNumber}.`);
+        battleLog.log(`Warning: No enemies for ${areaNameString} - Stage ${currentBattleStageNumber}.`);
+        // Auto-win or proceed to next stage if possible? For now, checkBattleOutcome will handle.
+    }
+
+    mobs.forEach((mob, index) => {
+        mob.team = team2;
+        mob.opposingTeam = team1;
+        mob.memberId = `team2-member-${index}`;
+    });
+    team2.addMembers(mobs);
+
+    renderTeamMembers(team2.members, 'team2', true); // Use dedicated battlefield container
+    renderTeamMembers(team1.members, 'team1', true); // Use dedicated battlefield container
+    team2.members.forEach(mob => mob.initializeDOMElements());
+
 
     if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId) {
         isBattlePausedForDialogue = true;
@@ -308,11 +335,10 @@ async function startBattle(currentTeam1, currentTeam2, areaName = null, dialogue
         isBattlePausedForDialogue = false;
     }
 
-    battleLog.log(`Battle started at ${currentPoiName}`); // currentPoiName is now set by initializeBattle
+    battleLog.log(`Battle started at ${currentPoiName}, Stage ${currentBattleStageNumber}`);
+    battleStarted = true;
 
-    battleStarted = true; // MODIFIED: Set battleStarted to true BEFORE triggering initial skills
-
-    useTeamSkills(currentTeam2);
+    useTeamSkills(team2); // Use team2 skills (mobs)
     if (hero) hero.triggerRepeatSkills();
 
     if (battleInterval) {
@@ -321,66 +347,59 @@ async function startBattle(currentTeam1, currentTeam2, areaName = null, dialogue
     battleInterval = setInterval(gameTick, 1000);
 }
 
-function stopBattle(currentTeam1, currentTeam2, fled = false) {
+function stopBattle(fled = false) {
     if (battleInterval) {
         clearInterval(battleInterval);
         battleInterval = null;
     }
-    battleStarted = false;
+    // battleStarted is set by checkBattleOutcome or here if fleeing
     isBattlePausedForDialogue = false;
 
-    stopAllSkills(currentTeam1, currentTeam2);
+    stopAllSkills(team1, team2); // Stop skills for player and enemy teams
 
     if (fled) {
+        battleStarted = false; // Ensure battle is marked as stopped
         hidePopup();
-        returnToMap();
+        openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
     }
-    // currentBattleArea = null; // Clear area context if battle fully stops and isn't just paused/reloaded
-    // currentBattleStageNumber = 1;
+    // If not fled, checkBattleOutcome handles setting battleStarted = false and showing popups.
+    // currentBattleArea and currentBattleStageNumber persist for repeat/next stage logic from popup.
 }
 
-// MODIFIED: Uses currentBattleArea and currentBattleStageNumber
+// Repeats the current stage (e.g. "Repeat Stage" button on popup)
 async function repeatStage() {
     hidePopup();
-    if (!currentBattleArea) {
-        console.error("Cannot repeat stage: currentBattleArea not set.");
-        battleLog.log("Error: No area context to repeat the stage.");
+    if (!currentBattleArea || !currentBattleArea.isLoaded || !currentPoiName) {
+        console.error("Cannot repeat stage: Battle area context not valid.");
+        battleLog.log("Error: No valid area context to repeat the stage.");
+        returnToMap();
         return;
     }
-    // Dialogue options typically remain the same for a POI/Area unless specifically changed
-    await startBattle(team1, team2, currentBattleDialogueOptions, currentBattleArea, currentBattleStageNumber);
+    const pseudoPoiData = { name: currentPoiName }; // Reconstruct minimal POI data needed
+    // currentBattleStageNumber is already set for the current battle.
+    await startBattle(pseudoPoiData, currentBattleDialogueOptions, currentBattleStageNumber);
 }
 
-// MODIFIED: Uses currentBattleArea to advance stage
+// Advances to the next stage within the same area (e.g. "Next Stage" button on popup)
 async function nextStage() {
     hidePopup();
-    if (!currentBattleArea) {
-        console.error("Cannot advance to next stage: currentBattleArea not set.");
-        battleLog.log("Error: No area context for next stage.");
-        // Potentially fall back to a global "next stage" system if needed,
-        // for now, it's an error if no battle-specific area is set.
-        return;
-    }
-    if (!currentBattleArea.isLoaded) {
-        console.error(`Cannot advance to next stage: currentBattleArea ${currentBattleArea.name} is not loaded.`);
-        battleLog.log(`Error: Area data not loaded for ${currentBattleArea.name}.`);
+    if (!currentBattleArea || !currentBattleArea.isLoaded || !currentPoiName) {
+        console.error("Cannot advance to next stage: Battle area context not valid.");
+        battleLog.log("Error: No valid area context for next stage.");
+        returnToMap();
         return;
     }
 
     const nextStageNum = currentBattleStageNumber + 1;
 
     if (nextStageNum > currentBattleArea.stages.length) {
-        battleLog.log(`All stages in ${currentBattleArea.name} cleared!`);
-        showPopup("Area Cleared!", `You have completed all stages in ${currentBattleArea.name}.`);
-        // Consider calling stopBattle() or specific logic for area completion.
-        // Example: returnToMap();
-        return;
+        battleLog.log(`All stages in ${currentPoiName} cleared! This should have been caught by handleBattleWin.`);
+        showPopup("Area Cleared!", `You have completed all stages in ${currentPoiName}.`);
+        return; // Should not happen if button logic is correct in showPopup
     }
 
-    // Assuming dialogue options and POI name (area name) remain consistent for stages within an area.
-    // If per-stage dialogue/details are needed, Area class or a new system would provide them.
-    await startBattle(team1, team2, currentBattleArea, currentBattleDialogueOptions, nextStageNum);
-
+    const pseudoPoiData = { name: currentPoiName };
+    await startBattle(pseudoPoiData, currentBattleDialogueOptions, nextStageNum);
 }
 
 export {startBattle, stopBattle, hidePopup, battleStarted, repeatStage, nextStage};

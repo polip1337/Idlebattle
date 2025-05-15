@@ -1,75 +1,75 @@
 import Member from './Member.js';
 
 class Area {
-    constructor(jsonPath) {
-        this.jsonPath = jsonPath;
-        this.name = ""; // Will be populated from JSON or inferred from path
+    constructor(areaNameString) {
+        this.areaName = areaNameString;
+        this.displayName = "";
         this.stages = [];
-        this.stageNumber = 1; // Represents the default or current stage being configured/viewed, not necessarily battle stage
         this.description = "";
-        this.isLoaded = false; // Flag to check if data has been fetched
+        this.isLoaded = false;
     }
 
     async loadData() {
         if (this.isLoaded) {
-            // console.log(`Area data for ${this.name} already loaded.`);
+            return;
+        }
+        if (!this.areaName) {
+            console.error("Area name is not set. Cannot load data.");
+            this.isLoaded = false; // Ensure this is set if early exit
             return;
         }
         try {
-            const response = await fetch("Data/Areas/" + this.jsonPath.replace(/\s/g, "") + ".json");
+            const filePath = `Data/Areas/${this.areaName.replace(/\s/g, "")}.json`;
+            const response = await fetch(filePath);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status} while fetching ${this.jsonPath}`);
+                throw new Error(`HTTP error! status: ${response.status} while fetching ${filePath}`);
             }
             const data = await response.json();
 
-            this.name = data.areaName || this.jsonPath.split('/').pop().replace(/\.json$/i, ''); // Get name from JSON or infer
-            this.description = data.areaDescription || ""; // Get description from JSON
-            this.stages = data.stages;
-            this.stageNumber = 1; // Reset to default first stage after loading
+            this.displayName = data.areaName || this.areaName;
+            this.description = data.areaDescription || "";
+            this.stages = data.stages || [];
             this.isLoaded = true;
-            // console.log(`Area data loaded successfully for: ${this.name}`);
         } catch (error) {
-            console.error(`Failed to load area data from ${this.jsonPath}:`, error);
+            console.error(`Failed to load area data for ${this.areaName} (source JSON: ${this.areaName.replace(/\s/g, "")}.json):`, error);
+            this.displayName = this.areaName || "Error Loading Area";
             this.stages = []; // Ensure stages is empty on error
-            this.isLoaded = false; // Explicitly set to false on error
+            this.isLoaded = false;
         }
     }
 
-    spawnMobs(mobClasses, teamToPopulate, stageNumToSpawn) { // teamToPopulate is not used, returns mobs
+    // teamToPopulate is no longer strictly needed as we return mobs, but kept for signature consistency if used elsewhere.
+    spawnMobs(mobClasses, teamToPopulate, stageNumToSpawn) {
         if (!this.isLoaded) {
-            console.error(`Area data for ${this.name} is not loaded. Call loadData() first.`);
+            console.error(`Area data for ${this.displayName} (source: ${this.areaName}.json) is not loaded. Call loadData() first.`);
             return [];
         }
         const stageIndex = stageNumToSpawn - 1;
         if (stageIndex < 0 || stageIndex >= this.stages.length) {
-            console.error(`Invalid stage number ${stageNumToSpawn} for area ${this.name}. Max stages: ${this.stages.length}, Available: ${this.stages.map(s => s.stage).join(', ')}`);
+            console.error(`Invalid stage number ${stageNumToSpawn} for area ${this.displayName}. Max stages: ${this.stages.length}. Available: ${this.stages.map((s,i) => i+1).join(', ')}`);
             return [];
         }
 
         const stage = this.stages[stageIndex];
         if (!stage) {
-            console.error(`Stage data not found for stage number ${stageNumToSpawn} (index ${stageIndex}) in area ${this.name}.`);
+            console.error(`Stage data not found for stage number ${stageNumToSpawn} (index ${stageIndex}) in area ${this.displayName}.`);
             return [];
         }
 
         const mobs = [];
         if (stage.mobs && Array.isArray(stage.mobs)) {
-            for (let i = 0; i < stage.mobs.length; i++) {
-                const mobData = stage.mobs[i];
-                const mobClassDefinition = mobClasses[mobData.type]; // Get the class definition
-
+            for (const mobData of stage.mobs) {
+                const mobClassDefinition = mobClasses[mobData.type];
                 if (!mobClassDefinition) {
-                    console.warn(`Mob type "${mobData.type}" not found in mobClasses for area ${this.name}, stage ${stageNumToSpawn}.`);
+                    console.warn(`Mob type "${mobData.type}" not found in mobClasses for area ${this.displayName}, stage ${stageNumToSpawn}.`);
                     continue;
                 }
-
                 for (let j = 0; j < mobData.count; j++) {
                     try {
-                        // Pass the actual class definition object to Member constructor
                         mobs.push(new Member(
-                            mobClassDefinition.name, // Name from class definition
-                            mobClassDefinition,      // The full class definition object
-                            mobClassDefinition.skills, // Skill IDs or definitions from class def
+                            mobClassDefinition.name,
+                            mobClassDefinition,
+                            mobClassDefinition.skills,
                             mobData.level
                         ));
                     } catch (error) {
@@ -78,25 +78,9 @@ class Area {
                 }
             }
         } else {
-            console.warn(`No mobs defined or mobs array is malformed for stage ${stageNumToSpawn} in area ${this.name}.`);
+            console.warn(`No mobs defined or mobs array is malformed for stage ${stageNumToSpawn} in area ${this.displayName}.`);
         }
         return mobs;
-    }
-
-    deepCopy(obj) {
-        if (obj === null || typeof obj !== 'object') {
-            return obj;
-        }
-        if (Array.isArray(obj)) {
-            return obj.map(item => this.deepCopy(item));
-        }
-        const copy = {};
-        for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                copy[key] = this.deepCopy(obj[key]);
-            }
-        }
-        return copy;
     }
 }
 

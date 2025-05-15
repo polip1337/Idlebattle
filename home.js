@@ -1,63 +1,81 @@
 import { openTab } from './navigation.js';
-import { loadGameData } from './initialize.js'; // Correct path
+// loadGameData is now exported by initialize.js and passed to saveLoad.js
+// For new game, we call it directly.
+import { loadGameData } from './initialize.js';
 import { startSlideshow } from './slideshow.js';
-import { openLoadModal } from './saveLoad.js'; // For Load Game button
+import { openLoadModal } from './saveLoad.js';
 
 export function initializeHomeScreen() {
     const homeScreen = document.getElementById('home-screen');
     const newGameButton = document.getElementById('new-game');
     const loadGameButton = document.getElementById('load-game');
-    const optionsButton = document.getElementById('options'); // Assuming you have an options tab
+    const optionsButton = document.getElementById('options');
     const exitButton = document.getElementById('exit');
     const homeNavButton = document.getElementById('homeNavButton');
 
     function hideHomeScreenAndShowFooter() {
         homeScreen.classList.remove('active');
         homeScreen.classList.add('hidden');
-        document.getElementById('footer').classList.remove('hidden');
+        const footer = document.getElementById('footer');
+        if (footer) footer.classList.remove('hidden');
     }
 
-    newGameButton.addEventListener('click', async () => {
-        // No need to hide home screen here, slideshow will cover it.
-        // loadGameData(null) will eventually hide it after slideshow.
-        startSlideshow(async () => {
-            await loadGameData(null); // Start new game after slideshow
-            hideHomeScreenAndShowFooter();
-            openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
-
+    if (newGameButton) {
+        newGameButton.addEventListener('click', async () => {
+            startSlideshow(async () => {
+                const gameReady = await loadGameData(null); // Start new game (null signifies no saved state)
+                if (gameReady) {
+                    hideHomeScreenAndShowFooter();
+                    openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
+                } else {
+                    // Error handling for game not starting (e.g. critical data load failure)
+                    // loadGameData should alert the user.
+                    console.error("New game initialization failed.");
+                    // Optionally, re-show home screen or an error message screen.
+                }
+            });
         });
-    });
+    }
 
-    loadGameButton.addEventListener('click', () => {
-        openLoadModal(); // This will handle game loading and navigation
-        // No need to hide home screen here, openLoadModal handles flow.
-        // If a game is successfully loaded from the modal, `initialize.js` `loadGameData`
-        // will then hide the home screen and open the map tab.
-    });
+    if (loadGameButton) {
+        loadGameButton.addEventListener('click', () => {
+            openLoadModal();
+            // Game loading success (hiding home screen, opening map) is handled by
+            // the loadGame function in saveLoad.js calling initialize.js#loadGameData
+        });
+    }
 
-    optionsButton.addEventListener('click', () => {
-        hideHomeScreenAndShowFooter();
-        openTab({ currentTarget: document.getElementById('optionsNavButton') }, 'options');
-    });
+    if (optionsButton) {
+        optionsButton.addEventListener('click', () => {
+            hideHomeScreenAndShowFooter();
+            openTab({ currentTarget: document.getElementById('optionsNavButton') }, 'options');
+        });
+    }
 
-    exitButton.addEventListener('click', () => {
-        if (confirm('Are you sure you want to exit?')) {
-            window.close(); // Note: This may not work in all browsers
-        }
-    });
+    if (exitButton) {
+        exitButton.addEventListener('click', () => {
+            if (confirm('Are you sure you want to exit?')) {
+                window.close();
+            }
+        });
+    }
 
-    homeNavButton.addEventListener('click', () => {
-        homeScreen.classList.add('active');
-        homeScreen.classList.remove('hidden');
-        document.getElementById('footer').classList.add('hidden');
-        const tabContents = document.getElementsByClassName('tabcontent');
-        for (let content of tabContents) {
-            content.classList.remove('active');
-        }
-        const tabLinks = document.getElementsByClassName('tablinks');
-        for (let link of tabLinks) {
-            link.classList.remove('active');
-        }
-        homeNavButton.classList.add('active');
-    });
+    if (homeNavButton) {
+        homeNavButton.addEventListener('click', () => {
+            homeScreen.classList.add('active');
+            homeScreen.classList.remove('hidden');
+            const footer = document.getElementById('footer');
+            if (footer) footer.classList.add('hidden');
+
+            const tabContents = document.getElementsByClassName('tabcontent');
+            for (let content of tabContents) {
+                content.classList.remove('active');
+            }
+            const tabLinks = document.getElementsByClassName('tablinks');
+            for (let link of tabLinks) {
+                link.classList.remove('active');
+            }
+            homeNavButton.classList.add('active');
+        });
+    }
 }
