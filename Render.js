@@ -1,5 +1,5 @@
 // Render.js
-import Item from './Item.js'; // Assuming Item.js is in the same directory
+import Item from './item.js'; // Assuming Item.js is in the same directory
 import { hero } from './initialize.js'; // To access hero instance for drag/drop
 
 export function updateSkillBar(skills) {

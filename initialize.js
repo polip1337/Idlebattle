@@ -7,7 +7,7 @@ import Area from './Area.js'; // Make sure Area.js defines the Area class
 import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
 import BattleLog from './BattleLog.js';
-import Item from './Item.js';
+import Item from './item.js';
 import {
     deepCopy,
     openEvolutionModal,
