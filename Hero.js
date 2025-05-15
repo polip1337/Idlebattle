@@ -2,7 +2,7 @@
 import Member from './Member.js';
 import {updatePassiveSkillBar,renderHeroConsumableToolbar, renderBattleConsumableBar, updateSkillBar,deepCopy, updateStatsDisplay, renderSkills, renderPassiveSkills, renderHeroInventory, renderEquippedItems, renderWeaponSkills, updateHealth, updateMana, updateStamina} from './Render.js';
 import Skill from './Skill.js';
-import Item from './Item.js'; // Add this
+import Item from './item.js'; // Add this
 import EffectClass from './EffectClass.js'; // Add this
 
 class Hero extends Member {
