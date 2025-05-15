@@ -496,15 +496,10 @@ class Hero extends Member {
             const activeSelectedSkills = this.selectedSkills.filter(skill => skill && skill.type === "active");
 
             activeSelectedSkills.forEach(skill => {
-                if (skill.repeat && !skill.onCooldown) {
-                    // Optional: Check resources here too, though useSkill does it.
-                    // This prevents skills from even attempting if hero is OOM/OOS at battle start.
-                    if (skill.manaCost <= this.currentMana && skill.staminaCost <= this.currentStamina) {
-                        skill.useSkill(this);
-                    } else {
-                        // console.log(`Hero cannot trigger repeat for ${skill.name}: insufficient resources.`);
-                    }
+                if (skill.repeat) {
+                    skill.useSkill(this);
                 }
+
             });
         }
         unselectSkill(slotIndex, isPassive = false) {

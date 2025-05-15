@@ -1,23 +1,32 @@
+// Battle.js
+
 import Member from './Member.js';
-import {battleLog, evolutionService,renderTeamMembers, hero, isPaused,
- team1, team2, battleStatistics, mobsClasses } from './initialize.js';
-import Hero from './Hero.js';
+// Ensure all necessary imports from initialize.js are here
+import {
+    hero,
+    team1,
+    team2,
+    battleStatistics,
+    mobsClasses,
+    battleLog,
+    evolutionService,
+    isPaused,
+    renderTeamMembers,
+} from './initialize.js';
 import Area from './Area.js';
 import { questSystem } from './questSystem.js';
 import { openTab } from './navigation.js';
-// renderMember is not explicitly used here anymore as renderTeamMembers from initialize handles it.
-// If Battle.js were to add individual members, it might need it.
 
 let battleStarted = false;
 let battleInterval = null;
 let isFleeOnCooldown = false;
 const FLEE_COOLDOWN_SECONDS = 10;
-let currentPoiName = null; // The name of the Area (e.g., "Goblin Cave")
+let currentPoiName = null;
 let currentBattleDialogueOptions = null;
 let isBattlePausedForDialogue = false;
 
-let currentBattleArea = null; // Stores the Area instance for the current battle
-let currentBattleStageNumber = 1; // Stores the current stage number for the battle
+let currentBattleArea = null;
+let currentBattleStageNumber = 1;
 
 function resetFleeButtonState() {
     const fleeButton = document.getElementById('flee-battle');
@@ -28,10 +37,10 @@ function resetFleeButtonState() {
     isFleeOnCooldown = false;
 }
 
-function initializeBattleState(poiName = null, stageNum = 1) { // Renamed and takes stageNum
+function initializeBattleState(poiName = null, stageNum = 1) {
     currentPoiName = poiName;
     currentBattleStageNumber = stageNum;
-    currentBattleArea = null; // Reset area, will be loaded in startBattle
+    currentBattleArea = null;
     resetFleeButtonState();
     isBattlePausedForDialogue = false;
 }
@@ -54,7 +63,7 @@ async function checkBattleOutcome() {
         battleInterval = null;
 
         const wasBattleStarted = battleStarted;
-        battleStarted = false;
+        battleStarted = false; // Battle is over
 
         if (!team1Alive) {
             await handleBattleLoss();
@@ -93,12 +102,12 @@ async function handleBattleWin() {
 
     if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.endWinDialogueId) {
         isBattlePausedForDialogue = true;
-        battleLog.log(`Starting post-battle (win) dialogue: ${currentBattleDialogueOptions.endWinDialogueId}`);
+        // battleLog.log(`Starting post-battle (win) dialogue: ${currentBattleDialogueOptions.endWinDialogueId}`);
         await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endWinDialogueId);
-        battleLog.log("Post-battle (win) dialogue finished.");
+        // battleLog.log("Post-battle (win) dialogue finished.");
         isBattlePausedForDialogue = false;
     }
-    // Check if there's a next stage before showing generic victory
+
     if (currentBattleArea && currentBattleStageNumber < currentBattleArea.stages.length) {
         showPopup("Stage Cleared!", `Your team has cleared stage ${currentBattleStageNumber}.`);
     } else {
@@ -109,9 +118,9 @@ async function handleBattleWin() {
 async function handleBattleLoss() {
     if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.endLossDialogueId) {
         isBattlePausedForDialogue = true;
-        battleLog.log(`Starting post-battle (loss) dialogue: ${currentBattleDialogueOptions.endLossDialogueId}`);
+        // battleLog.log(`Starting post-battle (loss) dialogue: ${currentBattleDialogueOptions.endLossDialogueId}`);
         await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endLossDialogueId);
-        battleLog.log("Post-battle (loss) dialogue finished.");
+        // battleLog.log("Post-battle (loss) dialogue finished.");
         isBattlePausedForDialogue = false;
     }
     showPopup("Defeat!", "Your team has been defeated.");
@@ -120,32 +129,48 @@ async function handleBattleLoss() {
 function checkAndHandleRepeatStage() {
     const repeatCheckbox = document.getElementById('repeat');
     const popup = document.getElementById('popup');
-    if (repeatCheckbox && repeatCheckbox.checked && popup && !popup.classList.contains('hidden')) {
-        // Only repeat if not advancing to a next stage automatically or something similar
-        const canAdvance = currentBattleArea && currentBattleStageNumber < currentBattleArea.stages.length;
-        if (!canAdvance || (popup && popup.querySelector('#popupTitle').textContent.includes("Victory!"))) { // Only repeat on final victory or if explicitly chosen
+
+    if (repeatCheckbox && repeatCheckbox.checked) {
+        let shouldRepeat = false;
+        if (!popup || popup.classList.contains('hidden')) {
+            shouldRepeat = true;
+        } else {
+            const popupTitle = popup.querySelector('#popupTitle')?.textContent || "";
+            const canAdvance = currentBattleArea && currentBattleStageNumber < currentBattleArea.stages.length;
+            if (popupTitle.includes("Victory!") || (popupTitle.includes("Stage Cleared!") && !canAdvance)) {
+                shouldRepeat = true;
+            }
+        }
+
+        if (shouldRepeat) {
             setTimeout(async () => {
+                if (popup && !popup.classList.contains('hidden')) {
+                    hidePopup();
+                }
                 await repeatStage();
             }, 1000);
         }
     }
 }
 
+
 function useTeamSkills(team) {
     team.members.forEach(member => {
         if (member.currentHealth > 0) {
             member.skills.forEach(skill => {
-                skill.useSkill(member);
+                if (skill.repeat) {
+                    skill.useSkill(member);
+                }
             });
         }
     });
 }
 
+// MODIFIED FUNCTION
 function stopHeroActiveSkills() {
-    if (hero && hero.skills) {
-        const activeSkills = hero.skills.filter(skill => skill.type === "active");
-        activeSkills.forEach(skill => {
-            if (typeof skill.heroStopSkill === 'function') {
+    if (hero && hero.selectedSkills) { // Iterate over SELECTED active skills
+        hero.selectedSkills.forEach(skill => {
+            if (skill && skill.type === "active" && typeof skill.heroStopSkill === 'function') {
                 skill.heroStopSkill();
             }
         });
@@ -153,16 +178,25 @@ function stopHeroActiveSkills() {
 }
 
 function stopTeamMemberSkills(team) {
+    if (!team || !team.members) return;
     team.members.forEach(member => {
-        if (typeof member.stopSkills === 'function') {
+        if (member && member.currentHealth > 0 && typeof member.stopSkills === 'function') {
             member.stopSkills();
+        }
+        // Also ensure their individual skills are fully reset if they behave like hero skills
+        if (member && member.skills) {
+            member.skills.forEach(skill => {
+                if (skill && typeof skill.heroStopSkill === 'function') { // Re-use heroStopSkill for full reset
+                    skill.heroStopSkill();
+                }
+            });
         }
     });
 }
 
 function stopAllSkills(playerTeam, enemyTeam) {
     stopHeroActiveSkills();
-    stopTeamMemberSkills(enemyTeam);
+    if (enemyTeam) stopTeamMemberSkills(enemyTeam);
 }
 
 function calculateFleeChance() {
@@ -181,7 +215,7 @@ function calculateFleeChance() {
 function handleSuccessfulFlee(fleeChance, randomRoll) {
     battleLog.log(`Successfully fled from battle! (Chance: ${fleeChance.toFixed(0)}%, Rolled: ${randomRoll.toFixed(0)})`);
     battleStatistics.addSuccessfulFlee();
-    stopBattle(true); // fled = true
+    stopBattle(true);
     questSystem.updateQuestProgress('escape', { poiName: currentPoiName});
 }
 
@@ -211,6 +245,7 @@ function startFleeCooldownVisuals() {
                 currentFleeButton.textContent = "Flee";
             } else if (currentFleeButton) {
                  currentFleeButton.textContent = "Flee";
+                 currentFleeButton.disabled = true;
             }
         }
     }, 1000);
@@ -239,8 +274,8 @@ export function attemptFlee() {
         handleSuccessfulFlee(fleeChance, randomRoll);
     } else {
         handleFailedFlee(fleeChance, randomRoll);
+        startFleeCooldownVisuals();
     }
-    startFleeCooldownVisuals();
 }
 
 function showPopup(title, message) {
@@ -249,13 +284,12 @@ function showPopup(title, message) {
     const popup = document.getElementById('popup');
     const titleDiv = document.getElementById('popupTitle');
     const messageDiv = document.getElementById('popupText');
-    const nextStageButton = document.getElementById('nextStage-popup'); // Battle's next stage button
+    const nextStageButton = document.getElementById('nextStage-popup');
 
     if (popup && titleDiv && messageDiv) {
         titleDiv.textContent = title;
         messageDiv.textContent = message;
 
-        // Show/hide battle's "Next Stage" button based on context
         if (nextStageButton) {
             const canAdvance = currentBattleArea && currentBattleArea.isLoaded && currentBattleStageNumber < currentBattleArea.stages.length;
             if (title.includes("Stage Cleared!") && canAdvance) {
@@ -275,13 +309,12 @@ function hidePopup() {
     }
 }
 
-export function returnToMap() { // This is called by the "Return to Map" button on the popup
+export function returnToMap() {
     hidePopup();
-    stopBattle(false); // fled = false, just ending the battle sequence
+    stopBattle(false);
     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
 }
 
-// poiData is the POI object from maps.json, stageNum is the stage to fight.
 async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     if (!poiData || !poiData.name) {
         console.error("startBattle called without valid POI data or POI name.");
@@ -289,30 +322,29 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         return;
     }
     const areaNameString = poiData.name;
-    initializeBattleState(areaNameString, stageNum); // Sets currentPoiName and currentBattleStageNumber
+    initializeBattleState(areaNameString, stageNum);
 
     currentBattleDialogueOptions = dialogueOptions;
-    currentBattleArea = new Area(areaNameString); // Area instance for this battle
+    currentBattleArea = new Area(areaNameString);
 
-    battleLog.log(`Attempting to load area: ${areaNameString} for battle.`);
+    // battleLog.log(`Attempting to load area: ${areaNameString} for battle.`);
     await currentBattleArea.loadData();
 
     if (!currentBattleArea.isLoaded) {
         console.error(`Failed to load data for area: ${areaNameString}. Cannot start battle.`);
         battleLog.log(`Error: Could not load enemy team for ${areaNameString}.`);
         showPopup("Battle Error", `Could not load battle area: ${areaNameString}.`);
-        setTimeout(returnToMap, 2000); // Go back to map after showing error
+        setTimeout(returnToMap, 2000);
         return;
     }
-    battleLog.log(`Area ${areaNameString} loaded. Spawning mobs for stage ${currentBattleStageNumber}.`);
+    // battleLog.log(`Area ${areaNameString} loaded. Spawning mobs for stage ${currentBattleStageNumber}.`);
 
-    team2.clearMembers(); // Clear battle team2 members
+    team2.clearMembers();
     const mobs = currentBattleArea.spawnMobs(mobsClasses, team2, currentBattleStageNumber);
 
     if (!mobs || mobs.length === 0) {
         console.warn(`No mobs spawned for ${areaNameString}, stage ${currentBattleStageNumber}.`);
         battleLog.log(`Warning: No enemies for ${areaNameString} - Stage ${currentBattleStageNumber}.`);
-        // Auto-win or proceed to next stage if possible? For now, checkBattleOutcome will handle.
     }
 
     mobs.forEach((mob, index) => {
@@ -322,24 +354,28 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     });
     team2.addMembers(mobs);
 
-    renderTeamMembers(team2.members, 'team2', true); // Use dedicated battlefield container
-    renderTeamMembers(team1.members, 'team1', true); // Use dedicated battlefield container
-    team2.members.forEach(mob => mob.initializeDOMElements());
+    renderTeamMembers(team2.members, 'team2', true);
+    renderTeamMembers(team1.members, 'team1', true);
 
+    team1.members.forEach(member => member.initializeDOMElements && member.initializeDOMElements());
+    team2.members.forEach(member => member.initializeDOMElements && member.initializeDOMElements());
 
     if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId) {
         isBattlePausedForDialogue = true;
-        battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
+        // battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
         await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
-        battleLog.log("Pre-battle dialogue finished.");
+        // battleLog.log("Pre-battle dialogue finished.");
         isBattlePausedForDialogue = false;
     }
 
     battleLog.log(`Battle started at ${currentPoiName}, Stage ${currentBattleStageNumber}`);
     battleStarted = true;
 
-    useTeamSkills(team2); // Use team2 skills (mobs)
-    if (hero) hero.triggerRepeatSkills();
+    const fleeButton = document.getElementById('flee-battle');
+    if (fleeButton) fleeButton.disabled = false;
+
+    useTeamSkills(team2);
+    if (hero) setTimeout(() => hero.triggerRepeatSkills(), 100); // This is where hero auto-skills are triggered
 
     if (battleInterval) {
         clearInterval(battleInterval);
@@ -352,21 +388,25 @@ function stopBattle(fled = false) {
         clearInterval(battleInterval);
         battleInterval = null;
     }
-    // battleStarted is set by checkBattleOutcome or here if fleeing
+
+    if (fled) { // If fleeing, battleStarted is set to false here. Otherwise, checkBattleOutcome does it.
+        battleStarted = false;
+    }
     isBattlePausedForDialogue = false;
 
-    stopAllSkills(team1, team2); // Stop skills for player and enemy teams
+    stopAllSkills(team1, team2); // Crucial: Call this to reset skill states
+
+    const fleeButton = document.getElementById('flee-battle');
+    if (fleeButton) {
+        fleeButton.disabled = true;
+    }
 
     if (fled) {
-        battleStarted = false; // Ensure battle is marked as stopped
         hidePopup();
         openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
     }
-    // If not fled, checkBattleOutcome handles setting battleStarted = false and showing popups.
-    // currentBattleArea and currentBattleStageNumber persist for repeat/next stage logic from popup.
 }
 
-// Repeats the current stage (e.g. "Repeat Stage" button on popup)
 async function repeatStage() {
     hidePopup();
     if (!currentBattleArea || !currentBattleArea.isLoaded || !currentPoiName) {
@@ -375,12 +415,10 @@ async function repeatStage() {
         returnToMap();
         return;
     }
-    const pseudoPoiData = { name: currentPoiName }; // Reconstruct minimal POI data needed
-    // currentBattleStageNumber is already set for the current battle.
+    const pseudoPoiData = { name: currentPoiName };
     await startBattle(pseudoPoiData, currentBattleDialogueOptions, currentBattleStageNumber);
 }
 
-// Advances to the next stage within the same area (e.g. "Next Stage" button on popup)
 async function nextStage() {
     hidePopup();
     if (!currentBattleArea || !currentBattleArea.isLoaded || !currentPoiName) {
@@ -393,9 +431,9 @@ async function nextStage() {
     const nextStageNum = currentBattleStageNumber + 1;
 
     if (nextStageNum > currentBattleArea.stages.length) {
-        battleLog.log(`All stages in ${currentPoiName} cleared! This should have been caught by handleBattleWin.`);
+        battleLog.log(`All stages in ${currentPoiName} cleared!`);
         showPopup("Area Cleared!", `You have completed all stages in ${currentPoiName}.`);
-        return; // Should not happen if button logic is correct in showPopup
+        return;
     }
 
     const pseudoPoiData = { name: currentPoiName };

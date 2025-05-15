@@ -101,192 +101,23 @@ body {
     align-items: center;
 }
 
-/* Hero Content Specific Styles */
-#heroContent { /* This is a .tabcontent */
-    background-color: #3a3a3a; /* Dark theme for hero screen */
-    padding: 20px;
-    border: 2px solid #555;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    height: 78vh; /* Consistent height */
-    overflow-y: auto; /* Scroll if content overflows */
-    color: #fff; /* Light text for dark background */
-}
-/* #heroContent.active will get display: block from .tabcontent.active, which is fine. */
 
-#heroInfoRow {
-    display: flex;
-    background-color: #4a4a4a;
-    padding: 20px;
-    border: 2px solid #666;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
-#heroPortrait {
-    flex: 0 0 150px;
-    margin-right: 20px;
-}
-#heroDetails {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-}
-#heroClassesAndStats {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    background-color: #5a5a5a;
-    padding: 5px;
-    border: 2px solid #777;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-#heroClasses {
-    flex: 1;
-}
-#heroStats {
-    flex: 2;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 10px;
-    justify-content: center;
-}
-.skill {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    margin: 5px 0;
-    /* width: calc(100% / 5) - 20px); Typo fixed to: */
-    width: calc((100% / 5) - 20px); /* Or consider flex-basis for grid children */
-    background-color: #444;
-    border: 2px solid #777;
-    border-radius: 5px;
-    padding: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-.progressBar {
-    width: 100%;
-    background-color: #777;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 5px;
-}
-.progress {
-    height: 10px;
-    background-color: #00ff00;
-}
-#heroSkills {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: #5a5a5a;
-    padding: 5px;
-    border: 2px solid #777;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-#activeSkills, #passiveSkills {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 5px;
-}
-#inventory {
-    margin-top: 20px;
-}
-#inventory h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
 .iconGrid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(2, auto);
     gap: 10px;
 }
-.inventorySlot {
-    width: 50px;
-    height: 50px;
-    background-color: #606060;
-    border: 2px solid #888;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-.inventorySlot:hover {
-    background-color: #777;
-}
+
 #heroClassesAndStats h2, #heroSkills h2 {
     margin-top: 0;
     border-bottom: 1px solid #777;
     padding-bottom: 5px;
     font-family: 'Cinzel', serif; /* Thematic headers */
 }
-#heroStats h2 {
-    grid-column: span 4;
-    margin: 0;
-    padding-bottom: 5px;
-    font-family: 'Cinzel', serif; /* Thematic headers */
-}
-#heroPortrait img {
-    width: 150px;
-    height: 150px;
-    border: 2px solid #777;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-}
-#paperDoll {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 10px;
-    padding: 10px;
-    background-color: #444;
-    border: 2px solid #777;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-.slot {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 60px;
-    background-color: #555;
-    border: 2px solid #777;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    text-align: center;
-    color: #fff;
-    font-size: 12px;
-}
-#helmetSlot { grid-area: 1 / 2 / 2 / 3; }
-#cloakSlot { grid-area: 1 / 3 / 2 / 4; }
-#amuletSlot { grid-area: 1 / 1 / 2 / 2; }
-#weaponSlot { grid-area: 2 / 1 / 3 / 2; }
-#chestArmorSlot { grid-area: 2 / 2 / 3 / 3; }
-#shieldSlot { grid-area: 2 / 3 / 3 / 4; }
-#legArmorSlot { grid-area: 3 / 2 / 4 / 3; }
-#glovesSlot { grid-area: 4 / 1 / 4 / 2; }
-#bootsSlot { grid-area: 4 / 2 / 5 / 3; } /* Corrected grid area */
-#ringSlot { grid-area: 4 / 3 / 5 / 4; } /* Corrected grid area */
 
-.slot:hover { background-color: #666; }
-.statGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-#heroPortraitAndPaperDoll { display: flex; flex-direction: column; align-items: center; gap: 10px; padding:5px; }
-.class-container, .stats-container { margin-top: 10px; }
-.skills-container { display: flex; flex-direction: column; width: 40%; padding-right: 20px; border-right: 1px solid #ddd; }
 .active-skills, .passive-skills { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 10px; }
-.skill-box { padding: 3px; text-align: center; cursor: pointer; position: relative; background-color: #444; border: 2px solid #777; border-radius: 5px; padding: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
-.skill-box img { width: 30px; height: 30px; margin-right: 5px; }
-.skill-box .tooltip { visibility: hidden; position: absolute; width: 160px; background-color: #fff; color: #000; text-align: left; padding: 5px; border-radius: 5px; border: 1px solid #888; z-index: 1000; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); opacity: 0; transition: opacity 0.3s; }
 .skill-box:hover .tooltip { visibility: visible; opacity: 1; }
-.skill-box.selected { border-color: green; }
 
 /* Battle View Specific Styles */
 #battlefield { /* This is a .tabcontent */
@@ -350,71 +181,3 @@ body {
 .tooltip strong { color: #ffd700; } /* Gold color for item name/rarity */
 .tooltip em { color: #aaa; font-size: 0.9em; }
 .tooltip hr { border-color: #444; margin: 5px 0; }
-
-
-/* Style for #heroWeaponSkills if needed */
-#heroWeaponSkills {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #5a5a5a; /* Similar to other hero sections */
-    border: 2px solid #777;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-#heroWeaponSkills h2 {
-    margin-top: 0;
-    border-bottom: 1px solid #777;
-    padding-bottom: 5px;
-    font-family: 'Cinzel', serif;
-}
-
-/* When an item is being dragged (optional visual feedback) */
-/* .dragging {
-    opacity: 0.5;
-    border: 2px dashed #fff;
-} */
-/* styles.css */
-/* ... existing styles ... */
-
-#heroConsumableToolbarContainer {
-    margin-top: 20px;
-    background-color: #4a4a4a; /* Slightly different from #5a5a5a of heroSkills for distinction */
-    padding: 15px;
-    border: 2px solid #666; /* Darker border */
-    border-radius: 10px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.6);
-}
-
-#heroConsumableToolbarContainer h2 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #777;
-    padding-bottom: 10px;
-    font-family: 'Cinzel', serif;
-    color: #eee; /* Lighter text for header */
-}
-
-#heroConsumableToolbar {
-    /* .iconGrid styling (display: grid, gap) is applied via classList in JS */
-    grid-template-columns: repeat(3, minmax(50px, 1fr)); /* 3 columns for 3 slots */
-    justify-content: center; /* Center the slots if the container is wider */
-    max-width: 240px; /* Approx 3 * (50px slot + 10px gap) + padding */
-    margin: 0 auto; /* Center the grid itself */
-}
-
-.consumable-toolbar-slot {
-    /* .inventorySlot styling is applied (width, height, background, border, etc.) */
-    /* Specific overrides for consumable slots if needed: */
-    background-color: #3e3e3e; /* Slightly different background for these slots */
-    border: 2px solid #5e5e5e;
-}
-
-.consumable-toolbar-slot:hover {
-    background-color: #4f4f4f;
-    border-color: #7f7f7f;
-}
-
-.consumable-toolbar-slot img {
-    pointer-events: none;
-}

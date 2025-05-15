@@ -21,6 +21,17 @@ export function updateSkillBar(skills) {
             currentSkill.setElement(skillElement);
             elementImg.src = currentSkill.icon;
 
+            skillElement.onmouseenter = (event) => {
+                // Ensure tooltip content is up-to-date before showing
+                if (currentSkill.type === "passive") {
+                    updatePassiveSkillTooltip(tooltip, currentSkill);
+                } else {
+                    updateSkillTooltip(tooltip, currentSkill);
+                }
+                showGeneralTooltip(event, tooltip); // Use general tooltip for mouse following
+            };
+            skillElement.onmouseleave = () => hideGeneralTooltip(tooltip);
+
             if (currentSkill.type === "passive") {
                 updatePassiveSkillTooltip(tooltip, currentSkill);
                 skillElement.classList.remove('rainbow');

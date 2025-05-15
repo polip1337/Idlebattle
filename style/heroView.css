@@ -1,0 +1,344 @@
+/* Hero View Specific Styles */
+
+#heroContent {
+    background-color: #3a3a3a; /* Dark theme for hero screen */
+    padding: 20px;
+    border: 2px solid #555;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    height: 78vh; /* Consistent height */
+    overflow-y: auto; /* Scroll if content overflows */
+    color: #fff; /* Light text for dark background */
+}
+
+#heroInfoRow {
+    display: flex;
+    background-color: #4a4a4a;
+    padding: 20px;
+    border: 2px solid #666;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#heroPortraitAndPaperDoll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding:5px;
+}
+
+#heroPortrait {
+    flex: 0 0 150px;
+    margin-right: 20px;
+}
+
+#heroPortrait img {
+    width: 150px;
+    height: 150px;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+#paperDoll {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+    padding: 10px;
+    background-color: #444;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.slot { /* Paperdoll slots */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background-color: #555;
+    border: 2px solid #777;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+}
+
+.slot:hover {
+    background-color: #666;
+}
+
+.slot img { /* Images inside paperdoll slots */
+    pointer-events: none;
+}
+
+
+/* Specific Paperdoll Slot Positions */
+#helmetSlot { grid-area: 1 / 2 / 2 / 3; }
+#cloakSlot { grid-area: 1 / 3 / 2 / 4; }
+#amuletSlot { grid-area: 1 / 1 / 2 / 2; }
+#weaponSlot { grid-area: 2 / 1 / 3 / 2; }
+#chestArmorSlot { grid-area: 2 / 2 / 3 / 3; }
+#shieldSlot { grid-area: 2 / 3 / 3 / 4; }
+#legArmorSlot { grid-area: 3 / 2 / 4 / 3; }
+#glovesSlot { grid-area: 4 / 1 / 4 / 2; }
+#bootsSlot { grid-area: 4 / 2 / 5 / 3; }
+#ringSlot { grid-area: 4 / 3 / 5 / 4; }
+
+
+#heroDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+#heroClassesAndStats {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    background-color: #5a5a5a;
+    padding: 5px;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+#heroClassesAndStats h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #777;
+    padding-bottom: 5px;
+    font-family: 'Cinzel', serif;
+}
+
+#heroClasses {
+    flex: 1;
+}
+
+#heroStats {
+    flex: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 10px;
+    justify-content: center;
+}
+
+#heroStats h2 {
+    grid-column: span 4;
+    margin: 0;
+    padding-bottom: 5px;
+    font-family: 'Cinzel', serif;
+}
+
+.statGrid { /* Used within heroStats if JS populates with this class */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.class-container, .stats-container { /* If used by JS within hero view */
+    margin-top: 10px;
+}
+
+#inventory {
+    margin-top: 20px;
+}
+
+#inventory h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.iconGrid { /* Used for inventory and consumable toolbar in hero view */
+    display: grid;
+    /* grid-template-columns and rows set by more specific rules or JS if varied */
+    gap: 10px;
+}
+
+#inventory .iconGrid { /* Specific for inventory */
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, auto); /* Assuming 2 rows for 10 slots, adjust if more */
+}
+
+
+.inventorySlot { /* General styling for any inventory-like slot in hero view */
+    width: 50px;
+    height: 50px;
+    background-color: #606060;
+    border: 2px solid #888;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    position: relative; /* For tooltip positioning */
+}
+
+.inventorySlot:hover {
+    background-color: #777;
+}
+
+.inventorySlot img {
+    pointer-events: none;
+}
+
+#heroSkills {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #5a5a5a;
+    padding: 5px;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+#heroSkills h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #777;
+    padding-bottom: 5px;
+    font-family: 'Cinzel', serif;
+}
+
+.skills-container { /* If used by JS for skill sections */
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding-right: 20px;
+    border-right: 1px solid #ddd;
+}
+
+#activeSkills, #passiveSkills {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 skills per row */
+    grid-template-rows: repeat(2, auto); /* Up to 2 rows */
+    gap: 5px;
+}
+
+.skill-box { /* For skill selection boxes in hero view */
+    padding: 3px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    background-color: #444;
+    border: 2px solid #777;
+    border-radius: 5px;
+    padding: 5px; /* Overwrites previous padding: 3px */
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    display: flex; /* Added for better alignment of content */
+    flex-direction: column; /* Stack image, name, progress bar */
+    align-items: center; /* Center items horizontally */
+    gap: 5px; /* Gap between items */
+}
+
+.skill-box img {
+    width: 30px;
+    height: 30px;
+}
+
+.skill-box .skill-name { /* If span used for skill name */
+    font-size: 0.9em;
+}
+
+.skill-box .tooltip {
+    /* Tooltip styling is handled by the global .tooltip style in styles.css */
+    /* Specific positioning or sizing for skill-box tooltips can go here if needed */
+    min-width: 160px; /* Example from original styles.css */
+    /* transform:translate(-30px,10px); Remove this, general tooltip handles positioning */
+}
+
+.skill-box.selected {
+    border-color: green;
+}
+
+/* .skill class was too generic, .skill-box is more specific for hero view skill selection */
+/* Styling for .skill (original name) which is applied to children of #activeSkills/#passiveSkills */
+.skill { /* This assumes .skill is a wrapper inside #activeSkills/#passiveSkills for each skill item */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 5px 0;
+    width: calc((100% / 5) - 20px); /* Based on original CSS, assuming 5 skills per row initially */
+    background-color: #444;
+    border: 2px solid #777;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+
+.progressBar { /* Used within .skill-box or .skill */
+    width: 100%;
+    background-color: #777;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+    height: 10px; /* Explicit height */
+}
+
+.progress {
+    height: 100%; /* Fill parent .progressBar height */
+    background-color: #00ff00;
+}
+
+#heroWeaponSkills {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #5a5a5a;
+    border: 2px solid #777;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+#heroWeaponSkills h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #777;
+    padding-bottom: 5px;
+    font-family: 'Cinzel', serif;
+}
+
+#heroConsumableToolbarContainer {
+    margin-top: 20px;
+    background-color: #4a4a4a;
+    padding: 15px;
+    border: 2px solid #666;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.6);
+}
+
+#heroConsumableToolbarContainer h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #777;
+    padding-bottom: 10px;
+    font-family: 'Cinzel', serif;
+    color: #eee;
+}
+
+#heroConsumableToolbar { /* This is an .iconGrid */
+    grid-template-columns: repeat(3, minmax(50px, 1fr));
+    justify-content: center;
+    max-width: 240px;
+    margin: 0 auto;
+}
+
+.consumable-toolbar-slot { /* These also have .inventorySlot class */
+    background-color: #3e3e3e;
+    border: 2px solid #5e5e5e;
+}
+
+.consumable-toolbar-slot:hover {
+    background-color: #4f4f4f;
+    border-color: #7f7f7f;
+}
+
+.consumable-toolbar-slot img {
+    pointer-events: none;
+}
