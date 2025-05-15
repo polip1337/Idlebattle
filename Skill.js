@@ -1,7 +1,8 @@
+// Skill.js
 import {renderLevelUp, updateMana, updateStamina} from './Render.js';
 import {selectTarget} from './Targeting.js';
-import {battleStarted} from './Battle.js';
-import {battleStatistics} from './initialize.js';
+import {battleStarted} from './Battle.js'; // battleStarted from Battle.js
+import {battleStatistics, hero as globalHero} from './initialize.js'; // For hero check in finishCooldown
 
 class Skill {
     constructor(skillData, effects, element = null) {
@@ -17,18 +18,19 @@ class Skill {
         this.cooldown = skillData.cooldown;
         this.remainingDuration = 0;
         this.cooldownStartTime = null;
-        this.onCooldown = false;
+        this.onCooldown = false; // Initialized
         this.damageType = skillData.damageType;
         this.targetingModes = skillData.targetingModes;
         this.extraTargets = skillData.extraTargets;
         this.effects = effects;
         this.div = element;
-        this.repeat = true; // Set repeat to true by default for all skills
+        this.repeat = true; // Default repeat state
         this.level = 1;
         this.experience = 0;
-        this.experienceToNextLevel = 100; // Example value for level 1
+        this.experienceToNextLevel = 100;
         this.baseDamage = 1;
-        this.overlay = null;
+        this.overlay = null; // Initialized
+        this.boundAnimationEndCallback = null; // For storing the specific animationend listener
     }
 
     setElement(element) {
@@ -58,7 +60,7 @@ class Skill {
         this.level += 1;
         this.experienceToNextLevel = Math.floor(this.experienceToNextLevel * 1.5);
         this.baseDamage = Math.floor(this.baseDamage * 1.05);
-        if (this.effects && this.effects.value) {
+        if (this.effects && typeof this.effects.value === 'number') { // Check if effects.value is a number
             this.effects.value = Math.floor(this.effects.value * 1.05);
         }
     }
@@ -77,11 +79,11 @@ class Skill {
     }
 
     useSkill(member) {
-        if (this.div == null) {
-            this.div = member.element.querySelector("#" + member.memberId + "Skill" + this.name.replace(/\s/g, ''));
-            this.startCooldown(member);
-            return true;
+        if (this.type === "active" && this.div == null && !member.isHero) {
+            const skillDivId = member.memberId + "Skill" + this.name.replace(/\s/g, '');
+            this.div = member.element ? member.element.querySelector("#" + skillDivId) : null;
         }
+
         if (this.type == "active" && battleStarted) {
             if (this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina) {
                 this.startCooldown(member);
@@ -102,92 +104,169 @@ class Skill {
                 });
 
             } else {
-                if(this.repeat){
-                setTimeout(() => {
-                    if (battleStarted && member.currentHealth > 0 && !this.onCooldown) {
-                        this.useSkill(member);
-                    }
-                }, 1000);}
+                if (this.repeat && member.isHero) {
+                    setTimeout(() => {
+                        if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
+                            const isSelected = globalHero && globalHero.selectedSkills.some(s => s && s.id === this.id);
+                            if (isSelected) {
+                                this.useSkill(member);
+                            }
+                        }
+                    }, 1000);
+                }
             }
         }
     }
 
     pause() {
-        if (this.type == "active" && this.div) {
-            var overlay = this.div.querySelector(" .cooldown-overlay");
-            overlay.classList.add('paused');
+        if (this.type == "active" && this.div && this.overlay && !this.overlay.classList.contains('hidden')) {
+            this.overlay.classList.add('paused');
         }
     }
 
     unpause() {
-        if (this.type == "active" && this.div) {
-            var overlay = this.div.querySelector(" .cooldown-overlay");
-            overlay.classList.remove('paused');
+        if (this.type == "active" && this.div && this.overlay && this.overlay.classList.contains('paused')) {
+            this.overlay.classList.remove('paused');
         }
     }
 
     heroStopSkill() {
-        this.finishCooldown(this);
+        this.onCooldown = false;
+        this.remainingDuration = 0;
+        this.cooldownStartTime = null;
+        if (this.overlay) {
+            if (this.boundAnimationEndCallback) {
+                this.overlay.removeEventListener('animationend', this.boundAnimationEndCallback);
+                this.boundAnimationEndCallback = null;
+            }
+            this.overlay.classList.add('hidden');
+            this.overlay.style.animation = '';
+            this.overlay.style.height = '0%';
+            this.overlay.classList.remove('paused');
+        }
+        if (this.div) {
+            this.div.classList.remove('disabled');
+        }
     }
 
     startCooldown(member) {
         this.cooldownStartTime = Date.now();
         this.remainingDuration = this.cooldown;
         this.onCooldown = true;
-        this.updateCooldownAnimation(member);
+        if (this.div) {
+            this.updateCooldownAnimation(member);
+        }
     }
 
     reduceCooldown(amount, member) {
-        const elapsedTime = (Date.now() - this.cooldownStartTime) / 1000;
+        const elapsedTime = this.cooldownStartTime ? (Date.now() - this.cooldownStartTime) / 1000 : 0;
         this.remainingDuration = Math.max(0, this.cooldown - elapsedTime - amount);
+
         if (this.remainingDuration > 0) {
-            this.updateCooldownAnimation(member);
+            this.cooldownStartTime = Date.now() - ((this.cooldown - this.remainingDuration) * 1000);
+            if (this.div) this.updateCooldownAnimation(member);
         } else {
-            this.finishCooldown(member, this.repeat);
+            // Ensure onCooldown is false before finishCooldown in case of direct call leading to repeat
+            const wasOnCooldown = this.onCooldown;
+            this.onCooldown = false;
+            if (this.div) {
+                this.finishCooldown(member, this.repeat && wasOnCooldown); // Pass wasOnCooldown state for repeat logic
+            } else {
+                 this.remainingDuration = 0;
+                 this.cooldownStartTime = null;
+                 if (this.repeat && wasOnCooldown && battleStarted && member && member.currentHealth > 0) {
+                     this.useSkill(member);
+                 }
+            }
         }
     }
 
     updateCooldownAnimation(member) {
-        if( this.div){
+        if (this.div) {
             if (this.overlay == null) {
-                this.overlay = this.div.querySelector(" .cooldown-overlay");
-                this.overlay.addEventListener('animationend', () => {
-                    this.finishCooldown(member, this.repeat);
-                });
+                this.overlay = this.div.querySelector(".cooldown-overlay");
+                if (!this.overlay) {
+                    console.error("Cooldown overlay not found for skill:", this.name, "in div:", this.div);
+                    return;
+                }
             }
+
+            if (this.boundAnimationEndCallback) {
+                this.overlay.removeEventListener('animationend', this.boundAnimationEndCallback);
+            }
+
+            this.boundAnimationEndCallback = () => {
+                this.finishCooldown(member, this.repeat); // 'this.repeat' is the current state
+            };
+            // Use { once: true } for safety, though explicit removal is also done.
+            this.overlay.addEventListener('animationend', this.boundAnimationEndCallback, { once: true });
+
             this.div.classList.add('disabled');
             this.overlay.classList.remove('hidden');
+            this.overlay.classList.remove('paused');
             this.overlay.style.animation = '';
             this.overlay.offsetHeight;
 
             const remainingPercentage = (this.remainingDuration / this.cooldown) * 100;
             this.overlay.style.height = `${remainingPercentage}%`;
-            this.overlay.style.animation = `fill ${this.remainingDuration}s ease-in-out forwards`;
+
+            if (this.remainingDuration > 0) {
+                this.overlay.style.animation = `fill ${this.remainingDuration}s linear forwards`;
+            } else {
+                // If duration is already 0, finishCooldown might have been called by reduceCooldown,
+                // or this is an edge case. Call it to ensure clean state.
+                this.finishCooldown(member, false); // Don't repeat if duration was already 0 here.
+            }
         }
     }
 
     finishCooldown(member, repeat = false) {
-        if( this.div){
-            if (this.overlay == null && this.div) {
-                this.overlay = this.div.querySelector(" .cooldown-overlay");
-            }
-            this.remainingDuration = 0;
-            this.cooldownStartTime = null;
-            this.overlay.classList.add('hidden');
+        // Remove the listener if it was set and this function is called
+        if (this.overlay && this.boundAnimationEndCallback) {
+            this.overlay.removeEventListener('animationend', this.boundAnimationEndCallback);
+            this.boundAnimationEndCallback = null; // Clear stored ref
+        }
+
+        this.remainingDuration = 0;
+        this.cooldownStartTime = null;
+
+        if (this.overlay) {
+           this.overlay.classList.add('hidden');
+           this.overlay.style.animation = '';
+           this.overlay.style.height = '0%';
+           this.overlay.classList.remove('paused');
+        }
+        if (this.div) {
             this.div.classList.remove('disabled');
-            this.onCooldown = false;
-            if (repeat != false) {
+        }
+
+        const wasOnCooldown = this.onCooldown; // Capture state before changing
+        this.onCooldown = false; // Set this state BEFORE attempting to use skill again
+
+        // 'repeat' param indicates if the call to finishCooldown was from a context where repeat is desired
+        // 'this.repeat' is the skill's current repeat toggle state.
+        // 'wasOnCooldown' ensures we only auto-repeat if it *was actually* on cooldown.
+        if (repeat && this.repeat && wasOnCooldown && battleStarted && member && member.currentHealth > 0) {
+            if (member.isHero) {
+                const heroInstance = globalHero;
+                if (!heroInstance || !heroInstance.selectedSkills.some(s => s && s.id === this.id)) {
+                    return;
+                }
+                this.useSkill(heroInstance);
+            } else {
                 this.useSkill(member);
             }
         }
     }
+
     applySavedState(data) {
         this.level = data.level || 1;
         this.experience = data.experience || 0;
-        this.experienceToNextLevel = data.experienceToNextLevel || 100; // Default if not saved
-        this.baseDamage = data.baseDamage || this.baseDamage; // Use existing baseDamage if not in save
-        // Note: effects modifications are not handled here for simplicity.
-        // They would reset to the skill's default effects.
+        this.experienceToNextLevel = data.experienceToNextLevel || 100;
+        this.baseDamage = data.baseDamage || this.baseDamage;
+        if (data.hasOwnProperty('repeat')) { // Restore repeat state if saved
+            this.repeat = data.repeat;
+        }
     }
 }
 

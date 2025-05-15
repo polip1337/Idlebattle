@@ -8,26 +8,80 @@ export function updateSkillBar(skills) {
         if (!skillElement) continue;
 
         const elementImg = skillElement.querySelector("img");
-        const tooltip = skillElement.querySelector(".tooltip"); // Corrected tooltip selection
+        const tooltip = skillElement.parentElement.querySelector(".tooltip");
 
         if (!elementImg || !tooltip) continue;
 
+        // Clear any previous listeners
+        skillElement.onclick = null;
+        skillElement.ondblclick = null;
+
         if (skills[i]) {
-            skills[i].setElement(skillElement); // Make sure Skill class has setElement
-            elementImg.src = skills[i].icon;
-            if (skills[i].type === "passive") {
-                updatePassiveSkillTooltip(tooltip, skills[i]);
+            const currentSkill = skills[i];
+            currentSkill.setElement(skillElement);
+            elementImg.src = currentSkill.icon;
+
+            if (currentSkill.type === "passive") {
+                updatePassiveSkillTooltip(tooltip, currentSkill);
+                skillElement.classList.remove('rainbow');
+            } else if (currentSkill.type === "active") {
+                updateSkillTooltip(tooltip, currentSkill);
+
+                // Double-click to toggle repeat
+                skillElement.ondblclick = () => {
+                    currentSkill.repeat = !currentSkill.repeat;
+                    if (currentSkill.repeat) {
+                        skillElement.classList.add('rainbow');
+                    } else {
+                        skillElement.classList.remove('rainbow');
+                    }
+                    // Optional: console.log(`Skill '${currentSkill.name}' repeat toggled to: ${currentSkill.repeat}`);
+                };
+
+                // Single-click to use skill (if not on cooldown and not on repeat)
+                skillElement.onclick = () => {
+                    if (!hero) return;
+
+                    if (!currentSkill.onCooldown && !currentSkill.repeat) {
+                        // Check resources before attempting to use skill
+                        if (currentSkill.manaCost <= hero.currentMana && currentSkill.staminaCost <= hero.currentStamina) {
+                            currentSkill.useSkill(hero); // 'hero' is the member instance
+                        } else {
+                            // Use battleLog for feedback if available
+                            if (battleLog && typeof battleLog.log === 'function') {
+                                battleLog.log(`Not enough resources to use ${currentSkill.name}.`);
+                            } else {
+                                console.log(`Not enough resources to use ${currentSkill.name}.`);
+                            }
+                        }
+                    } else if (currentSkill.onCooldown) {
+                         if (battleLog && typeof battleLog.log === 'function') {
+                            battleLog.log(`${currentSkill.name} is on cooldown.`);
+                        } else {
+                            console.log(`${currentSkill.name} is on cooldown.`);
+                        }
+                    } else if (currentSkill.repeat) {
+                        // Skill is on auto-repeat. Single click does nothing in this configuration.
+                        // Optionally, add a message:
+                        // if (battleLog && typeof battleLog.log === 'function') {
+                        //     battleLog.log(`${currentSkill.name} is on auto-repeat. Double-click to toggle auto-cast.`);
+                        // }
+                    }
+                };
+
+                // Set initial rainbow state for active skills based on their repeat property
+                if (currentSkill.repeat) {
+                    skillElement.classList.add('rainbow');
+                } else {
+                    skillElement.classList.remove('rainbow');
+                }
             } else {
-                updateSkillTooltip(tooltip, skills[i]);
-            }
-            if (skills[i].repeat && skills[i].type === "active") {
-                skillElement.classList.add('rainbow');
-            } else {
+                updateSkillTooltip(tooltip, currentSkill);
                 skillElement.classList.remove('rainbow');
             }
         } else {
             elementImg.src = "Media/UI/defaultSkill.jpeg";
-            tooltip.innerHTML = "Empty Slot"; // Clear tooltip or set to empty
+            tooltip.innerHTML = "Empty Slot";
             skillElement.classList.remove('rainbow');
         }
     }
