@@ -12,5 +12,5 @@
         "damage": 2
     },
     "effects": [],
-    "weaponSkillIds": ["basic_slash", "guard_stance"]
+    "weaponSkillIds": ["basic_slash"]
 }

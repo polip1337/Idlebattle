@@ -658,19 +658,19 @@ class Hero extends Member {
         this.recalculateHeroStats(false); 
     }
 
-        addGold(amount) {
-                this.gold += amount;
-                if (typeof updateStatsDisplay === "function") updateStatsDisplay(this); // Update gold on hero sheet
-            }
+    addGold(amount) {
+            this.gold += amount;
+            if (typeof updateStatsDisplay === "function") updateStatsDisplay(this); // Update gold on hero sheet
+        }
 
-            spendGold(amount) {
-                if (this.gold >= amount) {
-                    this.gold -= amount;
-                    if (typeof updateStatsDisplay === "function") updateStatsDisplay(this); // Update gold on hero sheet
-                    return true;
-                }
-                return false;
+        spendGold(amount) {
+            if (this.gold >= amount) {
+                this.gold -= amount;
+                if (typeof updateStatsDisplay === "function") updateStatsDisplay(this); // Update gold on hero sheet
+                return true;
             }
+            return false;
+        }
     selectSkill(skill, skillBox, isPassive = false) {
         const selectedSkillsArray = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
         const maxSkills = 4; // Max skills of one type (active/passive) hero can select for BAR

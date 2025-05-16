@@ -678,6 +678,7 @@ export function renderHeroInventory(heroInstance) {
 
     // Get all predefined inventory slots
     const predefinedSlots = Array.from(inventoryGrid.querySelectorAll('.inventorySlot'));
+
     inventoryGrid.innerHTML = ''; // Clear grid to re-add predefined slots first
 
     // Re-add predefined slots to ensure their order and that they are clean
@@ -764,7 +765,20 @@ export function renderEquippedItems(heroInstance) {
                 slotElement.addEventListener('dragstart', handleDragStart);
                 slotElement.onmouseenter = (event) => showGeneralTooltip(event, tooltip);
                 slotElement.onmouseleave = () => hideGeneralTooltip(tooltip);
-            }
+            }else {
+                 // No item in this slot, display the first word of the slotElement's title
+                 if (slotElement.dataset.item) {
+                     const titleWords = slotElement.dataset.item;
+                     if (titleWords.length > 0 && titleWords[0]) {
+                         const placeholderText = document.createElement('span'); // Use a span for styling
+                         placeholderText.className = 'slot-placeholder-text'; // Add a class for CSS styling
+                         placeholderText.textContent = titleWords;
+                         slotElement.appendChild(placeholderText);
+                     }
+                 }
+                 // Ensure slot is not draggable if empty
+                 slotElement.draggable = false;
+             }
             // Always allow dropping onto equipment slots
             slotElement.addEventListener('dragover', handleDragOver);
             slotElement.addEventListener('drop', handleDrop);

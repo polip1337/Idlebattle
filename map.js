@@ -1,8 +1,12 @@
+// In map.js
+
 import { openTab } from './navigation.js';
 import { startBattle } from './Battle.js'; // Battle.js manages its own Area loading
 import { team1, team2, battleLog, hero } from './initialize.js'; // No more stage/area specific imports from initialize for map UI
 import { questSystem } from './questSystem.js';
-import { updateHeroMapStats, renderHero, updateHealth, updateMana, updateStamina } from './Render.js';
+// Removed updateHeroMapStats from Render.js import as we'll handle its presumed functionality locally for sidebar.
+import { renderHero, updateHealth, updateMana, updateStamina } from './Render.js';
+
 
 export let mapsData = null;
 export let currentMapId = 'hollowreach_Valley';
@@ -16,21 +20,95 @@ let mapContainer = null;
 let poiListUI = null; // If you keep a list view of POIs
 let heroPortraitContainer = null;
 
+// Elements for gold and EXP bars (cached for performance)
+let heroMapGoldValueEl = null;
+let expBarClass1El = null;
+let expBarClass2El = null;
+let expBarClass3El = null;
+
+
+function _updateHeroMapSidebar(heroInstance) {
+    if (!heroInstance) return;
+
+    // Cache elements on first run or if they become null
+    if (!heroMapGoldValueEl) heroMapGoldValueEl = document.getElementById('hero-map-gold-value');
+    if (!expBarClass1El) expBarClass1El = document.getElementById('exp-bar-class1');
+    if (!expBarClass2El) expBarClass2El = document.getElementById('exp-bar-class2');
+    if (!expBarClass3El) expBarClass3El = document.getElementById('exp-bar-class3');
+
+    // Update Gold
+    if (heroMapGoldValueEl) {
+        heroMapGoldValueEl.textContent = heroInstance.gold !== undefined ? heroInstance.gold : '0';
+    }
+
+    const classProgressions = [];
+    if (heroInstance.class) {
+        classProgressions.push({
+            name: heroInstance.class.name || 'Primary Class',
+            level: heroInstance.level || 1,
+            exp: heroInstance.experience || 0,
+            tnl: heroInstance.experienceToLevel || 100
+        });
+    }
+    if (heroInstance.class2 && typeof heroInstance.class2 === 'object' && heroInstance.class2.name) {
+        classProgressions.push({
+            name: heroInstance.class2.name,
+            level: heroInstance.class2_level || 1,
+            exp: heroInstance.class2_experience || 0,
+            tnl: heroInstance.class2_xpToNextLevel || 100
+        });
+    }
+    if (heroInstance.class3 && typeof heroInstance.class3 === 'object' && heroInstance.class3.name) {
+        classProgressions.push({
+            name: heroInstance.class3.name,
+            level: heroInstance.class3_level || 1,
+            exp: heroInstance.class3_experience || 0,
+            tnl: heroInstance.class3_xpToNextLevel || 100
+        });
+    }
+
+
+    const expBarElements = [expBarClass1El, expBarClass2El, expBarClass3El];
+    expBarElements.forEach((barEl, index) => {
+        if (!barEl) return;
+
+        const progression = classProgressions[index];
+        if (progression) {
+            barEl.style.display = 'block';
+            const nameEl = barEl.querySelector('.exp-bar-class-name');
+            const progressEl = barEl.querySelector('.exp-bar-progress');
+            const valueEl = barEl.querySelector('.exp-bar-value');
+
+            if (nameEl) nameEl.textContent = `${progression.name} (Lvl ${progression.level})`;
+            if (valueEl) valueEl.textContent = `${progression.exp}/${progression.tnl}`;
+            if (progressEl) {
+                const percentage = progression.tnl > 0 ? (progression.exp / progression.tnl) * 100 : 0;
+                progressEl.style.width = `${Math.min(100, Math.max(0, percentage))}%`;
+            }
+        } else {
+            barEl.style.display = 'none';
+        }
+    });
+}
+
 
 function renderHeroPortrait() {
     if (!hero || !heroPortraitContainer) return;
     heroPortraitContainer.innerHTML = '';
     const heroElement = renderHero(hero);
     heroPortraitContainer.appendChild(heroElement);
+
     if (typeof hero.initializeDOMElements === 'function') hero.initializeDOMElements();
-    updateHealth(hero); updateMana(hero); updateStamina(hero);
+    updateHealth(hero);
+    updateMana(hero);
+    updateStamina(hero);
 }
 
 function handleTravel(poi) {
     if (poi.mapId) {
         mapHistory.push(currentMapId);
         const fromPoiName = poi.name;
-        loadMap(poi.mapId, true, fromPoiName); // loadMap will refresh elements
+        loadMap(poi.mapId, true, fromPoiName);
         battleLog.log(`Traveled via ${fromPoiName} to map: ${poi.mapId}. New location: ${currentLocation || 'Default'}`);
         questSystem.updateQuestProgress('travel', { poiName: poi.name, mapId: poi.mapId });
     } else {
@@ -39,24 +117,37 @@ function handleTravel(poi) {
 }
 
 async function handleCombat(poi) {
-    // Always start at stage 1 when initiating from map
-        await window.showCustomConfirm(`Start battle at ${poi.name} (Stage 1)?`);
+    // window.showCustomConfirm now resolves to true or false
+    const confirmed = await window.showCustomConfirm(`Start battle at ${poi.name} (Stage 1)?`);
 
-        currentLocation = poi.name; // Set current location on map
-        renderPOIs(); // Update POI highlighting
+    if (!confirmed) {
+        isProcessingPoiClick = false; // MODIFIED: Explicitly reset flag if battle is not started/cancelled
+        return;
+    }
 
-        battleLog.log(`Initiating battle at ${poi.name}, Stage 1`);
-        const battleDialogueOptions = {};
-        if (poi.dialogueNpcId) {
-            battleDialogueOptions.npcId = poi.dialogueNpcId;
-            if (poi.combatStartDialogueId) battleDialogueOptions.startDialogueId = poi.combatStartDialogueId;
-            if (poi.combatEndWinDialogueId) battleDialogueOptions.endWinDialogueId = poi.combatEndWinDialogueId;
-            if (poi.combatEndLossDialogueId) battleDialogueOptions.endLossDialogueId = poi.combatEndLossDialogueId;
-        }
-        // Battle.js#startBattle handles Area loading for poi.name and the given stage number (1)
-        openTab(null, 'battlefield'); // Switch to battlefield tab
-        await startBattle(poi, battleDialogueOptions, 1); // Always stage 1 from map
+    // If confirmed:
+    currentLocation = poi.name;
+    renderPOIs();
 
+    battleLog.log(`Initiating battle at ${poi.name}, Stage 1`);
+    const battleDialogueOptions = {};
+    if (poi.dialogueNpcId) {
+        battleDialogueOptions.npcId = poi.dialogueNpcId;
+        if (poi.combatStartDialogueId) battleDialogueOptions.startDialogueId = poi.combatStartDialogueId;
+        if (poi.combatEndWinDialogueId) battleDialogueOptions.endWinDialogueId = poi.combatEndWinDialogueId;
+        if (poi.combatEndLossDialogueId) battleDialogueOptions.endLossDialogueId = poi.combatEndLossDialogueId;
+    }
+
+    openTab(null, 'battlefield');
+    try {
+        await startBattle(poi, battleDialogueOptions, 1);
+    } catch (battleError) {
+        console.error(`Error during battle setup or execution for ${poi.name}:`, battleError);
+        // Log or show user-friendly message if necessary
+    } finally {
+        // MODIFIED: Ensure flag is reset after battle attempt (success or failure) for the confirmed path
+        isProcessingPoiClick = false;
+    }
 }
 
 async function handleTalk(poi) {
@@ -76,13 +167,17 @@ function handleTavern(poi) {
     renderPOIs();
     battleLog.log(`Visiting tavern: ${poi.name}`);
     const cost = poi.cost || 0;
+    // Consider using showCustomConfirm for consistency if desired, but native confirm is fine here.
     if (confirm(`Rest at ${poi.name} for ${cost} gold?`)) {
         if (hero.spendGold(cost)) {
             hero.currentHealth = hero.maxHealth;
             hero.currentMana = hero.stats.mana;
             hero.currentStamina = hero.stats.stamina;
             battleLog.log(`Rested at ${poi.name}. HP, Mana, and Stamina restored.`);
-            updateHeroMapStats(hero); renderHeroPortrait();
+            if (document.getElementById('map').classList.contains('active')) {
+                 renderHeroPortrait();
+                 _updateHeroMapSidebar(hero);
+            }
         } else {
             alert(`Not enough gold. You need ${cost} gold.`);
         }
@@ -120,23 +215,56 @@ function renderPOIs() {
 
         poiElement.addEventListener('click', async (event) => {
             event.stopPropagation(); event.preventDefault();
-            if (isProcessingPoiClick) return;
-            isProcessingPoiClick = true;
-            setTimeout(() => { isProcessingPoiClick = false; }, 300);
+            if (isProcessingPoiClick) {
+                console.warn("POI click ignored, already processing another.");
+                return;
+            }
+            isProcessingPoiClick = true; // Set flag at the beginning of processing
 
             const clickedPoiName = poiElement.dataset.poiName;
             const clickedPoiData = pointsOfInterest.find(p => p.name === clickedPoiName && !p.isEffectivelyLocked);
-            if (!clickedPoiData) return;
 
-            // currentLocation = clickedPoiData.name; // Set by individual handlers if action is taken
-            // renderPOIs(); // Re-render handled by individual handlers after currentLocation update
+            if (!clickedPoiData) {
+                isProcessingPoiClick = false; // Reset if POI data not found
+                return;
+            }
 
-            if (clickedPoiData.type === 'travel') handleTravel(clickedPoiData);
-            else if (clickedPoiData.type === 'combat') await handleCombat(clickedPoiData);
-            else if (clickedPoiData.type === 'dialogue') await handleTalk(clickedPoiData);
-            else if (clickedPoiData.type === 'tavern') handleTavern(clickedPoiData);
+            try {
+                if (clickedPoiData.type === 'travel') {
+                    handleTravel(clickedPoiData);
+                } else if (clickedPoiData.type === 'combat') {
+                    await handleCombat(clickedPoiData); // handleCombat now resets isProcessingPoiClick internally
+                } else if (clickedPoiData.type === 'dialogue') {
+                    await handleTalk(clickedPoiData);
+                } else if (clickedPoiData.type === 'tavern') {
+                    handleTavern(clickedPoiData);
+                }
+                // For synchronous handlers (travel, tavern) or async handlers that don't manage
+                // isProcessingPoiClick themselves, the finally block below will reset it.
+                // handleCombat manages it internally for its async nature.
+            } catch (error) {
+                console.error("Error handling POI click for:", clickedPoiData.name, error);
+                // The finally block will ensure isProcessingPoiClick is reset.
+            } finally {
+                // MODIFIED: Universal reset for the flag.
+                // If handleCombat (or other future async handlers) already reset it, this is fine.
+                // This ensures that after any POI action (sync or async, success or failure),
+                // the flag is cleared, allowing further interactions.
+                isProcessingPoiClick = false;
+            }
         });
-        // Optional list item rendering
+
+        if (poiListUI) {
+            const listItem = document.createElement('li');
+            listItem.classList.add('poi-list-item');
+            listItem.textContent = `${poi.name} (${poi.type})`;
+            listItem.dataset.poiName = poi.name;
+            listItem.addEventListener('click', (event) => {
+                const mapPoiElement = mapContainer.querySelector(`.poi[data-poi-name="${event.target.dataset.poiName}"]`);
+                if (mapPoiElement) mapPoiElement.click();
+            });
+            poiListUI.appendChild(listItem);
+        }
     });
 }
 
@@ -145,9 +273,8 @@ export function refreshMapElements() {
         renderPOIs();
         if (hero) {
             renderHeroPortrait();
-            updateHeroMapStats(hero);
+            _updateHeroMapSidebar(hero);
         }
-        // Stage/Area display elements on map tab are removed or no longer updated from here
     }
 }
 
@@ -164,7 +291,6 @@ function loadMap(mapIdToLoad, fromTravel = false, previousPoiName = null) {
         isEffectivelyLocked: poi.initiallyLocked && !unlockedPredefinedPois.has(poi.id)
     }));
 
-    // Determine currentLocation
     let newLocationCandidate = null;
     if (fromTravel && previousPoiName) {
         const entryPoi = pointsOfInterest.find(p => !p.isEffectivelyLocked && p.leadsFrom === mapHistory[mapHistory.length-1] && p.originalEntryPoiName === previousPoiName);
@@ -177,34 +303,37 @@ function loadMap(mapIdToLoad, fromTravel = false, previousPoiName = null) {
     }
     if (newLocationCandidate) currentLocation = newLocationCandidate;
     else if (pointsOfInterest.length > 0 && !pointsOfInterest.some(p => p.name === currentLocation && !p.isEffectivelyLocked)) {
-        // If current location is invalid/locked, pick first available
         const firstAvailable = pointsOfInterest.find(p => !p.isEffectivelyLocked);
         currentLocation = firstAvailable ? firstAvailable.name : null;
     }
 
-
-    // No call to setupCurrentAreaForMapUI as Area is not pre-loaded for map UI.
     refreshMapElements();
 }
 
 export function initializeMap() {
     mapContainer = document.getElementById('map-container');
-    poiListUI = document.getElementById('poi-list'); // If used
+    poiListUI = document.getElementById('poi-list');
     heroPortraitContainer = document.getElementById('hero-portrait-container');
+
+    heroMapGoldValueEl = document.getElementById('hero-map-gold-value');
+    expBarClass1El = document.getElementById('exp-bar-class1');
+    expBarClass2El = document.getElementById('exp-bar-class2');
+    expBarClass3El = document.getElementById('exp-bar-class3');
+
 
     async function loadMapDataAndRenderInitial() {
         try {
             const response = await fetch('Data/maps.json');
             mapsData = await response.json();
-            loadMap(currentMapId); // Initial map load
+            loadMap(currentMapId);
         } catch (error) {
             console.error('Error loading map data:', error);
         }
     }
-    
+
     window.addEventListener('resize', refreshMapElements);
 
-    function unlockMapPOI(targetMapId, poiIdToUnlock) { // This can remain nested if only called via window.unlockMapPOI
+    function unlockMapPOI(targetMapId, poiIdToUnlock) {
             if (!mapsData || !mapsData[targetMapId]) {
                 console.error(`Map ${targetMapId} not found for unlocking POI ${poiIdToUnlock}.`);
                 return;
@@ -232,7 +361,7 @@ export function initializeMap() {
                     ...poi,
                     isEffectivelyLocked: poi.initiallyLocked && !unlockedPredefinedPois.has(poi.id)
                 }));
-                renderPOIs(); // Calls module-scoped renderPOIs
+                renderPOIs();
             }
         }
 
@@ -246,7 +375,6 @@ export const getMapStateForSave = () => ({
     currentLocation: currentLocation,
     mapHistory: [...mapHistory],
     unlockedPredefinedPois: Array.from(unlockedPredefinedPois)
-    // stageNumber removed
 });
 
 export const setMapStateFromLoad = (state) => {
@@ -254,9 +382,8 @@ export const setMapStateFromLoad = (state) => {
         setTimeout(() => setMapStateFromLoad(state), 200); return;
     }
     currentMapId = state.currentMapId || 'hollowreach_Valley';
-    currentLocation = state.currentLocation || null; // Will be refined by loadMap
+    currentLocation = state.currentLocation || null;
     mapHistory = [...(state.mapHistory || [])];
     unlockedPredefinedPois = new Set(state.unlockedPredefinedPois || []);
-    // stageNumber from save is ignored for map UI purposes.
     loadMap(currentMapId);
 };

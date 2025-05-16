@@ -1,20 +1,19 @@
 // customDialog.js
 
 let customConfirmDialogEl, customConfirmMessageEl, customConfirmYesBtn, customConfirmNoBtn;
-let currentConfirmResolve, currentConfirmReject;
+let currentConfirmResolve, currentConfirmReject; // currentConfirmReject is kept for potential future use or different error handling
 let dialogInitialized = false; // To prevent multiple initializations or fetches
 let isInitializing = false; // To prevent race conditions during async initialization
 
 async function initializeCustomConfirmDialog() {
     if (dialogInitialized) return true;
     if (isInitializing) {
-        // Wait for the ongoing initialization to complete
         return new Promise(resolve => {
             const checkInterval = setInterval(() => {
                 if (dialogInitialized) {
                     clearInterval(checkInterval);
                     resolve(true);
-                } else if (!isInitializing) { // Initialization failed elsewhere
+                } else if (!isInitializing) {
                     clearInterval(checkInterval);
                     resolve(false);
                 }
@@ -23,14 +22,11 @@ async function initializeCustomConfirmDialog() {
     }
     isInitializing = true;
 
-    // Check if HTML is already in the DOM (e.g., included via server-side or manually)
     if (document.getElementById('custom-confirm-dialog')) {
         // Dialog HTML already exists
     } else {
-        // Fetch and inject HTML
         try {
-            // Adjust path if custom-confirm-dialog.html is not in the same directory as your main HTML file
-            const response = await fetch('custom-confirm-dialog.html'); 
+            const response = await fetch('custom-confirm-dialog.html');
             if (!response.ok) {
                 throw new Error(`Failed to fetch custom-confirm-dialog.html: ${response.statusText}`);
             }
@@ -39,7 +35,7 @@ async function initializeCustomConfirmDialog() {
         } catch (error) {
             console.error("Error fetching custom confirm dialog HTML:", error);
             isInitializing = false;
-            return false; // Initialization failed
+            return false;
         }
     }
 
@@ -56,21 +52,27 @@ async function initializeCustomConfirmDialog() {
 
     customConfirmYesBtn.addEventListener('click', () => {
         if (currentConfirmResolve) {
-            currentConfirmResolve(true); // Resolve with true for "Confirm"
+            currentConfirmResolve(true);
         }
         hideCustomConfirm();
     });
 
     customConfirmNoBtn.addEventListener('click', () => {
+        if (currentConfirmResolve) { // MODIFIED: Resolve with false for "No"
+            currentConfirmResolve(false);
+        }
         hideCustomConfirm();
     });
-    
-    // Close on Escape key
+
     window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && customConfirmDialogEl && !customConfirmDialogEl.classList.contains('hidden')) {
-            if (currentConfirmReject) {
-                currentConfirmReject(new Error("User cancelled via Escape"));
+            if (currentConfirmResolve) { // MODIFIED: Resolve with false for "Escape"
+                currentConfirmResolve(false);
             }
+            //  Original code used currentConfirmReject. Resolving false is more consistent with button behavior.
+            // if (currentConfirmReject) {
+            //     currentConfirmReject(new Error("User cancelled via Escape"));
+            // }
             hideCustomConfirm();
         }
     });
@@ -82,27 +84,25 @@ async function initializeCustomConfirmDialog() {
 
 async function showCustomConfirm(message) {
     const isReady = await initializeCustomConfirmDialog();
-    
+
     if (!isReady) {
         console.warn("Custom confirm dialog could not be initialized. Falling back to native confirm.");
-        // Fallback to native confirm, wrapped in a Promise to maintain consistent async behavior
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => { // MODIFIED: Fallback promise
             if (confirm(message)) {
                 resolve(true);
             } else {
-                reject(new Error("User cancelled (native confirm)"));
+                resolve(false); // MODIFIED: Resolve with false on native cancel
             }
         });
     }
 
     customConfirmMessageEl.textContent = message;
     customConfirmDialogEl.classList.remove('hidden');
-    // Focus the "Confirm" button for accessibility and immediate interaction
     customConfirmYesBtn.focus();
 
     return new Promise((resolve, reject) => {
         currentConfirmResolve = resolve;
-        currentConfirmReject = reject;
+        currentConfirmReject = reject; // Keep reject for cases where the promise itself should fail, not user cancellation
     });
 }
 
@@ -110,15 +110,8 @@ function hideCustomConfirm() {
     if (customConfirmDialogEl) {
         customConfirmDialogEl.classList.add('hidden');
     }
-    // Clean up promise resolvers
     currentConfirmResolve = null;
     currentConfirmReject = null;
 }
 
-// Expose showCustomConfirm globally. 
-// If you are using ES modules across your project, you might prefer to export/import.
 window.showCustomConfirm = showCustomConfirm;
-
-// Optional: You can pre-initialize the dialog when the DOM is ready
-// document.addEventListener('DOMContentLoaded', initializeCustomConfirmDialog);
-// This would fetch/prepare the dialog early. Otherwise, it's done on the first call to showCustomConfirm.
