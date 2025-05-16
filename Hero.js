@@ -3,7 +3,7 @@ import {updatePassiveSkillBar, renderBattleConsumableBar, updateSkillBar,deepCop
 import Skill from './Skill.js';
 import Item from './item.js'; // Add this
 import EffectClass from './EffectClass.js'; // Add this
-import Companion from './Companion.js'; // NEW
+import Companion from './companion.js'; // NEW
 import { allCompanionsData } from './initialize.js';
 
 class Hero extends Member {

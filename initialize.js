@@ -1,7 +1,7 @@
 import {nextStage as battleNextStageCmd, repeatStage as battleRepeatStageCmd, startBattle, returnToMap, attemptFlee} from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
-import Companion from './Companion.js';
+import Companion from './companion.js';
 
 import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
