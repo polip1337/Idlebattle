@@ -1,5 +1,5 @@
 import Member from './Member.js';
-import {updatePassiveSkillBar,renderHeroConsumableToolbar, renderBattleConsumableBar, updateSkillBar,deepCopy, updateStatsDisplay, renderSkills, renderPassiveSkills, renderHeroInventory, renderEquippedItems, renderWeaponSkills, updateHealth, updateMana, updateStamina} from './Render.js';
+import {updatePassiveSkillBar, renderBattleConsumableBar, updateSkillBar,deepCopy, updateStatsDisplay, renderSkills, renderPassiveSkills, renderHeroInventory, renderEquippedItems, renderWeaponSkills, updateHealth, updateMana, updateStamina} from './Render.js';
 import Skill from './Skill.js';
 import Item from './item.js'; // Add this
 import EffectClass from './EffectClass.js'; // Add this
@@ -33,7 +33,7 @@ class Hero extends Member {
             ringSlot: null, cloakSlot: null
         };
         this.inventory = [];
-        this.consumableToolbar = [null, null, null];
+        this.consumableToolbar = [null, null, null]; // This is the single source of truth for equipped consumables
         this.itemStatBonuses = {};
         this.itemEffects = [];
 
@@ -112,7 +112,7 @@ class Hero extends Member {
         console.log("No available slot in party formation for companion.");
         return false;
     }
-    
+
     placeHeroInFirstAvailableSlot() {
         if (this.isHeroInFormation()) return; // Already placed
 
@@ -262,14 +262,13 @@ class Hero extends Member {
             }
 
             if (this.consumableToolbar[slotIndex]) {
-                this.unequipConsumable(slotIndex, true); 
+                this.unequipConsumable(slotIndex, true);
             }
 
             this.removeItemFromInventory(itemInstance);
 
             this.consumableToolbar[slotIndex] = itemInstance;
 
-            if (typeof renderHeroConsumableToolbar === "function") renderHeroConsumableToolbar(this);
             if (typeof renderBattleConsumableBar === "function") renderBattleConsumableBar(this);
             return true;
         }
@@ -286,10 +285,9 @@ class Hero extends Member {
             this.consumableToolbar[slotIndex] = null;
 
             if (moveToInventory) {
-                this.addItemToInventory(itemToUnequip); 
+                this.addItemToInventory(itemToUnequip);
             }
 
-            if (typeof renderHeroConsumableToolbar === "function") renderHeroConsumableToolbar(this);
             if (typeof renderBattleConsumableBar === "function") renderBattleConsumableBar(this);
             return itemToUnequip;
         }
@@ -304,18 +302,17 @@ class Hero extends Member {
                 console.error("No consumable item in slot or item is not a consumable:", slotIndex, item);
                 return false;
             }
-            if (!target || !(target instanceof Member)) { 
+            if (!target || !(target instanceof Member)) {
                 console.error("Invalid target for consumable:", target);
                 return false;
             }
 
-            const success = item.use(target); 
+            const success = item.use(target);
 
             if (success) {
                 console.log(`${this.name} used ${item.name} on ${target.name}.`);
-                this.consumableToolbar[slotIndex] = null; 
+                this.consumableToolbar[slotIndex] = null;
 
-                if (typeof renderHeroConsumableToolbar === "function") renderHeroConsumableToolbar(this);
                 if (typeof renderBattleConsumableBar === "function") renderBattleConsumableBar(this);
                 
                 if (target === this) { 

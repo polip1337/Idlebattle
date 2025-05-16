@@ -169,7 +169,7 @@ function useTeamSkills(teamInstance) {
     teamInstance.members.forEach(member => {
         if (member.currentHealth > 0) {
             member.skills.forEach(skill => {
-                 if (skill.type === "active") {
+                 if (skill.type === "active" && !member.isHero) {
                     skill.needsInitialCooldownKickoff = true;
                     skill.useSkill(member);
                 } else if (skill.type === "passive") {

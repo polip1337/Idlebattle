@@ -1,8 +1,8 @@
 // navigation.js
 import { battleStatistics, hero } from './initialize.js';
-import { updateProgressBar, updateHeroMapStats, renderBattleConsumableBar, renderSkills, renderPassiveSkills, updateStatsDisplay, updateHealth, updateMana, updateStamina } from './Render.js'; // Added missing Render functions
+import { updateProgressBar, renderBattleConsumableBar, renderSkills, renderPassiveSkills, updateStatsDisplay, updateHealth, updateMana, updateStamina } from './Render.js'; // Added missing Render functions
 import { updateQuestLog } from './questLog.js';
-import { refreshMapElements } from './map.js';
+import { refreshMapElements } from './map.js'; // Removed updateHeroMapStats as it's handled in map.js
 
 export function openTab(evt, tabName) {
     const tabContents = document.getElementsByClassName('tabcontent');
@@ -56,9 +56,14 @@ export function openTab(evt, tabName) {
     }
 
     document.getElementById('footer')?.classList.toggle('hidden', tabName !== 'battlefield' && tabName !== 'heroContent');
+
     if (tabName === 'battlefield' && typeof renderBattleConsumableBar === 'function' && hero) {
         renderBattleConsumableBar(hero);
     }
+    if (tabName === 'heroContent' && typeof renderBattleConsumableBar === 'function' && hero) { // ADDED THIS
+        renderBattleConsumableBar(hero);
+    }
+
 
     if (tabName === 'battle-statistics' && battleStatistics) battleStatistics.updateBattleStatistics();
 
@@ -87,7 +92,7 @@ export function openTab(evt, tabName) {
     if (tabName === 'quests' && typeof updateQuestLog === 'function') updateQuestLog();
 
     if (tabName === 'map') {
-        if (hero && typeof updateHeroMapStats === 'function') updateHeroMapStats(hero);
+        // updateHeroMapStats is handled within map.js's refreshMapElements or its internal _updateHeroMapSidebar
         if (typeof refreshMapElements === 'function') refreshMapElements();
     }
 }
