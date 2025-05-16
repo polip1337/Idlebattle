@@ -411,7 +411,6 @@ export function renderSkills(heroInstance) {
             if (event.target.tagName.toLowerCase() === 'select') return;
             skill.targetingMode = targetingSelect.value;
             heroInstance.selectSkill(skill, skillBox, false); // isPassive = false
-            skillBox.classList.toggle('selected'); // Toggle selection visual
         });
         targetingSelect.addEventListener('change', () => {
             skill.targetingMode = targetingSelect.value;

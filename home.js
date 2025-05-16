@@ -15,8 +15,6 @@ export function initializeHomeScreen() {
     function hideHomeScreenAndShowFooter() {
         homeScreen.classList.remove('active');
         homeScreen.classList.add('hidden');
-        const footer = document.getElementById('footer');
-        if (footer) footer.classList.remove('hidden');
     }
 
     if (newGameButton) {

@@ -55,7 +55,7 @@ export function openTab(evt, tabName) {
         }
     }
 
-    document.getElementById('footer')?.classList.toggle('hidden', tabName !== 'battlefield');
+    document.getElementById('footer')?.classList.toggle('hidden', tabName !== 'battlefield' && tabName !== 'heroContent');
     if (tabName === 'battlefield' && typeof renderBattleConsumableBar === 'function' && hero) {
         renderBattleConsumableBar(hero);
     }
