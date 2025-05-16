@@ -161,9 +161,8 @@ function useTeamSkills(teamInstance) { // Renamed param for clarity
             // Companions and Mobs use their skills automatically based on their AI (if any) or simple loop
             // For now, loop through all skills and use if not on cooldown and resources permit
             member.skills.forEach(skill => {
-                 if (skill.type === "active" && !skill.onCooldown &&
-                    skill.manaCost <= member.currentMana &&
-                    skill.staminaCost <= member.currentStamina) {
+                 if (skill.type === "active") {
+                    skill.needsInitialCooldownKickoff = true;
                     skill.useSkill(member); // Member uses its own skill
                 } else if (skill.type === "passive") {
                     // Passive skills usually apply their effects on init or under certain conditions handled by EffectClass
@@ -406,6 +405,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     battleStarted = true;
 
     useTeamSkills(team2); // Mobs use their skills
+    useTeamSkills(team1); // Companions use their skills
     if (hero) hero.triggerRepeatSkills(); // Hero's auto-repeat skills
 
     if (battleInterval) {

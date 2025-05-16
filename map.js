@@ -40,8 +40,8 @@ function handleTravel(poi) {
 
 async function handleCombat(poi) {
     // Always start at stage 1 when initiating from map
-    const confirmBattle = confirm(`Start battle at ${poi.name} (Stage 1)?`);
-    if (confirmBattle) {
+        await window.showCustomConfirm(`Start battle at ${poi.name} (Stage 1)?`);
+
         currentLocation = poi.name; // Set current location on map
         renderPOIs(); // Update POI highlighting
 
@@ -56,7 +56,7 @@ async function handleCombat(poi) {
         // Battle.js#startBattle handles Area loading for poi.name and the given stage number (1)
         openTab(null, 'battlefield'); // Switch to battlefield tab
         await startBattle(poi, battleDialogueOptions, 1); // Always stage 1 from map
-    }
+
 }
 
 async function handleTalk(poi) {

@@ -31,6 +31,7 @@ class Skill {
         this.baseDamage = 1;
         this.overlay = null;
         this.boundAnimationEndCallback = null;
+        this.needsInitialCooldownKickoff;
     }
 
     setElement(element) {
@@ -79,9 +80,20 @@ class Skill {
     }
 
     useSkill(member) {
-        if (this.type === "active" && this.div == null && !member.isHero) {
-            const skillDivId = member.memberId + "Skill" + this.name.replace(/\s/g, '');
-            this.div = member.element ? member.element.querySelector("#" + skillDivId) : null;
+        if (this.type === "active" && !member.isHero && this.needsInitialCooldownKickoff) {
+            this.div = null;
+            this.overlay = null;
+            if (this.div == null && member.element) {
+                const skillDivId = member.memberId + "Skill" + this.name.replace(/\s/g, '');
+                this.setElement(member.element.querySelector("#" + skillDivId)); // Use setElement
+            }
+
+            if (this.div) {
+                this.startCooldown(member);
+                this.updateCooldownAnimation;
+                this.needsInitialCooldownKickoff = false;
+                return true;
+            }
         }
 
         if (this.type == "active" && battleStarted) {

@@ -69,7 +69,7 @@ class Companion extends Member {
 
     restoreFromData(data, companionDefinition, allSkillsLookup) {
         // companionDefinition is the raw data from companions.json for this companionId
-        const classInfoForMember = { [companionDefinition.classInfo.id]: companionDefinition.classInfo };
+        const classInfoForMember = { [companionDefinition.classInfo.id]: companionDefinition };
         super.restoreFromData(data, classInfoForMember, allSkillsLookup);
 
         this.companionId = data.companionId; // Should match the key from definitions
