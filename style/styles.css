@@ -181,3 +181,72 @@ body {
 .tooltip strong { color: #ffd700; } /* Gold color for item name/rarity */
 .tooltip em { color: #aaa; font-size: 0.9em; }
 .tooltip hr { border-color: #444; margin: 5px 0; }
+/* === CSS for Smooth Transitions === */
+
+/* 1. Slideshow Fade-out */
+#slideshow {
+    /* Ensure a transition is defined for opacity.
+       The duration should match `fadeOutDuration` in slideshow.js (currently 1000ms). */
+    transition: opacity 1s ease-out;
+}
+
+#slideshow.active {
+    /* When active, slideshow is visible.
+       Ensure 'display' is appropriate (e.g., block, flex) if not already set. */
+    opacity: 1;
+    /* display: block; /* Or your specific display type */
+}
+
+#slideshow.fading-out {
+    /* This class triggers the fade-out animation. */
+    opacity: 0;
+    pointer-events: none; /* Optional: prevent interactions during fade. */
+}
+
+#slideshow.hidden {
+    /* After fading out, slideshow is typically set to display: none.
+       Ensure opacity is also 0 in case the fade was interrupted. */
+    display: none;
+    opacity: 0;
+}
+
+
+/* 2. Home Screen Fade-out */
+#home-screen {
+    /* Define a transition for opacity. Adjust duration as desired. */
+    transition: opacity 0.5s ease-out;
+}
+
+#home-screen.active {
+    /* Assuming .active makes the home screen visible. */
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* When .active is removed or .hidden is added, home screen fades out. */
+#home-screen:not(.active),
+#home-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    /* If .hidden should also imply display: none, you might need JS
+       to apply it after the transition, or accept that it's just transparent.
+       For a full-screen element, opacity: 0 is usually sufficient. */
+}
+
+
+/* 3. Tab Content (e.g., Map) Fade-in */
+.tabcontent {
+    /* All tabs start transparent before becoming active.
+       Adjust duration as desired. */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    /* Tabs are typically display: none by default (handled by JS or initial CSS),
+       and then display: block/flex when activated. The opacity transition
+       will apply once display is set and .active is added. */
+}
+
+.tabcontent.active {
+    /* When a tab becomes active, it fades in.
+       The display property (block, flex, etc.) is set by navigation.js. */
+    opacity: 1;
+}

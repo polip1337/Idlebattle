@@ -20,9 +20,9 @@ export function initializeHomeScreen() {
     if (newGameButton) {
         newGameButton.addEventListener('click', async () => {
             startSlideshow(async () => {
+            hideHomeScreenAndShowFooter();
                 const gameReady = await loadGameData(null); // Start new game (null signifies no saved state)
                 if (gameReady) {
-                    hideHomeScreenAndShowFooter();
                     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
                 } else {
                     // Error handling for game not starting (e.g. critical data load failure)
