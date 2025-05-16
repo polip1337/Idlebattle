@@ -12,7 +12,7 @@ export function initializeHomeScreen() {
     const optionsButton = document.getElementById('options');
     const exitButton = document.getElementById('exit');
 
-    function hideHomeScreenAndShowFooter() {
+    function hideHomeScreen() {
         homeScreen.classList.remove('active');
         homeScreen.classList.add('hidden');
     }
@@ -20,7 +20,7 @@ export function initializeHomeScreen() {
     if (newGameButton) {
         newGameButton.addEventListener('click', async () => {
             startSlideshow(async () => {
-            hideHomeScreenAndShowFooter();
+            hideHomeScreen();
                 const gameReady = await loadGameData(null); // Start new game (null signifies no saved state)
                 if (gameReady) {
                     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
@@ -44,7 +44,7 @@ export function initializeHomeScreen() {
 
     if (optionsButton) {
         optionsButton.addEventListener('click', () => {
-            hideHomeScreenAndShowFooter();
+            hideHomeScreen();
             openTab({ currentTarget: document.getElementById('optionsNavButton') }, 'options');
         });
     }
