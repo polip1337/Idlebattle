@@ -25,15 +25,6 @@
         "icon": "Media/map/poi-dock.jpg",
         "type": "travel",
         "mapId": "driftmoor"
-      },
-      {
-        "name": "Old Sage",
-        "x": 12.50,
-        "y": 16.67,
-        "icon": "Media/map/poi-npc.png",
-        "type": "talk",
-        "npcId": "sampleNPC",
-        "dialogueId": "sampleDialogue"
       }
     ]
   },

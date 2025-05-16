@@ -1,7 +1,7 @@
 import {nextStage as battleNextStageCmd, repeatStage as battleRepeatStageCmd, startBattle, returnToMap, attemptFlee} from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
-import Companion from './Companion.js'; // NEW
+import Companion from './Companion.js';
 
 import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
@@ -30,8 +30,8 @@ import {initializeHomeScreen} from './home.js';
 import {initializeDialogue} from './dialogue.js';
 import {questSystem as globalQuestSystem} from './questSystem.js';
 import {initializeQuestLog} from './questLog.js';
-import { openSaveModal, setInitializeAndLoadGame as setInitLoadFnForSaveLoad } from './saveLoad.js';
-import { initializeCompanionUI } from './companionUIManager.js'; // NEW
+import { openSaveModal,openLoadModal, setInitializeAndLoadGame as setInitLoadFnForSaveLoad, configureAutosave as slConfigureAutosave } from './saveLoad.js'; // Added slConfigureAutosave
+import { initializeCompanionUI } from './companionUIManager.js';
 
 
 export let battleStatistics;
@@ -46,11 +46,20 @@ export let heroClasses;
 export let mobsClasses = null;
 export let allSkillsCache = null;
 export let allItemsCache = null;
-export let allCompanionsData = {}; // NEW: To store loaded companion definitions
+export let allCompanionsData = {};
 
 
 export const NPC_MEDIA_PATH = "Media/NPC/";
 let clickTimeout;
+
+// --- AUTOSAVE SETTINGS ---
+// These are the default settings. They can be overridden by user preferences later.
+export const globalAutosaveSettings = {
+    enabled: true,
+    intervalMinutes: 5, // Set to 0 or negative to disable interval-based autosave
+    saveOnBattleEnd: true
+};
+// --- END AUTOSAVE SETTINGS ---
 
 
 async function loadJSON(url) {
@@ -73,10 +82,10 @@ async function loadSkills(effects, path) {
             skillData.id = skillData.id || skillKey;
             let processedEffects = null;
             if (skillData.effects) {
-                if (Array.isArray(skillData.effects) && skillData.effects.length > 0 && skillData.effects[0].id && effects && effects[skillData.effects[0].id]) { // Check effect exists
+                if (Array.isArray(skillData.effects) && skillData.effects.length > 0 && skillData.effects[0].id && effects && effects[skillData.effects[0].id]) {
                     const effectTemplate = effects[skillData.effects[0].id];
                     processedEffects = { ...deepCopy(effectTemplate), ...deepCopy(skillData.effects[0]) };
-                } else if (typeof skillData.effects === 'object' && !Array.isArray(skillData.effects) && skillData.effects.id && effects && effects[skillData.effects.id]) { // Check effect exists
+                } else if (typeof skillData.effects === 'object' && !Array.isArray(skillData.effects) && skillData.effects.id && effects && effects[skillData.effects.id]) {
                     const effectTemplate = effects[skillData.effects.id];
                     processedEffects = { ...deepCopy(effectTemplate), ...deepCopy(skillData.effects) };
                 } else {
@@ -96,7 +105,7 @@ async function loadItems() {
         for (const fileName of itemFiles) {
             try {
                 const itemData = await loadJSON(`Data/Items/${fileName}`);
-                if (itemData.id) loadedItems[itemData.id] = new Item(itemData); // Store Item instance directly
+                if (itemData.id) loadedItems[itemData.id] = new Item(itemData);
                 else console.warn(`Item in ${fileName} missing 'id'.`);
             } catch (fileError) {
                 console.warn(`Failed to load item file ${fileName}. Status: ${fileError}`);
@@ -127,7 +136,6 @@ async function loadClasses() {
     } catch (error) { console.error("Failed to load classes.json:", error); return { tiers: [], classes: {} }; }
 }
 
-// NEW function to load companion definitions
 async function loadCompanionDefinitions() {
     try {
         allCompanionsData = await loadJSON('Data/Companions/companions.json');
@@ -151,7 +159,7 @@ export async function loadGameData(savedGameState = null) {
         allItemsCache = await loadItems();
         mobsClasses = await loadMobs();
         heroClasses = await loadClasses();
-        await loadCompanionDefinitions(); // NEW: Load companion defs
+        await loadCompanionDefinitions();
 
         if (Object.keys(heroClasses).length === 0 || Object.keys(allSkillsCache).length === 0) {
             console.error("CRITICAL: Hero classes or skills failed to load.");
@@ -163,7 +171,6 @@ export async function loadGameData(savedGameState = null) {
         evolutionService = new EvolutionService();
         await evolutionService.init();
 
-        // team1 for BATTLEFIELD, team2 for BATTLEFIELD
         team1 = new Team('Team1', 'team1-battle-container');
         team2 = new Team('Team2', 'team2-battle-container');
 
@@ -179,10 +186,8 @@ export async function loadGameData(savedGameState = null) {
             if (!heroClassInfo) {
                 alert("Critical error: No hero classes available to load hero."); return false;
             }
-            // Pass null for initial team1, team2 for Hero constructor, will be set by Battle.js
             hero = new Hero("Placeholder", heroClassInfo, [], 1, null, null);
             hero.restoreFromData(savedGameState.heroData, heroClasses, allSkillsCache, allItemsCache);
-            // Hero's restoreFromData now handles companions and partyFormation.
 
             battleStatistics = new BattleStatistics();
             battleStatistics.restoreFromData(savedGameState.battleStatisticsData);
@@ -192,13 +197,11 @@ export async function loadGameData(savedGameState = null) {
             setMapStateFromLoad(savedGameState.mapStateData);
 
             renderLevelProgress(hero);
-            // No direct team1 rendering here for map UI. Hero map portrait is handled by map.js
-            // renderTeamMembers(hero.getActivePartyMembers(), 'team1-members-map', true); // Example if needed for map
 
             hero.reselectSkillsAfterLoad();
             if (document.getElementById('heroContent')) {
                 updateStatsDisplay(hero); renderSkills(hero); renderPassiveSkills(hero);
-                initializeCompanionUI(); // Initialize companion UI after hero is loaded
+                initializeCompanionUI();
             }
             const homeScreen = document.getElementById('home-screen');
             if (homeScreen?.classList.contains('active')) {
@@ -214,19 +217,20 @@ export async function loadGameData(savedGameState = null) {
             if (!createAndInitHero(heroClasses, null, null)) return false;
 
             ['simple_sword_001', 'worn_leather_helmet_001', 'healing_potion_minor_001', 'healing_potion_minor_001'].forEach(itemId => {
-                if(allItemsCache[itemId]) hero.addItemToInventory(new Item(allItemsCache[itemId])); // Create new instances for inventory
+                if(allItemsCache[itemId]) hero.addItemToInventory(new Item(allItemsCache[itemId]));
             });
 
-            // Recruit some default companions for a new game
             hero.recruitCompanion('shadowClaw');
             hero.recruitCompanion('emberWisp');
-            // hero.recruitCompanion('stoneGuard'); // Optionally add more
 
             initMapModule();
             if (document.getElementById('heroContent')) {
-                 initializeCompanionUI(); // Also initialize for new game
+                 initializeCompanionUI();
             }
         }
+
+        // Configure and start autosave AFTER hero and other core systems are initialized
+        slConfigureAutosave(globalAutosaveSettings);
 
         initiateEventListeners();
         initializeQuestLog();
@@ -258,7 +262,6 @@ function createAndInitHero(classes, playerTeamContext, opposingTeamContext) {
     }).filter(Boolean);
 
     hero = new Hero("Hero", baseClassInfo, heroSkillsInstances, 1, playerTeamContext, opposingTeamContext);
-    // Initial hero placement in formation
     hero.placeHeroInFirstAvailableSlot();
 
 
@@ -266,7 +269,6 @@ function createAndInitHero(classes, playerTeamContext, opposingTeamContext) {
         updateStatsDisplay(hero); renderSkills(hero); renderPassiveSkills(hero);
     }
     renderLevelProgress(hero);
-    // No team rendering for map here, hero portrait on map is separate
     selectInitialSkills();
     return true;
 }
@@ -299,13 +301,14 @@ function initiateBattleLog() {
     const logContainer = document.getElementById('battle-log');
     if (!logContainer) {
         console.warn("Battle log container not found.");
-        battleLog = { log: console.log };
+        battleLog = { log: console.log }; // Fallback logger
         return;
     }
     battleLog = new BattleLog(logContainer);
     const toggleLogButton = document.getElementById('toggle-log');
     if (toggleLogButton) {
         let logVisible = true;
+        logContainer.style.display = 'flex'; // Ensure it's visible by default if button exists
         toggleLogButton.addEventListener('click', () => {
             logVisible = !logVisible;
             logContainer.style.display = logVisible ? 'flex' : 'none';
@@ -317,7 +320,6 @@ function initiateBattleLog() {
 export function renderTeamMembers(membersToRender, containerId, clearExisting = true) {
     const teamContainerElement = document.getElementById(containerId);
     if (!teamContainerElement) {
-        // console.warn(`Team container ${containerId} not found for rendering members.`);
         return;
     }
     const teamRows = teamContainerElement.querySelectorAll('.team-row');
@@ -330,41 +332,34 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         teamRows[0].innerHTML = ''; teamRows[1].innerHTML = '';
     }
 
-    // Ensure members have unique member IDs for this battle instance if they are companions or mobs
     membersToRender.forEach((member, index) => {
-        if (!member.isHero) { // Hero's memberId is usually fixed
+        if (!member.isHero) {
             member.memberId = `${containerId}-member-${member.companionId || member.classId || 'unknown'}-${index}`;
         } else {
-            member.memberId = `hero-${containerId}`; // Ensure hero has a unique ID for this container context
+            member.memberId = `hero-${containerId}`;
         }
     });
 
 
     membersToRender.forEach(member => {
-        // Determine row based on member.position (default to Front if not set for some reason)
         const targetRowIndex = (member.position === "Back") ? 1 : 0;
         let rowElement = teamRows[targetRowIndex];
 
-        // Basic overflow: if preferred row is full (4 members) and other row has space
         if (rowElement.children.length >= 4) {
             const otherRowIndex = (targetRowIndex === 0) ? 1 : 0;
             if (teamRows[otherRowIndex].children.length < 4) {
                 rowElement = teamRows[otherRowIndex];
-                // Optionally, log or update member.position if moved due to overflow,
-                // but for battle rendering, this visual placement is key.
             } else {
-                // Both rows full, cannot place more. This shouldn't happen if maxPartySize is respected.
                 console.warn(`Cannot place ${member.name} in ${containerId}, both rows are full.`);
                 return;
             }
         }
 
-        const memberElement = member.isHero ? renderHero(member) : renderMember(member); // renderMember for companions too
+        const memberElement = member.isHero ? renderHero(member) : renderMember(member);
         rowElement.appendChild(memberElement);
 
-        // Ensure DOM elements are initialized for dynamic updates (health bars etc.)
         if (typeof member.initializeDOMElements === 'function') {
-             member.initializeDOMElements(); // Connects member instance to its new DOM element
+             member.initializeDOMElements();
         }
         updateHealth(member); updateMana(member); updateStamina(member);
     });
@@ -374,17 +369,14 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
 function initiateEventListeners() {
     const navButtonMappings = {
         'heroContentNavButton': 'heroContent', 'mapNavButton': 'map',
-        'libraryNavButton': 'library', // 'optionsNavButton': 'options', // Options not fully implemented yet
+        'libraryNavButton': 'library',
         'battle-statisticsNavButton': 'battle-statistics',
-        'questsNavButton': 'quests', // Add quests button
-        'homeNavButton': 'home' // Add home button
+        'questsNavButton': 'quests',
     };
     for (const id in navButtonMappings) {
         const button = document.getElementById(id);
         if (button) {
-            // Remove existing listener to prevent duplicates if this function is called multiple times
-            // This is a simple way; a more robust way would be to store and remove specific handlers.
-            const newButton = button.cloneNode(true);
+            const newButton = button.cloneNode(true); // Clone to remove old listeners
             button.parentNode.replaceChild(newButton, button);
             newButton.addEventListener('click', (event) => openTab(event, navButtonMappings[id]));
         }
@@ -396,22 +388,25 @@ function initiateEventListeners() {
         saveGameButton.parentNode.replaceChild(newSaveButton, saveGameButton);
         newSaveButton.addEventListener('click', openSaveModal);
     }
+    document.getElementById('loadNavButton').addEventListener('click', openLoadModal);
 
-
-    // Battle popup buttons
     document.getElementById('repeat-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); battleRepeatStageCmd(); });
     document.getElementById('nextStage-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); battleNextStageCmd(); });
     document.getElementById('return-to-map-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); returnToMap(); });
 
-    document.getElementById('flee-battle')?.addEventListener('click', attemptFlee);
+    const fleeButton = document.getElementById('flee-battle');
+    if (fleeButton) { // Re-bind flee if it was cloned or to ensure single listener
+        const newFleeButton = fleeButton.cloneNode(true);
+        fleeButton.parentNode.replaceChild(newFleeButton, fleeButton);
+        newFleeButton.addEventListener('click', attemptFlee);
+    }
 
-    // Centralized keydown listener
-    document.removeEventListener('keydown', handleGlobalKeyDown); // Remove previous if any
+
+    document.removeEventListener('keydown', handleGlobalKeyDown);
     document.addEventListener('keydown', handleGlobalKeyDown);
 
 
-    // Tooltip listeners (ensure these are general enough or scoped correctly)
-    const tooltipArea = document.getElementById('battlefield') || document.body; // More general for battle tooltips
+    const tooltipArea = document.getElementById('battlefield') || document.body;
     tooltipArea.addEventListener('mouseover', (event) => {
         const target = event.target.closest('.memberPortrait, .iconDiv, .battleSkillIcon, .buff, .debuff, [data-tooltip-text]');
         if (target) {
@@ -425,17 +420,15 @@ function initiateEventListeners() {
         if (tooltip) { tooltip.style.display = 'none'; tooltip.style.visibility = 'hidden'; }
     }, true);
 
-    // Skill bar listeners are now set in Render.js within updateSkillBar
 }
 
 function handleGlobalKeyDown(event) {
     if (event.code === 'Space') {
         const activeTab = document.querySelector('.tabcontent.active');
-        if (activeTab && activeTab.id === 'battlefield') { // Only pause if on battlefield
+        if (activeTab && activeTab.id === 'battlefield') {
             togglePause();
         }
     }
-    // Add other global keybinds here if needed
 }
 
 
@@ -447,12 +440,12 @@ function hidePopupForBattleActions() {
 document.addEventListener('DOMContentLoaded', async () => {
     initializeHomeScreen();
     await initializeDialogue();
-    initializeQuestLog(); // Initialize quest log UI system
+    initializeQuestLog();
 
     document.querySelectorAll('.back-to-map-button').forEach(button => {
         button.addEventListener('click', (event) => {
             const mapNavButton = document.getElementById('mapNavButton') || document.querySelector('.tablinks[onclick*="\'map\'"]');
-            openTab({ currentTarget: mapNavButton }, 'map');
+            if (mapNavButton) openTab({ currentTarget: mapNavButton }, 'map');
         });
     });
 });
@@ -466,11 +459,11 @@ function togglePause() {
     overlayTarget.classList.toggle('paused-overlay', isPaused);
     if (battleLog) battleLog.log(isPaused ? "Battle Paused" : "Battle Resumed");
 
-    const activeBattleParty = hero ? hero.getActivePartyMembers() : []; // Get current active party for battle
+    const activeBattleParty = hero ? hero.getActivePartyMembers() : [];
     const enemyParty = team2 ? team2.members : [];
 
     [...activeBattleParty, ...enemyParty].forEach(member => {
-        if (member && member.currentHealth > 0) { // Check member exists and is alive
+        if (member && member.currentHealth > 0) {
             if (isPaused) member.stopSkills();
             else member.startSkills();
         }

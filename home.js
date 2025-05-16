@@ -11,7 +11,6 @@ export function initializeHomeScreen() {
     const loadGameButton = document.getElementById('load-game');
     const optionsButton = document.getElementById('options');
     const exitButton = document.getElementById('exit');
-    const homeNavButton = document.getElementById('homeNavButton');
 
     function hideHomeScreenAndShowFooter() {
         homeScreen.classList.remove('active');
@@ -60,22 +59,5 @@ export function initializeHomeScreen() {
         });
     }
 
-    if (homeNavButton) {
-        homeNavButton.addEventListener('click', () => {
-            homeScreen.classList.add('active');
-            homeScreen.classList.remove('hidden');
-            const footer = document.getElementById('footer');
-            if (footer) footer.classList.add('hidden');
 
-            const tabContents = document.getElementsByClassName('tabcontent');
-            for (let content of tabContents) {
-                content.classList.remove('active');
-            }
-            const tabLinks = document.getElementsByClassName('tablinks');
-            for (let link of tabLinks) {
-                link.classList.remove('active');
-            }
-            homeNavButton.classList.add('active');
-        });
-    }
 }

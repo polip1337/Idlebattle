@@ -17,61 +17,126 @@ const saveLoadTitle = document.getElementById('save-load-title');
 const slotsContainer = document.getElementById('save-load-slots-container');
 const closeButton = document.getElementById('save-load-close-button');
 
+// --- AUTOSAVE ---
+const AUTOSAVE_SLOT_INDEX = 0;
+let autosaveConfig = {
+    enabled: true,
+    intervalMinutes: 5, // 0 or less to disable interval-based autosave
+    saveOnBattleEnd: true
+};
+let autosaveTimerId = null;
+
+export function configureAutosave(newConfig = {}) {
+    autosaveConfig = { ...autosaveConfig, ...newConfig };
+
+    if (autosaveTimerId) {
+        clearInterval(autosaveTimerId);
+        autosaveTimerId = null;
+    }
+
+    if (autosaveConfig.enabled && autosaveConfig.intervalMinutes > 0) {
+        autosaveTimerId = setInterval(() => {
+            triggerAutosave("timer");
+        }, autosaveConfig.intervalMinutes * 60 * 1000);
+        console.log(`Autosave timer started: interval ${autosaveConfig.intervalMinutes} minutes. Saving to Slot ${AUTOSAVE_SLOT_INDEX + 1}.`);
+    } else {
+        console.log("Autosave timer disabled or interval not positive.");
+    }
+    populateSlots(); // Refresh UI in case "(Autosave)" label needs to update
+}
+
+export function triggerAutosave(reason = "manual_trigger") {
+    if (!autosaveConfig.enabled) {
+        // console.debug("Autosave skipped: system disabled."); // Can be noisy
+        return;
+    }
+
+    if (reason === "timer" && autosaveConfig.intervalMinutes <= 0) {
+        // console.debug("Autosave skipped: timer reason, but interval is 0 or less.");
+        return;
+    }
+
+    if (reason === "battle_end" && !autosaveConfig.saveOnBattleEnd) {
+        // console.debug("Autosave skipped: battle_end reason, but saveOnBattleEnd is false.");
+        return;
+    }
+
+    console.log(`Autosave triggered. Reason: ${reason}. Saving to Slot ${AUTOSAVE_SLOT_INDEX + 1}.`);
+    saveGame(AUTOSAVE_SLOT_INDEX, true); // Pass true for isAutosave flag
+}
+// --- END AUTOSAVE ---
+
 function getGameState() {
     if (!hero) {
         console.error("getGameState: Hero object is not initialized.");
-        alert("Error: Cannot save game because hero data is missing.");
+        // alert("Error: Cannot save game because hero data is missing."); // Avoid alert for autosave
         return null;
     }
     if (!hero.getSerializableData) {
         console.error("getGameState: hero.getSerializableData is not a function.");
-        alert("Error: Cannot save game due to an issue with the hero object.");
+        // alert("Error: Cannot save game due to an issue with the hero object."); // Avoid alert for autosave
         return null;
     }
 
     const heroData = hero.getSerializableData();
     if (!heroData || !heroData.classId) {
         console.error("getGameState: hero.getSerializableData() returned invalid data.", heroData);
-        alert("Error: Failed to gather complete hero data for saving.");
+        // alert("Error: Failed to gather complete hero data for saving."); // Avoid alert for autosave
         return null;
     }
 
     const mapState = getMapStateForSave(); // From map.js
     if (!mapState || typeof mapState.currentMapId !== 'string') {
         console.error("getGameState: mapState is invalid or missing currentMapId.", mapState);
-        alert("Error: Cannot save game because map information is missing or invalid.");
+        // alert("Error: Cannot save game because map information is missing or invalid."); // Avoid alert for autosave
         return null;
     }
-
-    // Stage number for map UI is no longer saved here as it's always stage 1 from map.
-    // If you need to save progress *within* a multi-stage battle area (e.g. player cleared up to stage X in "Goblin Cave"),
-    // that would be a different piece of state, perhaps associated with the hero or area-specific progress.
-    // For now, mapState.stageNumber is removed.
 
     const gameState = {
         timestamp: new Date().toISOString(),
         heroData: heroData,
         battleStatisticsData: battleStatistics ? battleStatistics.getSerializableData() : null,
         questSystemData: questSystem ? questSystem.getSerializableData() : null,
-        mapStateData: mapState, // Includes currentMapId, currentLocation, mapHistory, unlockedPois
+        mapStateData: mapState,
         gameVersion: '0.1.2'
     };
     return gameState;
 }
 
-export function saveGame(slotIndex) {
+export function saveGame(slotIndex, isAutosave = false) {
     try {
         const gameState = getGameState();
         if (!gameState) {
-            console.warn("SaveGame aborted because getGameState returned null.");
+            const msg = `${isAutosave ? 'Autosave' : 'SaveGame'} aborted because getGameState returned null.`;
+            console.warn(msg);
+            // Alert only for manual save if game state is null, not for autosave unless it's a critical error handled below
+            if (!isAutosave) alert(msg);
             return;
         }
         localStorage.setItem(`${SAVE_KEY_PREFIX}${slotIndex}`, JSON.stringify(gameState));
-        console.log(`Game saved to slot ${slotIndex + 1}`);
+
+        if (isAutosave) {
+            console.log(`Successfully autosaved to Slot ${slotIndex + 1}.`);
+        } else {
+            console.log(`Game saved to Slot ${slotIndex + 1}`);
+            // If manually saving to the autosave slot, and timer is active, reset the timer.
+            if (slotIndex === AUTOSAVE_SLOT_INDEX && autosaveConfig.enabled && autosaveConfig.intervalMinutes > 0) {
+                if (autosaveTimerId) clearInterval(autosaveTimerId);
+                autosaveTimerId = setInterval(() => {
+                    triggerAutosave("timer");
+                }, autosaveConfig.intervalMinutes * 60 * 1000);
+                console.log("Autosave timer reset due to manual save on autosave slot.");
+            }
+        }
         populateSlots();
     } catch (error) {
-        console.error("Error saving game:", error);
-        alert(`Failed to save game. Error: ${error.message}`);
+        console.error(`Error ${isAutosave ? 'autosaving' : 'saving'} game to slot ${slotIndex + 1}:`, error);
+        // Alert for manual saves, or for autosaves if it's a hero data issue or quota exceeded
+        if (!isAutosave ||
+            (error.message && error.message.toLowerCase().includes("hero")) ||
+            error.name === "QuotaExceededError") {
+             alert(`Failed to ${isAutosave ? 'autosave' : 'save'} game. Error: ${error.message}`);
+        }
     }
 }
 
@@ -84,7 +149,6 @@ export async function loadGame(slotIndex) {
         }
         const savedGameState = JSON.parse(savedStateJSON);
 
-        // Validate essential mapStateData (stageNumber is no longer essential here for map UI)
         if (!savedGameState.heroData ||
             !savedGameState.mapStateData ||
             !savedGameState.mapStateData.currentMapId) {
@@ -92,7 +156,6 @@ export async function loadGame(slotIndex) {
             alert("Failed to load game. Save data is corrupted. Please try another slot or start a new game.");
             return false;
         }
-        // If stageNumber was present in old saves, it will be ignored by new load logic for map UI.
 
         closeSaveLoadModal();
 
@@ -105,6 +168,7 @@ export async function loadGame(slotIndex) {
 
         if (!loadSuccessful) {
             console.error(`Game initialization failed for slot ${slotIndex + 1}.`);
+            // initializeAndLoadGame should handle its own alerts for critical load failures
             return false;
         }
         console.log(`Game loaded from slot ${slotIndex + 1}`);
@@ -137,7 +201,7 @@ function handleExportAction(slotIndex) {
         return;
     }
     try {
-        JSON.parse(slotDataJSON);
+        JSON.parse(slotDataJSON); // Validate JSON before creating blob
         const blob = new Blob([slotDataJSON], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -169,7 +233,6 @@ function handleImportAction(slotIndex, slotHasData) {
             reader.onload = (e) => {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    // StageNumber no longer a primary validation field for map UI state
                     if (!importedData.timestamp || !importedData.heroData || !importedData.heroData.name ||
                         typeof importedData.heroData.level !== 'number' ||
                         !importedData.mapStateData || !importedData.mapStateData.currentMapId) {
@@ -185,10 +248,14 @@ function handleImportAction(slotIndex, slotHasData) {
             };
             reader.readAsText(file);
         }
-        document.body.removeChild(fileInput); // Clean up input element
+        if (document.body.contains(fileInput)) { // Check if still in body before removing
+           document.body.removeChild(fileInput);
+        }
     };
     document.body.appendChild(fileInput);
     fileInput.click();
+    // No need to remove fileInput here if it auto-removes onchange or we want to keep it for retry,
+    // but typically good to clean up. Removed it inside onchange after processing.
 }
 
 function populateSlots() {
@@ -200,6 +267,11 @@ function populateSlots() {
         const slotDataJSON = localStorage.getItem(`${SAVE_KEY_PREFIX}${i}`);
         let slotData = null;
 
+        let slotTitleText = `Slot ${i + 1}`;
+        if (i === AUTOSAVE_SLOT_INDEX && autosaveConfig.enabled) {
+            slotTitleText += " <span class='autosave-indicator'>(Autosave)</span>";
+        }
+
         if (slotDataJSON) {
             try {
                 slotData = JSON.parse(slotDataJSON);
@@ -208,46 +280,45 @@ function populateSlots() {
                 const heroClass = slotData.heroData?.classType || (slotData.heroData?.classId || 'N/A');
                 const poiName = slotData.mapStateData?.currentLocation || 'Unknown POI';
                 const mapName = slotData.mapStateData?.currentMapId?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Unknown Map';
-                // Stage display removed from save slot preview as it's not map UI state anymore
                 const locationString = `${poiName} (${mapName})`;
 
                 slotElement.innerHTML = `
                     <div class="save-slot-info">
-                        <p><strong>Slot ${i + 1}</strong></p>
+                        <p><strong>${slotTitleText}</strong></p>
                         <p>Hero: ${heroName} (Lvl ${heroLevel})</p>
                         <p>Class: ${heroClass}</p>
                         <p>Location: ${locationString}</p>
                     </div>
                     <p class="save-slot-timestamp">${formatTimestamp(slotData.timestamp)}</p>
                 `;
-                if (!slotData.heroData || !slotData.mapStateData?.currentMapId) { // Simplified corruption check
+                if (!slotData.heroData || !slotData.mapStateData?.currentMapId) {
                     slotElement.classList.add('corrupted-preview');
                     slotElement.innerHTML += `<p style="color:red; font-size:0.8em; margin-top: 5px;">Warning: May be corrupted</p>`;
                 }
             } catch (e) {
                 slotElement.classList.add('empty', 'corrupted-preview');
-                slotElement.innerHTML = `<p>Slot ${i + 1}</p><p class="save-slot-timestamp" style="color:red;">Corrupted Data</p>`;
+                slotElement.innerHTML = `<p><strong>${slotTitleText}</strong></p><p class="save-slot-timestamp" style="color:red;">Corrupted Data</p>`;
             }
         } else {
             slotElement.classList.add('empty');
-            slotElement.innerHTML = `<p>Slot ${i + 1}</p><p class="save-slot-timestamp">Empty</p>`;
+            slotElement.innerHTML = `<p><strong>${slotTitleText}</strong></p><p class="save-slot-timestamp">Empty</p>`;
         }
 
         const actionsContainer = document.createElement('div');
         actionsContainer.classList.add('save-slot-actions');
-        // Import, Export, Clear buttons (code remains similar, simplified slightly)
-        const importButton = document.createElement('button'); /* ... */
+
+        const importButton = document.createElement('button');
         importButton.textContent = 'Import';
         importButton.onclick = (event) => { event.stopPropagation(); handleImportAction(i, !!slotData); };
         actionsContainer.appendChild(importButton);
 
-        const exportButton = document.createElement('button'); /* ... */
+        const exportButton = document.createElement('button');
         exportButton.textContent = 'Export';
         exportButton.disabled = !slotData;
         exportButton.onclick = (event) => { event.stopPropagation(); if(slotData) handleExportAction(i); };
         actionsContainer.appendChild(exportButton);
 
-        const clearButton = document.createElement('button'); /* ... */
+        const clearButton = document.createElement('button');
         clearButton.textContent = 'Clear';
         clearButton.disabled = !slotData;
         clearButton.onclick = (event) => { event.stopPropagation(); if(slotData) handleClearAction(i); };
@@ -261,7 +332,6 @@ function populateSlots() {
                 saveGame(i);
             } else if (currentMode === 'load') {
                 if (slotData) {
-                     // Simplified validation for load attempt
                     if (!slotData.heroData || !slotData.mapStateData || !slotData.mapStateData.currentMapId) {
                          alert("This save slot appears corrupted. Cannot load."); return;
                     }
