@@ -1,20 +1,19 @@
 import {nextStage as battleNextStageCmd, repeatStage as battleRepeatStageCmd, startBattle, returnToMap, attemptFlee} from './Battle.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
-// Member is used by Hero and Battle/Area, not directly instantiated here in global scope much.
-// Area is used by Battle.js, not directly here anymore for map UI staging.
+import Companion from './Companion.js'; // NEW
+
 import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
 import BattleLog from './BattleLog.js';
 import Item from './item.js';
-import { currentMapId as mapJsCurrentMapId, initializeMap as initMapModule, setMapStateFromLoad } from './map.js'; // Removed mapsData, currentLocation
+import { currentMapId as mapJsCurrentMapId, initializeMap as initMapModule, setMapStateFromLoad } from './map.js';
 
 import {
     deepCopy,
-    // openEvolutionModal, // If not used, remove
     renderHero,
     renderLevelProgress,
-    renderMember, // Used by renderTeamMembers
+    renderMember,
     renderPassiveSkills,
     renderSkills,
     showTooltip,
@@ -32,26 +31,26 @@ import {initializeDialogue} from './dialogue.js';
 import {questSystem as globalQuestSystem} from './questSystem.js';
 import {initializeQuestLog} from './questLog.js';
 import { openSaveModal, setInitializeAndLoadGame as setInitLoadFnForSaveLoad } from './saveLoad.js';
+import { initializeCompanionUI } from './companionUIManager.js'; // NEW
 
 
 export let battleStatistics;
 export let evolutionService;
 export let isPaused = false;
-export let team1; // Player's team
-export let team2; // Opponent's team (for battle instance)
+export let team1;
+export let team2;
 export let hero;
 export let battleLog;
 export let classTiers;
 export let heroClasses;
-export let mobsClasses = null; // Mob definitions
+export let mobsClasses = null;
 export let allSkillsCache = null;
 export let allItemsCache = null;
+export let allCompanionsData = {}; // NEW: To store loaded companion definitions
 
-// currentArea and currentStage for map UI staging are removed.
-// Stage selection for a new battle from map always defaults to 1.
 
 export const NPC_MEDIA_PATH = "Media/NPC/";
-let clickTimeout; // For skill bar double click
+let clickTimeout;
 
 
 async function loadJSON(url) {
@@ -74,12 +73,12 @@ async function loadSkills(effects, path) {
             skillData.id = skillData.id || skillKey;
             let processedEffects = null;
             if (skillData.effects) {
-                if (Array.isArray(skillData.effects) && skillData.effects.length > 0 && skillData.effects[0].id && effects) {
+                if (Array.isArray(skillData.effects) && skillData.effects.length > 0 && skillData.effects[0].id && effects && effects[skillData.effects[0].id]) { // Check effect exists
                     const effectTemplate = effects[skillData.effects[0].id];
-                    processedEffects = effectTemplate ? { ...deepCopy(effectTemplate), ...deepCopy(skillData.effects[0]) } : deepCopy(skillData.effects[0]);
-                } else if (typeof skillData.effects === 'object' && !Array.isArray(skillData.effects) && skillData.effects.id && effects) {
+                    processedEffects = { ...deepCopy(effectTemplate), ...deepCopy(skillData.effects[0]) };
+                } else if (typeof skillData.effects === 'object' && !Array.isArray(skillData.effects) && skillData.effects.id && effects && effects[skillData.effects.id]) { // Check effect exists
                     const effectTemplate = effects[skillData.effects.id];
-                    processedEffects = effectTemplate ? { ...deepCopy(effectTemplate), ...deepCopy(skillData.effects) } : deepCopy(skillData.effects);
+                    processedEffects = { ...deepCopy(effectTemplate), ...deepCopy(skillData.effects) };
                 } else {
                      processedEffects = deepCopy(skillData.effects);
                 }
@@ -97,7 +96,7 @@ async function loadItems() {
         for (const fileName of itemFiles) {
             try {
                 const itemData = await loadJSON(`Data/Items/${fileName}`);
-                if (itemData.id) loadedItems[itemData.id] = new Item(itemData);
+                if (itemData.id) loadedItems[itemData.id] = new Item(itemData); // Store Item instance directly
                 else console.warn(`Item in ${fileName} missing 'id'.`);
             } catch (fileError) {
                 console.warn(`Failed to load item file ${fileName}. Status: ${fileError}`);
@@ -107,15 +106,14 @@ async function loadItems() {
     } catch (error) { console.error("Failed to load items manifest:", error); return {};}
 }
 
-async function loadMobs() { // Removed skills param as it's not used directly here
+async function loadMobs() {
     try {
         const mobsData = await loadJSON('Data/mobs.json');
-        // mobsClasses will store definitions; instantiation happens in Area.js
-        return mobsData; // Return the raw data object
+        return mobsData;
     } catch (error) { console.error("Failed to load mobs.json:", error); return {}; }
 }
 
-async function loadClasses() { // Removed skills param
+async function loadClasses() {
     try {
         const classesData = await loadJSON('Data/classes.json');
         const loadedClasses = {};
@@ -129,6 +127,17 @@ async function loadClasses() { // Removed skills param
     } catch (error) { console.error("Failed to load classes.json:", error); return { tiers: [], classes: {} }; }
 }
 
+// NEW function to load companion definitions
+async function loadCompanionDefinitions() {
+    try {
+        allCompanionsData = await loadJSON('Data/Companions/companions.json');
+        console.log("Companions definitions loaded:", allCompanionsData);
+    } catch (error) {
+        console.error("Failed to load companions.json:", error);
+        allCompanionsData = {};
+    }
+}
+
 
 export async function loadGameData(savedGameState = null) {
     try {
@@ -140,8 +149,9 @@ export async function loadGameData(savedGameState = null) {
             ...(await loadSkills(effects, 'Data/passives.json'))
         };
         allItemsCache = await loadItems();
-        mobsClasses = await loadMobs(); // Loads mob definitions
+        mobsClasses = await loadMobs();
         heroClasses = await loadClasses();
+        await loadCompanionDefinitions(); // NEW: Load companion defs
 
         if (Object.keys(heroClasses).length === 0 || Object.keys(allSkillsCache).length === 0) {
             console.error("CRITICAL: Hero classes or skills failed to load.");
@@ -153,8 +163,9 @@ export async function loadGameData(savedGameState = null) {
         evolutionService = new EvolutionService();
         await evolutionService.init();
 
-        team1 = new Team('Team1', 'team1-members-map'); // Player team container on map/hero tabs
-        team2 = new Team('Team2', 'team2-members-battlefield'); // Enemy team container on battlefield tab
+        // team1 for BATTLEFIELD, team2 for BATTLEFIELD
+        team1 = new Team('Team1', 'team1-battle-container');
+        team2 = new Team('Team2', 'team2-battle-container');
 
         if (savedGameState) {
             if (!savedGameState.heroData || !savedGameState.mapStateData || !savedGameState.mapStateData.currentMapId) {
@@ -168,26 +179,26 @@ export async function loadGameData(savedGameState = null) {
             if (!heroClassInfo) {
                 alert("Critical error: No hero classes available to load hero."); return false;
             }
-            hero = new Hero("Placeholder", heroClassInfo, [], 1, team1, team2);
+            // Pass null for initial team1, team2 for Hero constructor, will be set by Battle.js
+            hero = new Hero("Placeholder", heroClassInfo, [], 1, null, null);
             hero.restoreFromData(savedGameState.heroData, heroClasses, allSkillsCache, allItemsCache);
-            team1.addMember(hero);
+            // Hero's restoreFromData now handles companions and partyFormation.
 
             battleStatistics = new BattleStatistics();
             battleStatistics.restoreFromData(savedGameState.battleStatisticsData);
             await globalQuestSystem.restoreFromData(savedGameState.questSystemData);
 
-            initMapModule(); // Initialize map systems
-            setMapStateFromLoad(savedGameState.mapStateData); // Restores mapId, location, etc.
-
-            // No Area or stage pre-loading for map UI anymore.
-            // Team2 members for battlefield are cleared by Battle.js before battle.
+            initMapModule();
+            setMapStateFromLoad(savedGameState.mapStateData);
 
             renderLevelProgress(hero);
-            renderTeamMembers(team1.members, 'team1-members-map', true);
+            // No direct team1 rendering here for map UI. Hero map portrait is handled by map.js
+            // renderTeamMembers(hero.getActivePartyMembers(), 'team1-members-map', true); // Example if needed for map
 
             hero.reselectSkillsAfterLoad();
             if (document.getElementById('heroContent')) {
                 updateStatsDisplay(hero); renderSkills(hero); renderPassiveSkills(hero);
+                initializeCompanionUI(); // Initialize companion UI after hero is loaded
             }
             const homeScreen = document.getElementById('home-screen');
             if (homeScreen?.classList.contains('active')) {
@@ -200,20 +211,26 @@ export async function loadGameData(savedGameState = null) {
             battleStatistics = new BattleStatistics();
             await globalQuestSystem.loadQuests();
 
-            if (!createAndInitHero(heroClasses, team1, team2)) return false; // team2 is for battle context
-            // Add starting items
-            ['simple_sword_001', 'worn_leather_helmet_001', 'healing_potion_minor_001'].forEach(itemId => {
-                if(allItemsCache[itemId]) hero.addItemToInventory(allItemsCache[itemId]);
+            if (!createAndInitHero(heroClasses, null, null)) return false;
+
+            ['simple_sword_001', 'worn_leather_helmet_001', 'healing_potion_minor_001', 'healing_potion_minor_001'].forEach(itemId => {
+                if(allItemsCache[itemId]) hero.addItemToInventory(new Item(allItemsCache[itemId])); // Create new instances for inventory
             });
 
-            initMapModule(); // Loads default map
-            // No Area or stage pre-loading for map UI. team2 members for battlefield empty.
+            // Recruit some default companions for a new game
+            hero.recruitCompanion('shadowClaw');
+            hero.recruitCompanion('emberWisp');
+            // hero.recruitCompanion('stoneGuard'); // Optionally add more
+
+            initMapModule();
+            if (document.getElementById('heroContent')) {
+                 initializeCompanionUI(); // Also initialize for new game
+            }
         }
 
         initiateEventListeners();
         initializeQuestLog();
         battleStatistics.updateBattleStatistics();
-        // updateStageDisplay and toggleStageControls are removed as they are no longer needed for map UI.
 
         return true;
 
@@ -226,7 +243,7 @@ export async function loadGameData(savedGameState = null) {
 setInitLoadFnForSaveLoad(loadGameData);
 
 
-function createAndInitHero(classes, playerTeam, opposingTeamContext) {
+function createAndInitHero(classes, playerTeamContext, opposingTeamContext) {
     const baseClassId = 'novice';
     let baseClassInfo = classes[baseClassId] || Object.values(classes)[0];
     if (!baseClassInfo) {
@@ -240,20 +257,20 @@ function createAndInitHero(classes, playerTeam, opposingTeamContext) {
         return skillData ? new Skill(skillData, skillData.effects) : null;
     }).filter(Boolean);
 
-    hero = new Hero("Hero", baseClassInfo, heroSkillsInstances, 1, playerTeam, opposingTeamContext);
-    playerTeam.addMember(hero);
+    hero = new Hero("Hero", baseClassInfo, heroSkillsInstances, 1, playerTeamContext, opposingTeamContext);
+    // Initial hero placement in formation
+    hero.placeHeroInFirstAvailableSlot();
+
 
     if (document.getElementById('heroContent')) {
         updateStatsDisplay(hero); renderSkills(hero); renderPassiveSkills(hero);
     }
     renderLevelProgress(hero);
-    renderTeamMembers(playerTeam.members, 'team1-members-map', true); // Render to map/hero tab container
+    // No team rendering for map here, hero portrait on map is separate
     selectInitialSkills();
     return true;
 }
 
-// loadStage, reLoadStage, setupCurrentAreaForMapUI, loadNextMapStage are removed.
-// updateStageDisplay, toggleStageControls are removed.
 
 function selectInitialSkills() {
     if (!hero || !hero.skills) return;
@@ -261,7 +278,9 @@ function selectInitialSkills() {
     let activeSelectedCount = 0;
     hero.skills.forEach(skill => {
         if (skill.type === "active" && activeSelectedCount < 4 && activeSkillBoxes[activeSelectedCount]) {
-            hero.selectSkill(skill, activeSkillBoxes[activeSelectedCount++]);
+            const skillBox = Array.from(activeSkillBoxes).find(sb => sb.id === 'skill-box-' + skill.name.replace(/\s/g, ''));
+            if(skillBox) hero.selectSkill(skill, skillBox, false);
+            activeSelectedCount++;
         }
     });
 
@@ -269,7 +288,9 @@ function selectInitialSkills() {
     let passiveSelectedCount = 0;
     hero.skills.forEach(skill => {
         if (skill.type !== "active" && passiveSelectedCount < 4 && passiveSkillBoxes[passiveSelectedCount]) {
-            hero.selectSkill(skill, passiveSkillBoxes[passiveSelectedCount++], true);
+             const skillBox = Array.from(passiveSkillBoxes).find(sb => sb.id === 'skill-box-' + skill.name.replace(/\s/g, ''));
+            if(skillBox) hero.selectSkill(skill, skillBox, true);
+            passiveSelectedCount++;
         }
     });
 }
@@ -278,7 +299,7 @@ function initiateBattleLog() {
     const logContainer = document.getElementById('battle-log');
     if (!logContainer) {
         console.warn("Battle log container not found.");
-        battleLog = { log: console.log }; // Fallback to console
+        battleLog = { log: console.log };
         return;
     }
     battleLog = new BattleLog(logContainer);
@@ -293,49 +314,89 @@ function initiateBattleLog() {
     }
 }
 
-// Renders members to a specific container (e.g., player team on map, or enemies on battlefield)
-export function renderTeamMembers(members, containerId, clear = true) {
-    const teamContainer = document.getElementById(containerId);
-    if (!teamContainer) {
-        // This can be normal if e.g. team2-members-map was removed
-        // console.warn(`Team container ${containerId} not found.`);
+export function renderTeamMembers(membersToRender, containerId, clearExisting = true) {
+    const teamContainerElement = document.getElementById(containerId);
+    if (!teamContainerElement) {
+        // console.warn(`Team container ${containerId} not found for rendering members.`);
         return;
     }
-    const teamRows = teamContainer.querySelectorAll('.team-row');
+    const teamRows = teamContainerElement.querySelectorAll('.team-row');
     if (teamRows.length < 2) {
         console.error(`Team rows not found in ${containerId}. HTML structure issue.`);
         return;
     }
 
-    if (clear) {
+    if (clearExisting) {
         teamRows[0].innerHTML = ''; teamRows[1].innerHTML = '';
     }
 
-    members.forEach(member => {
-        var row = (member.position === "Front") ? teamRows[0] : teamRows[1];
-        if (row.children.length >= 4 && teamRows[0].children.length + teamRows[1].children.length < 8) {
-             row = (row === teamRows[0]) ? teamRows[1] : teamRows[0]; // Overflow
+    // Ensure members have unique member IDs for this battle instance if they are companions or mobs
+    membersToRender.forEach((member, index) => {
+        if (!member.isHero) { // Hero's memberId is usually fixed
+            member.memberId = `${containerId}-member-${member.companionId || member.classId || 'unknown'}-${index}`;
+        } else {
+            member.memberId = `hero-${containerId}`; // Ensure hero has a unique ID for this container context
         }
-        const memberElement = member.isHero ? renderHero(member) : renderMember(member);
-        row.appendChild(memberElement);
-        // DOM element initialization (like adding health bars, etc.) is now mostly handled by Battle.js
-        // or specific render functions after adding to DOM.
-        // For hero on map/hero tab, initializeDOMElements is called after renderHero.
-        updateMana(member); updateStamina(member); updateHealth(member);
+    });
+
+
+    membersToRender.forEach(member => {
+        // Determine row based on member.position (default to Front if not set for some reason)
+        const targetRowIndex = (member.position === "Back") ? 1 : 0;
+        let rowElement = teamRows[targetRowIndex];
+
+        // Basic overflow: if preferred row is full (4 members) and other row has space
+        if (rowElement.children.length >= 4) {
+            const otherRowIndex = (targetRowIndex === 0) ? 1 : 0;
+            if (teamRows[otherRowIndex].children.length < 4) {
+                rowElement = teamRows[otherRowIndex];
+                // Optionally, log or update member.position if moved due to overflow,
+                // but for battle rendering, this visual placement is key.
+            } else {
+                // Both rows full, cannot place more. This shouldn't happen if maxPartySize is respected.
+                console.warn(`Cannot place ${member.name} in ${containerId}, both rows are full.`);
+                return;
+            }
+        }
+
+        const memberElement = member.isHero ? renderHero(member) : renderMember(member); // renderMember for companions too
+        rowElement.appendChild(memberElement);
+
+        // Ensure DOM elements are initialized for dynamic updates (health bars etc.)
+        if (typeof member.initializeDOMElements === 'function') {
+             member.initializeDOMElements(); // Connects member instance to its new DOM element
+        }
+        updateHealth(member); updateMana(member); updateStamina(member);
     });
 }
 
 
 function initiateEventListeners() {
-    const navButtons = {
+    const navButtonMappings = {
         'heroContentNavButton': 'heroContent', 'mapNavButton': 'map',
-        'libraryNavButton': 'library', 'optionsNavButton': 'options',
-        'battle-statisticsNavButton': 'battle-statistics'
+        'libraryNavButton': 'library', // 'optionsNavButton': 'options', // Options not fully implemented yet
+        'battle-statisticsNavButton': 'battle-statistics',
+        'questsNavButton': 'quests', // Add quests button
+        'homeNavButton': 'home' // Add home button
     };
-    for (const id in navButtons) {
-        document.getElementById(id)?.addEventListener('click', (event) => openTab(event, navButtons[id]));
+    for (const id in navButtonMappings) {
+        const button = document.getElementById(id);
+        if (button) {
+            // Remove existing listener to prevent duplicates if this function is called multiple times
+            // This is a simple way; a more robust way would be to store and remove specific handlers.
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            newButton.addEventListener('click', (event) => openTab(event, navButtonMappings[id]));
+        }
     }
-    document.getElementById('saveGameNavButton')?.addEventListener('click', openSaveModal);
+
+    const saveGameButton = document.getElementById('saveGameNavButton');
+    if (saveGameButton) {
+        const newSaveButton = saveGameButton.cloneNode(true);
+        saveGameButton.parentNode.replaceChild(newSaveButton, saveGameButton);
+        newSaveButton.addEventListener('click', openSaveModal);
+    }
+
 
     // Battle popup buttons
     document.getElementById('repeat-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); battleRepeatStageCmd(); });
@@ -343,16 +404,19 @@ function initiateEventListeners() {
     document.getElementById('return-to-map-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); returnToMap(); });
 
     document.getElementById('flee-battle')?.addEventListener('click', attemptFlee);
-    document.addEventListener('keydown', (event) => { if (event.code === 'Space') togglePause(); });
 
-    // Tooltip listeners
-    const tooltipArea = document.getElementById('teamAndBattleContainer') || document.body; // More general area
+    // Centralized keydown listener
+    document.removeEventListener('keydown', handleGlobalKeyDown); // Remove previous if any
+    document.addEventListener('keydown', handleGlobalKeyDown);
+
+
+    // Tooltip listeners (ensure these are general enough or scoped correctly)
+    const tooltipArea = document.getElementById('battlefield') || document.body; // More general for battle tooltips
     tooltipArea.addEventListener('mouseover', (event) => {
         const target = event.target.closest('.memberPortrait, .iconDiv, .battleSkillIcon, .buff, .debuff, [data-tooltip-text]');
         if (target) {
-            const tooltip = target.querySelector('.tooltip, .effectTooltip'); // Existing tooltips
-            if (tooltip) showTooltip(event, tooltip);
-            // else if (target.dataset.tooltipText) { /* TODO: Dynamic tooltip creation if needed */ }
+            const tooltip = target.querySelector('.tooltip, .effectTooltip');
+            if (tooltip && tooltip.innerHTML.trim()) showTooltip(event, tooltip);
         }
     }, true);
     tooltipArea.addEventListener('mouseout', (event) => {
@@ -361,26 +425,36 @@ function initiateEventListeners() {
         if (tooltip) { tooltip.style.display = 'none'; tooltip.style.visibility = 'hidden'; }
     }, true);
 
-    setupSkillListeners();
+    // Skill bar listeners are now set in Render.js within updateSkillBar
 }
 
-function hidePopupForBattleActions() { // Utility for battle popups
+function handleGlobalKeyDown(event) {
+    if (event.code === 'Space') {
+        const activeTab = document.querySelector('.tabcontent.active');
+        if (activeTab && activeTab.id === 'battlefield') { // Only pause if on battlefield
+            togglePause();
+        }
+    }
+    // Add other global keybinds here if needed
+}
+
+
+function hidePopupForBattleActions() {
     document.getElementById('popup')?.classList.add('hidden');
 }
 
-function setupSkillListeners() { /* ... (no changes, assumed correct) ... */ }
-
 
 document.addEventListener('DOMContentLoaded', async () => {
-    initializeHomeScreen(); // Sets up home screen, which can lead to loadGameData
+    initializeHomeScreen();
     await initializeDialogue();
+    initializeQuestLog(); // Initialize quest log UI system
 
     document.querySelectorAll('.back-to-map-button').forEach(button => {
-        button.addEventListener('click', (event) => openTab(event, 'map'));
+        button.addEventListener('click', (event) => {
+            const mapNavButton = document.getElementById('mapNavButton') || document.querySelector('.tablinks[onclick*="\'map\'"]');
+            openTab({ currentTarget: mapNavButton }, 'map');
+        });
     });
-
-    // Stage navigation buttons on map tab are removed.
-    // updateStageDisplay calls are removed from DOMContentLoaded.
 });
 
 
@@ -392,9 +466,13 @@ function togglePause() {
     overlayTarget.classList.toggle('paused-overlay', isPaused);
     if (battleLog) battleLog.log(isPaused ? "Battle Paused" : "Battle Resumed");
 
-    const allMembersInBattle = [...(team1?.getAllAliveMembers() || []), ...(team2?.getAllAliveMembers() || [])];
-    allMembersInBattle.forEach(member => {
-        if (isPaused) member.stopSkills();
-        else member.startSkills();
+    const activeBattleParty = hero ? hero.getActivePartyMembers() : []; // Get current active party for battle
+    const enemyParty = team2 ? team2.members : [];
+
+    [...activeBattleParty, ...enemyParty].forEach(member => {
+        if (member && member.currentHealth > 0) { // Check member exists and is alive
+            if (isPaused) member.stopSkills();
+            else member.startSkills();
+        }
     });
 }

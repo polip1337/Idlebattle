@@ -200,7 +200,13 @@
             </div>
         </div>
         <div id="heroDetails">
-            <div id="heroClassesAndStats">
+            <div id="hero-sub-tabs">
+                <button class="hero-sub-tab-button active" onclick="openHeroSubTab(event, 'heroMainStatsSkills')">Stats & Skills</button>
+                <button class="hero-sub-tab-button" onclick="openHeroSubTab(event, 'heroCompanions')">Companions</button>
+            </div>
+
+            <div id="heroMainStatsSkills" class="hero-sub-tab-content active">
+                <div id="heroClassesAndStats">
                 <div id="inventory">
                     <h2>Inventory</h2>
                     <div class="iconGrid">
@@ -357,6 +363,41 @@
                             <div class="progressBar">
                                 <div class="progress" style="width: 70%;"></div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div id="heroCompanions" class="hero-sub-tab-content">
+                <!-- Content managed by companionUIManager.js -->
+                <div class="companions-layout">
+                    <div class="companions-roster-panel">
+                        <h3>Roster</h3>
+                        <div id="companions-roster-list" class="themed-scrollbar">
+                            <!-- Companions in roster populated by JS -->
+                        </div>
+                    </div>
+                    <div class="companions-active-party-panel">
+                        <h3>Active Party (Max 8)</h3>
+                        <div id="companions-party-formation">
+                            <div class="party-formation-row">
+                                <div class="party-formation-slot" data-row="0" data-col="0"></div>
+                                <div class="party-formation-slot" data-row="0" data-col="1"></div>
+                                <div class="party-formation-slot" data-row="0" data-col="2"></div>
+                                <div class="party-formation-slot" data-row="0" data-col="3"></div>
+                            </div>
+                            <div class="party-formation-row">
+                                <div class="party-formation-slot" data-row="1" data-col="0"></div>
+                                <div class="party-formation-slot" data-row="1" data-col="1"></div>
+                                <div class="party-formation-slot" data-row="1" data-col="2"></div>
+                                <div class="party-formation-slot" data-row="1" data-col="3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="companions-detail-panel">
+                        <h3>Companion Details</h3>
+                        <div id="companion-selected-details">
+                            <p>Select a companion to see their details.</p>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,3 @@
-/* Hero View Specific Styles */
 
 #heroContent {
     background-color: #3a3a3a; /* Dark theme for hero screen */
@@ -9,15 +8,18 @@
     height: 78vh; /* Consistent height */
     overflow-y: auto; /* Scroll if content overflows */
     color: #fff; /* Light text for dark background */
+    display: flex; /* Enable flex for main hero content structure */
+    flex-direction: column; /* Stack elements vertically */
 }
 
 #heroInfoRow {
     display: flex;
     background-color: #4a4a4a;
-    padding: 20px;
-    border: 2px solid #666;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    padding: 10px; /* Reduced padding */
+    border: 1px solid #666; /* Slightly thinner border */
+    border-radius: 8px; /* Slightly smaller radius */
+    box-shadow: 0 0 8px rgba(0,0,0,0.4);
+    margin-bottom: 10px; /* Space before sub-tabs or content */
 }
 
 #heroPortraitAndPaperDoll {
@@ -29,8 +31,8 @@
 }
 
 #heroPortrait {
-    flex: 0 0 150px;
-    margin-right: 20px;
+    flex: 0 0 150px; /* Keep size */
+    /* margin-right: 20px; Let gap handle spacing */
 }
 
 #heroPortrait img {
@@ -45,11 +47,11 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    gap: 10px;
-    padding: 10px;
+    gap: 5px; /* Reduced gap */
+    padding: 5px; /* Reduced padding */
     background-color: #444;
-    border: 2px solid #777;
-    border-radius: 10px;
+    border: 1px solid #777; /* Thinner border */
+    border-radius: 8px;
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
 
@@ -57,22 +59,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60px;
-    height: 60px;
+    width: 50px; /* Reduced size */
+    height: 50px; /* Reduced size */
     background-color: #555;
-    border: 2px solid #777;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    border: 1px solid #777; /* Thinner border */
+    border-radius: 4px; /* Smaller radius */
+    box-shadow: 0 0 3px rgba(0,0,0,0.4);
     text-align: center;
     color: #fff;
-    font-size: 12px;
+    font-size: 10px; /* Smaller font */
 }
 
 .slot:hover {
     background-color: #666;
 }
 
-.slot img { /* Images inside paperdoll slots */
+.slot img {
+    width: 90%; /* Make image slightly smaller than slot */
+    height: 90%;
+    object-fit: contain;
     pointer-events: none;
 }
 
@@ -93,252 +98,522 @@
 #heroDetails {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px; /* Reduced gap */
     width: 100%;
+    flex-grow: 1; /* Allow heroDetails to take remaining space */
+    overflow: hidden; /* Prevent its own scrollbars if sub-tabs handle scrolling */
 }
+
+/* Sub-tabs within Hero View */
+#hero-sub-tabs {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #777;
+    padding-bottom: 5px;
+    flex-shrink: 0; /* Prevent tabs from shrinking */
+}
+.hero-sub-tab-button {
+    background-color: #505050; /* Darker inactive tab */
+    color: #ccc;
+    padding: 8px 12px; /* Smaller padding */
+    border: 1px solid #666;
+    border-bottom: none; /* Remove bottom border for inactive */
+    cursor: pointer;
+    margin-right: 3px;
+    border-radius: 4px 4px 0 0;
+    font-size: 0.9em;
+}
+.hero-sub-tab-button.active {
+    background-color: #3e3e3e; /* Slightly darker for active tab content area */
+    color: #fff;
+    border-color: #777;
+    border-bottom: 1px solid #3e3e3e; /* Match active content background */
+}
+.hero-sub-tab-content {
+    display: none;
+    padding: 10px;
+    border: 1px solid #666;
+    border-top: none;
+    background-color: #3e3e3e; /* Match active tab "merged" look */
+    border-radius: 0 0 8px 8px;
+    flex-grow: 1; /* Allow content to fill space */
+    overflow-y: auto; /* Scroll if content itself is too long */
+}
+.hero-sub-tab-content.active {
+    display: flex; /* Use flex for sub-tab content layout */
+    flex-direction: column; /* Default stack for main content areas */
+}
+
+
+#heroMainStatsSkills { /* This is a .hero-sub-tab-content */
+    /* display: flex; /* Let parent .active handle display */
+    flex-direction: column; /* Stack Classes/Stats and Skills sections */
+    gap: 10px;
+}
+
 
 #heroClassesAndStats {
     display: flex;
-    flex-direction: row;
-    gap: 20px;
-    background-color: #5a5a5a;
-    padding: 5px;
-    border: 2px solid #777;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    flex-direction: row; /* Inventory, Classes, Stats side-by-side */
+    gap: 10px; /* Reduced gap */
+    background-color: #4a4a4a; /* Slightly lighter than sub-tab content bg */
+    padding: 10px;
+    border: 1px solid #666;
+    border-radius: 6px;
 }
 
 #heroClassesAndStats h2 {
     margin-top: 0;
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid #666;
     padding-bottom: 5px;
     font-family: 'Cinzel', serif;
+    font-size: 1.1em;
 }
 
+#inventory {
+    flex: 1.5; /* Give inventory more space */
+    min-width: 200px; /* Ensure it has some base width */
+}
 #heroClasses {
-    flex: 1;
+    flex: 0.8;
+    min-width: 120px;
+}
+#heroStats {
+    flex: 1.2; /* Stats section */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Responsive columns */
+    gap: 5px 10px; /* row-gap column-gap */
+    align-content: start; /* Prevent stretching if few items */
 }
 
-#heroStats {
-    flex: 2;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 10px;
-    justify-content: center;
-}
 
 #heroStats h2 {
-    grid-column: span 4;
-    margin: 0;
+    grid-column: 1 / -1; /* Span all columns */
+    margin: 0 0 5px 0;
     padding-bottom: 5px;
     font-family: 'Cinzel', serif;
+    text-align: center;
+}
+#heroStats p {
+    margin: 2px 0;
+    font-size: 0.9em;
 }
 
-.statGrid { /* Used within heroStats if JS populates with this class */
+.statGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
-.class-container, .stats-container { /* If used by JS within hero view */
-    margin-top: 10px;
-}
-
-#inventory {
-    margin-top: 20px;
-}
 
 #inventory h2 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
-.iconGrid { /* Used for inventory and consumable toolbar in hero view */
+.iconGrid {
     display: grid;
-    /* grid-template-columns and rows set by more specific rules or JS if varied */
-    gap: 10px;
+    gap: 5px; /* Reduced gap */
 }
 
-#inventory .iconGrid { /* Specific for inventory */
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, auto); /* Assuming 2 rows for 10 slots, adjust if more */
+#inventory .iconGrid {
+    grid-template-columns: repeat(auto-fill, 50px); /* Fit as many 50px slots as possible */
+    justify-content: start; /* Align to start if not filling row */
 }
 
 
-.inventorySlot { /* General styling for any inventory-like slot in hero view */
-    width: 50px;
-    height: 50px;
-    background-color: #606060;
-    border: 2px solid #888;
-    border-radius: 5px;
+.inventorySlot {
+    width: 45px; /* Slightly smaller */
+    height: 45px;
+    background-color: #585858; /* Slightly lighter */
+    border: 1px solid #777; /* Thinner */
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    position: relative; /* For tooltip positioning */
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    position: relative;
+}
+.inventorySlot img{
+    width: 90%; height: 90%; object-fit: contain;
 }
 
 .inventorySlot:hover {
-    background-color: #777;
+    background-color: #6a6a6a;
 }
 
-.inventorySlot img {
-    pointer-events: none;
-}
 
 #heroSkills {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: #5a5a5a;
-    padding: 5px;
-    border: 2px solid #777;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    background-color: #4a4a4a;
+    padding: 10px;
+    border: 1px solid #666;
+    border-radius: 6px;
+    flex-grow: 1; /* Allow skills section to take space */
 }
 
 #heroSkills h2 {
     margin-top: 0;
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid #666;
     padding-bottom: 5px;
     font-family: 'Cinzel', serif;
+    font-size: 1.1em;
+    text-align: center;
 }
 
-.skills-container { /* If used by JS for skill sections */
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    padding-right: 20px;
-    border-right: 1px solid #ddd;
-}
 
-#activeSkills, #passiveSkills {
+#activeSkills, #passiveSkills { /* Now .skills-grid */
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 skills per row */
-    grid-template-rows: repeat(2, auto); /* Up to 2 rows */
-    gap: 5px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Responsive */
+    gap: 8px;
+    margin-top: 5px;
+}
+.skills-grid { /* Class to apply to #activeSkills, #passiveSkills */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Responsive */
+    gap: 8px;
+    margin-top: 5px;
 }
 
-.skill-box { /* For skill selection boxes in hero view */
-    padding: 3px;
+
+.skill-box {
+    padding: 5px;
     text-align: center;
     cursor: pointer;
     position: relative;
-    background-color: #444;
-    border: 2px solid #777;
-    border-radius: 5px;
-    padding: 5px; /* Overwrites previous padding: 3px */
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    display: flex; /* Added for better alignment of content */
-    flex-direction: column; /* Stack image, name, progress bar */
-    align-items: center; /* Center items horizontally */
-    gap: 5px; /* Gap between items */
-}
-
-.skill-box img {
-    width: 30px;
-    height: 30px;
-}
-
-.skill-box .skill-name { /* If span used for skill name */
-    font-size: 0.9em;
-}
-
-.skill-box .tooltip {
-    /* Tooltip styling is handled by the global .tooltip style in styles.css */
-    /* Specific positioning or sizing for skill-box tooltips can go here if needed */
-    min-width: 160px; /* Example from original styles.css */
-    /* transform:translate(-30px,10px); Remove this, general tooltip handles positioning */
-}
-
-.skill-box.selected {
-    border-color: green;
-}
-
-/* .skill class was too generic, .skill-box is more specific for hero view skill selection */
-/* Styling for .skill (original name) which is applied to children of #activeSkills/#passiveSkills */
-.skill { /* This assumes .skill is a wrapper inside #activeSkills/#passiveSkills for each skill item */
+    background-color: #383838; /* Darker box */
+    border: 1px solid #555;
+    border-radius: 4px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    margin: 5px 0;
-    width: calc((100% / 5) - 20px); /* Based on original CSS, assuming 5 skills per row initially */
-    background-color: #444;
-    border: 2px solid #777;
-    border-radius: 5px;
-    padding: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    gap: 3px; /* Smaller gap */
+    min-height: 80px; /* Ensure consistent height */
+}
+.skill-box:hover {
+    border-color: #777;
+    background-color: #404040;
+}
+
+.skill-box img {
+    width: 28px; /* Smaller icon */
+    height: 28px;
+}
+
+.skill-box .skill-name {
+    font-size: 0.8em; /* Smaller name */
+    margin: 2px 0;
+    color: #ddd;
+}
+.skill-box .targeting-modes {
+    font-size: 0.75em;
+    padding: 1px 3px;
+    background-color: #505050;
+    color: #ccc;
+    border: 1px solid #666;
+    border-radius: 3px;
+    margin-top: 2px;
+    width: 90%; /* Take most of box width */
 }
 
 
-.progressBar { /* Used within .skill-box or .skill */
-    width: 100%;
-    background-color: #777;
-    border-radius: 5px;
+.skill-box.selected {
+    border-color: #00b300; /* Brighter green */
+    box-shadow: 0 0 5px #00b300;
+}
+
+
+.progressBar {
+    width: 90%; /* Slightly narrower */
+    background-color: #555; /* Darker bar track */
+    border-radius: 3px;
     overflow: hidden;
-    margin-top: 5px;
-    height: 10px; /* Explicit height */
+    margin-top: auto; /* Push to bottom if skill-box has extra space */
+    height: 8px; /* Smaller height */
 }
 
 .progress {
-    height: 100%; /* Fill parent .progressBar height */
-    background-color: #00ff00;
+    height: 100%;
+    background-color: #009900; /* Darker green progress */
 }
 
 #heroWeaponSkills {
-    margin-top: 20px;
+    margin-top: 15px;
     padding: 10px;
-    background-color: #5a5a5a;
-    border: 2px solid #777;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    background-color: #4a4a4a;
+    border: 1px solid #666;
+    border-radius: 6px;
 }
 
 #heroWeaponSkills h2 {
     margin-top: 0;
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid #666;
     padding-bottom: 5px;
     font-family: 'Cinzel', serif;
+    font-size: 1.1em;
+    text-align: center;
+}
+/* Weapon skills displayed in a grid, similar to active/passive skills */
+#heroWeaponSkills .skills-grid { /* Re-use .skills-grid styling */
+    margin-top: 5px;
+}
+#heroWeaponSkills .skill-box { /* Make weapon skill boxes non-interactive if needed */
+    cursor: default;
+}
+#heroWeaponSkills .skill-box:hover { /* No special hover if non-interactive */
+    border-color: #555;
+    background-color: #383838;
 }
 
+
 #heroConsumableToolbarContainer {
-    margin-top: 20px;
-    background-color: #4a4a4a;
-    padding: 15px;
-    border: 2px solid #666;
-    border-radius: 10px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.6);
+    margin-top: 15px;
+    background-color: #404040; /* Slightly darker */
+    padding: 10px;
+    border: 1px solid #5c5c5c;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.5);
 }
 
 #heroConsumableToolbarContainer h2 {
     text-align: center;
     margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #777;
-    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #666;
+    padding-bottom: 8px;
     font-family: 'Cinzel', serif;
-    color: #eee;
+    color: #ddd;
+    font-size: 1.1em;
 }
 
 #heroConsumableToolbar { /* This is an .iconGrid */
-    grid-template-columns: repeat(3, minmax(50px, 1fr));
+    grid-template-columns: repeat(3, minmax(45px, 1fr)); /* 3 columns for 3 slots */
     justify-content: center;
-    max-width: 240px;
+    max-width: 200px; /* Adjust if slot size changes */
     margin: 0 auto;
 }
 
 .consumable-toolbar-slot { /* These also have .inventorySlot class */
-    background-color: #3e3e3e;
-    border: 2px solid #5e5e5e;
+    background-color: #333333; /* Darker slots */
+    border: 1px solid #505050;
+    width: 45px; /* Match inventory slot size */
+    height: 45px;
 }
 
 .consumable-toolbar-slot:hover {
-    background-color: #4f4f4f;
-    border-color: #7f7f7f;
+    background-color: #424242;
+    border-color: #686868;
 }
 
 .consumable-toolbar-slot img {
     pointer-events: none;
+}
+
+
+/* Companion Tab Styles */
+#heroCompanions { /* This is a .hero-sub-tab-content */
+    /* display: flex; handled by parent .active */
+    flex-direction: column; /* Stack title and layout */
+    gap: 10px;
+}
+#heroCompanions > h2 { /* The "Companions" title */
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    margin: 0 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #666;
+    flex-shrink: 0; /* Prevent title from shrinking */
+}
+
+.companions-layout {
+    display: flex;
+    gap: 15px;
+    flex-grow: 1; /* Allow layout to fill remaining space in tab */
+    overflow: hidden; /* Prevent layout from causing scrollbars on tab */
+}
+.companions-roster-panel, .companions-active-party-panel, .companions-detail-panel {
+    flex: 1;
+    background-color: #4a4a4a; /* Consistent with other panels */
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #666;
+    display: flex;
+    flex-direction: column; /* Stack title and content list/grid */
+    overflow: hidden; /* Important for scrollable children */
+}
+.companions-roster-panel h3, .companions-active-party-panel h3, .companions-detail-panel h3 {
+    margin: 0 0 8px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #5c5c5c;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 1em;
+    flex-shrink: 0; /* Prevent titles from shrinking */
+}
+
+.companions-detail-panel {
+    flex: 1.2; /* Slightly more space for details */
+}
+#companions-roster-list, #companion-selected-details {
+    overflow-y: auto; /* Allow these specific lists/areas to scroll */
+    flex-grow: 1; /* Allow list to take available space in panel */
+    padding-right: 5px; /* Space for scrollbar */
+}
+
+.companion-roster-item {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    margin-bottom: 4px;
+    background-color: #585858;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.companion-roster-item:hover {
+    background-color: #6a6a6a;
+    border-color: #888;
+}
+.companion-roster-item img {
+    width: 35px;
+    height: 35px;
+    margin-right: 8px;
+    border-radius: 50%;
+    border: 1px solid #444;
+}
+.companion-roster-item span {
+    font-size: 0.85em;
+}
+.companion-roster-item.in-party {
+    opacity: 0.6;
+    background-color: #4f4f4f;
+    cursor: default;
+}
+.companion-roster-item.in-party:hover {
+    border-color: transparent; /* No special hover border if in party */
+}
+
+
+#companions-party-formation {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Small gap between rows */
+    align-items: center; /* Center rows if container is wider */
+    margin-top: 10px; /* Space from title */
+}
+.party-formation-row {
+    display: flex;
+    gap: 4px; /* Small gap between slots */
+    justify-content: center; /* Center slots in the row */
+}
+.party-formation-slot {
+    width: 60px; /* Smaller slots */
+    height: 60px;
+    background-color: #383838; /* Darker empty slot */
+    border: 1px dashed #666;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+.party-formation-slot:hover {
+    border-color: #999;
+}
+.party-formation-slot img.companion-portrait-in-slot {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: grab;
+    transition: opacity 0.2s;
+}
+.party-formation-slot img.companion-portrait-in-slot:active {
+    cursor: grabbing;
+}
+.party-formation-slot .companion-name-in-slot {
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    right: 0; /* Make it span width */
+    text-align: center;
+    font-size: 0.65em;
+    background-color: rgba(0,0,0,0.6);
+    padding: 1px 2px;
+    color: white;
+    pointer-events: none; /* Allow clicks to pass to slot */
+}
+
+.party-formation-slot.has-hero img.companion-portrait-in-slot {
+    border: 2px solid gold; /* Highlight hero */
+    box-sizing: border-box;
+}
+.party-formation-slot.has-companion img.companion-portrait-in-slot {
+    border: 1px solid #777;
+    box-sizing: border-box;
+}
+
+
+#companion-selected-details {
+    font-size: 0.85em;
+    line-height: 1.5;
+}
+#companion-selected-details img.detail-portrait {
+    width: 80px; /* Smaller detail portrait */
+    height: 80px;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    border: 1px solid #555;
+}
+#companion-selected-details h4 { margin-top: 0; font-size: 1.1em; color: #efefef; }
+#companion-selected-details p { margin: 3px 0; }
+#companion-selected-details hr { border-color: #555; margin: 6px 0; }
+#companion-selected-details h5 { font-size: 1em; margin: 8px 0 4px 0; color: #dfdfdf; }
+#companion-selected-details ul.comp-stats-list, #companion-selected-details ul {
+    list-style-type: none;
+    padding-left: 5px;
+    margin: 0;
+}
+#companion-selected-details ul li {
+    margin-bottom: 2px;
+    font-size: 0.9em;
+}
+.companion-stat-xp-bar {
+    width: 100%;
+    height: 6px; /* Slimmer XP bar */
+    background-color: #666;
+    border-radius: 3px;
+    margin-top: 1px;
+    overflow: hidden;
+}
+.companion-stat-xp-bar .progress {
+    height: 100%;
+    background-color: #00b39e; /* Teal XP bar */
+}
+#remove-from-party-btn {
+    background-color: #702929;
+    color: #f0d0d0;
+    border: 1px solid #963b3b;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: block; /* Make it block for easier centering or full width */
+    width: fit-content; /* Or width: 100% */
+}
+#remove-from-party-btn:hover {
+    background-color: #8a3333;
+}
+#remove-from-party-btn:disabled {
+    background-color: #555;
+    color: #888;
+    cursor: not-allowed;
+    border-color: #666;
 }
