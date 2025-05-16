@@ -1,7 +1,8 @@
-
+// dialogue.js
 import { openTab } from './navigation.js';
 import { hero } from './initialize.js';
 import { questSystem } from './questSystem.js';
+import { openTradeModal } from './tradeModal.js';
 
 export async function initializeDialogue() {
     const dialogueModal = document.getElementById('dialogue-modal');
@@ -22,23 +23,25 @@ export async function initializeDialogue() {
 
     let currentDialogue = null;
     let currentNode = null;
-    let currentNPC = null;
+    let currentNPCData = null; // Store the NPC's own data from their .js file
     let resolveDialoguePromise = null; // For making startDialogue awaitable
 
     // Load NPC and dialogue data
-    async function loadDialogue(npcId, dialogueId) {
+    async function loadDialogueData(npcId, dialogueFileId) {
         try {
             const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
-            const dialogueModule = await import(`./Data/NPCs/${npcId}/${dialogueId}.js`);
-            currentNPC = npcModule.default;
-            return {
-                name: npcModule.default.name,
-                portrait: npcModule.default.portrait,
-                nodes: dialogueModule.default.nodes,
-                tradeInventory: npcModule.default.tradeInventory
+            const dialogueModule = await import(`./Data/NPCs/${npcId}/${dialogueFileId}.js`);
+
+            currentNPCData = npcModule.default; // Store the NPC's own data
+
+            return { // This object is what `currentDialogue` will hold
+                name: currentNPCData.name,
+                portrait: currentNPCData.portrait,
+                nodes: dialogueModule.default.nodes, // Dialogue structure from the specific dialogue file
+                // Keep tradeInventory accessible via currentNPCData
             };
         } catch (error) {
-            console.error('Error loading dialogue:', error);
+            console.error(`Error loading dialogue for NPC ${npcId}, dialogue file ${dialogueFileId}:`, error);
             return null;
         }
     }
@@ -71,7 +74,7 @@ export async function initializeDialogue() {
     // Display current dialogue node
     function displayNode(node) {
         currentNode = node;
-        npcPortrait.src = currentDialogue.portrait;
+        npcPortrait.src = currentDialogue.portrait; // currentDialogue holds name/portrait from NPC data
         npcName.textContent = currentDialogue.name;
         dialogueText.innerHTML = parseHypertext(node.text);
 
@@ -128,29 +131,27 @@ export async function initializeDialogue() {
                 visibleOptionIndex++;
             });
         } else {
-            // If no options, clicking the modal closes it (unless it's already being closed)
-            // Ensure this doesn't interfere with hypertext clicks
+            // If no options, clicking the modal closes it
             const clickListener = (event) => {
-                if (event.target === dialogueModal || event.target.closest('.dialogue-content') && !event.target.closest('.dialogue-options button, .hypertext, .action-button')) {
-                    if (!dialogueModal.classList.contains('hidden')) { // Only hide if visible
+                if (event.target === dialogueModal || (event.target.closest('.dialogue-content') && !event.target.closest('.dialogue-options button, .hypertext, .action-button'))) {
+                    if (!dialogueModal.classList.contains('hidden')) {
                         hideDialogue();
                     }
-                    dialogueModal.removeEventListener('click', clickListener); // Clean up listener
+                    dialogueModal.removeEventListener('click', clickListener);
                 }
             };
-            // Add listener only if no options are present
             dialogueModal.addEventListener('click', clickListener);
         }
 
-
-        if (currentDialogue.tradeInventory && currentDialogue.tradeInventory.length > 0) {
+        // Trade button logic
+        if (currentNPCData && currentNPCData.canTrade === true) {
             tradeButton.style.display = 'block';
             tradeButton.onclick = () => handleTrade();
         } else {
             tradeButton.style.display = 'none';
         }
 
-        questSystem.updateQuestProgress('dialogue', { npc: currentDialogue.name, dialogueId: node.id });
+        questSystem.updateQuestProgress('dialogue', { npcName: currentDialogue.name, dialogueNodeId: node.id });
     }
 
     function checkOptionConditions(option) {
@@ -173,6 +174,7 @@ export async function initializeDialogue() {
                     const quest = questSystem.quests.get(condition.questId);
                     result = quest && quest.completed;
                     break;
+                // Add more condition types like 'questStepCompleted', 'globalFlag', etc.
                 default:
                     console.warn('Unknown condition type:', condition.type);
                     result = false;
@@ -189,37 +191,29 @@ export async function initializeDialogue() {
                     case 'startQuest':
                         questSystem.startQuest(act.questId);
                         break;
-                    case 'addItem': // Changed from giveItem to addItem to match renn_base
-                        console.log(`Adding item: ${act.itemId}`);
-                        if (hero && typeof hero.inventoryAddItem === 'function') { // Assuming hero.inventoryAddItem exists
-                            hero.inventoryAddItem(act.itemId, act.quantity || 1);
+                    case 'addItem': // Assumes hero has a method like addItemToInventory that takes an Item instance or ID
+                        const itemData = hero.allItemsCache ? hero.allItemsCache[act.itemId] : null; // Assuming hero has access or pass allItemsCache
+                        if (itemData && hero && typeof hero.addItemToInventory === 'function') {
+                           for (let i = 0; i < (act.quantity || 1); i++) {
+                                hero.addItemToInventory(new hero.Item(itemData)); // Create new Item instance
+                           }
                         } else {
-                             console.warn('hero.inventoryAddItem function not found, or hero object not available.');
+                             console.warn(`Could not add item ${act.itemId}: item data not found or hero.addItemToInventory missing.`);
                         }
                         break;
                     case 'completeQuest':
-                        const questToComplete = questSystem.quests.get(act.questId);
-                        if (questToComplete && !questToComplete.completed) {
-                            questToComplete.currentStep = questToComplete.steps.length;
-                            questToComplete.completed = true;
-                            questSystem.activeQuests.delete(act.questId);
-                            questSystem.applyRewards(questToComplete);
-                            console.log(`Completed quest: ${act.questId}`);
-                            if (window.updateQuestLog) {
-                                window.updateQuestLog();
-                            }
-                        }
+                        questSystem.completeQuest(act.questId); // questSystem handles rewards
                         break;
-                    case 'unlockPOI': // MODIFIED to use poiId
+                    case 'unlockPOI':
                         if (window.unlockMapPOI) {
-                            window.unlockMapPOI(act.mapId, act.poiId); // Pass poiId
-                            console.log(`Action: Unlocked POI ID '${act.poiId}' on map '${act.mapId}'`);
+                            window.unlockMapPOI(act.mapId, act.poiId);
                         } else {
-                            console.error('unlockMapPOI function is not available on window object.');
+                            console.error('unlockMapPOI function is not available.');
                         }
                         break;
+                    // Add more action types: 'setFlag', 'changeReputation', 'removeItem'
                     default:
-                        console.log('Unknown action:', act);
+                        console.log('Unknown action type:', act.type, 'for option:', option.text);
                 }
             });
         }
@@ -230,71 +224,88 @@ export async function initializeDialogue() {
                 displayNode(nextNode);
             } else {
                 console.error('Next node not found:', option.nextId);
-                hideDialogue(); // This will resolve the promise
+                hideDialogue();
             }
         } else {
-            hideDialogue(); // This will resolve the promise
+            hideDialogue();
         }
     }
 
     function handleTrade() {
-        console.log('Opening trade with NPC:', currentNPC.name, 'Inventory:', currentDialogue.tradeInventory);
-        alert(`Trade with ${currentNPC.name} (Items: ${currentDialogue.tradeInventory.join(', ')})`);
-        // Future: openTab('trade', { npc: currentNPC, inventory: currentDialogue.tradeInventory });
+        if (currentNPCData && currentNPCData.canTrade) {
+            // The trade modal needs the full NPC data object, which currentNPCData is
+            openTradeModal(currentNPCData);
+        } else {
+            console.warn("Attempted to trade, but NPC data or trade capability is missing.");
+        }
     }
 
-    async function selectDialogue(npcId) {
-        const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
-        const npc = npcModule.default;
+    async function selectDialogueFile(npcId) {
+        // This logic needs to be adapted to how your NPC .js files structure their available dialogues.
+        // For example, npcFile.default.dialogues might be an array or object.
+        // Let's assume it's an array of dialogue file IDs, and we pick the first one.
+        try {
+            const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
+            const npcDefinition = npcModule.default;
 
-        for (const questId of questSystem.activeQuests) {
-            const quest = questSystem.quests.get(questId);
-            if (quest.currentStep < quest.steps.length) {
-                const nextStep = quest.steps[quest.currentStep];
-                const condition = nextStep.condition;
-                const conditionString = condition.toString();
-                if (conditionString.includes(`data.npc === '${npc.name}'`) ||
-                    conditionString.includes(`data.npcId === '${npcId}'`)) {
-
-                    if (quest.currentStep === quest.steps.length - 1) {
-                        const dialogueId = npc.dialogues.find(d => d.includes('questComplete') || d.includes(questId + '_complete')) ||
-                                           npc.dialogues.find(d => d.includes('questActive') || d.includes(questId + '_active')) ||
-                                           npc.dialogues[0];
-                        return dialogueId;
-                    } else {
-                        const dialogueId = npc.dialogues.find(d => d.includes('questActive') || d.includes(questId + '_active')) ||
-                                           npc.dialogues[0];
-                        return dialogueId;
+            // Prioritize quest-related dialogues
+            // This is a simplified example; you'll need more robust logic
+            // to check quest steps and conditions against the NPC.
+            for (const quest of questSystem.getActiveQuests()) {
+                if (quest.steps) { // Ensure steps array exists
+                    const currentStepDetails = quest.steps[quest.currentStepIndex || 0];
+                    if (currentStepDetails && currentStepDetails.npcId === npcId && currentStepDetails.dialogueFileId) {
+                        // Check if this dialogue file exists in the NPC's list of dialogues
+                        if (npcDefinition.dialogues && npcDefinition.dialogues.includes(currentStepDetails.dialogueFileId)) {
+                            return currentStepDetails.dialogueFileId;
+                        }
                     }
                 }
             }
+
+            // Fallback to a default or first dialogue file
+            if (npcDefinition.dialogues && npcDefinition.dialogues.length > 0) {
+                return npcDefinition.dialogues[0]; // e.g., "default_dialogue"
+            }
+            console.warn(`NPC ${npcId} has no dialogue files listed.`);
+            return null;
+        } catch (error) {
+            console.error(`Error selecting dialogue file for NPC ${npcId}:`, error);
+            return null;
         }
-        return npc.dialogues[0];
     }
 
-    async function startDialogue(npcId, dialogueId = null) {
-        return new Promise(async (resolve) => { // MODIFIED: Return a promise
+    // Public function to start a dialogue
+    async function startDialogue(npcId, dialogueFileId = null) { // dialogueFileId is now optional
+        return new Promise(async (resolve) => {
             resolveDialoguePromise = resolve;
 
-            const selectedDialogueId = dialogueId || await selectDialogue(npcId);
-            currentDialogue = await loadDialogue(npcId, selectedDialogueId);
+            const effectiveDialogueFileId = dialogueFileId || await selectDialogueFile(npcId);
+            if (!effectiveDialogueFileId) {
+                console.error(`No dialogue file could be determined for NPC ${npcId}.`);
+                hideDialogue();
+                return;
+            }
+
+            currentDialogue = await loadDialogueData(npcId, effectiveDialogueFileId);
             if (currentDialogue) {
                 const startNode = currentDialogue.nodes.find(node => node.id === 'start');
                 if (startNode) {
                     showDialogue();
                     displayNode(startNode);
                 } else {
-                    console.error('Start node not found in dialogue:', selectedDialogueId);
-                    hideDialogue(); // This will call resolveDialoguePromise
+                    console.error(`Start node not found in dialogue file: ${effectiveDialogueFileId} for NPC: ${npcId}`);
+                    hideDialogue();
                 }
             } else {
-                 console.error(`Could not load dialogue for NPC: ${npcId}, Dialogue: ${selectedDialogueId}`);
-                hideDialogue(); // This will call resolveDialoguePromise
+                 console.error(`Could not load dialogue data for NPC: ${npcId}, File: ${effectiveDialogueFileId}`);
+                hideDialogue();
             }
         });
     }
 
+    // Expose startDialogue globally if not using module imports from non-module scripts
     window.startDialogue = startDialogue;
 
-    console.log('Dialogue system initialized. Use startDialogue("npcId", "dialogueFileId") in console to test.');
+    console.log('Dialogue system initialized.');
 }

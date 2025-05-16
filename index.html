@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="style/saveLoadModal.css">
     <link rel="stylesheet" href="style/heroView.css">
     <link rel="stylesheet" href="style/customDialog.css">
+    <link rel="stylesheet" href="style/tradeModal.css">
     <link href="style/announcements.css" rel="stylesheet" type="text/css"> <!-- ADDED THIS LINE -->
 </head>
 <body>
@@ -132,7 +133,65 @@
         <button id="return-to-map-popup">Return to Map</button>
     </div>
 </div>
+<div class="trade-modal hidden" id="trade-modal">
+    <div class="trade-modal-content">
+        <div class="trade-modal-header" id="trade-modal-npc-name">Trade with NPC</div>
+        <div class="trade-modal-main">
+            <!-- Player Panel -->
+            <div class="trade-panel" id="trade-player-panel">
+                <div class="trade-inventory-header">
+                    <h3>Your Inventory</h3>
+                    <span class="trade-gold-display" id="trade-player-gold">Gold: 0</span>
+                </div>
+                <div class="trade-items-grid themed-scrollbar" id="trade-player-items">
+                    <!-- Player items populated by JS -->
+                </div>
+            </div>
 
+            <!-- Offer Area -->
+            <div class="trade-offer-area">
+                <h4>Your Offer</h4>
+                <div class="trade-offer-list themed-scrollbar" id="trade-player-offer-items">
+                    <!-- Player offered items -->
+                </div>
+                <div class="trade-gold-offer">
+                    <label for="trade-player-gold-offer">Gold:</label>
+                    <input type="number" id="trade-player-gold-offer" value="0" min="0">
+                </div>
+
+                <div class="trade-balance-bar">
+                    <div class="trade-balance-indicator" id="trade-balance-indicator"></div>
+                </div>
+                <span id="trade-balance-value" style="font-size: 0.9em; margin-bottom: 10px;">Balanced</span>
+
+
+                <h4>NPC's Offer</h4>
+                <div class="trade-offer-list themed-scrollbar" id="trade-npc-offer-items">
+                    <!-- NPC offered items -->
+                </div>
+                <div class="trade-gold-offer">
+                    <label for="trade-npc-gold-offer">Gold:</label>
+                    <input type="number" id="trade-npc-gold-offer" value="0" min="0">
+                </div>
+            </div>
+
+            <!-- NPC Panel -->
+            <div class="trade-panel" id="trade-npc-panel">
+                <div class="trade-inventory-header">
+                    <h3 id="trade-npc-inventory-title">NPC Inventory</h3>
+                    <span class="trade-gold-display" id="trade-npc-gold">Gold: 0</span>
+                </div>
+                <div class="trade-items-grid themed-scrollbar" id="trade-npc-items">
+                    <!-- NPC items populated by JS -->
+                </div>
+            </div>
+        </div>
+        <div class="trade-modal-footer">
+            <button id="trade-cancel-button">Cancel</button>
+            <button id="trade-accept-button">Accept</button>
+        </div>
+    </div>
+</div>
 <div class="modal" id="evolution-modal">
     <div class="modal-content">
         <h2>Choose Your Evolution</h2>
@@ -624,6 +683,7 @@
 <script src="initialize.js" type="module"></script>
 <script src="customDialog.js"></script>
 <script src="companion.js" type="module"></script>
+<script src="tradeModal.js" type="module"></script>
 
 </body>
 </html>

@@ -17,8 +17,11 @@ class Item {
         this.stats = itemData.stats ? deepCopy(itemData.stats) : {};
         // Effects should be an array of effect definition objects
         this.effects = itemData.effects ? deepCopy(itemData.effects) : [];
-
-        this.weaponSkills = [];
+        if(itemData.weaponSkills){
+            this.weaponSkills = itemData.weaponSkills;
+        }else{
+            this.weaponSkills = [];
+        }
         if (this.type === "weapon" && itemData.weaponSkillIds) {
             itemData.weaponSkillIds.forEach(skillId => {
                 const skillDataFromCache = allSkillsCache[skillId]; // skillDataFromCache is the definition
