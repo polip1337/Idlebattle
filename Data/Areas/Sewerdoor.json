@@ -1,0 +1,16 @@
+{
+  "id": "fogscarVault",
+  "name": "Fogscar Vault",
+  "description": "The crumbling, rune-lit depths of an Old Empire ruin hidden beneath Rustmarket. Ancient mechanisms hum faintly.",
+  "background": "Media/Backgrounds/fogscar_vault_interior.png",
+  "music": "Music/Dungeon/ancient_ruins_theme.ogg",
+  "stages": [
+    {
+      "stage": 1,
+      "description": "The entrance tunnel is littered with debris and the unsettling skittering of unseen creatures. The air is thick with dust.",
+      "mobs": [
+        {"type": "runeEtchedSentry", "count": 1, "level": 10}
+      ]
+    }
+  ]
+}

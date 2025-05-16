@@ -4,6 +4,7 @@
     "pois": [
       {
         "name": "Goblin Cave",
+        "areaId": "GoblinCave",
         "x": 25.00,
         "y": 45.83,
         "icon": "Media/map/poi-goblinCave.jpg",
@@ -17,7 +18,6 @@
         "type": "travel",
         "mapId": "hollowreach"
       },
-
       {
         "name": "Driftmoor",
         "x": 33.00,
@@ -63,7 +63,6 @@
         "type": "travel",
         "mapId": "verdant_hollow"
       },
-
       {
         "name": "Renn Quickfingers",
         "x": 55.00,
@@ -73,7 +72,6 @@
         "npcId": "renn_quickfingers",
         "dialogueId": "renn_base"
       },
-
       {
         "id": "rustmarketSewersPOI",
         "name": "Rustmarket Sewers",
@@ -90,18 +88,55 @@
     "background": "Media/map/hollowreach_sewers.png",
     "pois": [
       {
-        "id": "rustmarketSewersPOI",
-        "name": "First corridor",
+        "id": "sewer_fogscarApproach_POI",
+        "name": "First Corridor",
+        "areaId": "Firstcorridor",
         "x": 90.00,
         "y": 70.00,
         "icon": "Media/map/hollowreach_sewers.png",
         "type": "combat",
+        "isStartingLocation": true,
         "dialogueNpcId": "renn_quickfingers",
-        "combatStartDialogueId": "renn_sewer_enter",
-        "combatEndWinDialogueId": "renn_sewer_complete"
+        "combatStartDialogueId": "renn_firstcorridor_pre_battle",
+        "combatEndWinDialogueId": "renn_firstcorridor_post_battle"
+      },
+      {
+        "id": "sewer_scavengerRedoubt_POI",
+        "name": "Scavenger Redoubt",
+        "areaId": "fogscarVault_ScavengerRedoubt",
+        "x": 65.00,
+        "y": 55.00,
+        "icon": "Media/map/poi-combat.png",
+        "type": "combat",
+        "initiallyLocked": true,
+        "dialogueNpcId": "renn_quickfingers",
+        "combatStartDialogueId": "renn_secondcorridor_pre_battle",
+        "combatEndWinDialogueId": "renn_at_sewerdoor_relief"
+      },
+      {
+        "id": "sewer_vaultAntechamber_POI",
+        "name": "Vault Antechamber",
+        "areaId": "fogscarVault_Antechamber",
+        "x": 45.00,
+        "y": 35.00,
+        "icon": "Media/map/poi-combat.png",
+        "type": "combat",
+        "initiallyLocked": true,
+        "dialogueNpcId": "renn_quickfingers",
+        "combatStartDialogueId": "renn_golem_panic",
+        "combatEndWinDialogueId": "renn_vault_fled"
+      },
+      {
+        "id": "exit_sewers_to_hollowreach_POI",
+        "name": "Exit to Rustmarket",
+        "x": 10.00,
+        "y": 80.00,
+        "icon": "Media/map/poi-exit.jpg",
+        "type": "travel",
+        "mapId": "hollowreach"
       }
     ]
-},
+  },
   "threadhall": {
     "background": "Media/map/threadhall_interior.jpg",
     "pois": [
@@ -205,7 +240,8 @@
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
-      },{
+      },
+      {
         "name": "Renn the Scribe",
         "x": 65.67,
         "y": 65.00,
@@ -213,7 +249,8 @@
         "type": "dialogue",
         "npcId": "scribe_base",
         "dialogueId": "base"
-      },{
+      },
+      {
         "name": "Talia Emberhearth",
         "x": 87.67,
         "y": 62.00,
@@ -221,7 +258,8 @@
         "type": "dialogue",
         "npcId": "talia_emberhearth",
         "dialogueId": "base"
-      },{
+      },
+      {
         "name": "Varkis Ironblade",
         "x": 43.67,
         "y": 61.00,
