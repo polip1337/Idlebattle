@@ -1,7 +1,8 @@
 // tradeModal.js
-import { hero, allItemsCache, allCompanionsData } from './initialize.js'; // Assuming NPC data might come via allCompanionsData or a similar structure
+import { hero, allItemsCache, allCompanionsData } from './initialize.js';
 import { createItemTooltipElement, showGeneralTooltip, hideGeneralTooltip } from './Render.js';
 import Item from './item.js';
+// import { closeDialogue } from './dialogue.js'; // Uncomment if you have this
 
 const tradeModal = document.getElementById('trade-modal');
 const tradeModalNpcName = document.getElementById('trade-modal-npc-name');
@@ -26,15 +27,14 @@ const acceptButton = document.getElementById('trade-accept-button');
 let currentNpc = null;
 let playerInventory = []; // Array of { item: Item, uniqueId: string }
 let npcInventory = [];    // Array of { item: Item, uniqueId: string }
-let playerOffer = [];     // Array of { item: Item, uniqueId: string }
-let npcOffer = [];        // Array of { item: Item, uniqueId: string }
+let playerOffer = [];     // Array of { item: Item, uniqueId: string } - Holds individual item instances
+let npcOffer = [];        // Array of { item: Item, uniqueId: string } - Holds individual item instances
 let playerGoldOffered = 0;
 let npcGoldOffered = 0;
 
-// To make items distinct even if they have same item.id
 let itemInstanceCounter = 0;
 function generateUniqueId(item) {
-    return `${item.id}_${itemInstanceCounter++}`;
+    return `${item.id}_${itemInstanceCounter++}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
 }
 
 export function openTradeModal(npcData) {
@@ -42,30 +42,21 @@ export function openTradeModal(npcData) {
         console.error("Cannot open trade modal: hero or NPC data missing.");
         return;
     }
-    currentNpc = npcData; // This is the raw NPC data object from npcs.json
-    itemInstanceCounter = 0; // Reset for new trade session
+
+    const dialogueModalElement = document.getElementById('dialogue-modal');
+    if (dialogueModalElement) {
+            dialogueModalElement.classList.add('hidden');
+        }
+
+
+    currentNpc = npcData;
+    itemInstanceCounter = 0;
 
     tradeModalNpcName.textContent = `Trade with ${currentNpc.name}`;
     npcInventoryTitle.textContent = `${currentNpc.name}'s Inventory`;
 
-    // Deep copy inventories and assign unique IDs
-    playerInventory = hero.inventory.map(item => ({ item: new Item(item), uniqueId: generateUniqueId(item) })); // Create new Item instances for trade
-    
-    npcInventory = [];
-    if (currentNpc.tradeInventory) {
-        currentNpc.tradeInventory.forEach(entry => {
-            const itemData = allItemsCache[entry.id];
-            if (itemData) {
-                for (let i = 0; i < (entry.quantity || 1); i++) {
-                    const newItemInstance = new Item(itemData); // Create new Item instance
-                    npcInventory.push({ item: newItemInstance, uniqueId: generateUniqueId(newItemInstance) });
-                }
-            } else {
-                console.warn(`Item ID ${entry.id} not found in allItemsCache for NPC ${currentNpc.name}`);
-            }
-        });
-    }
-    
+    populateModalInventoriesFromSource();
+
     playerOffer = [];
     npcOffer = [];
     playerGoldOffered = 0;
@@ -78,54 +69,76 @@ export function openTradeModal(npcData) {
     tradeModal.classList.add('active');
 }
 
+function populateModalInventoriesFromSource() {
+    playerInventory = hero.inventory.map(item => ({ item: new Item(item), uniqueId: generateUniqueId(item) }));
+
+    npcInventory = [];
+    if (currentNpc.tradeInventory) {
+        currentNpc.tradeInventory.forEach(entry => {
+            const itemData = allItemsCache[entry.id];
+            if (itemData) {
+                for (let i = 0; i < (entry.quantity || 1); i++) {
+                    const newItemInstance = new Item(itemData);
+                    npcInventory.push({ item: newItemInstance, uniqueId: generateUniqueId(newItemInstance) });
+                }
+            } else {
+                console.warn(`Item ID ${entry.id} not found in allItemsCache for NPC ${currentNpc.name}`);
+            }
+        });
+    }
+    playerInventory.sort((a,b) => a.item.name.localeCompare(b.item.name));
+    npcInventory.sort((a,b) => a.item.name.localeCompare(b.item.name));
+}
+
+
 function closeTradeModal() {
     tradeModal.classList.add('hidden');
     tradeModal.classList.remove('active');
+    const dialogueModalElement = document.getElementById('dialogue-modal').classList.remove('hidden');
     currentNpc = null;
+    playerInventory = [];
+    npcInventory = [];
+    playerOffer = [];
+    npcOffer = [];
 }
 
 function renderAll() {
     renderInventory(playerItemsGrid, playerInventory, true);
     renderInventory(npcItemsGrid, npcInventory, false);
-    renderOffer(playerOfferItemsGrid, playerOffer, true);
-    renderOffer(npcOfferItemsGrid, npcOffer, false);
+    renderOffer(playerOfferItemsGrid, playerOffer, true); // playerOffer still holds individual unique items
+    renderOffer(npcOfferItemsGrid, npcOffer, false);   // npcOffer still holds individual unique items
     updateGoldDisplays();
     calculateBalance();
 }
 
-function renderInventory(gridElement, items, isPlayerSide) {
+function renderInventory(gridElement, sourceInventory, isPlayerSide) {
     gridElement.innerHTML = '';
-    items.forEach(inventoryEntry => {
-        const item = inventoryEntry.item;
+    const itemStacks = new Map();
+    sourceInventory.forEach(inventoryEntry => {
+        const itemId = inventoryEntry.item.id;
+        if (!itemStacks.has(itemId)) {
+            itemStacks.set(itemId, {
+                item: inventoryEntry.item,
+                quantity: 0,
+                uniqueIds: []
+            });
+        }
+        const stack = itemStacks.get(itemId);
+        stack.quantity++;
+        stack.uniqueIds.push(inventoryEntry.uniqueId);
+    });
+
+    const sortedStacks = Array.from(itemStacks.values()).sort((a,b) => a.item.name.localeCompare(b.item.name));
+
+    sortedStacks.forEach(stack => {
+        const item = stack.item;
         const itemDiv = document.createElement('div');
         itemDiv.className = 'trade-item';
         itemDiv.innerHTML = `
             <img src="${item.icon}" alt="${item.name}">
             <span class="trade-item-name">${item.name}</span>
             <span class="trade-item-value">${item.value}g</span>
-        `;
-        const tooltip = createItemTooltipElement(item);
-        tooltip.style.visibility = 'hidden'; // Ensure initially hidden by JS
-        itemDiv.appendChild(tooltip);
-
-        itemDiv.addEventListener('mouseenter', (e) => showGeneralTooltip(e, tooltip));
-        itemDiv.addEventListener('mouseleave', () => hideGeneralTooltip(tooltip));
-        
-        itemDiv.addEventListener('click', () => moveItem(inventoryEntry, isPlayerSide ? 'playerInventoryToOffer' : 'npcInventoryToOffer'));
-        gridElement.appendChild(itemDiv);
-    });
-}
-
-function renderOffer(gridElement, items, isPlayerSide) {
-    gridElement.innerHTML = '';
-     items.forEach(inventoryEntry => {
-        const item = inventoryEntry.item;
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'trade-item'; // Can reuse style
-        itemDiv.style.fontSize = '0.9em'; // Slightly smaller in offer
-        itemDiv.innerHTML = `
-            <img src="${item.icon}" alt="${item.name}" style="width:30px; height:30px;">
-            <span class="trade-item-name">${item.name} (${item.value}g)</span>
+            ${stack.quantity > 1 ? `<span class="trade-item-quantity">x${stack.quantity}</span>` : ''}
         `;
         const tooltip = createItemTooltipElement(item);
         tooltip.style.visibility = 'hidden';
@@ -134,32 +147,107 @@ function renderOffer(gridElement, items, isPlayerSide) {
         itemDiv.addEventListener('mouseenter', (e) => showGeneralTooltip(e, tooltip));
         itemDiv.addEventListener('mouseleave', () => hideGeneralTooltip(tooltip));
 
-        itemDiv.addEventListener('click', () => moveItem(inventoryEntry, isPlayerSide ? 'playerOfferToInventory' : 'npcOfferToInventory'));
+        itemDiv.addEventListener('click', (event) => {
+            const quantityToMove = event.shiftKey ? stack.quantity : 1;
+            moveItemsFromInventoryToOffer(item.id, quantityToMove, isPlayerSide);
+        });
         gridElement.appendChild(itemDiv);
     });
 }
 
-function moveItem(inventoryEntry, direction) {
-    switch (direction) {
-        case 'playerInventoryToOffer':
-            playerInventory = playerInventory.filter(e => e.uniqueId !== inventoryEntry.uniqueId);
-            playerOffer.push(inventoryEntry);
+function moveItemsFromInventoryToOffer(itemId, quantity, isPlayerSource) {
+    const sourceInv = isPlayerSource ? playerInventory : npcInventory;
+    const targetOffer = isPlayerSource ? playerOffer : npcOffer;
+
+    const itemsMoved = [];
+    for (let i = 0; i < quantity; i++) {
+        const itemIndex = sourceInv.findIndex(entry => entry.item.id === itemId);
+        if (itemIndex > -1) {
+            const [itemEntry] = sourceInv.splice(itemIndex, 1);
+            itemsMoved.push(itemEntry);
+        } else {
             break;
-        case 'npcInventoryToOffer':
-            npcInventory = npcInventory.filter(e => e.uniqueId !== inventoryEntry.uniqueId);
-            npcOffer.push(inventoryEntry);
-            break;
-        case 'playerOfferToInventory':
-            playerOffer = playerOffer.filter(e => e.uniqueId !== inventoryEntry.uniqueId);
-            playerInventory.push(inventoryEntry);
-            break;
-        case 'npcOfferToInventory':
-            npcOffer = npcOffer.filter(e => e.uniqueId !== inventoryEntry.uniqueId);
-            npcInventory.push(inventoryEntry);
-            break;
+        }
     }
-    renderAll();
+
+    if (itemsMoved.length > 0) {
+        targetOffer.push(...itemsMoved);
+        // targetOffer is an array of individual items, no need to sort by name here as renderOffer will stack
+        renderAll();
+    }
 }
+
+function renderOffer(gridElement, offeredItemsList, isPlayerOfferSide) {
+    gridElement.innerHTML = '';
+
+    // Group items in the offer list for stacking display
+    const itemStacks = new Map();
+    offeredItemsList.forEach(inventoryEntry => { // inventoryEntry is {item, uniqueId}
+        const itemId = inventoryEntry.item.id;
+        if (!itemStacks.has(itemId)) {
+            itemStacks.set(itemId, {
+                item: inventoryEntry.item, // Representative item for the stack
+                quantity: 0,
+                // We don't need to store all uniqueIds here for display purposes,
+                // but the original offeredItemsList still holds them.
+            });
+        }
+        const stack = itemStacks.get(itemId);
+        stack.quantity++;
+    });
+
+    // Sort stacks by item name for consistent display in offer area
+    const sortedStacks = Array.from(itemStacks.values()).sort((a,b) => a.item.name.localeCompare(b.item.name));
+
+    sortedStacks.forEach(stack => {
+        const item = stack.item; // This is the representative item (e.g., first one encountered)
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'trade-item'; // Can reuse style
+        itemDiv.style.fontSize = '0.9em'; // Slightly smaller in offer
+        itemDiv.innerHTML = `
+            <img src="${item.icon}" alt="${item.name}" style="width:30px; height:30px;">
+            <span class="trade-item-name">${item.name} (${item.value}g)</span>
+            ${stack.quantity > 1 ? `<span class="trade-item-quantity" style="font-size:0.9em;">x${stack.quantity}</span>` : ''}
+        `; // Added quantity display for offer items
+        const tooltip = createItemTooltipElement(item); // Tooltip for the representative item
+        tooltip.style.visibility = 'hidden';
+        itemDiv.appendChild(tooltip);
+
+        itemDiv.addEventListener('mouseenter', (e) => showGeneralTooltip(e, tooltip));
+        itemDiv.addEventListener('mouseleave', () => hideGeneralTooltip(tooltip));
+
+        // Clicking an offered item stack moves ONE item back. Shift+click moves ALL of that type.
+        itemDiv.addEventListener('click', (event) => {
+            const quantityToMove = event.shiftKey ? stack.quantity : 1;
+            moveItemsFromOfferToInventory(item.id, quantityToMove, isPlayerOfferSide);
+        });
+        gridElement.appendChild(itemDiv);
+    });
+}
+
+function moveItemsFromOfferToInventory(itemId, quantity, isPlayerOfferSource) {
+    const sourceOffer = isPlayerOfferSource ? playerOffer : npcOffer;
+    const targetInventory = isPlayerOfferSource ? playerInventory : npcInventory;
+
+    const itemsMovedBack = [];
+    for (let i = 0; i < quantity; i++) {
+        // Find the first item in the offer list that matches the itemId
+        const itemIndexInOffer = sourceOffer.findIndex(entry => entry.item.id === itemId);
+        if (itemIndexInOffer > -1) {
+            const [itemEntry] = sourceOffer.splice(itemIndexInOffer, 1); // Remove it from offer
+            itemsMovedBack.push(itemEntry);
+        } else {
+            break; // No more items of this type in the offer
+        }
+    }
+
+    if (itemsMovedBack.length > 0) {
+        targetInventory.push(...itemsMovedBack); // Add them back to the respective inventory
+        targetInventory.sort((a,b) => a.item.name.localeCompare(b.item.name)); // Re-sort inventory
+        renderAll();
+    }
+}
+
 
 function updateGoldDisplays() {
     playerGoldDisplay.textContent = `Gold: ${hero.gold}`;
@@ -170,7 +258,7 @@ playerGoldOfferInput.addEventListener('input', (e) => {
     let val = parseInt(e.target.value) || 0;
     if (val < 0) val = 0;
     if (val > hero.gold) val = hero.gold;
-    e.target.value = val; // Correct input if invalid
+    e.target.value = val;
     playerGoldOffered = val;
     calculateBalance();
 });
@@ -179,60 +267,59 @@ npcGoldOfferInput.addEventListener('input', (e) => {
     let val = parseInt(e.target.value) || 0;
     if (val < 0) val = 0;
     if (val > (currentNpc.gold || 0)) val = (currentNpc.gold || 0);
-    e.target.value = val; // Correct input if invalid
+    e.target.value = val;
     npcGoldOffered = val;
     calculateBalance();
 });
 
 
 function calculateBalance() {
+    if (!currentNpc) return;
+
     const playerOfferValue = playerOffer.reduce((sum, entry) => sum + entry.item.value, 0) + playerGoldOffered;
     const npcOfferValue = npcOffer.reduce((sum, entry) => sum + entry.item.value, 0) + npcGoldOffered;
 
-    const diff = npcOfferValue - playerOfferValue; // Positive if NPC offers more value, negative if player offers more
+    const diff = npcOfferValue - playerOfferValue;
 
     balanceIndicator.classList.remove('player-favored', 'npc-favored');
     let balanceText = "Balanced";
 
-    if (diff > 0) { // NPC is "paying more" or player gets more value
+    if (diff > 0) {
         balanceIndicator.classList.add('player-favored');
-        const percentage = Math.min(100, (diff / (playerOfferValue || 1)) * 50); // Cap at 50% shift towards player
+        const baseValueForPercentage = playerOfferValue > 0 ? playerOfferValue : (npcOfferValue / 2 || 1);
+        const percentage = Math.min(50, (diff / baseValueForPercentage) * 50);
         balanceIndicator.style.width = `${50 + percentage}%`;
         balanceText = `NPC offers ${diff}g more`;
-    } else if (diff < 0) { // Player is "paying more" or NPC gets more value
+    } else if (diff < 0) {
         balanceIndicator.classList.add('npc-favored');
-        const percentage = Math.min(100, (Math.abs(diff) / (npcOfferValue || 1)) * 50); // Cap at 50% shift towards NPC
+        const baseValueForPercentage = npcOfferValue > 0 ? npcOfferValue : (playerOfferValue / 2 || 1);
+        const percentage = Math.min(50, (Math.abs(diff) / baseValueForPercentage) * 50);
         balanceIndicator.style.width = `${50 + percentage}%`;
         balanceText = `You offer ${Math.abs(diff)}g more`;
     } else {
-        balanceIndicator.style.width = '100%'; // Full bar for balanced
-        balanceIndicator.style.backgroundColor = '#c89b3c'; // Neutral gold
+        balanceIndicator.style.width = '100%';
+        balanceIndicator.style.backgroundColor = '#c89b3c';
     }
     balanceValueText.textContent = balanceText;
 
-    // NPC AI: Might only accept if diff <= 0 (trade favors them or is balanced)
-    // Or within a certain threshold. For now, let's say NPC accepts if diff <= 0 (or slightly positive for them)
-    const npcAcceptsTrade = diff <= (currentNpc.barterThreshold || 5); // Example: NPC accepts if they gain up to 5g value or more.
-    
+    const npcAcceptsTrade = diff <= (currentNpc.barterThreshold || 5);
+
     if (playerGoldOffered > hero.gold || npcGoldOffered > (currentNpc.gold || 0)) {
         acceptButton.classList.add('disabled');
         acceptButton.disabled = true;
         balanceValueText.textContent = "Not enough gold!";
-    } else if (!npcAcceptsTrade && !(playerOfferValue === 0 && npcOfferValue === 0)) { // Don't disable if nothing is offered (e.g. just browsing)
+    } else if (!npcAcceptsTrade && !(playerOfferValue === 0 && npcOfferValue === 0)) {
         acceptButton.classList.add('disabled');
         acceptButton.disabled = true;
-        // balanceValueText.textContent += " (NPC unhappy)";
-    }
-     else {
+    } else {
         acceptButton.classList.remove('disabled');
         acceptButton.disabled = false;
     }
 }
 
 function finalizeTrade() {
-    // Double check conditions before finalizing
     if (playerGoldOffered > hero.gold || npcGoldOffered > (currentNpc.gold || 0)) {
-        alert("Not enough gold for the offer.");
+        showCustomDialog("Trade Error", "Not enough gold for the offer.", () => {});
         return;
     }
 
@@ -242,55 +329,81 @@ function finalizeTrade() {
     const npcAcceptsTrade = diff <= (currentNpc.barterThreshold || 5);
 
     if (!npcAcceptsTrade && !(playerOfferValue === 0 && npcOfferValue === 0)) {
-        alert(`${currentNpc.name} is not happy with this trade.`);
+        showCustomDialog("Trade Unacceptable", `${currentNpc.name} is not happy with this trade.`, () => {});
         return;
     }
 
-    // Update hero's gold and inventory
     hero.spendGold(playerGoldOffered);
     hero.addGold(npcGoldOffered);
-    playerOffer.forEach(entry => hero.removeItemFromInventory(hero.inventory.find(i => i.id === entry.item.id))); // Remove by original ID, assumes 1:1
-    npcOffer.forEach(entry => hero.addItemToInventory(entry.item)); // Add the new Item instance
 
-    // Update NPC's gold and inventory (currentNpc is the data object, not a class instance)
-    currentNpc.gold = (currentNpc.gold || 0) - npcGoldOffered + playerGoldOffered;
-    
-    // For NPC inventory, we need to update the source `currentNpc.tradeInventory`
-    // This is tricky if tradeInventory is just IDs.
-    // For now, let's assume changes to NPC inventory are NOT persistent beyond this trade screen
-    // or would be handled by a more complex NPC inventory management system.
-    // A simple update for the current session:
-    const npcOriginalTradeInventoryIds = (currentNpc.tradeInventory || []).map(e => e.id);
-    
-    // Remove items NPC offered
-    npcOffer.forEach(offeredEntry => {
-        const indexInOriginal = npcOriginalTradeInventoryIds.indexOf(offeredEntry.item.id);
-        if (indexInOriginal > -1) {
-           const originalEntry = currentNpc.tradeInventory.find(invEntry => invEntry.id === offeredEntry.item.id);
-           if (originalEntry) {
-               if (originalEntry.quantity > 1) originalEntry.quantity--;
-               else currentNpc.tradeInventory = currentNpc.tradeInventory.filter(invEntry => invEntry.id !== offeredEntry.item.id || originalEntry.quantity > 0);
-           }
-        }
-    });
-    // Add items Player offered
-    playerOffer.forEach(receivedEntry => {
-        const existingNpcEntry = (currentNpc.tradeInventory || []).find(e => e.id === receivedEntry.item.id);
-        if (existingNpcEntry) {
-            existingNpcEntry.quantity = (existingNpcEntry.quantity || 1) + 1;
+    // The playerOffer and npcOffer arrays contain the actual unique item instances being traded.
+    // So, when removing from hero's inventory, we need to ensure we're conceptually removing these.
+    // The current hero.removeItemFromInventory might just find by item.id.
+    // If hero.inventory stores unique instances, we'd need to match unique IDs.
+    // For now, assuming `hero.removeItemFromInventory(item)` works by ID for one instance.
+    playerOffer.forEach(entry => {
+        const itemDefinitionId = entry.item.id;
+        // This simplified removal assumes hero.removeItemFromInventory finds and removes *one* item matching the definition ID.
+        // A more robust system would involve hero's inventory having unique instance IDs for each item,
+        // and `entry.originalInstanceId` (if we tracked it from playerInventory) would be used for removal.
+        const itemInHeroInventory = hero.inventory.find(i => i.id === itemDefinitionId);
+        if (itemInHeroInventory) {
+             // If your Item class has a unique instance ID, use that:
+             // hero.removeItemInstanceFromInventory(entry.item.instanceId);
+             // Otherwise, by definition ID:
+            hero.removeItemFromInventory(entry.item); // Pass the actual item object, or one that matches by ID
         } else {
-            if(!currentNpc.tradeInventory) currentNpc.tradeInventory = [];
-            currentNpc.tradeInventory.push({ id: receivedEntry.item.id, quantity: 1 });
+            console.warn(`Could not find item ${itemDefinitionId} (unique trade ID: ${entry.uniqueId}) in hero inventory to remove.`);
         }
     });
 
+    npcOffer.forEach(entry => {
+        hero.addItemToInventory(new Item(entry.item)); // Add new instances to hero
+    });
 
-    // Refresh hero's inventory display on main hero sheet if open
+    currentNpc.gold = (currentNpc.gold || 0) - npcGoldOffered + playerGoldOffered;
+
+    if (!currentNpc.tradeInventory) currentNpc.tradeInventory = [];
+
+    npcOffer.forEach(offeredEntry => {
+        const itemDefId = offeredEntry.item.id;
+        const npcInvEntry = currentNpc.tradeInventory.find(e => e.id === itemDefId);
+        if (npcInvEntry) {
+            npcInvEntry.quantity = (npcInvEntry.quantity || 1) - 1;
+            if (npcInvEntry.quantity <= 0) {
+                currentNpc.tradeInventory = currentNpc.tradeInventory.filter(e => e.id !== itemDefId);
+            }
+        } else {
+             console.warn(`NPC offered item ${itemDefId} (unique: ${offeredEntry.uniqueId}) not found in their source tradeInventory.`);
+        }
+    });
+
+    playerOffer.forEach(receivedEntry => {
+        const itemDefId = receivedEntry.item.id;
+        const existingNpcEntry = currentNpc.tradeInventory.find(e => e.id === itemDefId);
+        if (existingNpcEntry) {
+            existingNpcEntry.quantity = (existingNpcEntry.quantity || 0) + 1;
+        } else {
+            currentNpc.tradeInventory.push({ id: itemDefId, quantity: 1 });
+        }
+    });
+
+    itemInstanceCounter = 0;
+    populateModalInventoriesFromSource();
+
+    playerOffer = [];
+    npcOffer = [];
+    playerGoldOffered = 0;
+    npcGoldOffered = 0;
+    playerGoldOfferInput.value = 0;
+    npcGoldOfferInput.value = 0;
+
+    renderAll();
+
     if (typeof window.renderHeroInventory === "function") window.renderHeroInventory(hero);
-    if (typeof window.updateStatsDisplay === "function") window.updateStatsDisplay(hero); // For gold
+    if (typeof window.updateStatsDisplay === "function") window.updateStatsDisplay(hero);
 
-    console.log("Trade successful!");
-    closeTradeModal();
+    console.log("Trade successful! Modal remains open.");
 }
 
 
@@ -301,13 +414,13 @@ acceptButton.addEventListener('click', () => {
     }
 });
 
-// Close modal if backdrop is clicked
 tradeModal.addEventListener('click', (event) => {
     if (event.target === tradeModal) {
         closeTradeModal();
     }
 });
 
-// Export openTradeModal so it can be called from dialogue.js
-// window.openTradeModal = openTradeModal; // If not using modules for dialogue.js
-// Since dialogue.js is a module, it can import it.
+function showCustomDialog(title, message, callback) {
+    alert(`${title}\n\n${message}`);
+    if(callback) callback();
+}

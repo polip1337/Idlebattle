@@ -21,7 +21,7 @@
     width: 90%;
     max-width: 1200px;
     height: 80%;
-    max-height: 700px;
+    max-height: 700px; /* Adjusted max-height for better fit on some screens */
     display: flex;
     flex-direction: column;
     box-shadow: 0 0 20px rgba(0,0,0,0.7);
@@ -51,6 +51,7 @@
     border: 1px solid #3a2c1b;
     border-radius: 5px;
     padding: 10px;
+    min-width: 0; /* Fix for flex item overflow issue in some browsers */
 }
 
 .trade-inventory-header {
@@ -75,9 +76,11 @@
     flex-grow: 1;
     overflow-y: auto;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); /* Adjusted minmax for item name + quantity */
     gap: 8px;
     padding: 5px; /* Padding for scrollbar */
+    min-height: 100px; /* Ensure area is visible */
+    align-content: flex-start; /* Aligns items to the start if grid is not full */
 }
 
 .trade-item {
@@ -87,12 +90,14 @@
     padding: 5px;
     text-align: center;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    position: relative; /* For tooltip positioning */
+    justify-content: space-between; /* Better distributes space if item content is small */
+    position: relative; /* For tooltip and quantity positioning */
+    min-height: 70px; /* Ensure a consistent minimum height for items */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .trade-item:hover {
@@ -113,11 +118,29 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
+    line-height: 1.2; /* Added for better readability if name wraps slightly (though overflow prevents it) */
 }
 .trade-item-value {
     font-size: 0.7em;
     color: #aaa;
+    margin-top: auto; /* Pushes value to the bottom if item is taller */
 }
+
+.trade-item .trade-item-quantity {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    font-size: 0.65em; /* Smaller for less obtrusion */
+    padding: 1px 3px;
+    border-radius: 3px;
+    line-height: 1;
+    font-weight: bold;
+    z-index: 1; /* Above image if overlapping */
+    pointer-events: none; /* So it doesn't interfere with clicks */
+}
+
 
 .trade-offer-area {
     flex: 0 0 250px; /* Fixed width for the middle offer area */
@@ -132,25 +155,57 @@
 
 .trade-offer-list {
     width: 100%;
-    height: 40%; /* Adjust as needed */
+    flex-grow: 1; /* Allows this to take up available space */
+    min-height: 100px; /* Minimum height before growing */
+    max-height: calc(50% - 50px); /* Dynamic max height based on parent, adjust 50px for gold inputs/headers */
     overflow-y: auto;
     margin-bottom: 10px;
     padding: 5px;
     border: 1px solid #2a211c;
+    display: grid; /* Can also use grid for offered items for consistency */
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); /* Smaller items in offer list */
+    gap: 5px;
+    align-content: flex-start;
 }
-.trade-offer-list h4 {
+.trade-offer-list h4 { /* This seems like a title for the section, not for the list itself */
     text-align: center;
     margin-top: 0;
     margin-bottom: 5px;
     font-size: 0.9em;
     color: #c89b3c;
+    width: 100%; /* Ensure it spans the width if it's a header for the list */
 }
+
+/* Styling for items within the offer list, to override generic .trade-item if needed */
+.trade-offer-list .trade-item {
+    font-size: 0.9em; /* Base font size for offered items */
+    padding: 3px;
+    min-height: 50px; /* Smaller min-height for offer items */
+}
+.trade-offer-list .trade-item img {
+    width: 30px;
+    height: 30px;
+}
+.trade-offer-list .trade-item .trade-item-name {
+    font-size: 0.8em; /* Relative to .trade-offer-list .trade-item's font-size */
+    white-space: normal; /* Allow wrapping for longer names in smaller boxes */
+    overflow: hidden; /* Still hide overflow if too long after wrapping */
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+}
+.trade-offer-list .trade-item .trade-item-value {
+    display: none; /* Value is often shown in name for offered items, or can be enabled if desired */
+}
+
 
 .trade-gold-offer {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
     width: 100%;
+    justify-content: center; /* Center gold offer elements */
 }
 .trade-gold-offer label {
     font-size: 0.8em;
@@ -189,19 +244,65 @@
 
 .trade-balance-indicator {
     height: 100%;
-    background-color: #c89b3c; /* Gold color */
+    background-color: #c89b3c; /* Gold color for balanced or default */
     position: absolute;
-    left: 50%; /* Start at middle for neutral */
-    transform: translateX(-50%); /* Center the bar itself initially */
-    transition: width 0.3s ease, background-color 0.3s ease;
+    /* Default to centered - JS will adjust width and potentially background */
+    left: 0; /* Will be manipulated by JS to show favor */
+    width: 50%; /* Start from left if player favored, right if NPC favored. Or 100% and transform for center. */
+    transition: width 0.3s ease, background-color 0.3s ease, left 0.3s ease;
+    /* The JS logic was setting width based on a 50% center point.
+       Alternative:
+       left: 50%;
+       transform: translateX(-50%);
+       width: 100%; (for balanced, then JS adjusts width to one side or other)
+    */
 }
+
+/* JS applies these classes and sets width.
+   Example: if player favored, width might be 75% and background green.
+   The JS calculates width like: balanceIndicator.style.width = `${50 + percentage}%`;
+   This means the indicator "grows" from the center.
+   To make it visually shift from center, more complex CSS or JS for 'left' is needed.
+   Let's stick to the JS's current approach of width change around a centered point.
+   If 'player-favored', it expands right. If 'npc-favored', it expands left.
+   The previous JS:
+    balanceIndicator.style.width = `${50 + percentage}%`; for player-favored (expands "right" from center)
+    balanceIndicator.style.width = `${50 + percentage}%`; for npc-favored (expands "left" from center) - this needs fix
+    The JS logic:
+    if diff > 0 (player-favored): balanceIndicator.style.width = `${50 + percentage}%`; (This effectively makes the bar start at 0 and extend to 50+p)
+    if diff < 0 (npc-favored): balanceIndicator.style.width = `${50 + percentage}%`; (This effectively makes the bar start at 0 and extend to 50+p)
+    This implies the balance bar always fills from the left. The player/npc favored class only changes color.
+
+    Let's refine the CSS for the balance indicator to work with the JS provided:
+    The JS sets width like `50 + percentage%`.
+    If balanced (diff == 0), width is 100%, color gold.
+    If player-favored (diff > 0), width is 50 + percentage_player_favor, color green.
+    If npc-favored (diff < 0), width is 50 + percentage_npc_favor, color red.
+
+    This means the indicator will always start from the left.
+    A true "center-out" bar needs two elements or careful `transform-origin` and `transform`.
+    Given the JS, this is simpler:
+*/
 
 .trade-balance-indicator.player-favored {
     background-color: #4CAF50; /* Green */
+    /* Assuming width is set by JS to expand from left towards right */
 }
 .trade-balance-indicator.npc-favored {
     background-color: #F44336; /* Red */
+    /* Assuming width is set by JS to expand from left towards right,
+       but text indicates "You offer more". This still shows the bar filling left-to-right.
+       To make it appear to favor NPC from right side, JS would need to adjust `left` and `width`.
+       e.g. left: `${50 - percentage}%`, width: `${percentage}%` and align right.
+       For now, sticking to the JS's simpler width manipulation.
+    */
 }
+/* The JS sets style.width = '100%' and neutral color for balanced.
+   When favored, it sets width = 50 + percentage.
+   The visual effect of this is a bar that's always full for balanced (gold),
+   or grows from the left for favored states (green/red). This is fine.
+*/
+
 
 .trade-modal-footer {
     display: flex;
@@ -232,22 +333,45 @@
 }
 
 /* Tooltip (can reuse from Render.js or define specific if needed) */
-.trade-item .tooltip {
-    display: none;
+.trade-item .tooltip { /* Ensure specificity for tooltips within trade items */
+    display: none; /* Controlled by JS */
     position: absolute;
-    background-color: #000;
-    color: #fff;
-    border: 1px solid #ccc;
+    background-color: #0d0a07; /* Darker, more fitting background */
+    color: #e0dacd;
+    border: 1px solid #4a3c2b; /* Themed border */
     padding: 10px;
-    z-index: 10010; /* Above trade modal */
+    z-index: 10010; /* Above trade modal elements */
     border-radius: 4px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0,0,0,0.6); /* Softer shadow */
     font-size: 0.85em;
     min-width: 180px;
     text-align: left;
     pointer-events: none; /* Important for mouse events to pass through */
+    visibility: hidden; /* Controlled by JS */
 }
 
-.trade-item:hover .tooltip {
-    /* display: block; -- Handled by JS for positioning */
+/* Add themed scrollbar styles if not globally defined */
+/* This is a common pattern; adjust colors as needed for your theme */
+.themed-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
+.themed-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+.themed-scrollbar::-webkit-scrollbar-thumb {
+    background: #5a4a3a;
+    border-radius: 4px;
+}
+.themed-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #7a6a5a;
+}
+/* For Firefox */
+.themed-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #5a4a3a rgba(0,0,0,0.2);
+}
+
+/* Ensure scrollbar styling is applied to the correct elements in HTML */
+/* e.g., <div class="trade-items-grid themed-scrollbar"> */
