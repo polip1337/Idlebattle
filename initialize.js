@@ -308,7 +308,7 @@ function initiateBattleLog() {
     const toggleLogButton = document.getElementById('toggle-log');
     if (toggleLogButton) {
         let logVisible = true;
-        logContainer.style.display = 'flex'; // Ensure it's visible by default if button exists
+        logContainer.style.display = 'block'; // Ensure it's visible by default if button exists
         toggleLogButton.addEventListener('click', () => {
             logVisible = !logVisible;
             logContainer.style.display = logVisible ? 'flex' : 'none';

@@ -3,7 +3,7 @@ class BattleLog {
         this.logContainer = logContainer;
     }
 
-    log(message, type) {
+    log(message, type = "info") {
         const logEntry = document.createElement('div');
         logEntry.textContent = message;
         logEntry.classList.add(type);

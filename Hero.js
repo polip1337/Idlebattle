@@ -707,6 +707,7 @@ class Hero extends Member {
             const activeSelectedSkills = this.selectedSkills.filter(skill => skill && skill.type === "active");
 
             activeSelectedSkills.forEach(skill => {
+                skill.finishCooldown(this);
                 if (skill.repeat && !skill.onCooldown) {
                     if (skill.manaCost <= this.currentMana && skill.staminaCost <= this.currentStamina) {
                         skill.useSkill(this);
