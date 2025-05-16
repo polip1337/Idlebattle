@@ -73,21 +73,35 @@
         "npcId": "renn_quickfingers",
         "dialogueId": "renn_base"
       },
+
       {
         "id": "rustmarketSewersPOI",
         "name": "Rustmarket Sewers",
         "x": 50.00,
         "y": 70.00,
         "icon": "Media/map/poi-hollowreach_sewers.jpg",
+        "type": "travel",
+        "mapId": "rustmarketSewers",
+        "initiallyLocked": true
+      }
+    ]
+  },
+  "rustmarketSewers": {
+    "background": "Media/map/hollowreach_sewers.png",
+    "pois": [
+      {
+        "id": "rustmarketSewersPOI",
+        "name": "First corridor",
+        "x": 90.00,
+        "y": 70.00,
+        "icon": "Media/map/hollowreach_sewers.png",
         "type": "combat",
-        "combatId": "rustmarketSewers",
-        "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_sewer_enter",
         "combatEndWinDialogueId": "renn_sewer_complete"
       }
     ]
-  },
+},
   "threadhall": {
     "background": "Media/map/threadhall_interior.jpg",
     "pois": [
