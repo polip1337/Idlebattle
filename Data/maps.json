@@ -91,7 +91,7 @@
         "id": "sewer_fogscarApproach_POI",
         "name": "First Corridor",
         "areaId": "Firstcorridor",
-        "x": 90.00,
+        "x": 80.00,
         "y": 70.00,
         "icon": "Media/map/hollowreach_sewers.png",
         "type": "combat",
@@ -129,8 +129,8 @@
       {
         "id": "exit_sewers_to_hollowreach_POI",
         "name": "Exit to Rustmarket",
-        "x": 10.00,
-        "y": 80.00,
+        "x": 93.00,
+        "y": 70.00,
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
