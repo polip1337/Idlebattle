@@ -10,7 +10,8 @@
       "description": "Permanently increases defense by 1."
     },
     "description": "Developed resilience to endure more hits in battle by increasing armor.",
-    "icon": "Media/Skills/Novice/resilience.jpg"
+    "icon": "Media/Skills/Novice/resilience.jpg",
+    "tags": ["Passive", "Buff", "Defense"]
   },
   "loneWolf": {
     "id": "loneWolf",
@@ -23,7 +24,8 @@
       "description": "Permanently increases accuracy by 1."
     },
     "description": "You got better when fighting alone. Increase accuracy and dodge.",
-    "icon": "Media/Skills/Novice/loneWolf.jpg"
+    "icon": "Media/Skills/Novice/loneWolf.jpg",
+    "tags": ["Passive", "Buff", "Accuracy", "Dodge"]
   },
   "toughenedSkin": {
     "id": "toughenedSkin",
@@ -36,7 +38,8 @@
       "description": "Permanently increases vitality by 2."
     },
     "description": "Thickened skin provides additional health.",
-    "icon": "Media/Skills/Novice/toughenedSkin.png"
+    "icon": "Media/Skills/Novice/toughenedSkin.png",
+    "tags": ["Passive", "Buff", "Health"]
   },
   "combatAwareness": {
     "id": "combatAwareness",
@@ -49,7 +52,8 @@
       "description": "Permanently increases evasion by 1."
     },
     "description": "Heightened awareness allows you to anticipate and evade attacks.",
-    "icon": "Media/Skills/Novice/combatAwareness.jpg"
+    "icon": "Media/Skills/Novice/combatAwareness.jpg",
+    "tags": ["Passive", "Buff", "Dodge"]
   },
   "warriorsEndurance": {
     "id": "warriorsEndurance",
@@ -68,7 +72,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Physical/muscular-torso.svg"
+    "icon": "Media/Skills/Physical/muscular-torso.svg",
+    "tags": ["Passive", "Buff", "Health"]
   },
   "staminaSurge": {
     "id": "staminaSurge",
@@ -87,7 +92,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Physical/StaminaSurge.jpg"
+    "icon": "Media/Skills/Physical/StaminaSurge.jpg",
+    "tags": ["Passive", "Buff", "Regen"]
   },
   "toughSkin": {
     "id": "toughSkin",
@@ -106,7 +112,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Physical/ToughSkin.jpg"
+    "icon": "Media/Skills/Physical/ToughSkin.jpg",
+    "tags": ["Passive", "Buff", "Armor"]
   },
   "spiritGuidance": {
     "id": "spiritGuidance",
@@ -125,7 +132,8 @@
     "targetingModes": [
       "All Team"
     ],
-    "icon": "Media/Skills/Passive/SpiritGuidance.jpg"
+    "icon": "Media/Skills/Passive/SpiritGuidance.jpg",
+    "tags": ["Passive", "Buff", "Regen", "Team"]
   },
   "shamanicFury": {
     "id": "shamanicFury",
@@ -144,7 +152,8 @@
     "targetingModes": [
       "All Team"
     ],
-    "icon": "Media/Skills/Passive/ShamanicFury.jpg"
+    "icon": "Media/Skills/Passive/ShamanicFury.jpg",
+    "tags": ["Passive", "Buff", "Magic", "Team"]
   },
   "earthsBlessing": {
     "id": "earthsBlessing",
@@ -163,7 +172,8 @@
     "targetingModes": [
       "All Team"
     ],
-    "icon": "Media/Skills/Passive/EarthsBlessing.jpg"
+    "icon": "Media/Skills/Passive/EarthsBlessing.jpg",
+    "tags": ["Passive", "Buff", "Health", "Team"]
   },
   "healingAura": {
     "id": "healingAura",
@@ -182,7 +192,8 @@
     "targetingModes": [
       "All Team"
     ],
-    "icon": "Media/Skills/Passive/HealingAura.jpg"
+    "icon": "Media/Skills/Passive/HealingAura.jpg",
+    "tags": ["Passive", "Buff", "Heal", "Aura", "Team"]
   },
   "manaSurge": {
     "id": "manaSurge",
@@ -201,7 +212,8 @@
     "targetingModes": [
       "All Team"
     ],
-    "icon": "Media/Skills/Passive/ManaSurge.jpg"
+    "icon": "Media/Skills/Passive/ManaSurge.jpg",
+    "tags": ["Passive", "Buff", "Regen", "Team"]
   },
   "protectiveWard": {
     "id": "protectiveWard",
@@ -220,7 +232,8 @@
     "targetingModes": [
       "All Team"
     ],
-    "icon": "Media/Skills/Passive/ProtectiveWard.jpg"
+    "icon": "Media/Skills/Passive/ProtectiveWard.jpg",
+    "tags": ["Passive", "Buff", "Armor", "Team"]
   },
   "agilityBoost": {
     "id": "agilityBoost",
@@ -239,7 +252,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/AgilityBoost.jpg"
+    "icon": "Media/Skills/Passive/AgilityBoost.jpg",
+    "tags": ["Passive", "Buff", "Speed"]
   },
   "camouflage": {
     "id": "camouflage",
@@ -258,7 +272,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Camouflage.jpg"
+    "icon": "Media/Skills/Passive/Camouflage.jpg",
+    "tags": ["Passive", "Buff", "Dodge"]
   },
   "keenEyes": {
     "id": "keenEyes",
@@ -277,7 +292,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Physical/semi-closed-eye.svg"
+    "icon": "Media/Skills/Physical/semi-closed-eye.svg",
+    "tags": ["Passive", "Buff", "Critical"]
   },
   "alchemicalMastery": {
     "id": "alchemicalMastery",
@@ -296,7 +312,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/AlchemicalMastery.jpg"
+    "icon": "Media/Skills/Passive/AlchemicalMastery.jpg",
+    "tags": ["Passive", "Buff", "Chemical"]
   },
   "burningRage": {
     "id": "burningRage",
@@ -315,7 +332,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/BurningRage.jpg"
+    "icon": "Media/Skills/Passive/BurningRage.jpg",
+    "tags": ["Passive", "Buff", "Fire"]
   },
   "uncontrolledFlames": {
     "id": "uncontrolledFlames",
@@ -334,7 +352,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/UncontrolledFlames.jpg"
+    "icon": "Media/Skills/Passive/UncontrolledFlames.jpg",
+    "tags": ["Passive", "Debuff", "Fire"]
   },
   "sharpshooter": {
     "id": "sharpshooter",
@@ -353,7 +372,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Sharpshooter.jpg"
+    "icon": "Media/Skills/Passive/Sharpshooter.jpg",
+    "tags": ["Passive", "Buff", "Critical"]
   },
   "quickReflexes": {
     "id": "quickReflexes",
@@ -372,7 +392,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/QuickReflexes.jpg"
+    "icon": "Media/Skills/Passive/QuickReflexes.jpg",
+    "tags": ["Passive", "Buff", "Dodge"]
   },
   "beastmastersBond": {
     "id": "beastmastersBond",
@@ -391,7 +412,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/BeastmastersBond.jpg"
+    "icon": "Media/Skills/Passive/BeastmastersBond.jpg",
+    "tags": ["Passive", "Buff", "Health", "Beast"]
   },
   "untamedFury": {
     "id": "untamedFury",
@@ -410,7 +432,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/UntamedFury.jpg"
+    "icon": "Media/Skills/Passive/UntamedFury.jpg",
+    "tags": ["Passive", "Buff", "Critical", "Beast"]
   },
   "unstoppableRage": {
     "id": "unstoppableRage",
@@ -429,7 +452,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/UnstoppableRage.jpg"
+    "icon": "Media/Skills/Passive/UnstoppableRage.jpg",
+    "tags": ["Passive", "Buff", "Damage"]
   },
   "bloodlust": {
     "id": "bloodlust",
@@ -448,7 +472,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Bloodlust.jpg"
+    "icon": "Media/Skills/Passive/Bloodlust.jpg",
+    "tags": ["Passive", "Buff", "Heal"]
   },
   "leadersFortitude": {
     "id": "leadersFortitude",
@@ -467,7 +492,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/LeadersFortitude.jpg"
+    "icon": "Media/Skills/Passive/LeadersFortitude.jpg",
+    "tags": ["Passive", "Buff", "Health", "Team"]
   },
   "inspiringAura": {
     "id": "inspiringAura",
@@ -486,7 +512,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/InspiringAura.jpg"
+    "icon": "Media/Skills/Passive/InspiringAura.jpg",
+    "tags": ["Passive", "Buff", "Speed", "Team", "Aura"]
   },
   "steadyHand": {
     "id": "steadyHand",
@@ -503,7 +530,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/SteadyHand.jpg"
+    "icon": "Media/Skills/Passive/SteadyHand.jpg",
+    "tags": ["Passive", "Buff", "Accuracy"]
   },
   "precision": {
     "id": "precision",
@@ -520,7 +548,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Precision.jpg"
+    "icon": "Media/Skills/Passive/Precision.jpg",
+    "tags": ["Passive", "Buff", "Critical"]
   },
   "archeryMastery": {
     "id": "archeryMastery",
@@ -537,7 +566,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/ArcheryMastery.jpg"
+    "icon": "Media/Skills/Passive/ArcheryMastery.jpg",
+    "tags": ["Passive", "Buff", "Damage", "Ranged"]
   },
   "camouflage": {
     "id": "camouflage",
@@ -554,7 +584,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Camouflage.jpg"
+    "icon": "Media/Skills/Passive/Camouflage.jpg",
+    "tags": ["Passive", "Buff", "Stealth"]
   },
   "fleetFoot": {
     "id": "fleetFoot",
@@ -571,7 +602,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/FleetFoot.jpg"
+    "icon": "Media/Skills/Passive/FleetFoot.jpg",
+    "tags": ["Passive", "Buff", "Speed"]
   },
   "sharpReflexes": {
     "id": "sharpReflexes",
@@ -588,7 +620,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/SharpReflexes.jpg"
+    "icon": "Media/Skills/Passive/SharpReflexes.jpg",
+    "tags": ["Passive", "Buff", "Dodge"]
   },
   "concentration": {
     "id": "concentration",
@@ -605,7 +638,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Concentration.jpg"
+    "icon": "Media/Skills/Passive/Concentration.jpg",
+    "tags": ["Passive", "Buff", "Regen"]
   },
   "marksmanship": {
     "id": "marksmanship",
@@ -622,7 +656,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Marksmanship.jpg"
+    "icon": "Media/Skills/Passive/Marksmanship.jpg",
+    "tags": ["Passive", "Buff", "Damage", "Ranged"]
   },
   "agility": {
     "id": "agility",
@@ -641,7 +676,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Agility.jpg"
+    "icon": "Media/Skills/Passive/Agility.jpg",
+    "tags": ["Passive", "Buff", "Speed"]
   },
   "lockpicking": {
     "id": "lockpicking",
@@ -660,7 +696,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Lockpicking.jpg"
+    "icon": "Media/Skills/Passive/Lockpicking.jpg",
+    "tags": ["Passive", "Utility"]
   },
   "evasion": {
     "id": "evasion",
@@ -679,7 +716,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/Evasion.jpg"
+    "icon": "Media/Skills/Passive/Evasion.jpg",
+    "tags": ["Passive", "Buff", "Dodge"]
   },
   "shadowMastery": {
     "id": "shadowMastery",
@@ -698,7 +736,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/ShadowMastery.jpg"
+    "icon": "Media/Skills/Passive/ShadowMastery.jpg",
+    "tags": ["Passive", "Buff", "Stealth"]
   },
   "criticalStrike": {
     "id": "criticalStrike",
@@ -717,7 +756,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/CriticalStrike.jpg"
+    "icon": "Media/Skills/Passive/CriticalStrike.jpg",
+    "tags": ["Passive", "Buff", "Critical"]
   },
   "silentMovement": {
     "id": "silentMovement",
@@ -736,7 +776,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/SilentMovement.jpg"
+    "icon": "Media/Skills/Passive/SilentMovement.jpg",
+    "tags": ["Passive", "Buff", "Stealth"]
   },
   "trapSense": {
     "id": "trapSense",
@@ -755,7 +796,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/TrapSense.jpg"
+    "icon": "Media/Skills/Passive/TrapSense.jpg",
+    "tags": ["Passive", "Utility"]
   },
   "lightArmorExpertise": {
     "id": "lightArmorExpertise",
@@ -774,7 +816,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Passive/LightArmorExpertise.jpg"
+    "icon": "Media/Skills/Passive/LightArmorExpertise.jpg",
+    "tags": ["Passive", "Buff", "Armor"]
   },
   "guardianProtocol": {
     "id": "guardianProtocol",
@@ -788,6 +831,7 @@
       {"id": "increaseDamagePercentage", "value": 20, "duration": -1 },
       {"id": "increaseArmorFlat", "value": 15, "duration": -1 }
     ],
-    "targetingModes": ["Self"]
+    "targetingModes": ["Self"],
+    "tags": ["Passive", "Buff", "Damage", "Armor"]
   }
 }

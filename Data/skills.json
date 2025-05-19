@@ -14,7 +14,8 @@
     "targetingModes": [
       "Random Front",
       "Lowest HP"
-    ]
+    ],
+    "tags": ["Single Target", "Physical", "Slash", "Melee", "Active", "Stamina"]
   },
   "basic_slash": {
     "id": "basic_slash",
@@ -27,7 +28,8 @@
     "staminaCost": 10,
     "cooldown": 3,
     "damageType": "physical",
-    "targetingModes": ["Random Front"]
+    "targetingModes": ["Random Front"],
+    "tags": ["Single Target", "Physical", "Slash", "Melee", "Active", "Stamina"]
   },
   "block": {
     "id": "block",
@@ -47,7 +49,8 @@
     "icon": "Media/Skills/Novice/shield.jpg",
     "targetingModes": [
       "Self"
-    ]
+    ],
+    "tags": ["Self", "Buff", "Active", "Stamina", "Melee"]
   },
   "quickStep": {
     "id": "quickStep",
@@ -68,7 +71,8 @@
     "icon": "Media/Skills/Novice/quick_step.png",
     "targetingModes": [
       "Self"
-    ]
+    ],
+    "tags": ["Self", "Buff", "Active", "Stamina", "Cooldown Reduction"]
   },
   "bite": {
     "id": "bite",
@@ -89,7 +93,8 @@
     "targetingModes": [
       "Random Front",
       "Lowest HP"
-    ]
+    ],
+    "tags": ["Single Target", "Physical", "Pierce", "Melee", "Active", "Stamina", "Debuff"]
   },
   "shieldBash": {
     "id": "shieldBash",
@@ -109,7 +114,8 @@
     "targetingModes": [
       "Random Front"
     ],
-    "icon": "Media/Skills/Physical/shield-bash.svg"
+    "icon": "Media/Skills/Physical/shield-bash.svg",
+    "tags": ["Single Target", "Physical", "Blunt", "Melee", "Active", "Stamina", "Debuff"]
   },
   "battleCry": {
     "id": "battleCry",
@@ -129,7 +135,8 @@
     "targetingModes": [
       "All Ally"
     ],
-    "icon": "Media/Skills/Physical/shouting.svg"
+    "icon": "Media/Skills/Physical/shouting.svg",
+    "tags": ["All Allies", "Buff", "Active", "Stamina", "Leadership"]
   },
   "throwRock": {
     "id": "throwRock",
@@ -146,28 +153,30 @@
     "targetingModes": [
       "Random Back"
     ],
-    "icon": "Media/Skills/Novice/throwRock.svg"
+    "icon": "Media/Skills/Novice/throwRock.svg",
+    "tags": ["Single Target", "Physical", "Blunt", "Ranged", "Active", "Stamina", "Back"]
   },
   "swingTorch": {
-  "id": "swingTorch",
-  "name": "Swing Torch",
-  "type": "active",
-  "damage": 10,
-  "manaCost": 5,
-  "staminaCost": 5,
-  "cooldown": 4,
-  "damageType": "fire",
-  "effects": [{
-    "id": "burn",
-    "duration": 3,
-    "damagePerTurn": 2
-  }],
-  "description": "Swings a torch to deal damage and potentially burn the enemy.",
-  "targetingModes": [
-    "Random Front"
-  ],
-  "icon": "Media/Skills/Novice/torch.svg"
-},
+    "id": "swingTorch",
+    "name": "Swing Torch",
+    "type": "active",
+    "damage": 10,
+    "manaCost": 5,
+    "staminaCost": 5,
+    "cooldown": 4,
+    "damageType": "fire",
+    "effects": [{
+      "id": "burn",
+      "duration": 3,
+      "damagePerTurn": 2
+    }],
+    "description": "Swings a torch to deal damage and potentially burn the enemy.",
+    "targetingModes": [
+      "Random Front"
+    ],
+    "icon": "Media/Skills/Novice/torch.svg",
+    "tags": ["Single Target", "Fire", "Magical", "Melee", "Active", "Mana", "Stamina", "Debuff"]
+  },
   "blindWithTorch": {
     "id": "blindWithTorch",
     "name": "Blind with Torch",
@@ -185,7 +194,8 @@
     "targetingModes": [
       "Random Front"
     ],
-    "icon": "Media/Skills/Novice/blindWithTorch.jpg"
+    "icon": "Media/Skills/Novice/blindWithTorch.jpg",
+    "tags": ["Single Target", "Fire", "Magical", "Melee", "Active", "Mana", "Stamina", "Debuff"]
   },
   "hum": {
     "id": "hum",
@@ -205,7 +215,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Novice/hum.svg"
+    "icon": "Media/Skills/Novice/hum.svg",
+    "tags": ["Self", "Buff", "Active", "Mana", "Stamina"]
   },
   "healingWave": {
     "id": "healingWave",
@@ -221,7 +232,8 @@
     "targetingModes": [
       "Random Ally"
     ],
-    "icon": "Media/Skills/Healing/HealingWave.jpg"
+    "icon": "Media/Skills/Healing/HealingWave.jpg",
+    "tags": ["Single Target", "Heal", "Magical", "Active", "Mana"]
   },
   "totemOfStrength": {
     "id": "totemOfStrength",
@@ -240,7 +252,8 @@
     "targetingModes": [
       "All Ally"
     ],
-    "icon": "Media/Skills/Buff/TotemOfStrength.jpg"
+    "icon": "Media/Skills/Buff/TotemOfStrength.jpg",
+    "tags": ["All Allies", "Buff", "Magical", "Active", "Mana", "Ritual"]
   },
   "mysticShield": {
     "id": "mysticShield",
@@ -261,7 +274,8 @@
     "targetingModes": [
       "Random Ally"
     ],
-    "icon": "Media/Skills/Buff/MysticShield.jpg"
+    "icon": "Media/Skills/Buff/MysticShield.jpg",
+    "tags": ["Self", "Buff", "Magical", "Active", "Mana"]
   },
   "healingTouch": {
     "id": "healingTouch",
@@ -277,7 +291,8 @@
     "targetingModes": [
       "Random Ally"
     ],
-    "icon": "Media/Skills/Healing/HealingTouch.jpg"
+    "icon": "Media/Skills/Healing/HealingTouch.jpg",
+    "tags": ["Single Target", "Heal", "Magical", "Active", "Mana"]
   },
   "revitalize": {
     "id": "revitalize",
@@ -296,7 +311,8 @@
     "targetingModes": [
       "Random Ally"
     ],
-    "icon": "Media/Skills/Healing/Revitalize.jpg"
+    "icon": "Media/Skills/Healing/Revitalize.jpg",
+    "tags": ["Single Target", "Heal", "Magical", "Active", "Mana"]
   },
   "groupHeal": {
     "id": "groupHeal",
@@ -312,7 +328,8 @@
     "targetingModes": [
       "All Ally"
     ],
-    "icon": "Media/Skills/Healing/GroupHeal.jpg"
+    "icon": "Media/Skills/Healing/GroupHeal.jpg",
+    "tags": ["All Allies", "Heal", "Magical", "Active", "Mana"]
   },
   "quickStrike": {
     "id": "quickStrike",
@@ -328,7 +345,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/quick-slash.svg"
+    "icon": "Media/Skills/Physical/quick-slash.svg",
+    "tags": ["Single Target", "Physical", "Slash", "Melee", "Active", "Stamina"]
   },
   "poisonDart": {
     "id": "poisonDart",
@@ -348,7 +366,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/PoisonDart.jpg"
+    "icon": "Media/Skills/Physical/PoisonDart.jpg",
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Stamina", "Debuff"]
   },
   "sneakAttack": {
     "id": "sneakAttack",
@@ -368,7 +387,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/SneakAttack.png"
+    "icon": "Media/Skills/Physical/SneakAttack.png",
+    "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina", "Debuff"]
   },
   "acidFlask": {
     "id": "acidFlask",
@@ -388,7 +408,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Chemical/AcidFlask.jpg"
+    "icon": "Media/Skills/Chemical/AcidFlask.jpg",
+    "tags": ["Single Target", "Chemical", "Active", "Stamina"]
   },
   "poisonCloud": {
     "id": "poisonCloud",
@@ -408,7 +429,8 @@
     "targetingModes": [
       "All Enemies"
     ],
-    "icon": "Media/Skills/Chemical/PoisonCloud.jpg"
+    "icon": "Media/Skills/Chemical/PoisonCloud.jpg",
+    "tags": ["All Enemies", "Chemical", "Active", "Mana"]
   },
   "paralyzingPotion": {
     "id": "paralyzingPotion",
@@ -427,7 +449,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Chemical/ParalyzingPotion.jpg"
+    "icon": "Media/Skills/Chemical/ParalyzingPotion.jpg",
+    "tags": ["Single Target", "Chemical", "Active", "Mana"]
   },
   "weakeningElixir": {
     "id": "weakeningElixir",
@@ -448,7 +471,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Chemical/WeakeningElixir.jpg"
+    "icon": "Media/Skills/Chemical/WeakeningElixir.jpg",
+    "tags": ["Single Target", "Chemical", "Active", "Mana"]
   },
   "toxicBomb": {
     "id": "toxicBomb",
@@ -467,7 +491,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Chemical/ToxicBomb.jpg"
+    "icon": "Media/Skills/Chemical/ToxicBomb.jpg",
+    "tags": ["Single Target", "Chemical", "Active", "Mana"]
   },
   "fireBlast": {
     "id": "fireBlast",
@@ -486,7 +511,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Fire/FireBlast.jpg"
+    "icon": "Media/Skills/Fire/FireBlast.jpg",
+    "tags": ["Single Target", "Fire", "Active", "Mana"]
   },
   "wildfire": {
     "id": "wildfire",
@@ -508,7 +534,8 @@
     "extraTargets": [
       "Random Ally"
     ],
-    "icon": "Media/Skills/Fire/Wildfire.jpg"
+    "icon": "Media/Skills/Fire/Wildfire.jpg",
+    "tags": ["All Enemies", "Fire", "Active", "Mana"]
   },
   "flameWave": {
     "id": "flameWave",
@@ -526,7 +553,8 @@
     "extraTargets": [
       "Random Ally"
     ],
-    "icon": "Media/Skills/Fire/FlameWave.jpg"
+    "icon": "Media/Skills/Fire/FlameWave.jpg",
+    "tags": ["All Enemies", "Fire", "Active", "Mana"]
   },
   "explosivePotion": {
     "id": "explosivePotion",
@@ -548,7 +576,8 @@
     "extraTargets": [
       "Random Ally"
     ],
-    "icon": "Media/Skills/Fire/ExplosivePotion.jpg"
+    "icon": "Media/Skills/Fire/ExplosivePotion.jpg",
+    "tags": ["Single Target", "Fire", "Active", "Mana"]
   },
   "poisonArrow": {
     "id": "poisonArrow",
@@ -567,7 +596,8 @@
     "targetingModes": [
       "Random Back"
     ],
-    "icon": "Media/Skills/Physical/PoisonArrow.jpg"
+    "icon": "Media/Skills/Physical/PoisonArrow.jpg",
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Stamina", "Debuff"]
   },
   "multiShot": {
     "id": "multiShot",
@@ -582,7 +612,8 @@
     "targetingModes": [
       "All Enemies"
     ],
-    "icon": "Media/Skills/Physical/MultiShot.jpg"
+    "icon": "Media/Skills/Physical/MultiShot.jpg",
+    "tags": ["All Enemies", "Physical", "Pierce", "Active", "Stamina"]
   },
   "explosiveArrow": {
     "id": "explosiveArrow",
@@ -601,7 +632,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Fire/ExplosiveArrow.jpg"
+    "icon": "Media/Skills/Fire/ExplosiveArrow.jpg",
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Stamina"]
   },
   "piercingShot": {
     "id": "piercingShot",
@@ -620,7 +652,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/PiercingShot.jpg"
+    "icon": "Media/Skills/Physical/PiercingShot.jpg",
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Stamina"]
   },
   "callOfTheWild": {
     "id": "callOfTheWild",
@@ -639,7 +672,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Summon/CallOfTheWild.jpg"
+    "icon": "Media/Skills/Summon/CallOfTheWild.jpg",
+    "tags": ["Self", "Summon", "Active", "Mana"]
   },
   "savageStrike": {
     "id": "savageStrike",
@@ -658,7 +692,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/SavageStrike.jpg"
+    "icon": "Media/Skills/Physical/SavageStrike.jpg",
+    "tags": ["Single Target", "Physical", "Slash", "Active", "Stamina", "Debuff"]
   },
   "packLeader": {
     "id": "packLeader",
@@ -678,7 +713,8 @@
     "targetingModes": [
       "All Beasts"
     ],
-    "icon": "Media/Skills/Buff/PackLeader.jpg"
+    "icon": "Media/Skills/Buff/PackLeader.jpg",
+    "tags": ["All Beasts", "Buff", "Active", "Mana"]
   },
   "ferociousRoar": {
     "id": "ferociousRoar",
@@ -697,7 +733,8 @@
     "targetingModes": [
       "All Enemies"
     ],
-    "icon": "Media/Skills/Debuff/FerociousRoar.jpg"
+    "icon": "Media/Skills/Debuff/FerociousRoar.jpg",
+    "tags": ["All Enemies", "Debuff", "Active", "Mana"]
   },
   "berserkSlash": {
     "id": "berserkSlash",
@@ -718,7 +755,8 @@
     "targetingModes": [
       "Random Front"
     ],
-    "icon": "Media/Skills/Physical/BerserkSlash.jpg"
+    "icon": "Media/Skills/Physical/BerserkSlash.jpg",
+    "tags": ["Single Target", "Physical", "Slash", "Active", "Stamina", "Debuff"]
   },
   "rageStrike": {
     "id": "rageStrike",
@@ -733,7 +771,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/RageStrike.jpg"
+    "icon": "Media/Skills/Physical/RageStrike.jpg",
+    "tags": ["Single Target", "Physical", "Slash", "Active", "Stamina"]
   },
   "frenzy": {
     "id": "frenzy",
@@ -752,7 +791,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Buff/Frenzy.jpg"
+    "icon": "Media/Skills/Buff/Frenzy.jpg",
+    "tags": ["Self", "Buff", "Active", "Mana"]
   },
   "warCry": {
     "id": "warCry",
@@ -772,7 +812,8 @@
     "targetingModes": [
       "All Enemies"
     ],
-    "icon": "Media/Skills/Debuff/WarCry.jpg"
+    "icon": "Media/Skills/Debuff/WarCry.jpg",
+    "tags": ["All Enemies", "Debuff", "Active", "Mana"]
   },
   "chieftainsStrike": {
     "id": "chieftainsStrike",
@@ -787,7 +828,8 @@
     "targetingModes": [
       "Random Front"
     ],
-    "icon": "Media/Skills/Physical/ChieftainsStrike.jpg"
+    "icon": "Media/Skills/Physical/ChieftainsStrike.jpg",
+    "tags": ["Single Target", "Physical", "Slash", "Active", "Stamina"]
   },
   "goblinsRally": {
     "id": "goblinsRally",
@@ -808,7 +850,8 @@
     "targetingModes": [
       "All Ally"
     ],
-    "icon": "Media/Skills/Buff/GoblinsRally.jpg"
+    "icon": "Media/Skills/Buff/GoblinsRally.jpg",
+    "tags": ["All Allies", "Buff", "Active", "Mana"]
   },
   "commandingPresence": {
     "id": "commandingPresence",
@@ -827,7 +870,8 @@
     "targetingModes": [
       "All Ally"
     ],
-    "icon": "Media/Skills/Buff/CommandingPresence.jpg"
+    "icon": "Media/Skills/Buff/CommandingPresence.jpg",
+    "tags": ["All Allies", "Buff", "Active", "Mana"]
   },
   "battleRoar": {
     "id": "battleRoar",
@@ -847,7 +891,8 @@
     "targetingModes": [
       "All Enemies"
     ],
-    "icon": "Media/Skills/Debuff/BattleRoar.jpg"
+    "icon": "Media/Skills/Debuff/BattleRoar.jpg",
+    "tags": ["All Enemies", "Debuff", "Active", "Mana"]
   },
   "howl": {
     "id": "howl",
@@ -866,7 +911,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/None/Howl.jpg"
+    "icon": "Media/Skills/None/Howl.jpg",
+    "tags": ["Self", "Buff", "Active", "Mana"]
   },
   "packHunt": {
     "id": "packHunt",
@@ -885,26 +931,23 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/PackHunt.jpg"
+    "icon": "Media/Skills/Physical/PackHunt.jpg",
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Stamina"]
   },
   "savageBite": {
     "id": "savageBite",
     "name": "Savage Bite",
+    "icon": "Media/Skills/Beast/vicious_bite.svg",
     "type": "active",
-    "damage": 25,
-    "manaCost": 10,
-    "cooldown": 12,
-    "damageType": "Pierce",
-    "effects": [
-      {
-        "id": "bleed"
-      }
-    ],
-    "description": "A fierce bite that causes the target to bleed over time.",
-    "targetingModes": [
-      "Random"
-    ],
-    "icon": "Media/Skills/Physical/SavageBite.jpg"
+    "description": "A nasty bite that aims to make the target bleed.",
+    "damage": 8,
+    "manaCost": 0,
+    "staminaCost": 5,
+    "cooldown": 4,
+    "damageType": "pierce",
+    "effects": [{ "id": "bleed", "duration": 3, "damagePerTurn": 2, "tickDamageType": "pierce" }],
+    "targetingModes": ["Random Front"],
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Stamina", "Debuff"]
   },
   "swiftPounce": {
     "id": "swiftPounce",
@@ -923,7 +966,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/SwiftPounce.jpg"
+    "icon": "Media/Skills/Physical/SwiftPounce.jpg",
+    "tags": ["Single Target", "Physical", "Blunt", "Active", "Stamina", "Debuff"]
   },
   "furiousCharge": {
     "id": "furiousCharge",
@@ -938,7 +982,8 @@
     "targetingModes": [
       "Random"
     ],
-    "icon": "Media/Skills/Physical/FuriousCharge.jpg"
+    "icon": "Media/Skills/Physical/FuriousCharge.jpg",
+    "tags": ["Single Target", "Physical", "Blunt", "Active", "Stamina"]
   },
   "primalRage": {
     "id": "primalRage",
@@ -957,7 +1002,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/None/PrimalRage.jpg"
+    "icon": "Media/Skills/None/PrimalRage.jpg",
+    "tags": ["Self", "Buff", "Active", "Mana"]
   },
   "backstab": {
     "id": "backstab",
@@ -976,7 +1022,8 @@
     "targetingModes": [
       "Single Enemy"
     ],
-    "icon": "Media/Skills/Attack/Backstab.jpg"
+    "icon": "Media/Skills/Attack/Backstab.jpg",
+    "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina", "Debuff"]
   },
   "stealth": {
     "id": "stealth",
@@ -995,7 +1042,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Utility/Stealth.jpg"
+    "icon": "Media/Skills/Utility/Stealth.jpg",
+    "tags": ["Self", "Utility", "Active", "Mana"]
   },
   "pickpocket": {
     "id": "pickpocket",
@@ -1014,7 +1062,8 @@
     "targetingModes": [
       "Single Enemy"
     ],
-    "icon": "Media/Skills/Utility/Pickpocket.jpg"
+    "icon": "Media/Skills/Utility/Pickpocket.jpg",
+    "tags": ["Single Target", "Utility", "Active", "Mana"]
   },
   "throwingKnife": {
     "id": "throwingKnife",
@@ -1029,7 +1078,8 @@
     "targetingModes": [
       "Single Enemy"
     ],
-    "icon": "Media/Skills/Attack/ThrowingKnife.jpg"
+    "icon": "Media/Skills/Attack/ThrowingKnife.jpg",
+    "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina"]
   },
   "quickEscape": {
     "id": "quickEscape",
@@ -1048,7 +1098,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Utility/QuickEscape.jpg"
+    "icon": "Media/Skills/Utility/QuickEscape.jpg",
+    "tags": ["Self", "Utility", "Active", "Mana"]
   },
   "smokeBomb": {
     "id": "smokeBomb",
@@ -1067,7 +1118,8 @@
     "targetingModes": [
       "All Enemies"
     ],
-    "icon": "Media/Skills/Utility/SmokeBomb.jpg"
+    "icon": "Media/Skills/Utility/SmokeBomb.jpg",
+    "tags": ["All Enemies", "Utility", "Active", "Mana"]
   },
   "poisonDagger": {
     "id": "poisonDagger",
@@ -1086,7 +1138,8 @@
     "targetingModes": [
       "Single Enemy"
     ],
-    "icon": "Media/Skills/Attack/PoisonDagger.jpg"
+    "icon": "Media/Skills/Attack/PoisonDagger.jpg",
+    "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina", "Debuff"]
   },
   "shadowStep": {
     "id": "shadowStep",
@@ -1105,9 +1158,9 @@
     "targetingModes": [
       "Single Enemy"
     ],
-    "icon": "Media/Skills/Utility/ShadowStep.jpg"
+    "icon": "Media/Skills/Utility/ShadowStep.jpg",
+    "tags": ["Single Target", "Utility", "Active", "Mana"]
   },
-
   "aimedShot": {
     "id": "aimedShot",
     "name": "Aimed Shot",
@@ -1121,7 +1174,8 @@
     "targetingModes": [
       "Single Enemy"
     ],
-    "icon": "Media/Skills/Attack/AimedShot.jpg"
+    "icon": "Media/Skills/Attack/AimedShot.jpg",
+    "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina"]
   },
   "quickShot": {
     "id": "quickShot",
@@ -1136,7 +1190,8 @@
     "targetingModes": [
       "Single Enemy"
     ],
-    "icon": "Media/Skills/Attack/QuickShot.jpg"
+    "icon": "Media/Skills/Attack/QuickShot.jpg",
+    "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina"]
   },
   "piercingArrow": {
     "id": "piercingArrow",
@@ -1151,7 +1206,8 @@
     "targetingModes": [
       "Line"
     ],
-    "icon": "Media/Skills/Attack/PiercingArrow.jpg"
+    "icon": "Media/Skills/Attack/PiercingArrow.jpg",
+    "tags": ["Line", "Physical", "Melee", "Active", "Stamina"]
   },
   "multishot": {
     "id": "multishot",
@@ -1166,7 +1222,8 @@
     "targetingModes": [
       "Multiple Enemies"
     ],
-    "icon": "Media/Skills/Attack/Multishot.jpg"
+    "icon": "Media/Skills/Attack/Multishot.jpg",
+    "tags": ["Multiple Enemies", "Physical", "Melee", "Active", "Stamina"]
   },
   "eagleEye": {
     "id": "eagleEye",
@@ -1183,7 +1240,8 @@
     "targetingModes": [
       "Self"
     ],
-    "icon": "Media/Skills/Utility/EagleEye.jpg"
+    "icon": "Media/Skills/Utility/EagleEye.jpg",
+    "tags": ["Self", "Utility", "Active", "Mana"]
   },
   "arrowRain": {
     "id": "arrowRain",
@@ -1198,7 +1256,8 @@
     "targetingModes": [
       "Area"
     ],
-    "icon": "Media/Skills/Attack/ArrowRain.jpg"
+    "icon": "Media/Skills/Attack/ArrowRain.jpg",
+    "tags": ["Area", "Physical", "Melee", "Active", "Stamina"]
   },
   "trickShot": {
     "id": "trickShot",
@@ -1215,7 +1274,8 @@
     "targetingModes": [
       "Single Enemy"
     ],
-    "icon": "Media/Skills/Utility/TrickShot.jpg"
+    "icon": "Media/Skills/Utility/TrickShot.jpg",
+    "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina"]
   },
   "viciousBite": {
     "id": "viciousBite",
@@ -1229,7 +1289,8 @@
     "cooldown": 4,
     "damageType": "pierce",
     "effects": [{ "id": "bleed", "duration": 3, "damagePerTurn": 2, "tickDamageType": "pierce" }],
-    "targetingModes": ["Random Front"]
+    "targetingModes": ["Random Front"],
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Stamina", "Debuff"]
   },
   "scurry": {
     "id": "scurry",
@@ -1243,7 +1304,8 @@
     "cooldown": 8,
     "damageType": "none",
     "effects": [{ "id": "increaseDodgeFlat", "value": 20, "duration": 2 }],
-    "targetingModes": ["Self"]
+    "targetingModes": ["Self"],
+    "tags": ["Self", "Buff", "Active", "Stamina"]
   },
   "wildSwing": {
     "id": "wildSwing",
@@ -1257,7 +1319,8 @@
     "cooldown": 5,
     "damageType": "blunt",
     "toHit": -10,
-    "targetingModes": ["Random Front"]
+    "targetingModes": ["Random Front"],
+    "tags": ["Single Target", "Physical", "Blunt", "Melee", "Active", "Stamina"]
   },
   "erraticMovement": {
     "id": "erraticMovement",
@@ -1271,7 +1334,8 @@
     "cooldown": 10,
     "damageType": "none",
     "effects": [{ "id": "increaseDodgePercentage", "value": 25, "duration": 2 }],
-    "targetingModes": ["Self"]
+    "targetingModes": ["Self"],
+    "tags": ["Self", "Buff", "Active", "Stamina"]
   },
   "desperateLunge": {
     "id": "desperateLunge",
@@ -1286,7 +1350,8 @@
     "damageType": "pierce",
     "toHit": -15,
     "effects": [{"id": "reduceDodgeFlat", "target": "Self", "value": -15, "duration": 1}],
-    "targetingModes": ["Random Front"]
+    "targetingModes": ["Random Front"],
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Stamina"]
   },
   "plantSpit": {
     "id": "plantSpit",
@@ -1300,7 +1365,8 @@
     "cooldown": 6,
     "damageType": "poison",
     "effects": [{ "id": "reduceAccuracyFlat", "value": -15, "duration": 2 }],
-    "targetingModes": ["Random"]
+    "targetingModes": ["Random"],
+    "tags": ["Single Target", "Debuff", "Active", "Mana"]
   },
   "energyBolt": {
     "id": "energyBolt",
@@ -1313,7 +1379,8 @@
     "staminaCost": 0,
     "cooldown": 4,
     "damageType": "energy",
-    "targetingModes": ["Random"]
+    "targetingModes": ["Random"],
+    "tags": ["Single Target", "Magic", "Active", "Mana"]
   },
   "stoneSlam": {
     "id": "stoneSlam",
@@ -1327,7 +1394,8 @@
     "cooldown": 6,
     "damageType": "blunt",
     "effects": [{"id": "stun", "chance": 0.25, "duration": 1}],
-    "targetingModes": ["Random Front"]
+    "targetingModes": ["Random Front"],
+    "tags": ["Single Target", "Physical", "Blunt", "Active", "Stamina"]
   },
   "fortifiedPlating": {
     "id": "fortifiedPlating",
@@ -1341,7 +1409,8 @@
     "cooldown": 12,
     "damageType": "none",
     "effects": [{ "id": "increaseArmorFlat", "value": 25, "duration": 3 }],
-    "targetingModes": ["Self"]
+    "targetingModes": ["Self"],
+    "tags": ["Self", "Buff", "Active", "Stamina"]
   }
 }
 
