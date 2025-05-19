@@ -79,3 +79,26 @@ export function updateQuestLog() {
         questList.appendChild(mapGroup);
     });
 }
+
+export function openQuestSubTab(evt, tabName) {
+    // Hide all tab content
+    const tabContents = document.getElementsByClassName("quest-sub-tab-content");
+    for (let content of tabContents) {
+        content.classList.remove("active");
+    }
+
+    // Remove active class from all tab buttons
+    const tabButtons = document.getElementsByClassName("quest-sub-tab-button");
+    for (let button of tabButtons) {
+        button.classList.remove("active");
+    }
+
+    // Show the selected tab content and mark its button as active
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+
+    // If switching to reputation tab, update the UI
+    if (tabName === 'reputation') {
+        reputationUI.updateUI();
+    }
+}

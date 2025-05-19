@@ -1,6 +1,7 @@
 import { hero, battleStatistics } from './initialize.js'; // Removed currentStage
 import { questSystem } from './questSystem.js';
 import { getMapStateForSave, setMapStateFromLoad } from './map.js';
+import { reputationSystem } from './reputation.js';
 
 let initializeAndLoadGame;
 
@@ -98,6 +99,7 @@ function getGameState() {
         battleStatisticsData: battleStatistics ? battleStatistics.getSerializableData() : null,
         questSystemData: questSystem ? questSystem.getSerializableData() : null,
         mapStateData: mapState,
+        reputationData: reputationSystem ? reputationSystem.getSerializableData() : null,
         gameVersion: '0.1.2'
     };
     return gameState;
@@ -164,6 +166,12 @@ export async function loadGame(slotIndex) {
             alert("Internal error: Game loading system not ready.");
             return false;
         }
+
+        // Load reputation data if available
+        if (savedGameState.reputationData && reputationSystem) {
+            reputationSystem.loadFromData(savedGameState.reputationData);
+        }
+
         const loadSuccessful = await initializeAndLoadGame(savedGameState);
 
         if (!loadSuccessful) {

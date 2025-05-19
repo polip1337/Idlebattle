@@ -1,0 +1,150 @@
+.reputation-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.reputation-section {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.reputation-section h2 {
+    color: #ffd700;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.reputation-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.reputation-card {
+    background: rgba(30, 30, 30, 0.8);
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.reputation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.reputation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reputation-name {
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.reputation-level {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.reputation-level.hostile { background: #8B0000; color: #fff; }
+.reputation-level.unfriendly { background: #CD5C5C; color: #fff; }
+.reputation-level.neutral { background: #808080; color: #fff; }
+.reputation-level.friendly { background: #228B22; color: #fff; }
+.reputation-level.honored { background: #4169E1; color: #fff; }
+.reputation-level.revered { background: #9932CC; color: #fff; }
+.reputation-level.exalted { background: #FFD700; color: #000; }
+
+.reputation-description {
+    color: #ccc;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.reputation-details {
+    font-size: 0.85em;
+    color: #aaa;
+}
+
+.reputation-progress {
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.reputation-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #4a4a4a, #666);
+    transition: width 0.3s ease;
+}
+
+.reputation-progress-bar.hostile { background: linear-gradient(90deg, #8B0000, #CD5C5C); }
+.reputation-progress-bar.unfriendly { background: linear-gradient(90deg, #CD5C5C, #DC143C); }
+.reputation-progress-bar.neutral { background: linear-gradient(90deg, #808080, #A9A9A9); }
+.reputation-progress-bar.friendly { background: linear-gradient(90deg, #228B22, #32CD32); }
+.reputation-progress-bar.honored { background: linear-gradient(90deg, #4169E1, #1E90FF); }
+.reputation-progress-bar.revered { background: linear-gradient(90deg, #9932CC, #BA55D3); }
+.reputation-progress-bar.exalted { background: linear-gradient(90deg, #FFD700, #FFA500); }
+
+.reputation-locations {
+    margin-top: 10px;
+    font-size: 0.85em;
+}
+
+.reputation-locations h4 {
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.reputation-locations ul {
+    list-style: none;
+    padding-left: 10px;
+}
+
+.reputation-locations li {
+    color: #ccc;
+    margin-bottom: 3px;
+}
+
+.reputation-figures {
+    margin-top: 10px;
+    font-size: 0.85em;
+}
+
+.reputation-figures h4 {
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.reputation-figures ul {
+    list-style: none;
+    padding-left: 10px;
+}
+
+.reputation-figures li {
+    color: #ccc;
+    margin-bottom: 3px;
+}
+
+.reputation-value {
+    font-size: 0.9em;
+    color: #ffd700;
+    text-align: right;
+    margin-top: 5px;
+} 

@@ -63,3 +63,40 @@
 .no-quests { text-align: center; font-style: italic; padding: 20px; }
 
 /* Scrollbar styling moved to styles.css (.themed-scrollbar) */
+
+#quest-sub-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.quest-sub-tab-button {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #4a3c2b;
+    color: #ffd700;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.quest-sub-tab-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #ffd700;
+}
+
+.quest-sub-tab-button.active {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.quest-sub-tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.quest-sub-tab-content.active {
+    display: block;
+}
