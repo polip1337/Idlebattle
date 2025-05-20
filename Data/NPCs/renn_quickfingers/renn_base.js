@@ -167,8 +167,11 @@ export default {
             text: 'Sweet! I knew I could count on you. Here’s that [Iron Sword|ironSword|A well-balanced blade, perfect for close encounters], as promised. Meet me at the [Rustmarket Sewers|rustmarketSewers|The tunnels under the bazaar]. We’ll find that door, crack it open, and see what’s waiting. It\'ll be a bit tricky, but don\'t worry. I’ll show you the ropes, teach you a thing or two about handling trouble. Think of it as a... practical lesson in Hollowreach survival.',
             options: [
                 {
-                    text: 'Got it. See you in the sewers.'
-                    // No nextId, closes dialogue. Player navigates via map.
+                    text: 'Got it. Lets go then.',
+                    action: {
+                        type: "addCompanion",
+                        companionId: "renn_quickfingers"
+                    }
                 }
             ]
         },

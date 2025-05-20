@@ -128,6 +128,20 @@ export async function initializeDialogue() {
                         }
                     }, act.slideshowId || 'slideshow');
                     break;
+                case 'addCompanion':
+                    if (window.addCompanionToParty) {
+                        window.addCompanionToParty(act.companionId);
+                    } else {
+                        console.error('addCompanionToParty function is not available.');
+                    }
+                    break;
+                case 'removeCompanion':
+                    if (window.removeCompanionFromParty) {
+                        window.removeCompanionFromParty(act.companionId);
+                    } else {
+                        console.error('removeCompanionFromParty function is not available.');
+                    }
+                    break;
                 default:
                     console.log('Unknown action type:', act.type);
             }

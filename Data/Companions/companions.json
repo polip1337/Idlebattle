@@ -66,5 +66,54 @@
     },
     "skills": ["slam", "fortify"],
     "experienceToLevelMultiplier": 1.2
+  },
+  "rennQuickfingers": {
+    "id": "rennQuickfingers",
+    "name": "Renn Quickfingers",
+    "description": "A nimble-fingered rogue with a talent for stealth and precision strikes.",
+    "classInfo": {
+      "id": "rogue_companion",
+      "name": "Rogue",
+      "portrait": "Media/NPC/renn_quickfingers.jpg",
+      "battleSprite": "Media/NPC/renn_quickfingers.jpg",
+      "stats": {
+        "strength": 8,
+        "speed": 15,
+        "dexterity": 18,
+        "vitality": 10,
+        "mana": 40,
+        "stamina": 80,
+        "manaRegen": 2,
+        "accuracy": 8,
+        "dodge": 12,
+        "armor": 2,
+        "magicPower": 0,
+        "magicControl": 0,
+        "damage": 1,
+        "resistances": {
+          "physical": 0,
+          "slash": 0,
+          "pierce": 0,
+          "blunt": 0,
+          "fire": -10,
+          "ice": 5,
+          "lightning": 0,
+          "poison": 0,
+          "holy": 0,
+          "shadow": 0,
+          "arcane": 0
+        }
+      },
+      "statsPerLevel": {
+        "dexterity": 2,
+        "speed": 1,
+        "accuracy": 1,
+        "dodge": 1,
+        "stamina": 8
+      }
+    },
+    "skills": ["backstab", "stealth", "poisonDagger"],
+    "passives": ["sharpReflexes", "marksmanship", "shadowMastery"],
+    "experienceToLevelMultiplier": 1.1
   }
 }
