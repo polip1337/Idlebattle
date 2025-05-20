@@ -232,6 +232,16 @@
     "type": "passive",
     "subType": "armor",
     "value": 5
+  },
+  "deadlyFog": {
+    "name": "Deadly Fog",
+    "type": "debuff",
+    "subType": "delayedDamage",
+    "damageType": "Poison",
+    "value": 1000,
+    "duration": 15,
+    "icon": "Media/UI/poison-bottle.svg",
+    "description": "The toxic fog will kill you in 15 seconds if you don't escape!"
   }
 }
 
