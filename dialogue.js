@@ -1,9 +1,10 @@
 // dialogue.js
 import { openTab } from './navigation.js';
-import { hero } from './initialize.js';
+import { hero,allItemsCache } from './initialize.js';
 import { questSystem } from './questSystem.js';
 import { openTradeModal } from './tradeModal.js';
 import { setCurrentMap } from './map.js';
+import  Item from './item.js';
 
 export async function initializeDialogue() {
     const dialogueModal = document.getElementById('dialogue-modal');
@@ -82,10 +83,10 @@ export async function initializeDialogue() {
                     questSystem.startQuest(act.questId);
                     break;
                 case 'addItem':
-                    const itemData = hero.allItemsCache ? hero.allItemsCache[act.itemId] : null;
+                    const itemData = allItemsCache ? allItemsCache[act.itemId] : null;
                     if (itemData && hero && typeof hero.addItemToInventory === 'function') {
                         for (let i = 0; i < (act.quantity || 1); i++) {
-                            hero.addItemToInventory(new hero.Item(itemData));
+                            hero.addItemToInventory(new Item(itemData));
                         }
                     } else {
                         console.warn(`Could not add item ${act.itemId}: item data not found or hero.addItemToInventory missing.`);
@@ -210,8 +211,8 @@ export async function initializeDialogue() {
                     result = heroStat >= condition.value;
                     break;
                 case 'item':
-                    console.log(`Checking for item: ${condition.itemId}`);
-                    result = hero.hasItem(condition.itemId, condition.quantity || 1); // Assuming hero.inventory.hasItem exists
+                    console.log(`Checking for item: ${condition.item}`);
+                    result = hero.hasItem(condition.item, condition.quantity || 1); // Assuming hero.inventory.hasItem exists
                     break;
                 case 'questActive':
                     result = questSystem.activeQuests.has(condition.questId);

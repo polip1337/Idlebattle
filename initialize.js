@@ -216,7 +216,7 @@ export async function loadGameData(savedGameState = null) {
 
             if (!createAndInitHero(heroClasses, null, null)) return false;
 
-            ['simple_sword_001', 'worn_leather_helmet_001', 'healing_potion_minor_001', 'healing_potion_minor_001'].forEach(itemId => {
+            ['simple_sword_001', 'worn_leather_helmet_001', 'mistwalkerAmulet', 'healing_potion_minor_001'].forEach(itemId => {
                 if(allItemsCache[itemId]) hero.addItemToInventory(new Item(allItemsCache[itemId]));
             });
 

@@ -263,7 +263,7 @@ class EffectClass {
                 this.target.effects.push(this);
                 // If this is a party aura, apply to all party members
                 if (this.effect.partyAura && this.target.team) {
-                    this.target.team.forEach(member => {
+                    this.target.team.members.forEach(member => {
                         if (member !== this.target) { // Don't apply twice to the source
                             new EffectClass(member, this.effect);
                         }
