@@ -251,7 +251,7 @@ class EffectClass {
                 // Store the damage value for later use in revertEffect
                 this.originalValue = this.effect.value;
                 // Check if target has immunity to this effect type
-                if (this.target.effects.some(e => e.effect.subType === 'immunity' && e.effect.immunityType === this.effect.name)) {
+                if (this.target.effects.some(e => e.effect.subType === 'immunity' && e.effect.immunityType === 'deadlyFog' && this.effect.name === 'Deadly Fog')) {
                     console.log(`${this.target.name} is immune to ${this.effect.name}`);
                     this.render = false;
                     return;
