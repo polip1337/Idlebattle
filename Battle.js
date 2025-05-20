@@ -95,11 +95,13 @@ async function checkBattleOutcome() {
         const wasBattleStarted = battleStarted; // Store before changing
         battleStarted = false; // Stop battle logic
 
-        // let battleWon = false; // Not strictly needed here for autosave logic, win/loss handles state
+        // Remove all effects from both teams
+        removeAllEffects(team1);
+        removeAllEffects(team2);
+
         if (!team1Alive) {
             await handleBattleLoss();
         } else { // team1 won (team2 defeated)
-            // battleWon = true;
             await handleBattleWin();
         }
 
@@ -235,6 +237,19 @@ function stopAllSkills(playerTeamInstance, enemyTeamInstance) {
     }
 }
 
+function removeAllEffects(teamInstance) {
+    if (teamInstance && teamInstance.members) {
+        teamInstance.members.forEach(member => {
+            if (member && member.effects) {
+                // Create a copy of the effects array since we'll be modifying it during iteration
+                const effectsCopy = [...member.effects];
+                effectsCopy.forEach(effect => {
+                    effect.remove();
+                });
+            }
+        });
+    }
+}
 
 function calculateFleeChance() {
     let heroDex = hero.stats.dexterity || 0;

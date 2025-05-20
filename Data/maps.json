@@ -87,18 +87,7 @@
   "rustmarketSewersCollapsed": {
     "background": "Media/map/hollowreach_sewers.png",
     "pois": [
-      {
-        "id": "sewer_vaultAntechamber_POI",
-        "name": "Vault Antechamber",
-        "areaId": "fogscarVault_Antechamber",
-        "x": 45.00,
-        "y": 52.00,
-        "icon": "Media/map/poi-combat.png",
-        "type": "combat",
-        "dialogueNpcId": "renn_quickfingers",
-        "combatStartDialogueId": "renn_golem_panic",
-        "combatEndWinDialogueId": "renn_vault_fled"
-      },
+      
       {
         "id": "sewer_foggedCorridor_POI",
         "name": "Fogged Corridor",
@@ -108,9 +97,9 @@
         "icon": "Media/map/poi-combat.png",
         "type": "combat",
         "dialogueNpcId": "renn_quickfingers",
-        "combatStartDialogueId": "renn_foggedcorridor_warning",
-        "combatEndWinDialogueId": "renn_foggedcorridor_escape",
-        "onEnterEffect": "deadlyFog"
+        "combatStartDialogueId": "renn_foggedcorridor_surprise",
+        "combatEndWinDialogueId": "renn_foggedcorridor_escape"
+
       }
     ]
   },
@@ -141,7 +130,6 @@
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_foggedcorridor_warning",
-        "combatEndWinDialogueId": "renn_foggedcorridor_escape",
         "onEnterEffect": "deadlyFog"
       },
       {
@@ -155,7 +143,7 @@
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_secondcorridor_pre_battle",
-        "combatEndWinDialogueId": "renn_at_sewerdoor_relief"
+        "combatEndWinDialogueId": "renn_secondcorridor_post_battle"
       },
       {
         "id": "sewer_vaultAntechamber_POI",
