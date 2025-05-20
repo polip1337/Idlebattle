@@ -1,0 +1,55 @@
+{
+  "stages": [
+    {
+      "stage": 1,
+      "mobs": [
+        {"type": "fogWraith", "count": 2, "level": 3}
+      ],
+      "onEnterEffect": {
+        "name": "Deadly Fog",
+        "type": "debuff",
+        "subType": "Poison",
+        "damageType": "Poison",
+        "value": 100,
+        "duration": 15,
+        "icon": "Media/UI/poison-bottle.svg",
+        "description": "The deadly fog will kill you in 15 seconds!"
+      }
+    },
+    {
+      "stage": 2,
+      "mobs": [
+        {"type": "fogWraith", "count": 3, "level": 4},
+        {"type": "fogSpecter", "count": 1, "level": 4}
+      ],
+      "onEnterEffect": {
+        "name": "Deadly Fog",
+        "type": "debuff",
+        "subType": "Poison",
+        "damageType": "Poison",
+        "value": 100,
+        "duration": 15,
+        "icon": "Media/UI/poison-bottle.svg",
+        "description": "The deadly fog will kill you in 15 seconds!"
+      }
+    },
+    {
+      "stage": 3,
+      "mobs": [
+        {"type": "fogWraith", "count": 2, "level": 5},
+        {"type": "fogSpecter", "count": 2, "level": 5},
+        {"type": "fogHorror", "count": 1, "level": 5}
+      ],
+      "onEnterEffect": {
+        "name": "Deadly Fog",
+        "type": "debuff",
+        "subType": "Poison",
+        "damageType": "Poison",
+        "value": 100,
+        "duration": 15,
+        "icon": "Media/UI/poison-bottle.svg",
+        "description": "The deadly fog will kill you in 15 seconds!"
+      }
+    }
+  ]
+} 

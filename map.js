@@ -389,8 +389,14 @@ export const setMapStateFromLoad = (state) => {
 };
 
 export function setCurrentMap(mapId) {
-    currentMapId = mapId;
-    renderPOIs();
+    if (!mapsData || !mapsData[mapId]) {
+        console.error(`Map ${mapId} not found`);
+        return;
+    }
+    
+    mapHistory.push(currentMapId);
+    loadMap(mapId, true);
+    battleLog.log(`Traveled to map: ${mapId}. New location: ${currentLocation || 'Default'}`);
 }
 
 // Expose setCurrentMap to window for dialogue system

@@ -7,6 +7,7 @@ import Area from './Area.js';
 import { questSystem } from './questSystem.js';
 import { openTab } from './navigation.js';
 import { updateHealth, updateMana, updateStamina } from './Render.js';
+import EffectClass from './EffectClass.js';
 
 
 let battleStarted = false;
@@ -462,6 +463,14 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     battleLog.log(`Battle started at ${currentPoiName}, Stage ${currentBattleStageNumber}`);
     battleStarted = true;
     resetFleeButtonState(); // Ensure flee button is enabled if not on cooldown
+
+    // Apply onEnterEffect if defined for the current stage
+    const currentStage = currentBattleArea.stages[currentBattleStageNumber - 1];
+    if (currentStage && currentStage.onEnterEffect) {
+        team1.members.forEach(member => {
+            new EffectClass(member, currentStage.onEnterEffect);
+        });
+    }
 
     useTeamSkills(team2);
     useTeamSkills(team1);
