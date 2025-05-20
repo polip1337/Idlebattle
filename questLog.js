@@ -95,7 +95,6 @@ export function openQuestSubTab(evt, tabName) {
     for (let content of tabContents) {
         content.classList.remove("active");
     }
-
     // Remove active class from all tab buttons
     const tabButtons = document.getElementsByClassName("quest-sub-tab-button");
     for (let button of tabButtons) {
