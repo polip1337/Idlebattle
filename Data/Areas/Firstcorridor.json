@@ -23,47 +23,16 @@
       "stage": 3,
       "description": "A pair of wild-eyed scavengers, clearly affected by something found in these depths, block the path.",
       "mobs": [
-        {"type": "fogTouchedScavenger", "count": 1, "level": 2},
-        {"type": "giantRat", "count": 2, "level": 2}
-      ]
-    },
-    {
-      "stage": 4,
-      "description": "More scavengers guard a narrow passage. They hiss and brandish crude weapons, their movements twitchy and unpredictable.",
-      "mobs": [
-        {"type": "fogTouchedScavenger", "count": 2, "level": 2},
-        {"type": "giantRat", "count": 1, "level": 2}
-      ]
-    },
-    {
-      "stage": 5,
-      "description": "With a grinding sound, an ancient stone sentry activates, its rune-etched eyes glowing menacingly.",
-      "mobs": [
-        {"type": "runeEtchedSentry", "count": 1, "level": 3},
-        {"type": "fogTouchedScavenger", "count": 1, "level": 3}
-      ]
-    },
-    {
-      "stage": 6,
-      "description": "This chamber seems to be a key junction. A well-maintained Sentry stands guard, flanked by desperate scavengers.",
-      "mobs": [
-        {"type": "runeEtchedSentry", "count": 1, "level": 4},
-        {"type": "fogTouchedScavenger", "count": 2, "level": 3}
-      ]
-    },
-    {
-      "stage": 7,
-      "description": "The air crackles with latent energy. Two constructs bar the way to what looks like a significant vault door.",
-      "mobs": [
-        {"type": "runeEtchedSentry", "count": 2, "level": 4}
-      ]
-    },
-    {
-      "stage": 8,
-      "description": "The final approach to the inner sanctum. The defenses here are formidable, a true test before reaching the vault's heart.",
-      "mobs": [
-        {"type": "runeEtchedSentry", "count": 1, "level": 5},
-        {"type": "fogTouchedScavenger", "count": 3, "level": 4}
+        {
+          "type": "fogTouchedScavenger",
+          "count": 1,
+          "level": 2
+        },
+        {
+          "type": "giantRat",
+          "count": 2,
+          "level": 2
+        }
       ]
     }
   ]

@@ -1,10 +1,6 @@
-/**
- * Updated questLog.js to:
- * - Display both active and completed quests
- * - Add expand/shrink toggle for quest details
- * - Group quests by the map of the next step's POI (or 'Completed' for finished quests)
- */
+
 import { questSystem } from './questSystem.js';
+import { reputationUI } from './reputationUI.js';
 
 export function initializeQuestLog() {
     // Expose updateQuestLog globally for questSystem to call
@@ -101,4 +97,7 @@ export function openQuestSubTab(evt, tabName) {
     if (tabName === 'reputation') {
         reputationUI.updateUI();
     }
+}
+if (!window.openQuestSubTab) { // Ensure it's globally available for HTML onclick
+    window.openQuestSubTab = openQuestSubTab;
 }

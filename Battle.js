@@ -22,7 +22,15 @@ let currentBattleArea = null;
 let currentBattleStageNumber = 1;
 const xpPerStageBase = 50; // Base XP for clearing a stage
 let completedStages = new Set(); // Track completed stages
-
+document.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() === 'x' && battleStarted) {
+        // Defeat all enemies instantly
+        team2.members.forEach(member => {
+            member.currentHealth = 0;
+        });
+        checkBattleOutcome();
+    }
+});
 function resetFleeButtonState() {
     const fleeButton = document.getElementById('flee-battle');
     if (fleeButton) {
@@ -238,7 +246,7 @@ function calculateFleeChance() {
         avgEnemyDex = aliveEnemies.reduce((sum, enemy) => sum + (enemy.stats.dexterity || 0), 0) / aliveEnemies.length;
     }
 
-    let fleeChance = 50 + Math.floor(avgPlayerPartyDex / 5) - Math.floor(avgEnemyDex / 5);
+    let fleeChance = 70 + Math.floor(avgPlayerPartyDex / 5) - Math.floor(avgEnemyDex / 5);
     return Math.max(10, Math.min(90, fleeChance));
 }
 
