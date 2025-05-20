@@ -102,6 +102,13 @@ export async function initializeDialogue() {
                         console.error('unlockMapPOI function is not available.');
                     }
                     break;
+                case 'hidePOI':
+                    if (window.hideMapPOI) {
+                        window.hideMapPOI(act.mapId, act.poiId);
+                    } else {
+                        console.error('hideMapPOI function is not available.');
+                    }
+                    break;
                 case 'travelToMap':
                     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
                     setCurrentMap(act.mapId);
@@ -110,6 +117,16 @@ export async function initializeDialogue() {
                     // Close current dialogue and open the new one
                     hideDialogue();
                     startDialogue(act.npcId, act.dialogueId);
+                    break;
+                case 'startSlideshow':
+                    // Hide dialogue and start the specified slideshow
+                    hideDialogue();
+                    startSlideshow(() => {
+                        // After slideshow completes, optionally resume dialogue
+                        if (act.resumeDialogue) {
+                            startDialogue(act.npcId, act.dialogueId);
+                        }
+                    }, act.slideshowId || 'slideshow');
                     break;
                 default:
                     console.log('Unknown action type:', act.type);

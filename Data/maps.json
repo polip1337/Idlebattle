@@ -73,7 +73,8 @@
         "type": "travel",
         "mapId": "verdant_hollow"
       },
-      {
+      { 
+        "id": "renn_quickfingers_heist",
         "name": "Renn Quickfingers",
         "x": 55.00,
         "y": 65.00,
@@ -83,10 +84,12 @@
         "dialogueId": "renn_base"
       },
       {
+        "id": "renn_quickfingers_house",
         "name": "Renn's House",
         "x": 60.00,
         "y": 70.00,
         "icon": "Media/NPC/poi-tavern.jpg",
+        "initiallyLocked": true,
         "type": "travel",
         "mapId": "rennsHouse"
       },

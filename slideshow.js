@@ -11,6 +11,7 @@ let currentSlideIndex = 0;
 let audioElement;
 let onSlideshowCompleteCallback;
 let isFadingOut = false; // Flag to prevent multiple fade-outs
+let currentSlideshowId = null;
 
 function calculateAudioTimestamp(targetSlideIndex) {
     let cumulativeTimeMs = 0;
@@ -93,7 +94,7 @@ function endSlideshow() {
     clearTimeout(slideTimeout);
     clearInterval(audioFadeInterval); // Clear any existing audio fade
 
-    const slideshow = document.getElementById('slideshow');
+    const slideshow = document.getElementById(currentSlideshowId);
     slideshow.classList.add('fading-out'); // Trigger visual fade via CSS
 
     // Fade out audio
@@ -136,6 +137,7 @@ function endSlideshow() {
         audioElement = null;
         onSlideshowCompleteCallback = null;
         isFadingOut = false; // Reset flag
+        currentSlideshowId = null;
     }, fadeOutDuration);
 }
 
@@ -157,14 +159,15 @@ function handleSkip() {
     }
 }
 
-export function startSlideshow(onComplete) {
+export function startSlideshow(onComplete, slideshowId = 'slideshow') {
     isFadingOut = false; // Ensure flag is reset at start
     clearTimeout(slideTimeout);
     clearInterval(audioFadeInterval);
 
-    const slideshow = document.getElementById('slideshow');
+    currentSlideshowId = slideshowId;
+    const slideshow = document.getElementById(slideshowId);
     slides = Array.from(slideshow.querySelectorAll('.slide'));
-    audioElement = document.getElementById('slideshow-audio');
+    audioElement = document.getElementById(`${slideshowId}-audio`);
     onSlideshowCompleteCallback = onComplete;
     currentSlideIndex = 0;
 
