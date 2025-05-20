@@ -349,8 +349,14 @@ class EffectClass {
                 break;
             case 'delayedDamage':
                 // Only deal damage if the target stayed in combat for the full duration
-                const finalDamage = this.target.calculateFinalDamage(this.originalValue, this.effect.damageType);
-                this.target.takeDamage(finalDamage);
+                const effectsDiv = document.querySelectorAll('#team1 .effects .debuff div');
+                const hasDeadlyFog = Array.from(effectsDiv).some(effect =>
+                                    effect.textContent.includes('Deadly Fog:'));
+                if(hasDeadlyFog){
+                    const finalDamage = this.target.calculateFinalDamage(this.originalValue, this.effect.damageType);
+                    this.target.takeDamage(finalDamage);
+                }
+
                 break;
             // Revert logic for other effects as necessary
             default:
