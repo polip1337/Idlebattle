@@ -26,7 +26,7 @@ export default {
         }
     ],
     rewards: {
-        items: ['ironSword'], // Sword given upfront, but kept in rewards for completion
-        experience: 50
+        experience: 50,
+        unlock:"mistwalkerSecret"
     }
 };
