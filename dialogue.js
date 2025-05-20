@@ -71,10 +71,55 @@ export async function initializeDialogue() {
         });
     }
 
+    // Unified action handler
+    function handleActions(actions) {
+        if (!actions) return;
+        const actionArray = Array.isArray(actions) ? actions : [actions];
+        actionArray.forEach(act => {
+            switch (act.type) {
+                case 'startQuest':
+                    questSystem.startQuest(act.questId);
+                    break;
+                case 'addItem':
+                    const itemData = hero.allItemsCache ? hero.allItemsCache[act.itemId] : null;
+                    if (itemData && hero && typeof hero.addItemToInventory === 'function') {
+                        for (let i = 0; i < (act.quantity || 1); i++) {
+                            hero.addItemToInventory(new hero.Item(itemData));
+                        }
+                    } else {
+                        console.warn(`Could not add item ${act.itemId}: item data not found or hero.addItemToInventory missing.`);
+                    }
+                    break;
+                case 'completeQuest':
+                    questSystem.completeQuest(act.questId);
+                    break;
+                case 'unlockPOI':
+                    if (window.unlockMapPOI) {
+                        window.unlockMapPOI(act.mapId, act.poiId);
+                    } else {
+                        console.error('unlockMapPOI function is not available.');
+                    }
+                    break;
+                case 'travelToMap':
+                    if (window.openTab) {
+                        window.openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
+                        if (act.mapId && window.setCurrentMap) {
+                            window.setCurrentMap(act.mapId);
+                        }
+                    } else {
+                        console.error('openTab or setCurrentMap function is not available.');
+                    }
+                    break;
+                default:
+                    console.log('Unknown action type:', act.type);
+            }
+        });
+    }
+
     // Display current dialogue node
     function displayNode(node) {
         currentNode = node;
-        npcPortrait.src = currentDialogue.portrait; // currentDialogue holds name/portrait from NPC data
+        npcPortrait.src = currentDialogue.portrait;
         npcName.textContent = currentDialogue.name;
         dialogueText.innerHTML = parseHypertext(node.text);
 
@@ -83,7 +128,7 @@ export async function initializeDialogue() {
         hypertextElements.forEach(element => {
             element.addEventListener('click', () => {
                 const topicId = element.dataset.topic;
-                hideDialogue(); // This will resolve the promise if one is active
+                hideDialogue();
                 openTab({ currentTarget: document.getElementById('libraryNavButton') }, 'library');
                 const topicElement = document.querySelector(`#topics li[data-topic="${topicId}"]`);
                 if (topicElement) {
@@ -132,38 +177,8 @@ export async function initializeDialogue() {
             });
         } else {
             // If no options, handle any actions first
-            if (node.action) {
-                const actions = Array.isArray(node.action) ? node.action : [node.action];
-                actions.forEach(act => {
-                    switch (act.type) {
-                        case 'startQuest':
-                            questSystem.startQuest(act.questId);
-                            break;
-                        case 'addItem':
-                            const itemData = hero.allItemsCache ? hero.allItemsCache[act.itemId] : null;
-                            if (itemData && hero && typeof hero.addItemToInventory === 'function') {
-                               for (let i = 0; i < (act.quantity || 1); i++) {
-                                    hero.addItemToInventory(new hero.Item(itemData));
-                               }
-                            } else {
-                                 console.warn(`Could not add item ${act.itemId}: item data not found or hero.addItemToInventory missing.`);
-                            }
-                            break;
-                        case 'completeQuest':
-                            questSystem.completeQuest(act.questId);
-                            break;
-                        case 'unlockPOI':
-                            if (window.unlockMapPOI) {
-                                window.unlockMapPOI(act.mapId, act.poiId);
-                            } else {
-                                console.error('unlockMapPOI function is not available.');
-                            }
-                            break;
-                        default:
-                            console.log('Unknown action type:', act.type);
-                    }
-                });
-            }
+            handleActions(node.action);
+            
             // Then set up click listener to close the dialogue
             const clickListener = (event) => {
                 if (event.target === dialogueModal || (event.target.closest('.dialogue-content') && !event.target.closest('.dialogue-options button, .hypertext, .action-button'))) {
@@ -217,48 +232,7 @@ export async function initializeDialogue() {
     }
 
     function handleOption(option) {
-        if (option.action) {
-            const actions = Array.isArray(option.action) ? option.action : [option.action];
-            actions.forEach(act => {
-                switch (act.type) {
-                    case 'startQuest':
-                        questSystem.startQuest(act.questId);
-                        break;
-                    case 'addItem':
-                        const itemData = hero.allItemsCache ? hero.allItemsCache[act.itemId] : null;
-                        if (itemData && hero && typeof hero.addItemToInventory === 'function') {
-                           for (let i = 0; i < (act.quantity || 1); i++) {
-                                hero.addItemToInventory(new hero.Item(itemData));
-                           }
-                        } else {
-                             console.warn(`Could not add item ${act.itemId}: item data not found or hero.addItemToInventory missing.`);
-                        }
-                        break;
-                    case 'completeQuest':
-                        questSystem.completeQuest(act.questId);
-                        break;
-                    case 'unlockPOI':
-                        if (window.unlockMapPOI) {
-                            window.unlockMapPOI(act.mapId, act.poiId);
-                        } else {
-                            console.error('unlockMapPOI function is not available.');
-                        }
-                        break;
-                    case 'travelToMap':
-                        if (window.openTab) {
-                            window.openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
-                            if (act.mapId && window.setCurrentMap) {
-                                window.setCurrentMap(act.mapId);
-                            }
-                        } else {
-                            console.error('openTab or setCurrentMap function is not available.');
-                        }
-                        break;
-                    default:
-                        console.log('Unknown action type:', act.type, 'for option:', option.text);
-                }
-            });
-        }
+        handleActions(option.action);
 
         if (option.nextId) {
             const nextNode = currentDialogue.nodes.find(node => node.id === option.nextId);
