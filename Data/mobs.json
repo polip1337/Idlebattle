@@ -424,7 +424,7 @@
       "dodge": 1
     }
   },
-  "FogTouchedScavenger": {
+  "fogTouchedScavenger": {
     "id": "fogTouchedScavenger",
     "name": "Fog-Touched Scavenger",
     "portrait": "Media/Mobs/Humanoid/fog_scavenger.png",
