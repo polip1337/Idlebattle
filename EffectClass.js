@@ -259,8 +259,6 @@ class EffectClass {
                 this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
                 break;
             case 'immunity':
-                // Add immunity to target's effects list
-                this.target.effects.push(this);
                 // If this is a party aura, apply to all party members
                 if (this.effect.partyAura && this.target.team) {
                     this.target.team.members.forEach(member => {
@@ -273,7 +271,6 @@ class EffectClass {
             default:
                 console.log(`${this.effect.type},${this.effect.subType} effect not implemented yet.`);
         }
-        this.target.effects.push(this);
     }
 
     createDamageOverTimeInterval(damage, damageType, target) {
