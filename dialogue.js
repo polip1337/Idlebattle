@@ -211,7 +211,7 @@ export async function initializeDialogue() {
                     break;
                 case 'item':
                     console.log(`Checking for item: ${condition.itemId}`);
-                    result = hero.inventory.hasItem(condition.itemId, condition.quantity || 1); // Assuming hero.inventory.hasItem exists
+                    result = hero.hasItem(condition.itemId, condition.quantity || 1); // Assuming hero.inventory.hasItem exists
                     break;
                 case 'questActive':
                     result = questSystem.activeQuests.has(condition.questId);

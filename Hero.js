@@ -668,7 +668,12 @@ class Hero extends Member {
             }
             return false;
         }
-    selectSkill(skill, skillBox, isPassive = false) {
+
+        hasItem(itemId) {
+            return this.inventory.some(item => item.id === itemId);
+        }
+
+        selectSkill(skill, skillBox, isPassive = false) {
         const selectedSkillsArray = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
         const maxSkills = 4; // Max skills of one type (active/passive) hero can select for BAR
         // This logic is for the 4-slot skill BAR, not the list of all learnable skills.
