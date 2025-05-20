@@ -19,7 +19,6 @@
             "subType": "immunity",
             "immunityType": "deadlyFog",
             "duration": -1,
-            "partyAura": true,
             "icon": "Media/UI/fog_immunity.png",
             "description": "?"
         }
