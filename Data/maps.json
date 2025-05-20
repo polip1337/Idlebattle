@@ -40,6 +40,7 @@
         "type": "travel",
         "mapId": "foggedDocks"
       },
+
       {
         "name": "City Gates",
         "x": 33.33,
@@ -80,6 +81,14 @@
         "type": "dialogue",
         "npcId": "renn_quickfingers",
         "dialogueId": "renn_base"
+      },
+      {
+        "name": "Renn's House",
+        "x": 60.00,
+        "y": 70.00,
+        "icon": "Media/NPC/poi-tavern.jpg",
+        "type": "travel",
+        "mapId": "rennsHouse"
       },
       {
         "id": "rustmarketSewersPOI",
@@ -370,6 +379,20 @@
         "x": 93.00,
         "y": 70.00,
         "icon": "Media/map/poi-ironspine.jpg",
+        "type": "travel",
+        "mapId": "hollowreach"
+      }
+    ]
+  },
+  "rennsHouse": {
+    "background": "Media/map/hollowreach_renn_house_interior.jpg",
+    "pois": [
+      {
+        "id": "exit_renn_house",
+        "name": "Exit",
+        "x": 13.00,
+        "y": 20.00,
+        "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
       }
