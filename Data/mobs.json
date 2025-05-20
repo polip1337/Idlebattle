@@ -431,7 +431,7 @@
     "positions": ["Front", "Back"],
     "experience": 12,
     "goldDrop": 8,
-    "skills": ["wildSwing", "erraticMovement", "desperateLunge", "plantSpit"],
+    "skills": [ "erraticMovement", "desperateLunge", "plantSpit"],
     "stats": {
       "strength": 12,
       "dexterity": 14,
@@ -455,7 +455,7 @@
       "mana": 2
     }
   },
-  "RuneEtchedSentry": {
+  "runeEtchedSentry": {
     "id": "runeEtchedSentry",
     "name": "Rune-Etched Sentry",
     "portrait": "Media/Mobs/Construct/rune_sentry.png",
@@ -465,7 +465,7 @@
     "skills": ["energyBolt", "stoneSlam", "fortifiedPlating", "guardianProtocol"],
     "stats": {
       "strength": 20,
-      "dexterity": 5,
+      "dexterity": -50,
       "stamina": 100,
       "vitality": 35,
       "magicPower": 18,
