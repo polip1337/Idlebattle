@@ -47,10 +47,28 @@ export class QuestSystem {
 
     // Start a quest
     startQuest(questId) {
-        if (this.quests.has(questId) && !this.activeQuests.has(questId)) {
-            this.activeQuests.add(questId);
-            console.log(`Started quest: ${questId}`);
+        if (!this.quests.has(questId)) {
+            console.error(`Attempted to start non-existent quest: ${questId}`);
+            return false;
         }
+        
+        if (this.activeQuests.has(questId)) {
+            console.warn(`Attempted to start already active quest: ${questId}`);
+            return false;
+        }
+
+        const quest = this.quests.get(questId);
+        this.activeQuests.add(questId);
+        console.log(`Started quest: ${questId}`, {
+            name: quest.name,
+            giver: quest.giver,
+            description: quest.description,
+            steps: quest.steps.length
+        });
+        
+        
+    
+        return true;
     }
 
     // Check and update quest progress
