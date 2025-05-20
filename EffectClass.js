@@ -365,7 +365,7 @@ class EffectClass {
         if (index !== -1) {
             this.target.effects.splice(index, 1);
         }// Revert the effect when the buff expires
-        this.element.remove();
+        if(this.element) this.element.remove();
     }
 
     deepCopy(obj) {
