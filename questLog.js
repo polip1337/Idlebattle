@@ -1,10 +1,6 @@
-/**
- * Updated questLog.js to:
- * - Display both active and completed quests
- * - Add expand/shrink toggle for quest details
- * - Group quests by the map of the next step's POI (or 'Completed' for finished quests)
- */
+
 import { questSystem } from './questSystem.js';
+import { reputationUI } from './reputationUI.js';
 
 export function initializeQuestLog() {
     // Expose updateQuestLog globally for questSystem to call
@@ -52,6 +48,10 @@ export function updateQuestLog() {
         mapQuests.forEach(quest => {
             const questElement = document.createElement('div');
             questElement.classList.add('quest-item');
+            
+            // Calculate progress percentage
+            const progressPercent = (quest.currentStep / quest.totalSteps) * 100;
+            
             questElement.innerHTML = `
                 <div class="quest-header">
                     <h3>${quest.name}${quest.completed ? ' (Completed)' : ''}</h3>
@@ -60,8 +60,17 @@ export function updateQuestLog() {
                 <div class="quest-details" style="display: ${quest.completed ? 'block' : 'none'};">
                     <p><strong>Giver:</strong> ${quest.giver}</p>
                     <p><strong>Description:</strong> ${quest.description}</p>
-                    <p><strong>Progress:</strong> Step ${quest.currentStep}/${quest.totalSteps}</p>
-                    <p><strong>Next Step:</strong> ${quest.nextHint}</p>
+                    <div class="quest-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                        </div>
+                        <span class="progress-text">${quest.currentStep}/${quest.totalSteps}</span>
+                    </div>
+                    ${!quest.completed ? `
+                        <div class="quest-next-step">
+                            <p><strong>Next Step:</strong> ${quest.nextHint}</p>
+                        </div>
+                    ` : ''}
                 </div>
             `;
             questContainer.appendChild(questElement);
@@ -78,4 +87,30 @@ export function updateQuestLog() {
         mapGroup.appendChild(questContainer);
         questList.appendChild(mapGroup);
     });
+}
+
+export function openQuestSubTab(evt, tabName) {
+    // Hide all tab content
+    const tabContents = document.getElementsByClassName("quest-sub-tab-content");
+    for (let content of tabContents) {
+        content.classList.remove("active");
+    }
+
+    // Remove active class from all tab buttons
+    const tabButtons = document.getElementsByClassName("quest-sub-tab-button");
+    for (let button of tabButtons) {
+        button.classList.remove("active");
+    }
+
+    // Show the selected tab content and mark its button as active
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+
+    // If switching to reputation tab, update the UI
+    if (tabName === 'reputation') {
+        reputationUI.updateUI();
+    }
+}
+if (!window.openQuestSubTab) { // Ensure it's globally available for HTML onclick
+    window.openQuestSubTab = openQuestSubTab;
 }

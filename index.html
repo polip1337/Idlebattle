@@ -23,7 +23,8 @@
     <link rel="stylesheet" href="style/heroView.css">
     <link rel="stylesheet" href="style/customDialog.css">
     <link rel="stylesheet" href="style/tradeModal.css">
-    <link href="style/announcements.css" rel="stylesheet" type="text/css"> <!-- ADDED THIS LINE -->
+    <link href="style/announcements.css" rel="stylesheet" type="text/css">
+    <link href="style/reputation.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -61,19 +62,19 @@
     <audio id="slideshow-audio" src="Media/intro_placeholder.mp3" preload="auto"></audio>
     <div class="slide" data-duration="8500">
         <img src="Media/slideshow/slide1.jpeg" alt="Slide 1">
-        <p>A millennium past, humanity’s dominion swept across the continent, their Golden Empire linked together by arcane portals.</p>
+        <p>A millennium past, humanity's dominion swept across the continent, their Golden Empire linked together by arcane portals.</p>
     </div>
     <div class="slide" data-duration="14000">
         <img src="Media/slideshow/slide2.jpeg" alt="Slide 2">
-        <p>Even then, no matter how strong the Empire, the wilds remained untamed. Beyond the empire’s gleaming spires, shadows and unspeakable horrors prowled, making it dangerous to stray too far from civilization</p>
+        <p>Even then, no matter how strong the Empire, the wilds remained untamed. Beyond the empire's gleaming spires, shadows and unspeakable horrors prowled, making it dangerous to stray too far from civilization</p>
     </div>
     <div class="slide" data-duration="11000">
         <img src="Media/slideshow/slide3.jpeg" alt="Slide 3">
-        <p>Grand Expeditions, thousands of bold men led by the best of us, carved new bastions from uncharted frontiers, spreading the empire’s banner.</p>
+        <p>Grand Expeditions, thousands of bold men led by the best of us, carved new bastions from uncharted frontiers, spreading the empire's banner.</p>
     </div>
     <div class="slide" data-duration="14000">
         <img src="Media/slideshow/slide4.jpeg" alt="Slide 4">
-        <p>But fate turned cruel. Without omen or mercy, the portals flickered and died, unleashing a deathly fog that broke every bond between the empire’s cities. To this day, the cause of their failure remains a mystery.</p>
+        <p>But fate turned cruel. Without omen or mercy, the portals flickered and died, unleashing a deathly fog that broke every bond between the empire's cities. To this day, the cause of their failure remains a mystery.</p>
     </div>
     <div class="slide" data-duration="11000">
         <img src="Media/slideshow/slide5.jpeg" alt="Slide 5">
@@ -203,9 +204,30 @@
 <div class="tabcontent" id="quests">
     <button class="back-to-map-button">Back to Map</button>
 
-    <div id="quest-list" class="themed-scrollbar">
-        <button class="back-to-map-button">Back to Map</button>
+    <div id="quest-sub-tabs">
+        <button class="quest-sub-tab-button active" onclick="openQuestSubTab(event, 'quest-list')">Quests</button>
+        <button class="quest-sub-tab-button" onclick="openQuestSubTab(event, 'reputation')">Reputation</button>
+    </div>
+
+    <div id="quest-list" class="quest-sub-tab-content active">
         <!-- Quest items will be populated here -->
+    </div>
+
+    <div id="reputation" class="quest-sub-tab-content">
+        <div class="reputation-container">
+            <div class="reputation-section">
+                <h2>Faction Reputations</h2>
+                <div class="reputation-list" id="faction-reputation-list">
+                    <!-- Faction reputation cards will be populated here -->
+                </div>
+            </div>
+            <div class="reputation-section">
+                <h2>Character Reputations</h2>
+                <div class="reputation-list" id="character-reputation-list">
+                    <!-- Character reputation cards will be populated here -->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="tabcontent" id="battlefield" class="battle-view">
@@ -213,7 +235,7 @@
         <div id="teamAndBattleContainer">
             <div id="stage-controls">
                 <button id="decrease-stage"><</button>
-                <span id="current-stage">Stage 1</span>
+                <div id="battle-stage-display" class="battle-stage-display">Stage 1 of 1</div>
                 <button id="increase-stage">></button>
                 <input id="repeat" type="checkbox">Repeat</input>
                 <button id="flee-battle">Flee</button> <!-- Flee Button -->
@@ -684,6 +706,8 @@
 <script src="customDialog.js"></script>
 <script src="companion.js" type="module"></script>
 <script src="tradeModal.js" type="module"></script>
+<script type="module" src="reputation.js"></script>
+<script type="module" src="reputationUI.js"></script>
 
 </body>
 </html>

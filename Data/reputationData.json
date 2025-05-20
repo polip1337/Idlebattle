@@ -1,0 +1,209 @@
+{
+  "factions": {
+    "loomkeepers": {
+      "name": "The Loomkeepers",
+      "description": "A collective of artisans who preserve history through magical tapestries that serve as maps, records, and spellcraft.",
+      "motivation": "Decode the portal collapse via ancient patterns to restore connections or prevent past mistakes.",
+      "influence": "Trade tapestries for supplies; their secrecy sparks distrust.",
+      "keyLocations": [
+        "The Threadhall",
+        "Ashen Archive",
+        "Spindle Vault"
+      ],
+      "keyFigures": [
+        {
+          "name": "Vrenna Stoneweave",
+          "description": "Dwarf matriarch (80s), wise but wary of tampering with portals."
+        },
+        {
+          "name": "Korzog",
+          "description": "Rebellious orc apprentice, seeks to weaponize tapestries against the fog."
+        }
+      ],
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    },
+    "driftkin": {
+      "name": "The Driftkin",
+      "description": "Nomadic scavengers dwelling in fog-resistant 'driftbarges.' Physically altered by the fog, they're viewed as reckless outcasts.",
+      "motivation": "Master the fog to evolve or find a mythical safe path through chaos.",
+      "influence": "Supply rare materials but attract monsters to the city.",
+      "keyLocations": [
+        "Driftmoor",
+        "Vortex Reach",
+        "Shardwreck Bay"
+      ],
+      "keyFigures": [
+        {
+          "name": "Sylvara Tidewalker",
+          "description": "Charismatic elf pilot (120s), addicted to fog energy."
+        },
+        {
+          "name": "Joren Halfhand",
+          "description": "Paranoid human mechanic with a magical prosthetic arm."
+        }
+      ],
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    },
+    "pulsefinders": {
+      "name": "The Pulsefinders",
+      "description": "A radical sect who worship the fog as a sentient god. Use psychedelic fog-plants and implants to commune with it, risking madness.",
+      "motivation": "Merge with the fog's consciousness to transcend mortality.",
+      "influence": "Offer healing and visions but cause violent outbursts.",
+      "keyLocations": [
+        "Verdant Hollow",
+        "Shrine of Whispers",
+        "Mistspire"
+      ],
+      "keyFigures": [
+        {
+          "name": "Eryndor Vinesoul",
+          "description": "Gnome prophet, fanatically believes the fog is divine."
+        },
+        {
+          "name": "Mira Solace",
+          "description": "Doubtful acolyte, secretly seeks to undermine the cult."
+        }
+      ],
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    },
+    "emberclad": {
+      "name": "The Emberclad",
+      "description": "The oldest faction, hailing from the Old Empire, once mighty but now diminished. This fire-worshipping order uses pyromancy to combat the fog, believing it an abomination.",
+      "motivation": "Burn away the fog to restore the Old Empire's glory, viewing it as a curse from failed portal experiments.",
+      "influence": "Their pyromantic rituals purify small areas but risk city-wide fires, making them pariahs.",
+      "keyLocations": [
+        "Cinderhold",
+        "Scorchveil Pit"
+      ],
+      "keyFigures": [
+        {
+          "name": "Drenvar Ironflame",
+          "description": "Aging human pyromancer (60s), clings to fading traditions but commands respect."
+        },
+        {
+          "name": "Lyra Emberkin",
+          "description": "Young gnome radical, pushes for aggressive fire-cleansing, even at the cost of Hollowreach."
+        }
+      ],
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    }
+  },
+  "characters": {
+    "renn": {
+      "name": "Renn 'Quickfingers'",
+      "description": "Taryn's childhood friend from the orphanage, now a charming thief in Rustmarket. Offers shady jobs but is loyal if paid. Skilled with daggers and traps.",
+      "location": "Rustmarket",
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    },
+    "selka": {
+      "name": "Selka Ironjaw",
+      "description": "Taryn's old rival, a half-orc bruiser turned Driftkin enforcer. Holds a grudge but respects strength. Wields a massive hammer.",
+      "location": "Driftmoor",
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    },
+    "maris": {
+      "name": "Old Maris",
+      "description": "A human herbalist and former orphanage caretaker, now a wandering healer. Knows Taryn's past and offers cryptic advice.",
+      "location": "Wandering",
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    },
+    "gavix": {
+      "name": "Gavix 'The Tinker'",
+      "description": "A gnome scavenger, once Taryn's orphanage bunkmate, now obsessed with building fog-powered gadgets. Neutral but unreliable, often selling secrets to any faction.",
+      "location": "Rustmarket",
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    },
+    "zynia": {
+      "name": "Zynia Velt",
+      "description": "A human ex-Pulsefinder who fled the cult after a failed implant. Now a cynical mercenary in Rustmarket, skilled with a crossbow, and distrusts Taryn due to past orphanage pranks.",
+      "location": "Rustmarket",
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    },
+    "tharok": {
+      "name": "Tharok One-Eye",
+      "description": "An orc storyteller who roams Ironspire Bridge, trading tales for food. A former acquaintance of Taryn's, he's wise but manipulative, hiding knowledge of the portal collapse.",
+      "location": "Ironspire Bridge",
+      "reputationLevels": {
+        "hostile": -100,
+        "unfriendly": -50,
+        "neutral": 0,
+        "friendly": 50,
+        "honored": 100,
+        "revered": 200,
+        "exalted": 300
+      }
+    }
+  }
+} 

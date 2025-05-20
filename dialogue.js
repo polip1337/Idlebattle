@@ -131,7 +131,40 @@ export async function initializeDialogue() {
                 visibleOptionIndex++;
             });
         } else {
-            // If no options, clicking the modal closes it
+            // If no options, handle any actions first
+            if (node.action) {
+                const actions = Array.isArray(node.action) ? node.action : [node.action];
+                actions.forEach(act => {
+                    switch (act.type) {
+                        case 'startQuest':
+                            questSystem.startQuest(act.questId);
+                            break;
+                        case 'addItem':
+                            const itemData = hero.allItemsCache ? hero.allItemsCache[act.itemId] : null;
+                            if (itemData && hero && typeof hero.addItemToInventory === 'function') {
+                               for (let i = 0; i < (act.quantity || 1); i++) {
+                                    hero.addItemToInventory(new hero.Item(itemData));
+                               }
+                            } else {
+                                 console.warn(`Could not add item ${act.itemId}: item data not found or hero.addItemToInventory missing.`);
+                            }
+                            break;
+                        case 'completeQuest':
+                            questSystem.completeQuest(act.questId);
+                            break;
+                        case 'unlockPOI':
+                            if (window.unlockMapPOI) {
+                                window.unlockMapPOI(act.mapId, act.poiId);
+                            } else {
+                                console.error('unlockMapPOI function is not available.');
+                            }
+                            break;
+                        default:
+                            console.log('Unknown action type:', act.type);
+                    }
+                });
+            }
+            // Then set up click listener to close the dialogue
             const clickListener = (event) => {
                 if (event.target === dialogueModal || (event.target.closest('.dialogue-content') && !event.target.closest('.dialogue-options button, .hypertext, .action-button'))) {
                     if (!dialogueModal.classList.contains('hidden')) {

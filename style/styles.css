@@ -250,3 +250,16 @@ body {
        The display property (block, flex, etc.) is set by navigation.js. */
     opacity: 1;
 }
+
+.battle-stage-display {
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 1.2em;
+    text-align: center;
+    font-weight: bold;
+    margin: 0 10px;
+    min-width: 120px;
+}

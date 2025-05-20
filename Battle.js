@@ -16,11 +16,21 @@ const FLEE_COOLDOWN_SECONDS = 10;
 let currentPoiName = null;
 let currentBattleDialogueOptions = null;
 let isBattlePausedForDialogue = false;
+let hasShownPreCombatDialogue = false;
 
 let currentBattleArea = null;
 let currentBattleStageNumber = 1;
 const xpPerStageBase = 50; // Base XP for clearing a stage
-
+let completedStages = new Set(); // Track completed stages
+document.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() === 'x' && battleStarted) {
+        // Defeat all enemies instantly
+        team2.members.forEach(member => {
+            member.currentHealth = 0;
+        });
+        checkBattleOutcome();
+    }
+});
 function resetFleeButtonState() {
     const fleeButton = document.getElementById('flee-battle');
     if (fleeButton) {
@@ -30,12 +40,32 @@ function resetFleeButtonState() {
     isFleeOnCooldown = false;
 }
 
+function updateStageDisplay() {
+    const stageDisplay = document.getElementById('battle-stage-display');
+    const increaseStageButton = document.getElementById('increase-stage');
+    
+    if (stageDisplay && currentBattleArea) {
+        stageDisplay.textContent = `Stage ${currentBattleStageNumber} of ${currentBattleArea.stages.length}`;
+    }
+    
+    // Update next stage button state
+    if (increaseStageButton) {
+        const canAdvance = currentBattleArea && 
+                          currentBattleStageNumber < currentBattleArea.stages.length && 
+                          completedStages.has(currentBattleStageNumber);
+        increaseStageButton.disabled = !canAdvance;
+        increaseStageButton.style.opacity = canAdvance ? '1' : '0.5';
+    }
+}
+
 function initializeBattleState(poiName = null, stageNum = 1) {
     currentPoiName = poiName;
     currentBattleStageNumber = stageNum;
     currentBattleArea = null;
+    hasShownPreCombatDialogue = false;
     resetFleeButtonState();
     isBattlePausedForDialogue = false;
+    completedStages = new Set(); // Reset completed stages when starting a new area
 }
 
 async function gameTick() {
@@ -119,9 +149,16 @@ async function handleBattleWin() {
         hero.distributeBattleXP(xpFromBattle);
     }
 
+    // Mark current stage as completed
+    completedStages.add(currentBattleStageNumber);
+    updateStageDisplay(); // Update display to reflect stage completion
+
     questSystem.updateQuestProgress('combatComplete', { poiName: currentPoiName, stage: currentBattleStageNumber });
 
-    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.endWinDialogueId) {
+    // Show post-combat dialogue only after completing the highest stage
+    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && 
+        currentBattleDialogueOptions.endWinDialogueId && 
+        currentBattleStageNumber === currentBattleArea.stages.length) {
         isBattlePausedForDialogue = true;
         battleLog.log(`Starting post-battle (win) dialogue: ${currentBattleDialogueOptions.endWinDialogueId}`);
         await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endWinDialogueId);
@@ -209,7 +246,7 @@ function calculateFleeChance() {
         avgEnemyDex = aliveEnemies.reduce((sum, enemy) => sum + (enemy.stats.dexterity || 0), 0) / aliveEnemies.length;
     }
 
-    let fleeChance = 50 + Math.floor(avgPlayerPartyDex / 5) - Math.floor(avgEnemyDex / 5);
+    let fleeChance = 70 + Math.floor(avgPlayerPartyDex / 5) - Math.floor(avgEnemyDex / 5);
     return Math.max(10, Math.min(90, fleeChance));
 }
 
@@ -386,14 +423,16 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         if (typeof mob.initializeDOMElements === 'function') mob.initializeDOMElements();
     });
 
-
-    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId) {
+    // Show pre-combat dialogue only at the start of the first stage
+    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && 
+        !hasShownPreCombatDialogue && currentBattleStageNumber === 1) {
         isBattlePausedForDialogue = true;
         battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
         await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
         battleLog.log("Pre-battle dialogue finished.");
+        hasShownPreCombatDialogue = true;
         isBattlePausedForDialogue = false;
-         if (isPaused) return; // If game was paused externally during dialogue
+        if (isPaused) return; // If game was paused externally during dialogue
     }
 
     if (team1.members.length === 0 || team2.members.length === 0) {
@@ -414,6 +453,9 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         clearInterval(battleInterval);
     }
     battleInterval = setInterval(gameTick, 1000);
+    
+    // Update stage display
+    updateStageDisplay();
 }
 
 function stopBattle(fled = false) {
