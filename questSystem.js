@@ -17,7 +17,7 @@ export class QuestSystem {
     // Load maps.json for POI-to-map mapping
     async loadMaps() {
         try {
-            const response = await fetch('../Data/maps.json');
+            const response = await fetch('../Idlebattle/Data/maps.json');
             this.maps = await response.json();
         } catch (error) {
             console.error('Error loading maps:', error);
