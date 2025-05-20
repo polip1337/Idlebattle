@@ -3,14 +3,14 @@
     {
       "stage": 1,
       "mobs": [
-        {"type": "fogWraith", "count": 2, "level": 3}
+        {"type": "giantRat", "count": 2, "level": 3}
       ],
       "onEnterEffect": {
         "name": "Deadly Fog",
         "type": "debuff",
-        "subType": "Poison",
+        "subType": "delayedDamage",
         "damageType": "Poison",
-        "value": 100,
+        "value": 10000,
         "duration": 15,
         "icon": "Media/UI/poison-bottle.svg",
         "description": "The deadly fog will kill you in 15 seconds!"
@@ -25,9 +25,9 @@
       "onEnterEffect": {
         "name": "Deadly Fog",
         "type": "debuff",
-        "subType": "Poison",
+        "subType": "delayedDamage",
         "damageType": "Poison",
-        "value": 100,
+        "value": 10000,
         "duration": 15,
         "icon": "Media/UI/poison-bottle.svg",
         "description": "The deadly fog will kill you in 15 seconds!"
@@ -43,9 +43,9 @@
       "onEnterEffect": {
         "name": "Deadly Fog",
         "type": "debuff",
-        "subType": "Poison",
+        "subType": "delayedDamage",
         "damageType": "Poison",
-        "value": 100,
+        "value": 10000,
         "duration": 15,
         "icon": "Media/UI/poison-bottle.svg",
         "description": "The deadly fog will kill you in 15 seconds!"

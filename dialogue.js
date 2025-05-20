@@ -3,6 +3,7 @@ import { openTab } from './navigation.js';
 import { hero } from './initialize.js';
 import { questSystem } from './questSystem.js';
 import { openTradeModal } from './tradeModal.js';
+import { setCurrentMap } from './map.js';
 
 export async function initializeDialogue() {
     const dialogueModal = document.getElementById('dialogue-modal');
@@ -101,14 +102,11 @@ export async function initializeDialogue() {
                     }
                     break;
                 case 'travelToMap':
-                    if (window.openTab) {
-                        window.openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
-                        if (act.mapId && window.setCurrentMap) {
-                            window.setCurrentMap(act.mapId);
-                        }
-                    } else {
-                        console.error('openTab or setCurrentMap function is not available.');
-                    }
+
+                    openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
+                    setCurrentMap(act.mapId);
+
+
                     break;
                 default:
                     console.log('Unknown action type:', act.type);

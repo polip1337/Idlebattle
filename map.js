@@ -136,6 +136,7 @@ async function handleCombat(poi) {
         if (poi.combatStartDialogueId) battleDialogueOptions.startDialogueId = poi.combatStartDialogueId;
         if (poi.combatEndWinDialogueId) battleDialogueOptions.endWinDialogueId = poi.combatEndWinDialogueId;
         if (poi.combatEndLossDialogueId) battleDialogueOptions.endLossDialogueId = poi.combatEndLossDialogueId;
+        if (poi.fleeDialogueId) battleDialogueOptions.fleeDialogueId = poi.fleeDialogueId;
     }
 
     openTab(null, 'battlefield');
@@ -393,7 +394,7 @@ export function setCurrentMap(mapId) {
         console.error(`Map ${mapId} not found`);
         return;
     }
-    
+
     mapHistory.push(currentMapId);
     loadMap(mapId, true);
     battleLog.log(`Traveled to map: ${mapId}. New location: ${currentLocation || 'Default'}`);
