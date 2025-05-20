@@ -28,7 +28,7 @@ export default {
             id: 'flee_to_fog',
             text: "Good choice! *Renn sprints ahead* Follow me! And whatever you do, don't breathe in the fog! Hold your breath as long as you can!",
             action: [
-
+                { type: 'addItem', itemId: 'mistwalkerAmulet', quantity: 1 },
                 { type: 'travelToMap', mapId: 'rustmarketSewersCollapsed' }
             ]
             // No options, dialogue closes automatically

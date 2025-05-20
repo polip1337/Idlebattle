@@ -159,6 +159,13 @@ function moveItemsFromInventoryToOffer(itemId, quantity, isPlayerSource) {
     const sourceInv = isPlayerSource ? playerInventory : npcInventory;
     const targetOffer = isPlayerSource ? playerOffer : npcOffer;
 
+    // Check if trying to trade a quest item
+    const itemToTrade = sourceInv.find(entry => entry.item.id === itemId);
+    if (isPlayerSource && itemToTrade && itemToTrade.item.questItem) {
+        showCustomDialog("Cannot Trade", "Quest items cannot be traded or sold.");
+        return;
+    }
+
     const itemsMoved = [];
     for (let i = 0; i < quantity; i++) {
         const itemIndex = sourceInv.findIndex(entry => entry.item.id === itemId);
@@ -172,7 +179,6 @@ function moveItemsFromInventoryToOffer(itemId, quantity, isPlayerSource) {
 
     if (itemsMoved.length > 0) {
         targetOffer.push(...itemsMoved);
-        // targetOffer is an array of individual items, no need to sort by name here as renderOffer will stack
         renderAll();
     }
 }

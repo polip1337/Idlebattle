@@ -1,0 +1,27 @@
+{
+    "id": "mistwalkerAmulet",
+    "name": "Mistwalker Amulet",
+    "type": "accessory",
+    "slot": "amuletSlot",
+    "icon": "Media/Items/Accessories/amulet_mistwalker.svg",
+    "description": "An ancient amulet. Its runes glow faintly when exposed to the toxic mist.",
+    "rarity": "quest",
+    "questItem": true,
+    "value": 0,
+    "stats": {
+        "magicPower": 5,
+        "magicControl": 3
+    },
+    "effects": [
+        {
+            "name": "?",
+            "type": "buff",
+            "subType": "immunity",
+            "immunityType": "deadlyFog",
+            "duration": -1,
+            "partyAura": true,
+            "icon": "Media/UI/fog_immunity.png",
+            "description": "?"
+        }
+    ]
+} 

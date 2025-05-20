@@ -248,8 +248,27 @@ class EffectClass {
                 break;
             case 'delayedDamage':
                 // Store the damage value for later use in revertEffect
-                this.delayedDamageValue = this.effect.value;
-                this.delayedDamageType = this.effect.damageType;
+                this.originalValue = this.effect.value;
+                // Check if target has immunity to this effect type
+                if (this.target.effects.some(e => e.effect.subType === 'immunity' && e.effect.immunityType === this.effect.name)) {
+                    console.log(`${this.target.name} is immune to ${this.effect.name}`);
+                    this.render = false;
+                    return;
+                }
+                // If not immune, apply the delayed damage
+                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+                break;
+            case 'immunity':
+                // Add immunity to target's effects list
+                this.target.effects.push(this);
+                // If this is a party aura, apply to all party members
+                if (this.effect.partyAura && this.target.team) {
+                    this.target.team.forEach(member => {
+                        if (member !== this.target) { // Don't apply twice to the source
+                            new EffectClass(member, this.effect);
+                        }
+                    });
+                }
                 break;
             default:
                 console.log(`${this.effect.type},${this.effect.subType} effect not implemented yet.`);
@@ -342,7 +361,7 @@ class EffectClass {
                 this.target.entrap = false;
                 break;
             case 'delayedDamage':
-                const finalDamage = this.target.calculateFinalDamage(this.delayedDamageValue, this.delayedDamageType);
+                const finalDamage = this.target.calculateFinalDamage(this.originalValue, this.effect.damageType);
                 this.target.takeDamage(finalDamage);
                 break;
             // Revert logic for other effects as necessary
