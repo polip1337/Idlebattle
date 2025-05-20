@@ -16,6 +16,7 @@ const FLEE_COOLDOWN_SECONDS = 10;
 let currentPoiName = null;
 let currentBattleDialogueOptions = null;
 let isBattlePausedForDialogue = false;
+let hasShownPreCombatDialogue = false;
 
 let currentBattleArea = null;
 let currentBattleStageNumber = 1;
@@ -30,10 +31,18 @@ function resetFleeButtonState() {
     isFleeOnCooldown = false;
 }
 
+function updateStageDisplay() {
+    const stageDisplay = document.getElementById('battle-stage-display');
+    if (stageDisplay && currentBattleArea) {
+        stageDisplay.textContent = `Stage ${currentBattleStageNumber} of ${currentBattleArea.stages.length}`;
+    }
+}
+
 function initializeBattleState(poiName = null, stageNum = 1) {
     currentPoiName = poiName;
     currentBattleStageNumber = stageNum;
     currentBattleArea = null;
+    hasShownPreCombatDialogue = false;
     resetFleeButtonState();
     isBattlePausedForDialogue = false;
 }
@@ -121,7 +130,10 @@ async function handleBattleWin() {
 
     questSystem.updateQuestProgress('combatComplete', { poiName: currentPoiName, stage: currentBattleStageNumber });
 
-    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.endWinDialogueId) {
+    // Show post-combat dialogue only after completing all stages
+    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && 
+        currentBattleDialogueOptions.endWinDialogueId && 
+        currentBattleStageNumber >= currentBattleArea.stages.length) {
         isBattlePausedForDialogue = true;
         battleLog.log(`Starting post-battle (win) dialogue: ${currentBattleDialogueOptions.endWinDialogueId}`);
         await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endWinDialogueId);
@@ -387,13 +399,15 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     });
 
 
-    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId) {
+        // Show pre-combat dialogue only at the start of the first stage
+    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && !hasShownPreCombatDialogue) {
         isBattlePausedForDialogue = true;
         battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
         await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
         battleLog.log("Pre-battle dialogue finished.");
+        hasShownPreCombatDialogue = true;
         isBattlePausedForDialogue = false;
-         if (isPaused) return; // If game was paused externally during dialogue
+        if (isPaused) return; // If game was paused externally during dialogue
     }
 
     if (team1.members.length === 0 || team2.members.length === 0) {
