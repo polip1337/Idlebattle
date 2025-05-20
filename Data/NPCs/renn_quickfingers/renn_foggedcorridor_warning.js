@@ -2,9 +2,10 @@ export default {
     nodes: [
         {
             id: 'start',
-            text: "",
+            text: "What are you doing? Get back before the fog gets you!",
 
-            // No options, dialogue closes automatically
+            
+        
         }
     ]
 };
