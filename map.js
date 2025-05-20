@@ -13,6 +13,7 @@ export let currentMapId = 'hollowreach_Valley';
 export let pointsOfInterest = [];
 export let currentLocation = null;
 let unlockedPredefinedPois = new Set();
+let hiddenPois = new Set(); // Track hidden POIs
 let isProcessingPoiClick = false;
 let mapHistory = [];
 
@@ -194,7 +195,8 @@ function renderPOIs() {
     const mapHeight = mapContainer.offsetHeight;
 
     pointsOfInterest.forEach((poi) => {
-        if (poi.isEffectivelyLocked) return;
+        // Skip if POI is locked or hidden
+        if (poi.isEffectivelyLocked || hiddenPois.has(poi.id)) return;
 
         const poiElement = document.createElement('div');
         poiElement.classList.add('poi', poi.type);
@@ -203,6 +205,7 @@ function renderPOIs() {
         poiElement.style.left = `${(poi.x / 100) * mapWidth}px`;
         poiElement.style.top = `${(poi.y / 100) * mapHeight}px`;
         poiElement.dataset.poiName = poi.name;
+        poiElement.dataset.poiId = poi.id;
 
         const poiIcon = document.createElement('img');
         poiIcon.src = poi.icon; poiIcon.alt = poi.name;
@@ -375,7 +378,8 @@ export const getMapStateForSave = () => ({
     currentMapId: currentMapId,
     currentLocation: currentLocation,
     mapHistory: [...mapHistory],
-    unlockedPredefinedPois: Array.from(unlockedPredefinedPois)
+    unlockedPredefinedPois: Array.from(unlockedPredefinedPois),
+    hiddenPois: Array.from(hiddenPois) // Add hidden POIs to save state
 });
 
 export const setMapStateFromLoad = (state) => {
@@ -386,6 +390,7 @@ export const setMapStateFromLoad = (state) => {
     currentLocation = state.currentLocation || null;
     mapHistory = [...(state.mapHistory || [])];
     unlockedPredefinedPois = new Set(state.unlockedPredefinedPois || []);
+    hiddenPois = new Set(state.hiddenPois || []); // Restore hidden POIs
     loadMap(currentMapId);
 };
 
@@ -402,3 +407,54 @@ export function setCurrentMap(mapId) {
 
 // Expose setCurrentMap to window for dialogue system
 window.setCurrentMap = setCurrentMap;
+
+// Add function to hide a POI
+export function hideMapPOI(targetMapId, poiIdToHide) {
+    if (!mapsData || !mapsData[targetMapId]) {
+        console.error(`Map ${targetMapId} not found for hiding POI ${poiIdToHide}.`);
+        return;
+    }
+    const poiDefinitionOnMap = mapsData[targetMapId].pois.find(p => p.id === poiIdToHide);
+
+    if (!poiDefinitionOnMap) {
+        console.error(`POI definition with ID ${poiIdToHide} not found on map ${targetMapId}.`);
+        return;
+    }
+
+    hiddenPois.add(poiIdToHide);
+    console.log(`POI ${poiIdToHide} on map ${targetMapId} hidden.`);
+
+    if (currentMapId === targetMapId) {
+        renderPOIs();
+    }
+}
+
+// Add function to show a hidden POI
+export function showMapPOI(targetMapId, poiIdToShow) {
+    if (!mapsData || !mapsData[targetMapId]) {
+        console.error(`Map ${targetMapId} not found for showing POI ${poiIdToShow}.`);
+        return;
+    }
+    const poiDefinitionOnMap = mapsData[targetMapId].pois.find(p => p.id === poiIdToShow);
+
+    if (!poiDefinitionOnMap) {
+        console.error(`POI definition with ID ${poiIdToShow} not found on map ${targetMapId}.`);
+        return;
+    }
+
+    if (!hiddenPois.has(poiIdToShow)) {
+        console.warn(`POI ${poiIdToShow} is not hidden.`);
+        return;
+    }
+
+    hiddenPois.delete(poiIdToShow);
+    console.log(`POI ${poiIdToShow} on map ${targetMapId} shown.`);
+
+    if (currentMapId === targetMapId) {
+        renderPOIs();
+    }
+}
+
+// Expose hide/show functions to window for dialogue system
+window.hideMapPOI = hideMapPOI;
+window.showMapPOI = showMapPOI;
