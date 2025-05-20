@@ -31,7 +31,7 @@ export default {
                 {
                     text: "Lead the way. I'm right behind you.",
                     action: [
-                        { type: 'travelToMap', mapId: 'hollowreach' }
+                        { type: 'travelToMap', mapId: 'foggedDocks' }
                     ]
                     // No nextId, closes dialogue
                 }

@@ -32,6 +32,15 @@
     "background": "Media/map/hollowreach_town.png",
     "pois": [
       {
+        "id": "ironspine_to_docks",
+        "name": "Ironspine bridge",
+        "x": 93.00,
+        "y": 70.00,
+        "icon": "Media/map/poi-ironspine.jpg",
+        "type": "travel",
+        "mapId": "foggedDocks"
+      },
+      {
         "name": "City Gates",
         "x": 33.33,
         "y": 80.00,
@@ -352,21 +361,17 @@
       }
     ]
   },
-  "foggedSewers": {
-    "background": "Media/map/hollowreach_sewers.png",
+  "foggedDocks": {
+    "background": "Media/map/hollowreach_docks.jpg",
     "pois": [
       {
-        "id": "sewer_foggedCorridor_POI",
-        "name": "Fogged Corridor",
-        "areaId": "FoggedCorridor",
-        "x": 50.00,
-        "y": 50.00,
-        "icon": "Media/map/poi-combat.png",
-        "type": "combat",
-        "dialogueNpcId": "renn_quickfingers",
-        "combatStartDialogueId": "renn_foggedcorridor_surprise",
-        "combatEndWinDialogueId": "renn_foggedcorridor_escape",
-        "onEnterEffect": "deadlyFog"
+        "id": "ironspine_to_hollowrech",
+        "name": "Ironspine bridge",
+        "x": 93.00,
+        "y": 70.00,
+        "icon": "Media/map/poi-ironspine.jpg",
+        "type": "travel",
+        "mapId": "hollowreach"
       }
     ]
   }
