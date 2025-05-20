@@ -52,6 +52,10 @@ export function updateQuestLog() {
         mapQuests.forEach(quest => {
             const questElement = document.createElement('div');
             questElement.classList.add('quest-item');
+            
+            // Calculate progress percentage
+            const progressPercent = (quest.currentStep / quest.totalSteps) * 100;
+            
             questElement.innerHTML = `
                 <div class="quest-header">
                     <h3>${quest.name}${quest.completed ? ' (Completed)' : ''}</h3>
@@ -60,8 +64,17 @@ export function updateQuestLog() {
                 <div class="quest-details" style="display: ${quest.completed ? 'block' : 'none'};">
                     <p><strong>Giver:</strong> ${quest.giver}</p>
                     <p><strong>Description:</strong> ${quest.description}</p>
-                    <p><strong>Progress:</strong> Step ${quest.currentStep}/${quest.totalSteps}</p>
-                    <p><strong>Next Step:</strong> ${quest.nextHint}</p>
+                    <div class="quest-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                        </div>
+                        <span class="progress-text">${quest.currentStep}/${quest.totalSteps}</span>
+                    </div>
+                    ${!quest.completed ? `
+                        <div class="quest-next-step">
+                            <p><strong>Next Step:</strong> ${quest.nextHint}</p>
+                        </div>
+                    ` : ''}
                 </div>
             `;
             questContainer.appendChild(questElement);
