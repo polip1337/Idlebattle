@@ -8,7 +8,9 @@ export default {
                     type: 'unlockPOI',
                     mapId: 'rustmarketSewers', // Map where the POI to unlock is located
                     poiId: 'sewer_scavengerRedoubt_POI' // Unique ID of the POI to unlock
-                }
+                },
+                { type: 'travelToMap', mapId: 'rustmarketSewers' }
+
             ]
             // No options, dialogue closes automatically
         }

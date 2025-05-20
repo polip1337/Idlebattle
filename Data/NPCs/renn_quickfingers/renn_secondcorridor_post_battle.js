@@ -29,6 +29,11 @@ export default {
             options: [
                 {
                     text: "Follow her in.",
+                    action:
+                    {
+                        type: 'travelToMap',
+                        mapId: 'rustmarketSewers'
+                    }
                 }
             ]
         }

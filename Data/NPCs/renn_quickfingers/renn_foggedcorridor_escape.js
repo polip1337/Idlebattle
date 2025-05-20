@@ -31,7 +31,6 @@ export default {
                 {
                     text: "Lead the way. I'm right behind you.",
                     action: [
-                        { type: 'hidePOI', mapId: 'hollowreach', poiId: 'renn_quickfingers_heist' },
                         { type: 'hidePOI', mapId: 'rustmarketSewers', poiId: 'sewer_foggedCorridor_POI' },
                         { type: 'hidePOI', mapId: 'rustmarketSewers', poiId: 'sewer_vaultAntechamber_POI' },
                         { type: 'unlockPOI', mapId: 'hollowreach', poiId: 'renn_quickfingers_house' },

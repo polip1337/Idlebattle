@@ -67,8 +67,8 @@
     "skills": ["slam", "fortify"],
     "experienceToLevelMultiplier": 1.2
   },
-  "rennQuickfingers": {
-    "id": "rennQuickfingers",
+  "renn_quickfingers": {
+    "id": "renn_quickfingers",
     "name": "Renn Quickfingers",
     "description": "A nimble-fingered rogue with a talent for stealth and precision strikes.",
     "classInfo": {

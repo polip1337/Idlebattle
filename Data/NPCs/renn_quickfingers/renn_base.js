@@ -95,7 +95,7 @@ export default {
                     text: 'Alright, Renn. I\'m in. Let\'s find that door. And I’ll take that sword.',
                     action: [
                         { type: 'startQuest', questId: 'fogscarHeist' },
-                        { type: 'addItem', itemId: 'ironSword' },
+                        { type: 'addItem', itemId: 'simple_sword_001' },
                         {
                             type: 'unlockPOI',
                             mapId: 'hollowreach',
@@ -137,7 +137,7 @@ export default {
                     text: 'Okay, okay, you convinced me. Let\'s do it. And don’t forget the sword.',
                     action: [
                         { type: 'startQuest', questId: 'fogscarHeist' },
-                        { type: 'addItem', itemId: 'ironSword' },
+                        { type: 'addItem', itemId: 'simple_sword_001' },
                         {
                             type: 'unlockPOI',
                             mapId: 'hollowreach',
@@ -168,10 +168,12 @@ export default {
             options: [
                 {
                     text: 'Got it. Lets go then.',
-                    action: {
+                    action: [{
                         type: "addCompanion",
                         companionId: "renn_quickfingers"
-                    }
+                    },
+                        { type: 'hidePOI', mapId: 'hollowreach', poiId: 'renn_quickfingers_heist' },
+                    ]
                 }
             ]
         },

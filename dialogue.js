@@ -129,10 +129,10 @@ export async function initializeDialogue() {
                     }, act.slideshowId || 'slideshow');
                     break;
                 case 'addCompanion':
-                    if (window.addCompanionToParty) {
-                        window.addCompanionToParty(act.companionId);
-                    } else {
-                        console.error('addCompanionToParty function is not available.');
+                    try {
+                        hero.recruitCompanion(act.companionId);
+                    } catch(error) {
+                        console.error('addCompanionToParty function is not available.', error);
                     }
                     break;
                 case 'removeCompanion':
