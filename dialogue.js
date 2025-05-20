@@ -224,18 +224,18 @@ export async function initializeDialogue() {
                     case 'startQuest':
                         questSystem.startQuest(act.questId);
                         break;
-                    case 'addItem': // Assumes hero has a method like addItemToInventory that takes an Item instance or ID
-                        const itemData = hero.allItemsCache ? hero.allItemsCache[act.itemId] : null; // Assuming hero has access or pass allItemsCache
+                    case 'addItem':
+                        const itemData = hero.allItemsCache ? hero.allItemsCache[act.itemId] : null;
                         if (itemData && hero && typeof hero.addItemToInventory === 'function') {
                            for (let i = 0; i < (act.quantity || 1); i++) {
-                                hero.addItemToInventory(new hero.Item(itemData)); // Create new Item instance
+                                hero.addItemToInventory(new hero.Item(itemData));
                            }
                         } else {
                              console.warn(`Could not add item ${act.itemId}: item data not found or hero.addItemToInventory missing.`);
                         }
                         break;
                     case 'completeQuest':
-                        questSystem.completeQuest(act.questId); // questSystem handles rewards
+                        questSystem.completeQuest(act.questId);
                         break;
                     case 'unlockPOI':
                         if (window.unlockMapPOI) {
@@ -244,7 +244,16 @@ export async function initializeDialogue() {
                             console.error('unlockMapPOI function is not available.');
                         }
                         break;
-                    // Add more action types: 'setFlag', 'changeReputation', 'removeItem'
+                    case 'travelToMap':
+                        if (window.openTab) {
+                            window.openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
+                            if (act.mapId && window.setCurrentMap) {
+                                window.setCurrentMap(act.mapId);
+                            }
+                        } else {
+                            console.error('openTab or setCurrentMap function is not available.');
+                        }
+                        break;
                     default:
                         console.log('Unknown action type:', act.type, 'for option:', option.text);
                 }

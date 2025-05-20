@@ -387,3 +387,11 @@ export const setMapStateFromLoad = (state) => {
     unlockedPredefinedPois = new Set(state.unlockedPredefinedPois || []);
     loadMap(currentMapId);
 };
+
+export function setCurrentMap(mapId) {
+    currentMapId = mapId;
+    renderPOIs();
+}
+
+// Expose setCurrentMap to window for dialogue system
+window.setCurrentMap = setCurrentMap;

@@ -84,6 +84,32 @@
       }
     ]
   },
+  "rustmarketSewersCollapsed": {
+    "background": "Media/map/hollowreach_sewers.png",
+    "pois": [
+      {
+        "id": "sewer_vaultAntechamber_POI",
+        "name": "Vault Antechamber",
+        "areaId": "fogscarVault_Antechamber",
+        "x": 45.00,
+        "y": 35.00,
+        "icon": "Media/map/poi-combat.png",
+        "type": "combat",
+        "dialogueNpcId": "renn_quickfingers",
+        "combatStartDialogueId": "renn_golem_panic",
+        "combatEndWinDialogueId": "renn_vault_fled"
+      },
+      {
+        "id": "exit_sewers_to_hollowreach_POI",
+        "name": "Exit to Rustmarket",
+        "x": 93.00,
+        "y": 70.00,
+        "icon": "Media/map/poi-exit.jpg",
+        "type": "travel",
+        "mapId": "hollowreach"
+      }
+    ]
+  },
   "rustmarketSewers": {
     "background": "Media/map/hollowreach_sewers.png",
     "pois": [

@@ -4,6 +4,8 @@
   "description": "The crumbling, rune-lit depths of an Old Empire ruin hidden beneath Rustmarket. Ancient mechanisms hum faintly.",
   "background": "Media/Backgrounds/fogscar_vault_interior.png",
   "music": "Music/Dungeon/ancient_ruins_theme.ogg",
+  "dialogueNpcId": "renn_quickfingers",
+  "fleeDialogueId": "renn_vault_fled",
   "stages": [
     {
       "stage": 1,

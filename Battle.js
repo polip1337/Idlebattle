@@ -253,7 +253,25 @@ function calculateFleeChance() {
 function handleSuccessfulFlee(fleeChance, randomRoll) {
     battleLog.log(`Successfully fled from battle! (Chance: ${fleeChance.toFixed(0)}%, Rolled: ${randomRoll.toFixed(0)})`);
     battleStatistics.addSuccessfulFlee();
-    stopBattle(true); // Pass true to indicate fled
+    
+    // Check for flee dialogue before stopping battle
+    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.fleeDialogueId) {
+        isBattlePausedForDialogue = true;
+        battleLog.log(`Starting flee dialogue: ${currentBattleDialogueOptions.fleeDialogueId}`);
+        window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.fleeDialogueId)
+            .then(() => {
+                battleLog.log("Flee dialogue finished.");
+                isBattlePausedForDialogue = false;
+                stopBattle(true); // Pass true to indicate fled
+            })
+            .catch(error => {
+                console.error("Error during flee dialogue:", error);
+                stopBattle(true); // Still stop battle even if dialogue fails
+            });
+    } else {
+        stopBattle(true); // Pass true to indicate fled
+    }
+    
     questSystem.updateQuestProgress('escape', { poiName: currentPoiName});
 }
 

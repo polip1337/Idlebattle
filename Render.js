@@ -488,7 +488,16 @@ export function renderMember(member) { // For non-hero battle members
         iconDiv.className = 'iconDiv';
         iconDiv.id = member.memberId + 'Skill' + skill.name.replace(/\s/g, '');
         const icon = document.createElement('img');
-        icon.className = 'icon'; icon.src = skill.icon; icon.alt = skill.name;
+        icon.className = 'icon';
+        // Check if the icon exists by attempting to load it, fallback if error
+        icon.src = skill.icon;
+        icon.alt = skill.name;
+        icon.onerror = function() {
+            if (icon.src !== 'Media/UI/defaultSkill.jpeg' && icon.src !== '@defaultSkill.jpeg') {
+                console.warn(`Missing skill icon for skill: ${skill.name} (icon: ${skill.icon}) for member: ${member.name}`);
+                icon.src = 'Media/UI/defaultSkill.jpeg';
+            }
+        };
         const tooltip = document.createElement('div'); tooltip.className = 'tooltip';
         if (skill.type === "passive") updatePassiveSkillTooltip(tooltip, skill);
         else updateSkillTooltip(tooltip, skill);
