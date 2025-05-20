@@ -239,6 +239,19 @@ class EffectClass {
             case 'Taunt':
                 // Logic for Taunt effect
                 break;
+            case 'DoT':
+            case 'Bleed':
+            case 'Burn':
+            case 'Poison':
+            case 'WildfireBurn':
+                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+                break;
+            case 'delayedDamage':
+                this.timer = setTimeout(() => {
+                    const finalDamage = this.target.calculateFinalDamage(this.effect.value, this.effect.damageType);
+                    this.target.takeDamage(finalDamage);
+                }, this.effect.duration * 1000);
+                break;
             default:
                 console.log(`${this.effect.type},${this.effect.subType} effect not implemented yet.`);
         }

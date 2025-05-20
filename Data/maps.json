@@ -101,6 +101,20 @@
         "combatEndWinDialogueId": "renn_firstcorridor_post_battle"
       },
       {
+        "id": "sewer_foggedCorridor_POI",
+        "name": "Fogged Corridor",
+        "areaId": "FoggedCorridor",
+        "x": 72.50,
+        "y": 62.50,
+        "icon": "Media/map/poi-combat.png",
+        "type": "combat",
+        "initiallyLocked": true,
+        "dialogueNpcId": "renn_quickfingers",
+        "combatStartDialogueId": "renn_foggedcorridor_warning",
+        "combatEndWinDialogueId": "renn_foggedcorridor_escape",
+        "onEnterEffect": "deadlyFog"
+      },
+      {
         "id": "sewer_scavengerRedoubt_POI",
         "name": "Scavenger Redoubt",
         "areaId": "fogscarVault_ScavengerRedoubt",
@@ -141,7 +155,7 @@
     "background": "Media/map/threadhall_interior.jpg",
     "pois": [
       {
-        "name": "Vrenna’s Loom",
+        "name": "Vrenna's Loom",
         "x": 66.67,
         "y": 41.67,
         "icon": "Media/npc/vrenna_stoneweave.jpg",
@@ -150,7 +164,7 @@
         "dialogueId": "base"
       },
       {
-        "name": "Korzog’s Station",
+        "name": "Korzog's Station",
         "x": 50.00,
         "y": 25.00,
         "icon": "Media/npc/kerzog.jpg",
@@ -172,7 +186,7 @@
     "background": "Media/map/driftmoor_dockyard.png",
     "pois": [
       {
-        "name": "Sylvara’s Barge",
+        "name": "Sylvara's Barge",
         "x": 58.33,
         "y": 33.33,
         "icon": "Media/map/poi-npc.png",
@@ -181,7 +195,7 @@
         "dialogueId": "base"
       },
       {
-        "name": "Joren’s Workshop",
+        "name": "Joren's Workshop",
         "x": 75.00,
         "y": 50.00,
         "icon": "Media/map/poi-npc.png",
@@ -203,7 +217,7 @@
     "background": "Media/map/verdant_hollow_temple.png",
     "pois": [
       {
-        "name": "Eryndor’s Altar",
+        "name": "Eryndor's Altar",
         "x": 50.00,
         "y": 41.67,
         "icon": "Media/map/poi-npc.png",
@@ -212,7 +226,7 @@
         "dialogueId": "base"
       },
       {
-        "name": "Mira’s Garden",
+        "name": "Mira's Garden",
         "x": 66.67,
         "y": 25.00,
         "icon": "Media/map/poi-npc.png",
@@ -275,6 +289,24 @@
         "icon": "Media/map/tavern.png",
         "cost": 5,
         "type": "tavern"
+      }
+    ]
+  },
+  "foggedSewers": {
+    "background": "Media/map/hollowreach_sewers.png",
+    "pois": [
+      {
+        "id": "sewer_foggedCorridor_POI",
+        "name": "Fogged Corridor",
+        "areaId": "FoggedCorridor",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-combat.png",
+        "type": "combat",
+        "dialogueNpcId": "renn_quickfingers",
+        "combatStartDialogueId": "renn_foggedcorridor_surprise",
+        "combatEndWinDialogueId": "renn_foggedcorridor_escape",
+        "onEnterEffect": "deadlyFog"
       }
     ]
   }
