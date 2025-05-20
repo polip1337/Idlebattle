@@ -167,8 +167,10 @@ async function handleBattleWin() {
         await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endWinDialogueId);
         battleLog.log("Post-battle (win) dialogue finished.");
         isBattlePausedForDialogue = false;
+        return; // Skip popup if dialogue was shown
     }
 
+    // Only show popup if no dialogue was shown
     if (currentBattleArea && currentBattleStageNumber < currentBattleArea.stages.length) {
         showPopup("Stage Cleared!", `Your team has cleared stage ${currentBattleStageNumber}.`);
     } else {
@@ -184,7 +186,10 @@ async function handleBattleLoss() {
         await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endLossDialogueId);
         battleLog.log("Post-battle (loss) dialogue finished.");
         isBattlePausedForDialogue = false;
+        return; // Skip popup if dialogue was shown
     }
+    
+    // Only show popup if no dialogue was shown
     showPopup("Defeat!", "Your team has been defeated.");
 }
 
