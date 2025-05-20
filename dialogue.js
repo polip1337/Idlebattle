@@ -103,11 +103,13 @@ export async function initializeDialogue() {
                     }
                     break;
                 case 'travelToMap':
-
                     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
                     setCurrentMap(act.mapId);
-
-
+                    break;
+                case 'openDialogue':
+                    // Close current dialogue and open the new one
+                    hideDialogue();
+                    startDialogue(act.npcId, act.dialogueId);
                     break;
                 default:
                     console.log('Unknown action type:', act.type);

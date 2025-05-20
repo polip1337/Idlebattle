@@ -51,7 +51,11 @@ export default {
                 {
                     text: "What task do you have in mind?",
                     nextId: "fragment_request",
-                    action: { type: "startQuest", questId: "proofForTheWeave" }
+                    action: [
+                        { type: "startQuest", questId: "proofForTheWeave" }, { type: "addItem", item: "mistwalkerAmulet" },
+                        {type: "openDialogue", npcId: "vrenna_stoneweave", dialogueId: "proof_for_weave"}
+                    ] 
+                    
                 },
                 {
                     text: "I'll consider it later.",
