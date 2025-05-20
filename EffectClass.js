@@ -11,6 +11,7 @@ class EffectClass {
         this.startTime = null;
         this.remainingTime = null;
         this.render = true;
+        this.isPartyAuraApplication = false; // Add flag to track party aura application
         if (effect.stackMode == "duration" && this.isAlreadyApplied(effect, target)) {
             this.extendTimer(effect.duration);
         } else if (effect.stackMode == "refresh" && this.isAlreadyApplied(effect, target)) {
@@ -259,11 +260,13 @@ class EffectClass {
                 this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
                 break;
             case 'immunity':
-                // If this is a party aura, apply to all party members
-                if (this.effect.partyAura && this.target.team) {
+                // If this is a party aura and we're not already applying a party aura
+                if (this.effect.partyAura && this.target.team && !this.isPartyAuraApplication) {
+                    this.isPartyAuraApplication = true; // Set flag before applying to party members
                     this.target.team.members.forEach(member => {
-                        if (member !== this.target && !member.effects.some(e => e.effect.name === this.effect.name)) { // Don't apply twice to the source or to members who already have it
-                            new EffectClass(member, this.effect);
+                        if (member !== this.target && !member.effects.some(e => e.effect.name === this.effect.name)) {
+                            const partyEffect = new EffectClass(member, this.effect);
+                            partyEffect.isPartyAuraApplication = true; // Set flag on new instance
                         }
                     });
                 }
