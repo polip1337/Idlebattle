@@ -166,6 +166,48 @@
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
+      },
+      {
+        "id": "sewer_contact_POI",
+        "name": "Mysterious Figure",
+        "description": "A hooded figure lurks in the shadows, watching the tunnels carefully.",
+        "type": "dialogue",
+        "npc": "sewer_contact",
+        "location": {
+          "x": 45,
+          "y": 60
+        },
+        "requirements": {
+          "quests": ["proofForTheWeave"]
+        },
+        "unlockConditions": [
+          {
+            "type": "quest",
+            "questId": "proofForTheWeave",
+            "status": "active"
+          }
+        ]
+      },
+      {
+        "id": "sewer_scavengerRedoubt_POI",
+        "name": "Scavenger Redoubt",
+        "description": "A heavily guarded chamber where the fog-touched scavengers have made their base. The air crackles with fog energy.",
+        "type": "combat",
+        "areaId": "scavengerRedoubt",
+        "location": {
+          "x": 75,
+          "y": 30
+        },
+        "requirements": {
+          "quests": ["proofForTheWeave"]
+        },
+        "unlockConditions": [
+          {
+            "type": "dialogue",
+            "npc": "sewer_contact",
+            "dialogueId": "reveal_location"
+          }
+        ]
       }
     ]
   },

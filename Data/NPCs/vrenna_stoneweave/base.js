@@ -9,6 +9,11 @@ export default {
                     nextId: "loomkeepers"
                 },
                 {
+                    text: "I have found this amulet.Can you tell me anything about it?",
+                    nextId: "mistwalker",
+                    conditions: [{ type: 'item', item: 'mistwalkerAmulet' }]
+                },
+                {
                     text: "I seek a portal sequence. Can you help?",
                     nextId: "quest",
                     action: { type: "startQuest", questId: "lost_pattern" },
@@ -27,7 +32,7 @@ export default {
         },
         {
             id: "loomkeepers",
-            text: "We preserve [Hollowreach|hollowreach|Isolated city]’s history in threads. Our tapestries map the [fog|fog|Hides portals], but the [portals|portals|Lost gateways]’ collapse eludes us.",
+            text: "We preserve [Hollowreach|hollowreach|Isolated city]'s history in threads. Our tapestries map the [fog|fog|Hides portals], but the [portals|portals|Lost gateways]' collapse eludes us.",
             options: [
                 {
                     text: "How can I help your work?",
@@ -40,11 +45,26 @@ export default {
             ]
         },
         {
+            id: "mistwalker",
+            text: "The Mistwalker Amulet... *leans forward, eyes narrowing* I've heard tales of such artifacts. They supposedly work only on the first person that touches them. If you wish to prove its genuine, I have a task that would serve us both.",
+            options: [
+                {
+                    text: "What task do you have in mind?",
+                    nextId: "fragment_request",
+                    action: { type: "startQuest", questId: "proofForTheWeave" }
+                },
+                {
+                    text: "I'll consider it later.",
+                    nextId: null
+                }
+            ]
+        },
+        {
             id: "quest",
             text: "A scroll in the [Ashen Archive|ashen_archive|Fog-bound ruin] holds a portal sequence. Retrieve it, but beware the [Driftkin|driftkin|Fog nomads] who claim it.",
             options: [
                 {
-                    text: "I’ll find it.",
+                    text: "I'll find it.",
                     nextId: null,
                     action: { type: "startQuest", questId: "goblinSlayer" }
                 },
@@ -56,10 +76,10 @@ export default {
         },
         {
             id: "expedition",
-            text: "Your expedition could map the [fog|fog|Twists paths]. I’ll weave a tapestry for safe routes, but only if you share your [Amulet|amulet|Fog-parting relic]’s secrets.",
+            text: "Your expedition could map the [fog|fog|Twists paths]. I'll weave a tapestry for safe routes, but only if you share your [Amulet|amulet|Fog-parting relic]'s secrets.",
             options: [
                 {
-                    text: "I’ll share the Amulet’s data.",
+                    text: "I'll share the Amulet's data.",
                     nextId: null,
                     action: { type: "factionSupport", faction: "loomkeepers", resource: "tapestry_map" }
                 },
