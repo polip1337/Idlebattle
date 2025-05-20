@@ -130,10 +130,10 @@ async function handleBattleWin() {
 
     questSystem.updateQuestProgress('combatComplete', { poiName: currentPoiName, stage: currentBattleStageNumber });
 
-    // Show post-combat dialogue only after completing all stages
+    // Show post-combat dialogue only after completing the highest stage
     if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && 
         currentBattleDialogueOptions.endWinDialogueId && 
-        currentBattleStageNumber >= currentBattleArea.stages.length) {
+        currentBattleStageNumber === currentBattleArea.stages.length) {
         isBattlePausedForDialogue = true;
         battleLog.log(`Starting post-battle (win) dialogue: ${currentBattleDialogueOptions.endWinDialogueId}`);
         await window.startDialogue(currentBattleDialogueOptions.npcId, currentBattleDialogueOptions.endWinDialogueId);
@@ -398,9 +398,9 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         if (typeof mob.initializeDOMElements === 'function') mob.initializeDOMElements();
     });
 
-
-        // Show pre-combat dialogue only at the start of the first stage
-    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && !hasShownPreCombatDialogue) {
+    // Show pre-combat dialogue only at the start of the first stage
+    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && 
+        !hasShownPreCombatDialogue && currentBattleStageNumber === 1) {
         isBattlePausedForDialogue = true;
         battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
         await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
@@ -428,6 +428,9 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         clearInterval(battleInterval);
     }
     battleInterval = setInterval(gameTick, 1000);
+    
+    // Update stage display
+    updateStageDisplay();
 }
 
 function stopBattle(fled = false) {
