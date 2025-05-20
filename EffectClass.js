@@ -255,8 +255,7 @@ class EffectClass {
                     this.render = false;
                     return;
                 }
-                // If not protected, apply the delayed damage
-                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+                // Don't apply damage immediately - it will be applied in revertEffect if the target stays in combat
                 break;
 
             default:
@@ -349,6 +348,7 @@ class EffectClass {
                 this.target.entrap = false;
                 break;
             case 'delayedDamage':
+                // Only deal damage if the target stayed in combat for the full duration
                 const finalDamage = this.target.calculateFinalDamage(this.originalValue, this.effect.damageType);
                 this.target.takeDamage(finalDamage);
                 break;
