@@ -9,7 +9,7 @@ export class QuestSystem {
         this.activeQuests = new Set(); // Track active quest IDs
         this.maps = null; // Store maps.json data
         this.questFiles = [
-        'Data/quests/fogscarHeist.js'];
+        'Idlebattle/Data/quests/fogscarHeist.js'];
 
     }
 
