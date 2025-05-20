@@ -247,10 +247,9 @@ class EffectClass {
                 this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
                 break;
             case 'delayedDamage':
-                this.timer = setTimeout(() => {
-                    const finalDamage = this.target.calculateFinalDamage(this.effect.value, this.effect.damageType);
-                    this.target.takeDamage(finalDamage);
-                }, this.effect.duration * 1000);
+                // Store the damage value for later use in revertEffect
+                this.delayedDamageValue = this.effect.value;
+                this.delayedDamageType = this.effect.damageType;
                 break;
             default:
                 console.log(`${this.effect.type},${this.effect.subType} effect not implemented yet.`);
@@ -341,6 +340,10 @@ class EffectClass {
                 break;
             case 'Entrap':
                 this.target.entrap = false;
+                break;
+            case 'delayedDamage':
+                const finalDamage = this.target.calculateFinalDamage(this.delayedDamageValue, this.delayedDamageType);
+                this.target.takeDamage(finalDamage);
                 break;
             // Revert logic for other effects as necessary
             default:
