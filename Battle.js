@@ -21,6 +21,7 @@ let hasShownPreCombatDialogue = false;
 let currentBattleArea = null;
 let currentBattleStageNumber = 1;
 const xpPerStageBase = 50; // Base XP for clearing a stage
+let completedStages = new Set(); // Track completed stages
 
 function resetFleeButtonState() {
     const fleeButton = document.getElementById('flee-battle');
@@ -33,8 +34,19 @@ function resetFleeButtonState() {
 
 function updateStageDisplay() {
     const stageDisplay = document.getElementById('battle-stage-display');
+    const increaseStageButton = document.getElementById('increase-stage');
+    
     if (stageDisplay && currentBattleArea) {
         stageDisplay.textContent = `Stage ${currentBattleStageNumber} of ${currentBattleArea.stages.length}`;
+    }
+    
+    // Update next stage button state
+    if (increaseStageButton) {
+        const canAdvance = currentBattleArea && 
+                          currentBattleStageNumber < currentBattleArea.stages.length && 
+                          completedStages.has(currentBattleStageNumber);
+        increaseStageButton.disabled = !canAdvance;
+        increaseStageButton.style.opacity = canAdvance ? '1' : '0.5';
     }
 }
 
@@ -45,6 +57,7 @@ function initializeBattleState(poiName = null, stageNum = 1) {
     hasShownPreCombatDialogue = false;
     resetFleeButtonState();
     isBattlePausedForDialogue = false;
+    completedStages = new Set(); // Reset completed stages when starting a new area
 }
 
 async function gameTick() {
@@ -127,6 +140,10 @@ async function handleBattleWin() {
         battleLog.log(`Party gained ${xpFromBattle} XP!`);
         hero.distributeBattleXP(xpFromBattle);
     }
+
+    // Mark current stage as completed
+    completedStages.add(currentBattleStageNumber);
+    updateStageDisplay(); // Update display to reflect stage completion
 
     questSystem.updateQuestProgress('combatComplete', { poiName: currentPoiName, stage: currentBattleStageNumber });
 
