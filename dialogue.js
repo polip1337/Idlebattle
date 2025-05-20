@@ -200,7 +200,7 @@ export async function initializeDialogue() {
             tradeButton.style.display = 'none';
         }
 
-        questSystem.updateQuestProgress('dialogue', { npcName: currentDialogue.name, dialogueNodeId: node.id });
+        questSystem.updateQuestProgress('dialogue', { npc: currentDialogue.name, dialogueId: node.id });
     }
 
     function checkOptionConditions(option) {

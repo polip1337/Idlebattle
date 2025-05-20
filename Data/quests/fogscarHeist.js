@@ -17,7 +17,7 @@ export default {
         {
             description: 'Listen to Renn\'s warning about the fogged corridor.',
             hint: 'Pay attention to Renn\'s dialogue about the dangerous fogged district route.',
-            condition: (event, data) => event === 'dialogue' && data.npc === 'Renn Quickfingers' && data.dialogueId === 'fogged_corridor_warning'
+            condition: (event, data) => event === 'dialogue' && data.npc === 'Renn Quickfingers' && data.dialogueId === 'getToTheDoor'
         },
         {
             description: 'Escape the guardian construct in the Rustmarket Sewers.',

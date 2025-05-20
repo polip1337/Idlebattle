@@ -1,4 +1,4 @@
-import {mobsClasses, renderTeamMembers} from './initialize.js';
+import {mobsClasses, renderTeamMembers, hero} from './initialize.js';
 import Member from './Member.js'
 import {deepCopy} from './Render.js';
 
@@ -250,7 +250,7 @@ class EffectClass {
                 // Store the damage value for later use in revertEffect
                 this.originalValue = this.effect.value;
                 // Check if hero has the Mistwalker Amulet equipped
-                if (this.target.isHero && this.target.equipment.amuletSlot && this.target.equipment.amuletSlot.id === 'mistwalkerAmulet') {
+                if (hero.equipment.amuletSlot && hero.equipment.amuletSlot.id === 'mistwalkerAmulet') {
                     console.log(`${this.target.name} is protected by the Mistwalker Amulet`);
                     this.render = false;
                     return;

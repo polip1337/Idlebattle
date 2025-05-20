@@ -1,7 +1,7 @@
 export default {
     nodes: [
         {
-            id: 'fragment_request',
+            id: 'start',
             text: "That amulet you wear... *studies it intently* The Mistwalker Amulet. I've only seen it in our oldest tapestries. They are rumored to only for the first person that touches them. If you wish to prove its not fake, there's a task I have in mind. A valuable tapestry fragment was stolen from our archives - one that contains information valuable to us. It's being held by fog-touched scavengers in the Rustmarket Sewers.",
             options: [
                 {

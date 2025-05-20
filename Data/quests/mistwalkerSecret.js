@@ -1,7 +1,7 @@
 export default {
-    id: 'mistwalkerSecret',
-    name: "The Mistwalker's Secret",
-    giver: 'Renn Quickfingers',
+    id: 'proofForTheWeave',
+    name: "Proof for the weave",
+    giver: 'Vrenna Stoneweave',
     description: 'Uncover the Mistwalker Amulet\'s secrets and choose a faction to share them with.',
     steps: [
         {
