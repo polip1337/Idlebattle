@@ -133,7 +133,7 @@
         "areaId": "Firstcorridor",
         "x": 80.00,
         "y": 70.00,
-        "icon": "Media/map/hollowreach_sewers.png",
+        "icon": "Media/map/poi-first-corridor.jpg",
         "type": "combat",
         "isStartingLocation": true,
         "dialogueNpcId": "renn_quickfingers",
@@ -146,7 +146,7 @@
         "areaId": "FoggedCorridor",
         "x": 22.50,
         "y": 52.50,
-        "icon": "Media/map/poi-combat.png",
+        "icon": "Media/map/poi-foggy-corridor.jpg",
         "type": "combat",
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
@@ -159,7 +159,7 @@
         "areaId": "fogscarVault_ScavengerRedoubt",
         "x": 65.00,
         "y": 55.00,
-        "icon": "Media/map/poi-combat.png",
+        "icon": "Media/map/poi-scavenger-camp.jpg",
         "type": "combat",
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
@@ -172,18 +172,18 @@
         "areaId": "fogscarVault_Antechamber",
         "x": 45.00,
         "y": 52.00,
-        "icon": "Media/map/poi-combat.png",
+        "icon": "Media/map/poi-vault-door.jpg",
         "type": "combat",
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
         "fleeDialogueId": "renn_vault_fled",
+        "combatStartDialogueId": "renn_vault_panic",
+
         "preBattleSequence": [
           {
             "type": "startSlideshow",
-            "slideshowId": "slideshow2",
-            "resumeDialogue": true,
-            "npcId": "renn_quickfingers",
-            "dialogueId": "renn_vault_panic"
+            "slideshowId": "slideshow2"
+
           }
         ]
       },
@@ -278,7 +278,7 @@
         "name": "Sylvara's Barge",
         "x": 58.33,
         "y": 33.33,
-        "icon": "Media/map/poi-npc.png",
+        "icon": "Media/NPC/sylvara-tidewalker.jpg",
         "type": "dialogue",
         "npcId": "sylvara_tidewalker",
         "dialogueId": "base"
@@ -287,7 +287,7 @@
         "name": "Joren's Workshop",
         "x": 75.00,
         "y": 50.00,
-        "icon": "Media/map/poi-npc.png",
+        "icon": "Media/NPC/joren-halfhand.jpg",
         "type": "dialogue",
         "npcId": "joren_halfhand",
         "dialogueId": "base"
@@ -309,7 +309,7 @@
         "name": "Eryndor's Altar",
         "x": 50.00,
         "y": 41.67,
-        "icon": "Media/map/poi-npc.png",
+        "icon": "Media/map/poi-npc.jpeg",
         "type": "dialogue",
         "npcId": "eryndor_vinesoul",
         "dialogueId": "base"
@@ -318,7 +318,7 @@
         "name": "Mira's Garden",
         "x": 66.67,
         "y": 25.00,
-        "icon": "Media/map/poi-npc.png",
+        "icon": "Media/map/poi-npc.jpeg",
         "type": "dialogue",
         "npcId": "mira_solace",
         "dialogueId": "base"
@@ -348,7 +348,7 @@
         "name": "Renn the Scribe",
         "x": 65.67,
         "y": 65.00,
-        "icon": "Media/npc/poi-npc.png",
+        "icon": "Media/NPC/renn_scribe.jpg",
         "type": "dialogue",
         "npcId": "scribe_base",
         "dialogueId": "base"
@@ -366,16 +366,16 @@
         "name": "Varkis Ironblade",
         "x": 43.67,
         "y": 61.00,
-        "icon": "Media/npc/poi-npc.png",
+        "icon": "Media/map/poi-npc.jpeg",
         "type": "dialogue",
         "npcId": "varkis_ironblade",
         "dialogueId": "base"
       },
       {
-        "name": "Tavern",
+        "name": "Room",
         "x": 50,
         "y": 50,
-        "icon": "Media/map/tavern.png",
+        "icon": "Media/map/poi-bed.jpg",
         "cost": 5,
         "type": "tavern"
       }
