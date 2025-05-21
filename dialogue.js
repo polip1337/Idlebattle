@@ -4,7 +4,8 @@ import { hero,allItemsCache } from './initialize.js';
 import { questSystem } from './questSystem.js';
 import { openTradeModal } from './tradeModal.js';
 import { setCurrentMap } from './map.js';
-import  Item from './item.js';
+import Item from './item.js';
+import { handleActions } from './actionHandler.js';
 
 export async function initializeDialogue() {
     const dialogueModal = document.getElementById('dialogue-modal');
@@ -70,81 +71,6 @@ export async function initializeDialogue() {
                         ${word}
                         <span class="hypertext-tooltip">${description}</span>
                     </span>`;
-        });
-    }
-
-    // Unified action handler
-    function handleActions(actions) {
-        if (!actions) return;
-        const actionArray = Array.isArray(actions) ? actions : [actions];
-        actionArray.forEach(act => {
-            switch (act.type) {
-                case 'startQuest':
-                    questSystem.startQuest(act.questId);
-                    break;
-                case 'addItem':
-                    const itemData = allItemsCache ? allItemsCache[act.itemId] : null;
-                    if (itemData && hero && typeof hero.addItemToInventory === 'function') {
-                        for (let i = 0; i < (act.quantity || 1); i++) {
-                            hero.addItemToInventory(new Item(itemData));
-                        }
-                    } else {
-                        console.warn(`Could not add item ${act.itemId}: item data not found or hero.addItemToInventory missing.`);
-                    }
-                    break;
-                case 'completeQuest':
-                    questSystem.completeQuest(act.questId);
-                    break;
-                case 'unlockPOI':
-                    if (window.unlockMapPOI) {
-                        window.unlockMapPOI(act.mapId, act.poiId);
-                    } else {
-                        console.error('unlockMapPOI function is not available.');
-                    }
-                    break;
-                case 'hidePOI':
-                    if (window.hideMapPOI) {
-                        window.hideMapPOI(act.mapId, act.poiId);
-                    } else {
-                        console.error('hideMapPOI function is not available.');
-                    }
-                    break;
-                case 'travelToMap':
-                    openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
-                    setCurrentMap(act.mapId);
-                    break;
-                case 'openDialogue':
-                    // Close current dialogue and open the new one
-                    hideDialogue();
-                    startDialogue(act.npcId, act.dialogueId);
-                    break;
-                case 'startSlideshow':
-                    // Hide dialogue and start the specified slideshow
-                    hideDialogue();
-                    startSlideshow(() => {
-                        // After slideshow completes, optionally resume dialogue
-                        if (act.resumeDialogue) {
-                            startDialogue(act.npcId, act.dialogueId);
-                        }
-                    }, act.slideshowId || 'slideshow');
-                    break;
-                case 'addCompanion':
-                    try {
-                        hero.recruitCompanion(act.companionId);
-                    } catch(error) {
-                        console.error('addCompanionToParty function is not available.', error);
-                    }
-                    break;
-                case 'removeCompanion':
-                    if (window.removeCompanionFromParty) {
-                        window.removeCompanionFromParty(act.companionId);
-                    } else {
-                        console.error('removeCompanionFromParty function is not available.');
-                    }
-                    break;
-                default:
-                    console.log('Unknown action type:', act.type);
-            }
         });
     }
 

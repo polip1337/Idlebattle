@@ -25,10 +25,10 @@ export default {
         },
         {
             id: 'getToTheDoor',
-            text: "We made it! That looks like the door, Taryn! Just like the rumors said. Heavy old thing, but I think... yes! The mechanism is still working! *click, grind* There! Let's see what treasures await!",
+            text: "We made it! That looks like the door, Taryn! Just like the rumors said. But why is it open? Nevermind, let's see what treasures await!",
             options: [
                 {
-                    text: "Follow her in.",
+                    text: "...",
                     action:
                     {
                         type: 'travelToMap',

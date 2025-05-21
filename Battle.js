@@ -8,6 +8,7 @@ import { questSystem } from './questSystem.js';
 import { openTab } from './navigation.js';
 import { updateHealth, updateMana, updateStamina } from './Render.js';
 import EffectClass from './EffectClass.js';
+import { handleActions } from './actionHandler.js';
 
 
 let battleStarted = false;
@@ -283,17 +284,25 @@ function handleSuccessfulFlee(fleeChance, randomRoll) {
             .then(() => {
                 battleLog.log("Flee dialogue finished.");
                 isBattlePausedForDialogue = false;
+                handleEscapeActions();
                 stopBattle(true); // Pass true to indicate fled
             })
             .catch(error => {
                 console.error("Error during flee dialogue:", error);
+                handleEscapeActions();
                 stopBattle(true); // Still stop battle even if dialogue fails
             });
     } else {
+        handleEscapeActions();
         stopBattle(true); // Pass true to indicate fled
     }
     
     questSystem.updateQuestProgress('escape', { poiName: currentPoiName});
+}
+
+function handleEscapeActions() {
+    if (!currentBattleDialogueOptions || !currentBattleDialogueOptions.escapeActions) return;
+    handleActions(currentBattleDialogueOptions.escapeActions);
 }
 
 function handleFailedFlee(fleeChance, randomRoll) {

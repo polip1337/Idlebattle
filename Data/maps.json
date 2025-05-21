@@ -176,7 +176,6 @@
         "type": "combat",
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
-        "combatStartDialogueId": "renn_golem_panic",
         "fleeDialogueId": "renn_vault_fled"
       },
       {

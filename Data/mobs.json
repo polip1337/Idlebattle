@@ -458,7 +458,7 @@
   "runeEtchedSentry": {
     "id": "runeEtchedSentry",
     "name": "Rune-Etched Sentry",
-    "portrait": "Media/Mobs/Construct/rune_sentry.png",
+    "portrait": "Media/Mobs/Golem/rune_etched_sentry.png",
     "positions": ["Front"],
     "experience": 25,
     "goldDrop": 15,
