@@ -425,6 +425,27 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         setTimeout(returnToMap, 2000);
         return;
     }
+
+    // Handle area-level onEnterActions first, before setting up teams
+    if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
+        battleLog.log("Executing area onEnterActions");
+        isBattlePausedForDialogue = true;
+        await handleActions(currentBattleArea.onEnterActions);
+        isBattlePausedForDialogue = false;
+    }
+
+    // Show pre-combat dialogue only at the start of the first stage
+    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && 
+        !hasShownPreCombatDialogue && currentBattleStageNumber === 1) {
+        isBattlePausedForDialogue = true;
+        battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
+        await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
+        battleLog.log("Pre-battle dialogue finished.");
+        hasShownPreCombatDialogue = true;
+        isBattlePausedForDialogue = false;
+        if (isPaused) return; // If game was paused externally during dialogue
+    }
+
     battleLog.log(`Area ${areaNameString} loaded. Spawning mobs for stage ${currentBattleStageNumber}.`);
 
     team1.clearMembers();
@@ -471,18 +492,6 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         if (typeof mob.initializeDOMElements === 'function') mob.initializeDOMElements();
     });
 
-    // Show pre-combat dialogue only at the start of the first stage
-    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && 
-        !hasShownPreCombatDialogue && currentBattleStageNumber === 1) {
-        isBattlePausedForDialogue = true;
-        battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
-        await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
-        battleLog.log("Pre-battle dialogue finished.");
-        hasShownPreCombatDialogue = true;
-        isBattlePausedForDialogue = false;
-        if (isPaused) return; // If game was paused externally during dialogue
-    }
-
     if (team1.members.length === 0 || team2.members.length === 0) {
         battleLog.log("Battle cannot start or continue, one team is empty.");
         await checkBattleOutcome();
@@ -493,19 +502,6 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     battleStarted = true;
     resetFleeButtonState(); // Ensure flee button is enabled if not on cooldown
 
-    // Handle area-level onEnterActions first
-    if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
-        battleLog.log("Executing area onEnterActions");
-        // Pause battle before executing onEnterActions
-        isBattlePausedForDialogue = true;
-        
-        // Execute actions and wait for any async operations to complete
-        await handleActions(currentBattleArea.onEnterActions);
-        
-        // Resume battle after actions are complete
-        isBattlePausedForDialogue = false;
-    }
-
     // Then handle stage-specific onEnterEffect and onEnterActions
     const currentStage = currentBattleArea.stages[currentBattleStageNumber - 1];
     if (currentStage) {
@@ -515,7 +511,6 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
             });
         }
         if (currentStage.onEnterActions) {
-            // Pause battle before executing stage onEnterActions
             isBattlePausedForDialogue = true;
             await handleActions(currentStage.onEnterActions);
             isBattlePausedForDialogue = false;
