@@ -33,7 +33,7 @@ import {initializeQuestLog} from './questLog.js';
 import { openSaveModal,openLoadModal, setInitializeAndLoadGame as setInitLoadFnForSaveLoad, configureAutosave as slConfigureAutosave } from './saveLoad.js'; // Added slConfigureAutosave
 import { initializeCompanionUI } from './companionUIManager.js';
 import { handleEarlyGameInit } from './slideshow.js';
-import { openClassChangeModal } from './classChange.js';
+import { openClassChangeModal, initializeClassChange } from './classChange.js';
 
 
 export let battleStatistics;
@@ -450,6 +450,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeHomeScreen();
     await initializeDialogue();
     initializeQuestLog();
+    initializeClassChange();
 
     document.querySelectorAll('.back-to-map-button').forEach(button => {
         button.addEventListener('click', (event) => {
