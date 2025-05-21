@@ -462,7 +462,7 @@
     "positions": ["Front"],
     "experience": 25,
     "goldDrop": 15,
-    "skills": ["energyBolt", "stoneSlam", "fortifiedPlating", "guardianProtocol"],
+    "skills": [ "stoneSlam", "fortifiedPlating", "guardianProtocol"],
     "stats": {
       "strength": 20,
       "dexterity": -50,
@@ -489,7 +489,7 @@
   "fogSpecter": {
     "id": "fogSpecter",
     "name": "Fog Specter",
-    "portrait": "Media/Mobs/Spectral/fog_specter.png",
+    "portrait": "Media/Mobs/Spectral/fog_specter.jpg",
     "positions": ["Front", "Back"],
     "experience": 20,
     "goldDrop": 12,

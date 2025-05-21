@@ -1388,14 +1388,14 @@
     "icon": "Media/Skills/Physical/stone_slam.png",
     "type": "active",
     "description": "Slams a heavy stone limb into the target with concussive force.",
-    "damage": 20,
+    "damage": 400,
     "manaCost": 0,
     "staminaCost": 10,
-    "cooldown": 6,
+    "cooldown": 35,
     "damageType": "blunt",
     "effects": [{"id": "stun", "chance": 0.25, "duration": 1}],
-    "targetingModes": ["Random Front"],
-    "tags": ["Single Target", "Physical", "Blunt", "Active", "Stamina"]
+    "targetingModes": ["All Enemies"],
+    "tags": ["Multi Target", "Physical", "Blunt", "Active", "Stamina"]
   },
   "fortifiedPlating": {
     "id": "fortifiedPlating",
