@@ -32,6 +32,7 @@ import {questSystem as globalQuestSystem} from './questSystem.js';
 import {initializeQuestLog} from './questLog.js';
 import { openSaveModal,openLoadModal, setInitializeAndLoadGame as setInitLoadFnForSaveLoad, configureAutosave as slConfigureAutosave } from './saveLoad.js'; // Added slConfigureAutosave
 import { initializeCompanionUI } from './companionUIManager.js';
+import { handleEarlyGameInit } from './slideshow.js';
 
 
 export let battleStatistics;
@@ -228,6 +229,11 @@ export async function loadGameData(savedGameState = null) {
         initiateEventListeners();
         initializeQuestLog();
         battleStatistics.updateBattleStatistics();
+
+        // If this is a new game (no saved state), notify slideshow of early completion
+        if (!savedGameState) {
+            handleEarlyGameInit();
+        }
 
         return true;
 

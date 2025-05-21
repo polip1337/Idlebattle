@@ -20,8 +20,12 @@ export function initializeHomeScreen() {
     if (newGameButton) {
         newGameButton.addEventListener('click', async () => {
             hideHomeScreen();
+            // Start game initialization in parallel with slideshow
+            const gameInitPromise = loadGameData(null);
+            
             startSlideshow(async () => {
-                const gameReady = await loadGameData(null); // Start new game (null signifies no saved state)
+                // Wait for game initialization to complete
+                const gameReady = await gameInitPromise;
                 if (gameReady) {
                     openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
                 } else {

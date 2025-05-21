@@ -123,10 +123,9 @@ function endSlideshow() {
 
         if (audioElement) {
             audioElement.pause(); // Ensure it's paused
-            // Consider resetting volume if you plan to reuse the audio element immediately
-            // audioElement.volume = 1;
         }
 
+        // Call the completion callback if it exists
         if (typeof onSlideshowCompleteCallback === 'function') {
             onSlideshowCompleteCallback();
         }
@@ -192,4 +191,12 @@ export function startSlideshow(onComplete, slideshowId = 'slideshow') {
     }
 
     showSlide(0);
+}
+
+// Add a new function to handle early game initialization completion
+export function handleEarlyGameInit() {
+    if (!isFadingOut && currentSlideshowId) {
+        // If slideshow is still running, end it early
+        endSlideshow();
+    }
 }
