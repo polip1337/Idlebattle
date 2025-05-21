@@ -33,7 +33,6 @@ import {initializeQuestLog} from './questLog.js';
 import { openSaveModal,openLoadModal, setInitializeAndLoadGame as setInitLoadFnForSaveLoad, configureAutosave as slConfigureAutosave } from './saveLoad.js'; // Added slConfigureAutosave
 import { initializeCompanionUI } from './companionUIManager.js';
 import { handleEarlyGameInit } from './slideshow.js';
-import { openClassChangeModal } from './classChange.js';
 
 
 export let battleStatistics;
@@ -457,9 +456,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (mapNavButton) openTab({ currentTarget: mapNavButton }, 'map');
         });
     });
-
-    // Add event listener for change class button
-    document.getElementById('changeClassButton').addEventListener('click', openClassChangeModal);
 });
 
 
