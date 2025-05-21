@@ -48,7 +48,6 @@ export let mobsClasses = null;
 export let allSkillsCache = null;
 export let allItemsCache = null;
 export let allCompanionsData = {};
-let allHeroClasses = {};
 
 
 export const NPC_MEDIA_PATH = "Media/NPC/";
@@ -126,24 +125,16 @@ async function loadMobs() {
 
 async function loadClasses() {
     try {
-        const response = await fetch('data/classes.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const classes = await response.json();
-        allHeroClasses = classes; // Store the classes data
-        classTiers = classes['tiers'] || [];
-        const heroClassDefinitions = classes['classes'] || {};
-        heroClasses = {};
+        const classesData = await loadJSON('Data/classes.json');
+        const loadedClasses = {};
+        classTiers = classesData['tiers'] || [];
+        const heroClassDefinitions = classesData['classes'] || {};
         for (const key in heroClassDefinitions) {
             const heroClassDef = heroClassDefinitions[key];
-            heroClasses[heroClassDef.id] = {...heroClassDef, skills: heroClassDef.skills || []};
+            loadedClasses[heroClassDef.id] = {...heroClassDef, skills: heroClassDef.skills || []};
         }
-        return classes;
-    } catch (error) {
-        console.error('Error loading classes:', error);
-        return {};
-    }
+        return loadedClasses;
+    } catch (error) { console.error("Failed to load classes.json:", error); return { tiers: [], classes: {} }; }
 }
 
 async function loadCompanionDefinitions() {
@@ -168,6 +159,7 @@ export async function loadGameData(savedGameState = null) {
         };
         allItemsCache = await loadItems();
         mobsClasses = await loadMobs();
+        heroClasses = await loadClasses();
         await loadCompanionDefinitions();
 
         if (Object.keys(heroClasses).length === 0 || Object.keys(allSkillsCache).length === 0) {
@@ -477,5 +469,3 @@ function togglePause() {
         }
     });
 }
-
-export { hero, battleLog, battleStatistics, evolutionService, allSkillsCache, allHeroClasses };
