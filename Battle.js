@@ -493,17 +493,23 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     battleStarted = true;
     resetFleeButtonState(); // Ensure flee button is enabled if not on cooldown
 
-    // Apply onEnterEffect if defined for the current stage
-    const currentStage = currentBattleArea.stages[currentBattleStageNumber - 1];
-    if (currentStage && currentStage.onEnterEffect) {
-        team1.members.forEach(member => {
-            new EffectClass(member, currentStage.onEnterEffect);
-        });
+    // Handle area-level onEnterActions first
+    if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
+        battleLog.log("Executing area onEnterActions");
+        handleActions(currentBattleArea.onEnterActions);
     }
 
-    // Handle onEnterActions if defined for the current stage
-    if (currentStage && currentStage.onEnterActions) {
-        handleActions(currentStage.onEnterActions);
+    // Then handle stage-specific onEnterEffect and onEnterActions
+    const currentStage = currentBattleArea.stages[currentBattleStageNumber - 1];
+    if (currentStage) {
+        if (currentStage.onEnterEffect) {
+            team1.members.forEach(member => {
+                new EffectClass(member, currentStage.onEnterEffect);
+            });
+        }
+        if (currentStage.onEnterActions) {
+            handleActions(currentStage.onEnterActions);
+        }
     }
 
     useTeamSkills(team2);

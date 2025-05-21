@@ -7,6 +7,7 @@ class Area {
         this.stages = [];
         this.description = "";
         this.isLoaded = false;
+        this.onEnterActions = [];
     }
 
     async loadData() {
@@ -26,14 +27,16 @@ class Area {
             }
             const data = await response.json();
 
-            this.displayName = data.areaName || this.areaName;
-            this.description = data.areaDescription || "";
+            this.displayName = data.name || this.areaName;
+            this.description = data.description || "";
             this.stages = data.stages || [];
+            this.onEnterActions = data.onEnterActions || [];
             this.isLoaded = true;
         } catch (error) {
             console.error(`Failed to load area data for ${this.areaName} (source JSON: ${this.areaName.replace(/\s/g, "")}.json):`, error);
             this.displayName = this.areaName || "Error Loading Area";
             this.stages = []; // Ensure stages is empty on error
+            this.onEnterActions = []; // Ensure onEnterActions is empty on error
             this.isLoaded = false;
         }
     }

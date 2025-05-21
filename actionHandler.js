@@ -31,10 +31,16 @@ export function handleActions(actions) {
                     if (!hero.hasItem(equipItem.id)) {
                         hero.addItemToInventory(new Item(equipItem));
                     }
-                    // Try to equip the item
-                    const equipResult = hero.equipItem(equipItem,equipItem.slot);
-                    if (!equipResult) {
-                        console.warn(`Failed to equip item ${action.itemId}: ${equipResult.reason}`);
+                    // Find the actual item instance in inventory
+                    const itemInstance = hero.inventory.find(item => item.id === equipItem.id);
+                    if (itemInstance) {
+                        // Try to equip the actual item instance
+                        const equipResult = hero.equipItem(itemInstance, equipItem.slot);
+                        if (!equipResult) {
+                            console.warn(`Failed to equip item ${action.itemId}: ${equipResult.reason}`);
+                        }
+                    } else {
+                        console.warn(`Could not find item ${action.itemId} in inventory after adding it.`);
                     }
                 } else {
                     console.warn(`Could not equip item ${action.itemId}: item data not found or hero missing.`);
