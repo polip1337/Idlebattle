@@ -501,6 +501,11 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         });
     }
 
+    // Handle onEnterActions if defined for the current stage
+    if (currentStage && currentStage.onEnterActions) {
+        handleActions(currentStage.onEnterActions);
+    }
+
     useTeamSkills(team2);
     useTeamSkills(team1);
     if (hero) hero.triggerRepeatSkills();

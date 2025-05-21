@@ -13,7 +13,7 @@
       ]
     }
   ],
-  "entranceActions": [
+  "onEnterActions": [
     {
       "type": "startSlideshow",
       "slideshowId": "slideshow2",
