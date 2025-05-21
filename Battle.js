@@ -430,6 +430,14 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         return;
     }
 
+    // Handle pre-battle sequence if it exists
+    if (poiData.preBattleSequence && poiData.preBattleSequence.length > 0) {
+        battleLog.log("Executing pre-battle sequence");
+        for (const action of poiData.preBattleSequence) {
+            await handleActions(action);
+        }
+    }
+
     // Set up teams first
     team1.clearMembers();
     const activePlayerParty = hero.getActivePartyMembers();
@@ -488,7 +496,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     window.isBattlePausedForDialogue = true;
     resetFleeButtonState();
 
-    // Handle area-level onEnterActions first, before starting the battle interval
+    // Handle area-level onEnterActions
     if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
         battleLog.log("Executing area onEnterActions");
         await handleActions(currentBattleArea.onEnterActions);
