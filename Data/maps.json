@@ -75,14 +75,13 @@
       {
         "id": "orphans_hollow_poi",
         "name": "Orphan's Hollow",
-        "x": 20.00,
-        "y": 85.00,
+        "x": 21.00,
+        "y": 36.00,
         "icon": "Media/map/poi-orphanage.jpg",
         "type": "dialogue",
         "npcId": "old_maris",
-        "dialogueId": "old_maris",
-        "isStartingLocation": true,
-        "description": "A dilapidated three-story building on the city's edge, its once-white walls now stained with age and fog residue. The orphanage stands as a testament to better times, with boarded-up windows and a creaking sign that reads 'Orphan's Hollow' in faded letters."
+        "dialogueId": "base",
+        "isStartingLocation": true
       },
       { 
         "id": "renn_quickfingers_heist",

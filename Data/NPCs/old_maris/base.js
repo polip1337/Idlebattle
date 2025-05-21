@@ -2,37 +2,56 @@ export default {
     nodes: [
         {
             id: "start",
-            npcId: "orphanage_mistress",
-            text: "I'm afraid I have difficult news. The city council has cut our funding again. We can no longer support our older wards. You've reached the age where you must make your own way in the world. The Orphan's Hollow has always been a sanctuary, but even our crumbling walls can't protect you forever.",
+            npcId: "old_maris",
+            text: "Taryn, sit with me. The council’s cut our funds again, those greedy fools. Orphan’s Hollow can’t keep you now—you’re sixteen, old enough to face Hollowreach on your own. This place has been your home, but the city won’t care. You’ll need to find your way, and fast.",
             options: [
                 {
-                    text: "But where will I go?",
+                    text: "Leave? Maris, where do I even start?",
                     nextId: "guidance"
                 },
                 {
-                    text: "I understand.",
+                    text: "I knew this day was coming. I’ll figure it out.",
                     nextId: "farewell_gift"
                 }
             ]
         },
         {
             id: "guidance",
-            text: "Rustmarket is always looking for able hands. Your old friend Renn 'Quickfingers' might have some work for you - though be careful with his schemes. The city may seem daunting, but you've been preparing for this day. Remember what you've learned about the factions: the Loomkeepers with their magical tapestries, the Driftkin in their fog-resistant barges, the Pulsefinders and their fog-worship, and the Emberclad with their fire rituals. Choose your path carefully, Taryn.",
+            text: "Hollowreach is rough, Taryn. Rustmarket’s your best bet—plenty of work there if you’re clever. Renn ‘Quickfingers’ is around, making deals and dodging trouble. The factions will notice you: Loomkeepers with their tapestries, Driftkin on their barges, Pulsefinders lost in fog-worship, Emberclad burning everything they don’t trust. Choose carefully. They all want something.",
+            options: [
+                {
+                    text: "Renn? Can I still trust her?",
+                    nextId: "renn_advice"
+                },
+                {
+                    text: "What do I need to know to survive out there?",
+                    nextId: "survival_advice"
+                }
+            ]
+        },
+        {
+            id: "renn_advice",
+            text: "Renn hasn’t changed much—same sly grin, same knack for trouble. He’s in Rustmarket, offering jobs that sound too good. He’ll help if you pay, but watch out for Selka Ironjaw. She’s a Driftkin enforcer now, still mad about those old orphanage fights. Don’t let Renn pull you into anything stupid.",
+            nextId: "farewell_gift"
+        },
+        {
+            id: "survival_advice",
+            text: "The city’s dangerous, Taryn. The fog’s worst—it gets in your head, makes you see things. Stay off Ironspire Bridge after dark. Driftkin sell fog-wards, but they’re no good. Find Gavix ‘The Tinker’ if you need tools—his gadgets might help. And keep my herbs on you. They’ll ease the city’s sting.",
             nextId: "farewell_gift"
         },
         {
             id: "farewell_gift",
-            text: "Here. Take these 5 gold pieces. It's not much, but it should help you get started. Remember what I've taught you - stay away from the fog, keep your wits about you, and trust your instincts. The factions will try to recruit you, but choose your path carefully. And watch out for Selka Ironjaw - she's become a Driftkin enforcer and still holds that grudge from your orphanage days.",
+            text: "Take these, Taryn—five gold pieces, all we could spare. They’ll get you food or a knife in Rustmarket, maybe both if you bargain well. Selka’s still holding that grudge, and the factions will try to pull you in. Trust what I taught you: question everything, and don’t be fooled by promises.",
             options: [
                 {
-                    text: "Thank you for everything, Mistress.",
+                    text: "Thank you, Maris. I won’t let you down.",
                     nextId: "final_words"
                 }
             ]
         },
         {
             id: "final_words",
-            text: "You've grown into a fine young person, Taryn. I'm proud of you. Now go, before the council's men arrive to clear out the older wards. And remember - Orphan's Hollow will always be here if you need guidance. The city may be fractured, but you have friends here: Gavix 'The Tinker' is still obsessed with his fog-powered gadgets, and Old Maris wanders as a healer now. They might help you find your way.",
+            text: "You’ve grown strong, Taryn, stronger than that kid who swiped my bread years ago. I’m proud of you. The council’s men are coming to clear out the older wards—get moving before they show up. Orphan’s Hollow will be here if you need it. Look for Gavix in Rustmarket; his contraptions could keep you alive. And if you see Tharok One-Eye on Ironspire Bridge, listen to his stories. There’s truth in them. Go now, and don’t look back.",
             is_final: true,
             effects: [
                 {
@@ -46,4 +65,4 @@ export default {
             ]
         }
     ]
-}; 
+};
