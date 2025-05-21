@@ -31,7 +31,7 @@ export default {
         },
         {
             id: "renn_advice",
-            text: "Renn hasn’t changed much—same sly grin, same knack for trouble. He’s in Rustmarket, offering jobs that sound too good. He’ll help if you pay, but watch out for Selka Ironjaw. She’s a Driftkin enforcer now, still mad about those old orphanage fights. Don’t let Renn pull you into anything stupid.",
+            text: "Renn hasn’t changed much—same sly grin, same knack for trouble. She’s in Rustmarket, offering jobs that sound too good. She’ll help if you pay, but watch out for Selka Ironjaw. She’s a Driftkin enforcer now, still mad about those old orphanage fights. Don’t let Renn pull you into anything stupid.",
             nextId: "farewell_gift"
         },
         {

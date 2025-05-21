@@ -221,6 +221,7 @@ export async function loadGameData(savedGameState = null) {
             if (document.getElementById('heroContent')) {
                  initializeCompanionUI();
             }
+            await window.startDialogue('old_maris', 'base');
         }
 
         // Configure and start autosave AFTER hero and other core systems are initialized

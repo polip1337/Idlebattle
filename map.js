@@ -9,7 +9,7 @@ import { renderHero, updateHealth, updateMana, updateStamina } from './Render.js
 
 
 export let mapsData = null;
-export let currentMapId = 'hollowreach_Valley';
+export let currentMapId = 'hollowreach';
 export let pointsOfInterest = [];
 export let currentLocation = null;
 let unlockedPredefinedPois = new Set();
