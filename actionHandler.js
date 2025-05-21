@@ -32,8 +32,8 @@ export function handleActions(actions) {
                         hero.addItemToInventory(new Item(equipItem));
                     }
                     // Try to equip the item
-                    const equipResult = hero.equipItem(equipItem);
-                    if (!equipResult.success) {
+                    const equipResult = hero.equipItem(equipItem,equipItem.slot);
+                    if (!equipResult) {
                         console.warn(`Failed to equip item ${action.itemId}: ${equipResult.reason}`);
                     }
                 } else {
