@@ -435,6 +435,17 @@ class Hero extends Member {
             }
         }
 
+        // Update class level displays
+        if (updateHeroUI) {
+            const class1Level = document.getElementById('heroClass1Level');
+            const class2Level = document.getElementById('heroClass2Level');
+            const class3Level = document.getElementById('heroClass3Level');
+            
+            if (class1Level) class1Level.textContent = this.level;
+            if (class2Level && this.class2) class2Level.textContent = this.level;
+            if (class3Level && this.class3) class3Level.textContent = this.level;
+        }
+
         this.recalculateHeroStats(updateHeroUI); 
     }
 
