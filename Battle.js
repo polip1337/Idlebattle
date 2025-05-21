@@ -426,23 +426,22 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         return;
     }
 
+    // Set battle as paused before any pre-battle content
+    isBattlePausedForDialogue = true;
+
     // Handle area-level onEnterActions first, before setting up teams
     if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
         battleLog.log("Executing area onEnterActions");
-        isBattlePausedForDialogue = true;
         await handleActions(currentBattleArea.onEnterActions);
-        isBattlePausedForDialogue = false;
     }
 
     // Show pre-combat dialogue only at the start of the first stage
     if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && 
         !hasShownPreCombatDialogue && currentBattleStageNumber === 1) {
-        isBattlePausedForDialogue = true;
         battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
         await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
         battleLog.log("Pre-battle dialogue finished.");
         hasShownPreCombatDialogue = true;
-        isBattlePausedForDialogue = false;
         if (isPaused) return; // If game was paused externally during dialogue
     }
 
@@ -511,9 +510,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
             });
         }
         if (currentStage.onEnterActions) {
-            isBattlePausedForDialogue = true;
             await handleActions(currentStage.onEnterActions);
-            isBattlePausedForDialogue = false;
         }
     }
 
@@ -528,6 +525,9 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     
     // Update stage display
     updateStageDisplay();
+
+    // Only unpause the battle after everything is set up and ready
+    isBattlePausedForDialogue = false;
 }
 
 function stopBattle(fled = false) {
@@ -535,7 +535,7 @@ function stopBattle(fled = false) {
         clearInterval(battleInterval);
         battleInterval = null;
     }
-    battleStarted = false; // Ensure battle is marked as not started
+    battleStarted = false; // Ensure battle is marked as not startedx
     isBattlePausedForDialogue = false;
     resetFleeButtonState(); // Reset flee button, e.g. if battle stopped externally
 
