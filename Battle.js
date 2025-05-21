@@ -430,28 +430,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         return;
     }
 
-    // Set battle as paused before any pre-battle content
-    isBattlePausedForDialogue = true;
-    window.isBattlePausedForDialogue = true; // Update window object
-
-    // Handle area-level onEnterActions first, before setting up teams
-    if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
-        battleLog.log("Executing area onEnterActions");
-        await handleActions(currentBattleArea.onEnterActions);
-    }
-
-    // Show pre-combat dialogue only at the start of the first stage
-    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && 
-        !hasShownPreCombatDialogue && currentBattleStageNumber === 1) {
-        battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
-        await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
-        battleLog.log("Pre-battle dialogue finished.");
-        hasShownPreCombatDialogue = true;
-        if (isPaused) return; // If game was paused externally during dialogue
-    }
-
-    battleLog.log(`Area ${areaNameString} loaded. Spawning mobs for stage ${currentBattleStageNumber}.`);
-
+    // Set up teams first
     team1.clearMembers();
     const activePlayerParty = hero.getActivePartyMembers();
 
@@ -502,9 +481,28 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         return;
     }
 
-    battleLog.log(`Battle started at ${currentPoiName}, Stage ${currentBattleStageNumber}`);
+    // Set battle as started but paused
     battleStarted = true;
-    resetFleeButtonState(); // Ensure flee button is enabled if not on cooldown
+    window.battleStarted = true;
+    isBattlePausedForDialogue = true;
+    window.isBattlePausedForDialogue = true;
+    resetFleeButtonState();
+
+    // Handle area-level onEnterActions first, before starting the battle interval
+    if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
+        battleLog.log("Executing area onEnterActions");
+        await handleActions(currentBattleArea.onEnterActions);
+    }
+
+    // Show pre-combat dialogue only at the start of the first stage
+    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && 
+        !hasShownPreCombatDialogue && currentBattleStageNumber === 1) {
+        battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
+        await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
+        battleLog.log("Pre-battle dialogue finished.");
+        hasShownPreCombatDialogue = true;
+        if (isPaused) return; // If game was paused externally during dialogue
+    }
 
     // Then handle stage-specific onEnterEffect and onEnterActions
     const currentStage = currentBattleArea.stages[currentBattleStageNumber - 1];
@@ -533,7 +531,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
 
     // Only unpause the battle after everything is set up and ready
     isBattlePausedForDialogue = false;
-    window.isBattlePausedForDialogue = false; // Update window object
+    window.isBattlePausedForDialogue = false;
 }
 
 function stopBattle(fled = false) {
