@@ -12,14 +12,5 @@
         {"type": "runeEtchedSentry", "count": 1, "level": 10}
       ]
     }
-  ],
-  "onEnterActions": [
-    {
-      "type": "startSlideshow",
-      "slideshowId": "slideshow2",
-      "resumeDialogue": true,
-      "npcId": "renn_quickfingers",
-      "dialogueId": "renn_vault_panic"
-    }
   ]
 }
