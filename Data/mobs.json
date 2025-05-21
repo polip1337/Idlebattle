@@ -485,6 +485,45 @@
       "mana": 5,
       "armor": 2
     }
+  },
+  "fogSpecter": {
+    "id": "fogSpecter",
+    "name": "Fog Specter",
+    "portrait": "Media/Mobs/Spectral/fog_specter.png",
+    "positions": ["Front", "Back"],
+    "experience": 20,
+    "goldDrop": 12,
+    "skills": ["energyBolt", "mistBolt", "etherealShift", "shadowStep"],
+    "stats": {
+      "strength": 15,
+      "dexterity": 20,
+      "stamina": 25,
+      "vitality": 20,
+      "magicPower": 25,
+      "magicControl": 15,
+      "mana": 60,
+      "manaRegen": 3,
+      "armor": 8,
+      "resistances": {
+        "physical": 15,
+        "slash": 15,
+        "pierce": 15,
+        "blunt": 15,
+        "poison": 25,
+        "fire": -10,
+        "energy": 20
+      },
+      "dodge": 15,
+      "accuracy": 8,
+      "damage": 1
+    },
+    "statsPerLevel": {
+      "strength": 2,
+      "dexterity": 3,
+      "vitality": 3,
+      "magicPower": 4,
+      "mana": 5,
+      "armor": 1
+    }
   }
-
 }

@@ -57,6 +57,10 @@ export async function initializeDialogue() {
     // Hide dialogue modal
     function hideDialogue() {
         dialogueModal.classList.add('hidden');
+        // Resume battle if it was paused for dialogue
+        if (window.battleStarted) {
+            window.isBattlePausedForDialogue = false;
+        }
         if (resolveDialoguePromise) {
             resolveDialoguePromise();
             resolveDialoguePromise = null;
@@ -253,6 +257,11 @@ export async function initializeDialogue() {
     async function startDialogue(npcId, dialogueFileId = null) { // dialogueFileId is now optional
         return new Promise(async (resolve) => {
             resolveDialoguePromise = resolve;
+
+            // Ensure battle is paused during dialogue
+            if (window.battleStarted) {
+                window.isBattlePausedForDialogue = true;
+            }
 
             const effectiveDialogueFileId = dialogueFileId || await selectDialogueFile(npcId);
             if (!effectiveDialogueFileId) {

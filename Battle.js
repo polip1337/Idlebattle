@@ -20,6 +20,10 @@ let currentBattleDialogueOptions = null;
 let isBattlePausedForDialogue = false;
 let hasShownPreCombatDialogue = false;
 
+// Expose battle state variables to window object
+window.battleStarted = battleStarted;
+window.isBattlePausedForDialogue = isBattlePausedForDialogue;
+
 let currentBattleArea = null;
 let currentBattleStageNumber = 1;
 const xpPerStageBase = 50; // Base XP for clearing a stage
@@ -428,6 +432,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
 
     // Set battle as paused before any pre-battle content
     isBattlePausedForDialogue = true;
+    window.isBattlePausedForDialogue = true; // Update window object
 
     // Handle area-level onEnterActions first, before setting up teams
     if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
@@ -528,6 +533,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
 
     // Only unpause the battle after everything is set up and ready
     isBattlePausedForDialogue = false;
+    window.isBattlePausedForDialogue = false; // Update window object
 }
 
 function stopBattle(fled = false) {
@@ -535,8 +541,10 @@ function stopBattle(fled = false) {
         clearInterval(battleInterval);
         battleInterval = null;
     }
-    battleStarted = false; // Ensure battle is marked as not startedx
+    battleStarted = false; // Ensure battle is marked as not started
+    window.battleStarted = false; // Update window object
     isBattlePausedForDialogue = false;
+    window.isBattlePausedForDialogue = false; // Update window object
     resetFleeButtonState(); // Reset flee button, e.g. if battle stopped externally
 
     // Skills are typically stopped by checkBattleOutcome.
