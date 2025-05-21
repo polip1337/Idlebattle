@@ -176,16 +176,7 @@
         "type": "combat",
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
-        "fleeDialogueId": "renn_vault_fled",
-        "preBattleActions": [
-          {
-            "type": "startSlideshow",
-            "slideshowId": "slideshow2",
-            "resumeDialogue": true,
-            "npcId": "renn_quickfingers",
-            "dialogueId": "renn_vault_panic"
-          }
-        ]
+        "fleeDialogueId": "renn_vault_fled"
       },
       {
         "id": "exit_sewers_to_hollowreach_POI",
