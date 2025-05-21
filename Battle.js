@@ -496,7 +496,14 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     // Handle area-level onEnterActions first
     if (currentBattleArea.onEnterActions && currentBattleArea.onEnterActions.length > 0) {
         battleLog.log("Executing area onEnterActions");
-        handleActions(currentBattleArea.onEnterActions);
+        // Pause battle before executing onEnterActions
+        isBattlePausedForDialogue = true;
+        
+        // Execute actions and wait for any async operations to complete
+        await handleActions(currentBattleArea.onEnterActions);
+        
+        // Resume battle after actions are complete
+        isBattlePausedForDialogue = false;
     }
 
     // Then handle stage-specific onEnterEffect and onEnterActions
@@ -508,7 +515,10 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
             });
         }
         if (currentStage.onEnterActions) {
-            handleActions(currentStage.onEnterActions);
+            // Pause battle before executing stage onEnterActions
+            isBattlePausedForDialogue = true;
+            await handleActions(currentStage.onEnterActions);
+            isBattlePausedForDialogue = false;
         }
     }
 
