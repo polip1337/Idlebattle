@@ -3,6 +3,7 @@ import { questSystem } from './questSystem.js';
 import { openTab } from './navigation.js';
 import { setCurrentMap } from './map.js';
 import { openTradeModal } from './tradeModal.js';
+import { startSlideshow } from './slideshow.js';
 import Item from './item.js';
 
 export function handleActions(actions) {
@@ -75,10 +76,10 @@ export function handleActions(actions) {
                 }
                 break;
             case 'startSlideshow':
-                if (window.startSlideshow) {
-                    window.startSlideshow(() => {
+                if (startSlideshow) {
+                    startSlideshow(() => {
                         if (action.resumeDialogue) {
-                            window.startDialogue(action.npcId, action.dialogueId);
+                            startDialogue(action.npcId, action.dialogueId);
                         }
                     }, action.slideshowId || 'slideshow');
                 } else {

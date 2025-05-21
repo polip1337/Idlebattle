@@ -18,8 +18,8 @@
       "type": "startSlideshow",
       "slideshowId": "slideshow2",
       "resumeDialogue": true,
-      "npcId": "renn",
-      "dialogueId": "post_vault_escape"
+      "npcId": "renn_quickfingers",
+      "dialogueId": "renn_vault_panic"
     }
   ]
 }
