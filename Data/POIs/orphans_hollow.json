@@ -1,0 +1,14 @@
+{
+    "id": "orphans_hollow",
+    "name": "Orphan's Hollow",
+    "description": "A dilapidated three-story building on the city's edge, its once-white walls now stained with age and fog residue. The orphanage stands as a testament to better times, with boarded-up windows and a creaking sign that reads 'Orphan's Hollow' in faded letters. Inside, the building is surprisingly well-maintained despite its exterior, with clean floors and walls decorated with children's drawings. Secret stashes from past residents are rumored to be hidden within its crumbling walls.",
+    "type": "location",
+    "faction": "unaligned",
+    "connected_locations": ["rustmarket"],
+    "npcs": ["orphanage_mistress"],
+    "available_quests": [],
+    "services": [],
+    "ambient_description": "The sound of children playing echoes through the halls, mixed with the creaking of old floorboards and the distant howl of the fog. The smell of fresh bread and cleaning supplies fills the air, a stark contrast to the city's usual fog-tainted atmosphere.",
+    "music": "orphanage_theme",
+    "is_safe_zone": true
+} 
