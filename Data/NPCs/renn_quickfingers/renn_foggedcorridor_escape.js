@@ -10,7 +10,7 @@ export default {
                 },
                 {
                     text: "Let's get out of here before more show up.",
-                    nextId: 'escape_plan'
+                    nextId: 'amulet_discussion'
                 }
             ]
         },
@@ -20,16 +20,16 @@ export default {
             options: [
                 {
                     text: "So what's our next move?",
-                    nextId: 'escape_plan'
+                    nextId: 'amulet_discussion'
                 }
             ]
         },
         {
-            id: 'escape_plan',
-            text: "Figure out why the fog didn't kill us. Then we can figure out what to do next.",
+            id: 'amulet_discussion',
+            text: "Figure out why the fog didn't kill us. Then we can figure out what to do next. Meet me at my house.",
             options: [
                 {
-                    text: "Lead the way. I'm right behind you.",
+                    text: "Let's go.",
                     action: [
                         { type: 'hidePOI', mapId: 'rustmarketSewers', poiId: 'sewer_foggedCorridor_POI' },
                         { type: 'hidePOI', mapId: 'rustmarketSewers', poiId: 'sewer_vaultAntechamber_POI' },

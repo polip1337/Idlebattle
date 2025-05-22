@@ -27,7 +27,7 @@ export default {
         {
             description: 'Navigate through the collapsed corridors and escape through the fogged district.',
             hint: 'Use the amulet\'s protection to survive the poisonous fog and escape to the surface.',
-            condition: (event, data) => event === 'areaEnter' && data.areaId === 'foggedDistrict'
+            condition: (event, data) => event === 'areaEnter' && data.areaId === 'foggedDocks'
         },
         {
             description: 'Return to the surface and discuss the amulet with Renn.',

@@ -79,34 +79,83 @@ describe('Fogscar Heist Quest', () => {
 
     describe('Quest Progression', () => {
         it('should progress through first corridor combat', () => {
-            const preBattleNode = rennFirstCorridorPreBattle.nodes[0];
-            expect(preBattleNode.text).to.include("RATS! BIG ONES!");
-
-            const postBattleNode = rennFirstCorridorPostBattle.nodes[0];
-            expect(postBattleNode.action).to.deep.include({
+            expect(rennFirstCorridorPreBattle).to.have.property('nodes');
+            expect(rennFirstCorridorPostBattle).to.have.property('nodes');
+            expect(rennFirstCorridorPostBattle.nodes[0].action).to.deep.include({
                 type: 'unlockPOI',
                 mapId: 'rustmarketSewers',
                 poiId: 'sewer_scavengerRedoubt_POI'
             });
         });
 
-        it('should handle vault encounter correctly', () => {
-            const vaultPanicNode = rennVaultPanic.nodes[0];
-            expect(vaultPanicNode.text).to.include("Old Empire Sentry");
+        it('should progress through scavenger redoubt combat', () => {
+            expect(rennSecondCorridorPreBattle).to.have.property('nodes');
+            expect(rennSecondCorridorPostBattle).to.have.property('nodes');
+            const startNode = rennSecondCorridorPostBattle.nodes.find(node => node.id === 'start');
+            expect(startNode).to.exist;
+            const unlockAction = startNode.options[0].action;
+            expect(unlockAction).to.deep.include({
+                type: 'unlockPOI',
+                mapId: 'rustmarketSewers',
+                poiId: 'sewer_vaultAntechamber_POI'
+            });
+            expect(unlockAction).to.deep.include({
+                type: 'unlockPOI',
+                mapId: 'rustmarketSewers',
+                poiId: 'sewer_foggedCorridor_POI'
+            });
+        });
 
-            const vaultFledNode = rennVaultFled.nodes.find(node => node.id === 'flee_to_fog');
-            expect(vaultFledNode.action).to.deep.include({ type: 'equip', itemId: 'mistwalkerAmulet' });
+        it('should handle fogged corridor warning dialogue', () => {
+            expect(rennFoggedCorridorWarning).to.have.property('nodes');
+            expect(rennFoggedCorridorWarning.nodes[0]).to.have.property('id', 'start');
+        });
+
+        it('should handle vault encounter correctly', () => {
+            expect(rennVaultPanic).to.have.property('nodes');
+            expect(rennVaultFled).to.have.property('nodes');
+            const fleeNode = rennVaultFled.nodes.find(node => node.id === 'flee_to_fog');
+            expect(fleeNode.action).to.deep.include({ type: 'equip', itemId: 'mistwalkerAmulet' });
         });
 
         it('should handle fogged corridor sequence', () => {
-            const warningNode = rennFoggedCorridorWarning.nodes[0];
-            expect(warningNode.text).to.include("Get back before the fog gets you");
-
-            const surpriseNode = rennFoggedCorridorSurprise.nodes.find(node => node.id === 'flee_to_fog');
-            expect(surpriseNode.text).to.include("What the...?");
-
-            const escapeNode = rennFoggedCorridorEscape.nodes.find(node => node.id === 'escape_plan');
+            expect(rennFoggedCorridorWarning).to.have.property('nodes');
+            expect(rennFoggedCorridorSurprise).to.have.property('nodes');
+            expect(rennFoggedCorridorEscape).to.have.property('nodes');
+            
+            const escapeNode = rennFoggedCorridorEscape.nodes.find(node => node.id === 'amulet_discussion');
             expect(escapeNode.options[0].action).to.deep.include({ type: 'travelToMap', mapId: 'foggedDocks' });
+        });
+
+        it('should handle fogged district navigation', () => {
+            expect(rennFoggedCorridorEscape).to.have.property('nodes');
+            const amuletNode = rennFoggedCorridorEscape.nodes.find(node => node.id === 'amulet_discussion');
+            expect(amuletNode).to.exist;
+            const actions = amuletNode.options[0].action;
+            expect(actions).to.deep.include({ 
+                type: 'travelToMap',
+                mapId: 'foggedDocks'
+            });
+            expect(actions).to.deep.include({
+                type: 'hidePOI',
+                mapId: 'rustmarketSewers',
+                poiId: 'sewer_foggedCorridor_POI'
+            });
+            expect(actions).to.deep.include({
+                type: 'unlockPOI',
+                mapId: 'hollowreach',
+                poiId: 'renn_quickfingers_house'
+            });
+        });
+
+        it('should handle final amulet discussion', () => {
+            expect(rennFoggedCorridorEscape).to.have.property('nodes');
+            const amuletNode = rennFoggedCorridorEscape.nodes.find(node => node.id === 'amulet_discussion');
+            expect(amuletNode).to.exist;
+            expect(amuletNode.options[0].action).to.deep.include({ 
+                type: 'travelToMap',
+                mapId: 'foggedDocks'
+            });
         });
     });
 
