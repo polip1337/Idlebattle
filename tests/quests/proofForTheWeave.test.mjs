@@ -78,7 +78,9 @@ describe('Proof for the Weave Quest', () => {
             npcs: [],
             dialogues: [],
             items: [],
-            combat: []
+            combat: [],
+            questFlow: [],
+            rewards: []
         };
     });
 
@@ -95,40 +97,40 @@ describe('Proof for the Weave Quest', () => {
 
     describe('Quest Structure', () => {
         it('should have valid quest metadata', () => {
-            if (!proofForTheWeave.id) missingElements.questStructure.push('Quest ID');
-            if (!proofForTheWeave.name) missingElements.questStructure.push('Quest Name');
-            if (!proofForTheWeave.giver) missingElements.questStructure.push('Quest Giver');
-            if (!proofForTheWeave.description) missingElements.questStructure.push('Quest Description');
+            if (!proofForTheWeave.id) missingElements.questStructure.push('Quest ID is missing');
+            if (!proofForTheWeave.name) missingElements.questStructure.push('Quest Name is missing');
+            if (!proofForTheWeave.giver) missingElements.questStructure.push('Quest Giver is missing');
+            if (!proofForTheWeave.description) missingElements.questStructure.push('Quest Description is missing');
             if (!proofForTheWeave.steps || proofForTheWeave.steps.length === 0) {
-                missingElements.questStructure.push('Quest Steps');
+                missingElements.questStructure.push('Quest Steps array is empty or missing');
             }
         });
 
         it('should have valid requirements', () => {
             if (!proofForTheWeave.requirements) {
-                missingElements.questStructure.push('Quest Requirements');
+                missingElements.questStructure.push('Quest Requirements object is missing');
             } else {
                 if (!proofForTheWeave.requirements.quests) {
-                    missingElements.questStructure.push('Required Quests');
+                    missingElements.questStructure.push('Required Quests array is missing');
                 }
                 if (!proofForTheWeave.requirements.items) {
-                    missingElements.questStructure.push('Required Items');
+                    missingElements.questStructure.push('Required Items array is missing');
                 }
             }
         });
 
         it('should have valid rewards', () => {
             if (!proofForTheWeave.rewards) {
-                missingElements.questStructure.push('Quest Rewards');
+                missingElements.rewards.push('Quest Rewards object is missing');
             } else {
                 if (!Array.isArray(proofForTheWeave.rewards.items)) {
-                    missingElements.questStructure.push('Item Rewards');
+                    missingElements.rewards.push('Item Rewards array is missing or invalid');
                 }
                 if (typeof proofForTheWeave.rewards.experience !== 'number') {
-                    missingElements.questStructure.push('Experience Reward');
+                    missingElements.rewards.push('Experience Reward is missing or invalid');
                 }
                 if (!proofForTheWeave.rewards.reputation) {
-                    missingElements.questStructure.push('Reputation Rewards');
+                    missingElements.rewards.push('Reputation Rewards object is missing');
                 }
             }
         });
@@ -139,14 +141,14 @@ describe('Proof for the Weave Quest', () => {
             const requiredAreas = ['rustmarketSewers', 'scavenger_redoubt'];
             requiredAreas.forEach(area => {
                 if (!findAreaById(area)) {
-                    missingElements.areas.push(`Area: ${area}`);
+                    missingElements.areas.push(`Area "${area}" is not found in maps.json`);
                 }
             });
         });
 
         it('should have required combat encounters', () => {
             if (!findCombatNodesInArea('scavenger_redoubt')) {
-                missingElements.combat.push('Combat nodes in Scavenger Redoubt');
+                missingElements.combat.push('Combat nodes in "scavenger_redoubt" area are missing');
             }
         });
     });
@@ -155,12 +157,12 @@ describe('Proof for the Weave Quest', () => {
         it('should have all required NPCs and dialogues', () => {
             // Check Vrenna's dialogue
             if (!findPOIByNpcAndDialogue('vrenna_stoneweave', 'fragment_request')) {
-                missingElements.npcs.push('Vrenna Stoneweave POI with fragment_request dialogue');
+                missingElements.npcs.push('Vrenna Stoneweave POI with "fragment_request" dialogue is missing');
             }
 
             // Check Sewer Contact
             if (!findPOIByNpcAndDialogue('sewer_contact', 'reveal_location')) {
-                missingElements.npcs.push('Sewer Contact POI with reveal_location dialogue');
+                missingElements.npcs.push('Sewer Contact POI with "reveal_location" dialogue is missing');
             }
         });
     });
@@ -168,88 +170,135 @@ describe('Proof for the Weave Quest', () => {
     describe('Items', () => {
         it('should have required items', () => {
             if (!proofForTheWeave.rewards?.items?.includes('loomkeeperPortalMap')) {
-                missingElements.items.push('loomkeeperPortalMap in quest rewards');
+                missingElements.items.push('"loomkeeperPortalMap" is missing from quest rewards');
             }
             if (!proofForTheWeave.requirements?.items?.includes('mistwalkerAmulet')) {
-                missingElements.items.push('mistwalkerAmulet in quest requirements');
+                missingElements.items.push('"mistwalkerAmulet" is missing from quest requirements');
             }
         });
     });
 
-    describe('Quest Initialization', () => {
+    describe('Quest Flow', () => {
         it('should have correct quest metadata', () => {
-            expect(proofForTheWeave.id).to.equal('proofForTheWeave');
-            expect(proofForTheWeave.name).to.equal('Proof for the Weave');
-            expect(proofForTheWeave.giver).to.equal('Vrenna Stoneweave');
-            expect(proofForTheWeave.steps.length).to.equal(6);
+            if (proofForTheWeave.id !== 'proofForTheWeave') {
+                missingElements.questFlow.push('Quest ID does not match expected value "proofForTheWeave"');
+            }
+            if (proofForTheWeave.name !== 'Proof for the Weave') {
+                missingElements.questFlow.push('Quest Name does not match expected value "Proof for the Weave"');
+            }
+            if (proofForTheWeave.giver !== 'Vrenna Stoneweave') {
+                missingElements.questFlow.push('Quest Giver does not match expected value "Vrenna Stoneweave"');
+            }
+            if (proofForTheWeave.steps.length !== 6) {
+                missingElements.questFlow.push(`Quest Steps length is ${proofForTheWeave.steps.length}, expected 6`);
+            }
         });
 
         it('should have correct requirements', () => {
-            expect(proofForTheWeave.requirements.quests).to.include('fogscarHeist');
-            expect(proofForTheWeave.requirements.items).to.include('mistwalkerAmulet');
+            if (!proofForTheWeave.requirements?.quests?.includes('fogscarHeist')) {
+                missingElements.questFlow.push('Required quest "fogscarHeist" is missing');
+            }
+            if (!proofForTheWeave.requirements?.items?.includes('mistwalkerAmulet')) {
+                missingElements.questFlow.push('Required item "mistwalkerAmulet" is missing');
+            }
         });
     });
 
     describe('Dialogue Flow', () => {
         it('should start quest when accepting from Vrenna', () => {
             const startNode = vrennaBase.nodes.find(node => node.id === 'start');
+            if (!startNode) {
+                missingElements.dialogues.push('Vrenna start dialogue node is missing');
+                return;
+            }
             const acceptOption = startNode.options.find(opt => 
                 opt.text.includes("About the tapestry fragment")
             );
-            
-            expect(acceptOption).to.exist;
-            expect(acceptOption.nextId).to.equal('fragment_request');
+            if (!acceptOption) {
+                missingElements.dialogues.push('Vrenna fragment request dialogue option is missing');
+            } else if (acceptOption.nextId !== 'fragment_request') {
+                missingElements.dialogues.push('Vrenna fragment request dialogue nextId is incorrect');
+            }
         });
 
         it('should add quest and unlock sewers when accepting', () => {
             const questAcceptedNode = vrennaBase.nodes.find(node => node.id === 'fragment_request');
+            if (!questAcceptedNode) {
+                missingElements.dialogues.push('Vrenna fragment request node is missing');
+                return;
+            }
             const acceptOption = questAcceptedNode.options[0];
-            
-            expect(acceptOption.action).to.deep.include({ type: 'startQuest', questId: 'proofForTheWeave' });
-            expect(acceptOption.action).to.deep.include({ 
-                type: 'unlockPOI',
-                mapId: 'hollowreach',
-                poiId: 'rustmarketSewers'
-            });
+            if (!acceptOption?.action) {
+                missingElements.dialogues.push('Vrenna fragment request action is missing');
+            } else {
+                if (!acceptOption.action.some(a => a.type === 'startQuest' && a.questId === 'proofForTheWeave')) {
+                    missingElements.dialogues.push('Quest start action is missing or incorrect');
+                }
+                if (!acceptOption.action.some(a => a.type === 'unlockPOI' && a.mapId === 'hollowreach' && a.poiId === 'rustmarketSewers')) {
+                    missingElements.dialogues.push('Sewers unlock action is missing or incorrect');
+                }
+            }
         });
     });
 
     describe('Quest Progression', () => {
         it('should handle sewer contact dialogue', () => {
-            expect(sewerContact).to.have.property('nodes');
+            if (!sewerContact?.nodes) {
+                missingElements.dialogues.push('Sewer contact dialogue nodes are missing');
+                return;
+            }
             const startNode = sewerContact.nodes.find(node => node.id === 'start');
-            expect(startNode).to.exist;
-            expect(startNode.options[0].action).to.deep.include({
-                type: 'unlockPOI',
-                mapId: 'rustmarketSewers',
-                poiId: 'scavenger_redoubt'
-            });
+            if (!startNode) {
+                missingElements.dialogues.push('Sewer contact start node is missing');
+            } else if (!startNode.options?.[0]?.action) {
+                missingElements.dialogues.push('Sewer contact start node action is missing');
+            } else if (!startNode.options[0].action.some(a => 
+                a.type === 'unlockPOI' && 
+                a.mapId === 'rustmarketSewers' && 
+                a.poiId === 'scavenger_redoubt'
+            )) {
+                missingElements.dialogues.push('Scavenger redoubt unlock action is missing or incorrect');
+            }
         });
 
         it('should handle scavenger combat', () => {
             const combatStep = proofForTheWeave.steps.find(step => 
                 step.description.includes('Deal with the fog-touched scavengers')
             );
-            expect(combatStep).to.exist;
-            expect(combatStep.condition).to.be.a('function');
+            if (!combatStep) {
+                missingElements.questFlow.push('Scavenger combat step is missing');
+            } else if (typeof combatStep.condition !== 'function') {
+                missingElements.questFlow.push('Scavenger combat step condition is not a function');
+            }
         });
 
         it('should handle fragment retrieval', () => {
             const fragmentStep = proofForTheWeave.steps.find(step => 
                 step.description.includes('Retrieve the tapestry fragment')
             );
-            expect(fragmentStep).to.exist;
-            expect(fragmentStep.condition).to.be.a('function');
+            if (!fragmentStep) {
+                missingElements.questFlow.push('Fragment retrieval step is missing');
+            } else if (typeof fragmentStep.condition !== 'function') {
+                missingElements.questFlow.push('Fragment retrieval step condition is not a function');
+            }
         });
 
         it('should handle fragment decision', () => {
-            expect(vrennaFragmentReturn).to.have.property('nodes');
+            if (!vrennaFragmentReturn?.nodes) {
+                missingElements.dialogues.push('Vrenna fragment return dialogue nodes are missing');
+                return;
+            }
             const decisionNode = vrennaFragmentReturn.nodes.find(node => node.id === 'fragment_decision');
-            expect(decisionNode).to.exist;
-            expect(decisionNode.options[0].action).to.deep.include({
-                type: 'completeQuest',
-                questId: 'proofForTheWeave'
-            });
+            if (!decisionNode) {
+                missingElements.dialogues.push('Fragment decision node is missing');
+            } else if (!decisionNode.options?.[0]?.action) {
+                missingElements.dialogues.push('Fragment decision action is missing');
+            } else if (!decisionNode.options[0].action.some(a => 
+                a.type === 'completeQuest' && 
+                a.questId === 'proofForTheWeave'
+            )) {
+                missingElements.dialogues.push('Quest completion action is missing or incorrect');
+            }
         });
     });
 
