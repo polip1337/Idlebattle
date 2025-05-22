@@ -1,5 +1,5 @@
 export default {
-    id: 'proofForTheWeave',
+    id: 'mistwalkerSecret',
     name: "Proof for the weave",
     giver: 'Vrenna Stoneweave',
     description: 'Uncover the Mistwalker Amulet\'s secrets and choose a faction to share them with.',
