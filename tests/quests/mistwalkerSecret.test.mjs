@@ -1,5 +1,8 @@
 import { expect } from 'chai';
 import mistwalkerSecret from '../../Data/quests/hollowreach/stage1/mistwalkerSecret.js';
+import vrennaBase from '../../Data/NPCs/vrenna_stoneweave/vrenna_base.js';
+import rennMistwalkerIntro from '../../Data/NPCs/renn_quickfingers/renn_mistwalker_intro.js';
+import korzogArchive from '../../Data/NPCs/korzog/korzog_archive.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -64,154 +67,114 @@ function findTravelConnection(fromMapId, toMapId) {
   return false;
 }
 
-describe('Mistwalker Secret Quest Implementation Check', () => {
-  let missingElements = {
-    questStructure: [],
-    areas: [],
-    npcs: [],
-    dialogues: [],
-    travelConnections: [],
-    items: [],
-    combat: []
-  };
+describe('Mistwalker Secret Quest', () => {
+    let gameState;
+    let questState;
 
-  before(() => {
-    // Reset missing elements
-    Object.keys(missingElements).forEach(key => {
-      missingElements[key] = [];
-    });
-  });
-
-  after(() => {
-    // Print missing elements report
-    console.log('\n=== Missing Implementation Elements ===');
-    Object.entries(missingElements).forEach(([category, elements]) => {
-      if (elements.length > 0) {
-        console.log(`\n${category.toUpperCase()}:`);
-        elements.forEach(element => console.log(`  - ${element}`));
-      }
-    });
-  });
-
-  describe('Quest Structure', () => {
-    it('should have valid quest metadata', () => {
-      if (!mistwalkerSecret.id) missingElements.questStructure.push('Quest ID');
-      if (!mistwalkerSecret.name) missingElements.questStructure.push('Quest Name');
-      if (!mistwalkerSecret.giver) missingElements.questStructure.push('Quest Giver');
-      if (!mistwalkerSecret.description) missingElements.questStructure.push('Quest Description');
-      if (!mistwalkerSecret.steps || mistwalkerSecret.steps.length === 0) {
-        missingElements.questStructure.push('Quest Steps');
-      }
+    beforeEach(() => {
+        gameState = {
+            inventory: [],
+            companions: [],
+            activeQuests: [],
+            completedQuests: [],
+            unlockedPOIs: [],
+            currentMap: 'hollowreach'
+        };
+        questState = {
+            currentStep: 0,
+            completedSteps: []
+        };
     });
 
-    it('should have valid requirements', () => {
-      if (!mistwalkerSecret.requirements) {
-        missingElements.questStructure.push('Quest Requirements');
-      } else {
-        if (typeof mistwalkerSecret.requirements.level !== 'number') {
-          missingElements.questStructure.push('Level Requirement');
-        }
-        if (!mistwalkerSecret.requirements.reputation) {
-          missingElements.questStructure.push('Reputation Requirements');
-        }
-      }
+    describe('Quest Initialization', () => {
+        it('should have correct quest metadata', () => {
+            expect(mistwalkerSecret.id).to.equal('mistwalkerSecret');
+            expect(mistwalkerSecret.name).to.equal('Proof for the weave');
+            expect(mistwalkerSecret.giver).to.equal('Vrenna Stoneweave');
+            expect(mistwalkerSecret.steps.length).to.equal(5);
+        });
     });
 
-    it('should have valid rewards', () => {
-      if (!mistwalkerSecret.rewards) {
-        missingElements.questStructure.push('Quest Rewards');
-      } else {
-        if (!Array.isArray(mistwalkerSecret.rewards.items)) {
-          missingElements.questStructure.push('Item Rewards');
-        }
-        if (typeof mistwalkerSecret.rewards.experience !== 'number') {
-          missingElements.questStructure.push('Experience Reward');
-        }
-        if (!mistwalkerSecret.rewards.reputation) {
-          missingElements.questStructure.push('Reputation Rewards');
-        }
-      }
-    });
-  });
+    describe('Dialogue Flow', () => {
+        it('should start quest when accepting from Vrenna', () => {
+            const startNode = vrennaBase.nodes.find(node => node.id === 'start');
+            const acceptOption = startNode.options.find(opt => 
+                opt.text.includes("About the Mistwalker Amulet")
+            );
+            
+            expect(acceptOption).to.exist;
+            expect(acceptOption.nextId).to.equal('questAccepted_mistwalker');
+        });
 
-  describe('Areas and Travel', () => {
-    it('should have all required areas', () => {
-      const requiredAreas = ['ashenArchive', 'runeChamber'];
-      requiredAreas.forEach(area => {
-        if (!findAreaById(area)) {
-          missingElements.areas.push(`Area: ${area}`);
-        }
-      });
+        it('should add quest and unlock Renn dialogue when accepting', () => {
+            const questAcceptedNode = vrennaBase.nodes.find(node => node.id === 'questAccepted_mistwalker');
+            const acceptOption = questAcceptedNode.options[0];
+            
+            expect(acceptOption.action).to.deep.include({ type: 'startQuest', questId: 'mistwalkerSecret' });
+            expect(acceptOption.action).to.deep.include({ 
+                type: 'unlockPOI',
+                mapId: 'hollowreach',
+                poiId: 'renn_quickfingers_house'
+            });
+        });
     });
 
-    it('should have required travel connections', () => {
-      const requiredConnections = [
-        { from: 'hollowreach', to: 'ashenArchive' },
-        { from: 'ashenArchive', to: 'runeChamber' }
-      ];
-      requiredConnections.forEach(conn => {
-        if (!findTravelConnection(conn.from, conn.to)) {
-          missingElements.travelConnections.push(`Travel: ${conn.from} -> ${conn.to}`);
-        }
-      });
-    });
-  });
+    describe('Quest Progression', () => {
+        it('should handle Renn discussion about amulet', () => {
+            expect(rennMistwalkerIntro).to.have.property('nodes');
+            const startNode = rennMistwalkerIntro.nodes.find(node => node.id === 'start');
+            expect(startNode).to.exist;
+            expect(startNode.options[0].action).to.deep.include({
+                type: 'unlockPOI',
+                mapId: 'hollowreach',
+                poiId: 'ashenArchive_entrance'
+            });
+        });
 
-  describe('NPCs and Dialogues', () => {
-    it('should have all required NPCs and dialogues', () => {
-      // Check Renn's dialogue
-      if (!findPOIByNpcAndDialogue('renn_quickfingers', 'mistwalker_intro')) {
-        missingElements.npcs.push('Renn Quickfingers POI with mistwalker_intro dialogue');
-      }
+        it('should handle Ashen Archive entrance', () => {
+            const archiveEntrance = mistwalkerSecret.steps.find(step => 
+                step.description.includes('Enter the Ashen Archive')
+            );
+            expect(archiveEntrance).to.exist;
+            expect(archiveEntrance.condition).to.be.a('function');
+        });
 
-      // Check final choice NPCs
-      const finalNpcs = ['Loomkeeper Elder', 'Driftkin Chief', 'Emberclad Commander'];
-      finalNpcs.forEach(npc => {
-        let found = false;
-        for (const map of Object.values(maps)) {
-          if (!map.pois) continue;
-          for (const poi of map.pois) {
-            if ((poi.npcId === npc || poi.npc === npc)) {
-              found = true;
-              break;
-            }
-          }
-          if (found) break;
-        }
-        if (!found) {
-          missingElements.npcs.push(`Final Choice NPC: ${npc}`);
-        }
-      });
-    });
-  });
+        it('should handle rune-etched sentries', () => {
+            const sentriesStep = mistwalkerSecret.steps.find(step => 
+                step.description.includes('Deal with the rune-etched sentries')
+            );
+            expect(sentriesStep).to.exist;
+            expect(sentriesStep.condition).to.be.a('function');
+        });
 
-  describe('Combat and Items', () => {
-    it('should have required combat encounters', () => {
-      if (!findCombatNodesInArea('ashenArchive')) {
-        missingElements.combat.push('Combat nodes in Ashen Archive');
-      }
+        it('should handle rune puzzles', () => {
+            const puzzleStep = mistwalkerSecret.steps.find(step => 
+                step.description.includes('Solve the rune puzzles')
+            );
+            expect(puzzleStep).to.exist;
+            expect(puzzleStep.condition).to.be.a('function');
+        });
+
+        it('should handle Korzog confrontation', () => {
+            expect(korzogArchive).to.have.property('nodes');
+            const confrontationNode = korzogArchive.nodes.find(node => node.id === 'confrontation');
+            expect(confrontationNode).to.exist;
+            expect(confrontationNode.options[0].action).to.deep.include({
+                type: 'completeQuest',
+                questId: 'mistwalkerSecret'
+            });
+        });
     });
 
-    it('should have required items', () => {
-      if (!mistwalkerSecret.rewards?.items?.includes('mistwalkerAmulet')) {
-        missingElements.items.push('mistwalkerAmulet in quest rewards');
-      }
+    describe('Quest Completion', () => {
+        it('should grant correct rewards', () => {
+            expect(mistwalkerSecret.rewards.items).to.include('mistwalkerAmulet');
+            expect(mistwalkerSecret.rewards.experience).to.equal(100);
+            expect(mistwalkerSecret.rewards.reputation).to.deep.include({
+                Loomkeepers: 10,
+                Driftkin: 10,
+                Emberclad: 10
+            });
+        });
     });
-  });
-
-  describe('Quest Steps', () => {
-    it('should have valid step conditions', () => {
-      mistwalkerSecret.steps?.forEach((step, index) => {
-        if (!step.description) {
-          missingElements.questStructure.push(`Step ${index + 1} description`);
-        }
-        if (!step.hint) {
-          missingElements.questStructure.push(`Step ${index + 1} hint`);
-        }
-        if (typeof step.condition !== 'function') {
-          missingElements.questStructure.push(`Step ${index + 1} condition function`);
-        }
-      });
-    });
-  });
 }); 
