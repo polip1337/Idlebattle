@@ -1,5 +1,7 @@
 export default {
-    mistwalker_intro: {
+    nodes: [
+    {
+    start: {
         text: "Ah, you're just the person I was hoping to see! I've come across something fascinating - an Old Empire amulet that seems to have power over the fog. But I need someone with your... particular skills to help me investigate it further.",
         options: [
             {

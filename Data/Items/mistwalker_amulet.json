@@ -13,14 +13,6 @@
         "magicControl": 3
     },
     "effects": [
-        {
-            "name": "?",
-            "type": "buff",
-            "subType": "immunity",
-            "immunityType": "deadlyFog",
-            "duration": -1,
-            "icon": "Media/UI/fog_immunity.png",
-            "description": "?"
-        }
+
     ]
 } 

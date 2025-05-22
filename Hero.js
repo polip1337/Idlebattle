@@ -887,3 +887,4 @@ class Hero extends Member {
         return true;
     }
 }
+export default Hero;

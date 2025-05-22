@@ -49,7 +49,7 @@ export let mobsClasses = null;
 export let allSkillsCache = null;
 export let allItemsCache = null;
 export let allCompanionsData = {};
-let allHeroClasses = {};
+export let allHeroClasses = {};
 
 
 export const NPC_MEDIA_PATH = "Media/NPC/";
@@ -170,6 +170,7 @@ export async function loadGameData(savedGameState = null) {
         allItemsCache = await loadItems();
         mobsClasses = await loadMobs();
         await loadCompanionDefinitions();
+        await loadClasses();
 
         if (Object.keys(heroClasses).length === 0 || Object.keys(allSkillsCache).length === 0) {
             console.error("CRITICAL: Hero classes or skills failed to load.");
@@ -483,4 +484,3 @@ function togglePause() {
     });
 }
 
-export { hero, battleLog, battleStatistics, evolutionService, allSkillsCache, allHeroClasses };
