@@ -56,15 +56,15 @@ export default {
         },
         {
             id: "expedition",
-            text: "Your expedition’s doomed without my tech. I’ll rig barges for the [fog|fog|Deadly paths], but no [Pulsefinders|pulsefinders|Mad cult] near my work.",
+            text: "Your expedition's doomed without my tech. I'll rig barges for the [fog|fog|Deadly paths], but no [Pulsefinders|pulsefinders|Mad cult] near my work.",
             options: [
                 {
                     text: "Your skills are needed.",
                     nextId: null,
-                    action: { type: "factionSupport", faction: "driftkin", resource: "barge_tech" }
+                    action: { type: "startQuest", questId: "joren_expedition" }
                 },
                 {
-                    text: "I’ll think it over.",
+                    text: "I'll think it over.",
                     nextId: null
                 }
             ]

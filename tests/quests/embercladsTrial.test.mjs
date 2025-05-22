@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import embercladsTrial from '../../Data/quests/hollowreach/stage1/embercladsTrial.js';
-import lyraBase from '../../Data/NPCs/talia_emberhearth/lyra_base.js';
-import lyraRitualComplete from '../../Data/NPCs/talia_emberhearth/lyra_ritual_complete.js';
-import drenvarRitual from '../../Data/NPCs/talia_emberhearth/drenvar_ritual.js';
+import lyraBase from '../../Data/NPCs/talia_emberhearth/base.js';
+import lyraRitualComplete from '../../Data/NPCs/lyra_emberkin/lyra_ritual_complete.js';
+import drenvarRitual from '../../Data/NPCs/lyra_emberkin/drenvar_ritual.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';

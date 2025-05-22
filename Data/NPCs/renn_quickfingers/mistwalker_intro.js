@@ -71,7 +71,8 @@ export default {
         text: "Take your time. The archive isn't going anywhere, and neither are the factions. Just remember - knowledge is power in Hollowreach, and right now, we've got a chance to get ahead of everyone else. When you're ready, you know where to find me.",
         options: [
             {
-                text: "Goodbye."
+                text: "Goodbye.",
+                nextId: null
             }
         ]
     },
@@ -80,7 +81,8 @@ export default {
         text: "Perfect. I'll get everything ready. Remember, we're looking for anything about fog control or Old Empire artifacts. And watch out for Korzog - he's been acting strange lately, even for a Loomkeeper. Something about the amulet's got him spooked.",
         options: [
             {
-                text: "I'll be careful."
+                text: "I'll be careful.",
+                nextId: null
             }
         ]
     }

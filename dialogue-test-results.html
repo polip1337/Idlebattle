@@ -1,0 +1,1540 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dialogue Test Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .summary {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+        .passed {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+        .failed {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-top: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .passed .stat-number { color: #4caf50; }
+        .failed .stat-number { color: #f44336; }
+        .total .stat-number { color: #2196f3; }
+        .view-dialogue-btn {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        .view-dialogue-btn:hover {
+            background-color: #1976d2;
+        }
+        .dialogue-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .dialogue-modal.hidden {
+            display: none;
+        }
+        .dialogue-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+        }
+        .npc-portrait {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .npc-portrait img {
+            max-width: 200px;
+            border-radius: 4px;
+        }
+        .dialogue-text {
+            margin-bottom: 20px;
+        }
+        .dialogue-text p {
+            margin: 5px 0;
+        }
+        #npc-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #333;
+        }
+        #dialogue-text {
+            line-height: 1.5;
+            color: #444;
+        }
+        .dialogue-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-button {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.2s;
+        }
+        .option-button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dialogue Test Results</h1>
+        
+        <div class="stats">
+            <div class="stat-box total">
+                <div>Total Tests</div>
+                <div class="stat-number">126</div>
+            </div>
+            <div class="stat-box passed">
+                <div>Passed</div>
+                <div class="stat-number">121</div>
+            </div>
+            <div class="stat-box failed">
+                <div>Failed</div>
+                <div class="stat-number">5</div>
+            </div>
+        </div>
+
+        
+        <div class="test-section">
+            <h2>Failed Tests</h2>
+            
+                <div class="test-item failed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_archive.js</div>
+                    <div class="error-message">File korzog_archive.js: Found unreachable nodes: amulet_understanding, renn_reference, knowledge_price, understanding_warning, departure_warning, truth_revelation, amulet_purpose, guidance_offering, danger_acknowledgment, time_to_think, archive_entrance, archive_warning, confrontation, confrontation_truth, confrontation_combat</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_archive.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item failed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sewer_contact/sewer_contact_base.js</div>
+                    <div class="error-message">File sewer_contact_base.js: Node price_negotiation, Option 1 points to non-existent node ID: favor_details</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sewer_contact/sewer_contact_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item failed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sylvara_tidewalker/base.js</div>
+                    <div class="error-message">File base.js: Node start, Option 1 points to non-existent node ID: quest</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sylvara_tidewalker/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item failed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/proof_for_weave.js</div>
+                    <div class="error-message">File proof_for_weave.js: Found unreachable nodes: fragment_decision</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/proof_for_weave.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item failed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/dialogue.js</div>
+                    <div class="error-message">File dialogue.js: Node mistwalker_standoff, Option 0, Action 0 is missing 'type' property</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/dialogue.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+        </div>
+        
+
+        <div class="test-section">
+            <h2>Passed Tests</h2>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: drenvar/drenvar_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('drenvar/drenvar_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: eryndor_vinesoul/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('eryndor_vinesoul/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: faction_leaders/dialogue.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('faction_leaders/dialogue.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: joren_halfhand/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('joren_halfhand/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/dialogue.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/dialogue.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_archive.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_archive.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/drenvar_ritual.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/drenvar_ritual.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_ritual_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_ritual_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: mira_solace/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('mira_solace/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_cache_return.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_cache_return.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/fragment_study.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/fragment_study.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/mistwalker_intro.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/mistwalker_intro.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_firstcorridor_post_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_firstcorridor_post_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_firstcorridor_pre_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_firstcorridor_pre_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_escape.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_escape.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_surprise.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_surprise.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_warning.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_warning.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_secondcorridor_post_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_secondcorridor_post_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_secondcorridor_pre_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_secondcorridor_pre_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_vault_fled.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_vault_fled.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_vault_panic.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_vault_panic.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_scribe/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_scribe/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sewer_contact/sewer_contact_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sewer_contact/sewer_contact_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sylvara_tidewalker/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sylvara_tidewalker/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sylvara_tidewalker/sylvara_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sylvara_tidewalker/sylvara_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: talia_emberhearth/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('talia_emberhearth/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: varkis_ironblade/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('varkis_ironblade/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/proof_for_weave.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/proof_for_weave.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_fragment_return.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_fragment_return.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: zynia_velt/fragment_offer.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('zynia_velt/fragment_offer.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: drenvar/drenvar_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('drenvar/drenvar_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: eryndor_vinesoul/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('eryndor_vinesoul/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: faction_leaders/dialogue.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('faction_leaders/dialogue.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: joren_halfhand/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('joren_halfhand/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/dialogue.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/dialogue.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/drenvar_ritual.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/drenvar_ritual.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_ritual_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_ritual_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: mira_solace/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('mira_solace/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_cache_return.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_cache_return.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/fragment_study.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/fragment_study.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/mistwalker_intro.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/mistwalker_intro.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_firstcorridor_post_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_firstcorridor_post_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_firstcorridor_pre_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_firstcorridor_pre_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_escape.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_escape.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_surprise.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_surprise.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_warning.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_warning.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_secondcorridor_post_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_secondcorridor_post_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_secondcorridor_pre_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_secondcorridor_pre_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_vault_fled.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_vault_fled.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_vault_panic.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_vault_panic.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_scribe/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_scribe/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sylvara_tidewalker/sylvara_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sylvara_tidewalker/sylvara_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: talia_emberhearth/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('talia_emberhearth/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: varkis_ironblade/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('varkis_ironblade/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_fragment_return.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_fragment_return.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: zynia_velt/fragment_offer.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('zynia_velt/fragment_offer.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: drenvar/drenvar_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('drenvar/drenvar_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: eryndor_vinesoul/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('eryndor_vinesoul/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: faction_leaders/dialogue.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('faction_leaders/dialogue.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: joren_halfhand/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('joren_halfhand/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_archive.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_archive.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: korzog/korzog_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('korzog/korzog_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/drenvar_ritual.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/drenvar_ritual.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: lyra_emberkin/lyra_ritual_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('lyra_emberkin/lyra_ritual_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: mira_solace/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('mira_solace/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_cache_return.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_cache_return.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: old_maris/old_maris_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('old_maris/old_maris_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/fragment_study.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/fragment_study.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/mistwalker_intro.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/mistwalker_intro.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_firstcorridor_post_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_firstcorridor_post_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_firstcorridor_pre_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_firstcorridor_pre_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_escape.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_escape.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_surprise.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_surprise.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_foggedcorridor_warning.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_foggedcorridor_warning.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_secondcorridor_post_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_secondcorridor_post_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_secondcorridor_pre_battle.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_secondcorridor_pre_battle.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_vault_fled.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_vault_fled.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_quickfingers/renn_vault_panic.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_quickfingers/renn_vault_panic.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: renn_scribe/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('renn_scribe/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sewer_contact/sewer_contact_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sewer_contact/sewer_contact_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sylvara_tidewalker/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sylvara_tidewalker/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: sylvara_tidewalker/sylvara_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('sylvara_tidewalker/sylvara_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: talia_emberhearth/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('talia_emberhearth/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: varkis_ironblade/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('varkis_ironblade/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/proof_for_weave.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/proof_for_weave.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_base.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_base.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_fragment_return.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_fragment_return.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: vrenna_stoneweave/vrenna_quest_complete.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('vrenna_stoneweave/vrenna_quest_complete.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+                <div class="test-item passed">
+                    <div><strong>undefined</strong></div>
+                    <div>File: zynia_velt/fragment_offer.js</div>
+                    
+                    <button class="view-dialogue-btn" onclick="window.displayDialogue('zynia_velt/fragment_offer.js')">
+                        View Dialogue
+                    </button>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <div class="dialogue-modal hidden" id="dialogue-modal">
+        <div class="dialogue-content">
+            <div class="npc-portrait">
+                <img id="npc-portrait-img" src="Media/npc/img.png" alt="NPC Portrait">
+            </div>
+            <div class="dialogue-text">
+                <p id="npc-name">NPC Name</p>
+                <p id="dialogue-text">Dialogue text goes here.</p>
+            </div>
+            <div class="dialogue-options">
+                <button class="option-button" id="option-1" style="display: none;">Option 1</button>
+                <button class="option-button" id="option-2" style="display: none;">Option 2</button>
+                <button class="option-button" id="option-3" style="display: none;">Option 3</button>
+                <button class="option-button" id="option-4" style="display: none;">Option 4</button>
+                <button class="option-button" id="option-5" style="display: none;">Option 5</button>
+                <button class="option-button" id="option-6" style="display: none;">Option 6</button>
+                <button class="option-button" id="option-7" style="display: none;">Option 7</button>
+                <button class="option-button" id="option-8" style="display: none;">Option 8</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store dialogue data
+        window.dialogueData = {"drenvar/drenvar_base.js":{"nodes":[{"id":"start","text":"*Drenvar stands by the ritual fire in [Cinderhold|cinderhold|The Emberclad's stronghold], their hands moving in practiced patterns as they tend the flames* You've completed the trial. That means you understand the importance of our work here. The fog may be growing stronger, but so are we. *They look up, their face marked with ritual scars* What brings you to the ritual grounds?","options":[{"text":"I want to learn more about your rituals.","nextId":"ritual_knowledge","conditions":[{"type":"questCompleted","questId":"embercladsTrial"}],"hideWhenUnavailable":true},{"text":"I'm looking for Lyra.","nextId":"lyra_reference"},{"text":"Just passing through.","nextId":"passing_through"}]},{"id":"ritual_knowledge","text":"*Drenvar's eyes light up with passion* The rituals are more than just fire and smoke. They're a connection to something ancient. Something powerful. *They gesture to the ritual circle* Each flame, each movement, each word... they all have meaning. They all have power. The fog fears this power. That's why it tries to corrupt our rituals, to turn them against us.","options":[{"text":"Can you teach me these rituals?","nextId":"ritual_teaching"},{"text":"How do you protect against corruption?","nextId":"corruption_protection"}]},{"id":"lyra_reference","text":"*Drenvar nods respectfully* Lyra leads us well. She's in the [Scorchveil Pit|scorchveilPit|Where our most powerful rituals are performed], preparing for the next fog-burning ceremony. *Their expression grows serious* The fog has been particularly aggressive lately. We need to strengthen our defenses.","options":[{"text":"I can help with the ceremony.","nextId":"ceremony_help"},{"text":"I'll find her there.","nextId":null}]},{"id":"ceremony_help","text":"*Drenvar's eyes light up with hope* Your help would be most welcome. The ceremony requires strength, focus, and a pure heart. *They gesture toward the Scorchveil Pit* Speak with Lyra. She'll guide you through the preparations.","options":[{"text":"I'll go to her now.","nextId":null},{"text":"What should I expect?","nextId":"ceremony_expectations"}]},{"id":"ceremony_expectations","text":"*Drenvar's expression grows serious* The ceremony is intense. The flames will test you, challenge you. But if your heart is true, they will protect you. *They look toward the pit* The fog fears our fire. Together, we can push it back.","options":[{"text":"I understand. I'll go to Lyra.","nextId":null}]},{"id":"ritual_teaching","text":"*Drenvar considers you carefully* Teaching the rituals... it's not just about learning the words or the movements. It's about understanding the fire. Feeling its power. *They extend a hand, a small flame dancing in their palm* The first step is learning to listen to the flames. To hear what they tell you about the fog.","options":[{"text":"I'm ready to learn.","nextId":"ritual_beginning"},{"text":"Maybe I'm not ready yet.","nextId":null}]},{"id":"ritual_beginning","text":"*Drenvar's eyes light up with approval* Good. The first ritual is simple, but powerful. We call it the Flame's Whisper. *They guide your hands into position* Close your eyes. Feel the heat. Listen to what the flames tell you about the fog.","options":[{"text":"I can feel something...","nextId":"ritual_progress"},{"text":"This is harder than I thought.","nextId":"ritual_encouragement"}]},{"id":"ritual_progress","text":"*Drenvar nods approvingly* The connection is forming. The flames recognize your potential. *They gesture to the ritual circle* This is just the beginning. The more you practice, the stronger your connection will become.","options":[{"text":"I want to learn more.","nextId":null,"action":{"type":"startQuest","questId":"embercladsRitual"}},{"text":"I need to practice this first.","nextId":null}]},{"id":"ritual_encouragement","text":"*Drenvar's expression softens* The first time is always the hardest. The flames are shy. They need to learn to trust you. *They place a hand on your shoulder* Keep trying. The connection will come.","options":[{"text":"I'll keep practicing.","nextId":null},{"text":"Maybe another time.","nextId":null}]},{"id":"corruption_protection","text":"*Their expression darkens* The fog tries to twist our rituals, to use our own power against us. We protect ourselves through purity of purpose. Through understanding. Through the strength of our community. *They gesture to the other Emberclad around them* Alone, we are vulnerable. Together, we are strong.","options":[{"text":"How can I help strengthen the community?","nextId":"community_strength"},{"text":"I understand.","nextId":null}]},{"id":"community_strength","text":"*Drenvar's eyes light up with hope* There are many ways. Help protect our rituals. Share what you learn with others. Stand with us against the fog. *They place a hand on your shoulder* Every person who joins our cause makes us stronger. Every flame we kindle together pushes back the darkness.","options":[{"text":"I'll do what I can.","nextId":null,"action":{"type":"startQuest","questId":"embercladsCommunity"}},{"text":"I need to think about this.","nextId":null}]},{"id":"passing_through","text":"*Drenvar nods, returning to their work with the ritual fire* The [Cinderhold|cinderhold|Our flame-protected haven] is open to all who seek shelter from the fog. Rest if you need to. The flames will keep you safe. *They look up briefly* But remember - in these times, we all need to stand together against the darkness.","options":[{"text":"Maybe I should stay a while.","nextId":"ritual_knowledge","conditions":[{"type":"questCompleted","questId":"embercladsTrial"}],"hideWhenUnavailable":true},{"text":"Thank you for the hospitality.","nextId":null}]}]},"eryndor_vinesoul/base.js":{"nodes":[{"id":"start","text":"The [fog|fog|Divine mind] speaks, and your [Amulet|amulet|Holy relic] is its voice. Join my [Pulsefinders|pulsefinders|Fog worshippers], or defy the divine?","options":[{"text":"What do the [Pulsefinders|pulsefinders|Cult] believe?","nextId":"pulsefinders"},{"text":"I need a vision from the [Shrine of Whispers|shrine_of_whispers|Cave].","nextId":"quest","action":{"type":"startQuest","questId":"pulse_within"},"conditions":[{"type":"skill","stat":"Willpower","value":7}]},{"text":"Will you support my expedition?","nextId":"expedition","conditions":[{"type":"questActive","questId":"great_crossing"}]},{"text":"Goodbye.","nextId":null}]},{"id":"pulsefinders","text":"The [fog|fog|Sentient god] birthed when [portals|portals|False gates] fell. Our implants let us hear its will, guiding [Hollowreach|hollowreach|Lost city] to transcendence.","options":[{"text":"Can the fog guide me?","nextId":"quest"},{"text":"Goodbye.","nextId":null}]},{"id":"quest","text":"In the [Shrine of Whispers|shrine_of_whispers|Neural cave], take an implant to see the [fog|fog|God]’s path. [Loomkeepers|loomkeepers|Weavers] may try to stop you.","options":[{"text":"I'll take the implant.","nextId":null,"action":{"type":"startQuest","questId":"pulse_within"}},{"text":"I refuse.","nextId":null}]},{"id":"expedition","text":"Your expedition serves the [fog|fog|Divine will]. My [Pulsefinders|pulsefinders|Guides] will join with implants, but you must embrace our visions.","options":[{"text":"Your guides are welcome.","nextId":null,"action":{"type":"startQuest","questId":"pulsefinder_expedition"}},{"text":"I'll pass.","nextId":null}]}]},"faction_leaders/dialogue.js":{"nodes":[{"id":"start","text":"Welcome to the faction leaders' chamber. Who would you like to speak with?","options":[{"text":"The Loomkeeper Elder","nextId":"loomkeeper_elder_start"},{"text":"The Driftkin Chief","nextId":"driftkin_chief_start"},{"text":"The Emberclad Commander","nextId":"emberclad_commander_start"}]},{"id":"loomkeeper_elder_start","text":"The Mistwalker Amulet... a fascinating discovery. The Loomkeepers have been studying Old Empire artifacts for generations. Share it with us, and we'll provide you with a detailed map of known portal locations.","options":[{"text":"I'll share the amulet's secrets with the Loomkeepers.","nextId":"loomkeeper_accept","action":{"type":"completeQuest","questId":"mistwalker_amulet"}},{"text":"I need to consider other options.","nextId":"loomkeeper_reject"}]},{"id":"loomkeeper_accept","text":"Wise choice. The Loomkeepers will put this knowledge to good use. Here's the portal map - it will help you navigate the Old Empire's network.","options":[{"text":"Thank you for your trust.","nextId":null}]},{"id":"loomkeeper_reject","text":"Very well. But remember, the Loomkeepers are the most knowledgeable about Old Empire artifacts. We'll be here if you change your mind.","options":[{"text":"I understand.","nextId":null}]},{"id":"driftkin_chief_start","text":"A fog-repelling amulet? This could be exactly what the Driftkin need to explore the deeper mists. Share it with us, and we'll give you our most advanced fog compass.","options":[{"text":"I'll share the amulet's secrets with the Driftkin.","nextId":"driftkin_accept","action":{"type":"completeQuest","questId":"mistwalker_amulet"}},{"text":"I need to consider other options.","nextId":"driftkin_reject"}]},{"id":"driftkin_accept","text":"The Driftkin thank you. This fog compass will help you navigate even the thickest mists. May it serve you well.","options":[{"text":"Thank you for your trust.","nextId":null}]},{"id":"driftkin_reject","text":"Think carefully. The Driftkin know the mists better than anyone. We'll be here if you need us.","options":[{"text":"I understand.","nextId":null}]},{"id":"emberclad_commander_start","text":"An amulet that controls the fog? The Emberclad could use this to protect our borders. Share it with us, and we'll give you our most powerful flame ward.","options":[{"text":"I'll share the amulet's secrets with the Emberclad.","nextId":"emberclad_accept","action":{"type":"completeQuest","questId":"mistwalker_amulet"}},{"text":"I need to consider other options.","nextId":"emberclad_reject"}]},{"id":"emberclad_accept","text":"The Emberclad are in your debt. This flame ward will protect you from the most dangerous threats. Use it well.","options":[{"text":"Thank you for your trust.","nextId":null}]},{"id":"emberclad_reject","text":"The offer stands. The Emberclad are the strongest faction in these lands. We'll be here if you change your mind.","options":[{"text":"I understand.","nextId":null}]}]},"joren_halfhand/base.js":{"nodes":[{"id":"start","text":"Keep your distance. The [fog|fog|Corrupts tech]’s bad enough without spies. What do you want with my [Driftkin|driftkin|Barge folk]?","options":[{"text":"What’s your role here?","nextId":"role"},{"text":"I need help with a wrecked barge.","nextId":"quest","action":{"type":"startQuest","questId":"moors_lament"},"conditions":[{"type":"skill","stat":"Engineering","value":6}]},{"text":"Can you aid my expedition?","nextId":"expedition","conditions":[{"type":"questActive","questId":"great_crossing"}]},{"text":"Goodbye.","nextId":null}]},{"id":"role","text":"I fix driftbarges, keep ‘em floating despite the [fog|fog|Ruins machines]. [portals|portals|Old tech]’ shards are my life, but they’re cursed.","options":[{"text":"Can you fix a barge wreck?","nextId":"quest"},{"text":"Goodbye.","nextId":null}]},{"id":"quest","text":"The [Starbarge Wreck|starbarge_wreck|Leaking ruin]’s core is drawing [fog|fog|Spawns drones] beasts. Disable it, but [Pulsefinders|pulsefinders|Cultists] want it too.","options":[{"text":"I’ll handle it.","nextId":null,"action":{"type":"startQuest","questId":"moors_lament"}},{"text":"Not my problem.","nextId":null}]},{"id":"expedition","text":"Your expedition's doomed without my tech. I'll rig barges for the [fog|fog|Deadly paths], but no [Pulsefinders|pulsefinders|Mad cult] near my work.","options":[{"text":"Your skills are needed.","nextId":null,"action":{"type":"startQuest","questId":"joren_expedition"}},{"text":"I'll think it over.","nextId":null}]}]},"korzog/base.js":{"nodes":[{"id":"start","text":"Vrenna's too cautious. The [fog|fog|Living chaos] can be tamed with my weaves. You got the guts to help, or you just another coward?","options":[{"text":"What's your plan for the [fog|fog|Chaos mist]?","nextId":"plan"},{"text":"I hear you're making a forbidden tapestry.","nextId":"quest","action":{"type":"startQuest","questId":"korzogs_rebellion"},"conditions":[{"type":"skill","stat":"Dexterity","value":7}]},{"text":"Can you help my expedition?","nextId":"expedition","conditions":[{"type":"questActive","questId":"great_crossing"}]},{"text":"Goodbye.","nextId":null}]},{"id":"plan","text":"My tapestries can bind [fog|fog|Monstrous mist] creatures, not just map them. Vrenna fears the risk, but I say we fight the [portals|portals|Broken gates]' curse head-on.","options":[{"text":"Sounds dangerous. What do you need?","nextId":"quest"},{"text":"Goodbye.","nextId":null}]},{"id":"quest","text":"I've woven a tapestry in the [Weave Vault|weave_vault|Hidden chamber] to control fog-beasts. Steal it for me, or destroy it if you're with Vrenna.","options":[{"text":"I'll get it.","nextId":null,"action":{"type":"startQuest","questId":"korzogs_rebellion"}},{"text":"I'll stop you.","nextId":null,"action":{"type":"startQuest","questId":"oppose_korzog"}}]},{"id":"expedition","text":"Your expedition needs fighters. My weaves can trap fog-beasts, but I want a cut of any [portals|portals|Gateways] you find.","options":[{"text":"Join us, and you'll get a share.","nextId":null,"action":{"type":"startQuest","questId":"korzog_expedition"}},{"text":"No deal.","nextId":null}]}]},"korzog/dialogue.js":{"nodes":[{"id":"start","text":"Ah, I see you've found the amulet. Hand it over, and I'll let you walk away. The Loomkeepers have no right to keep such power to themselves.","options":[{"text":"The amulet doesn't belong to the Loomkeepers either.","nextId":"mistwalker_negotiate"},{"text":"I won't let you take it.","nextId":"mistwalker_combat","action":{"type":"startBattle"}}]},{"id":"mistwalker_negotiate","text":"You're right, it belongs to no one. But I can help you understand its true power. The Loomkeepers would just lock it away in their vaults.","options":[{"text":"What do you know about its power?","nextId":"mistwalker_reveal"},{"text":"I still can't trust you.","nextId":"mistwalker_combat","action":{"type":"startBattle"}}]},{"id":"mistwalker_reveal","text":"The amulet can control the fog around Old Empire portals. With it, we could explore places the Loomkeepers have kept hidden for centuries. Share it with me, and I'll show you secrets they've been hiding.","options":[{"text":"I'll consider your offer, but I need time to think.","nextId":"mistwalker_standoff"},{"text":"Your knowledge is valuable, but I can't trust you.","nextId":"mistwalker_combat","action":{"type":"startBattle"}}]},{"id":"mistwalker_standoff","text":"Time is a luxury we don't have. The Loomkeepers will be here soon. Make your choice now.","options":[{"text":"I'll share what I learn with you, but I keep the amulet.","nextId":"mistwalker_compromise","action":"completeQuestStep"},{"text":"I can't make that deal.","nextId":"mistwalker_combat","action":"startBattle"}]},{"id":"mistwalker_compromise","text":"A reasonable offer. I'll be watching for your discoveries. Don't disappoint me.","options":[{"text":"I'll be in touch.","nextId":null}]},{"id":"mistwalker_combat","text":"So be it. You'll regret this decision.","options":[{"text":"We'll see about that.","nextId":null}]}]},"korzog/korzog_archive.js":{"nodes":[{"id":"start","text":"*Korzog's massive form looms in the shadows of the [Ashen Archive|ashenArchive|An ancient repository of forbidden knowledge]. His eyes, glowing with an unnatural light, study you intently* So. You've found your way here. And you carry something... interesting. The amulet. *He gestures to the Mistwalker Amulet* I've been expecting you.","options":[{"text":"You know about the amulet?","nextId":"amulet_knowledge","conditions":[{"type":"hasItem","itemId":"mistwalkerAmulet"}],"hideWhenUnavailable":true},{"text":"I'm looking for information about the fog.","nextId":"fog_inquiry"},{"text":"I should go.","nextId":null}]},{"id":"amulet_understanding","text":"*Korzog's expression darkens* Understanding comes with a price. The amulet... it's more than just a tool. It's a bridge. A connection between our world and something else. *They gesture to the Archive* The answers you seek are inside. But be warned - once you know the truth, you can't unknow it.","options":[{"text":"I'm ready to learn.","nextId":"archive_entrance"},{"text":"What price?","nextId":"knowledge_price"}]},{"id":"renn_reference","text":"*A deep, rumbling laugh echoes through the chamber* Renn Quickfingers. Always meddling in things they don't understand. *Their expression grows serious* But they were right about one thing - I can help you understand the amulet. If you're willing to face what that understanding means.","options":[{"text":"I want to understand.","nextId":"archive_entrance"},{"text":"What do you mean?","nextId":"understanding_warning"}]},{"id":"knowledge_price","text":"*Korzog's eyes flare brighter* The amulet changes those who use it. The more you understand it, the more it understands you. *They gesture to the ancient tomes around them* The fog isn't just a curse. It's a presence. A consciousness. And the amulet... it's learning to speak to it.","options":[{"text":"I still want to learn.","nextId":"archive_entrance"},{"text":"Maybe I should leave.","nextId":"departure_warning"}]},{"id":"understanding_warning","text":"*Korzog's voice takes on a grave tone* The amulet was meant to be a key. A way to understand the fog. To control it. But something went wrong. The fog... it changed. Adapted. *They look around cautiously* The factions think they understand it. The Driftkin worship it. The Emberclad fear it. The Loomkeepers study it. But none of them know the truth.","options":[{"text":"What is the truth?","nextId":"truth_revelation"},{"text":"I need to think about this.","nextId":"time_to_think"}]},{"id":"departure_warning","text":"*Korzog's expression grows serious* Leaving won't change what's happening. The fog is growing stronger. The amulet is changing. And the factions... they're getting desperate. *They gesture to the Archive* The answers are here. Whether you seek them or not, they will find you.","options":[{"text":"You're right. I'll stay.","nextId":"archive_entrance"},{"text":"I still need time.","nextId":"time_to_think"}]},{"id":"truth_revelation","text":"*Korzog looks around cautiously before speaking* The fog didn't just appear. It was called. Summoned. The Old Empire... they sought power beyond their understanding. The portals that once connected our world to others... they weren't just for travel. They were gates. And when they opened the wrong one... *Their voice drops to a whisper* The fog was their punishment. Our punishment.","options":[{"text":"The amulet was meant to fix this?","nextId":"amulet_purpose"},{"text":"This is too much to process.","nextId":"time_to_think"}]},{"id":"amulet_purpose","text":"*Korzog nods slowly* The amulet was their last attempt to control what they had unleashed. A key to understanding the fog. To communicating with it. *Their expression darkens* But the fog is changing. Adapting. The amulet is changing with it. Becoming something new. Something powerful.","options":[{"text":"What should I do?","nextId":"guidance_offering"},{"text":"This is dangerous.","nextId":"danger_acknowledgment"}]},{"id":"guidance_offering","text":"*Korzog gestures to the Archive* The answers are here. In the ancient texts. In the runes on the walls. *They offer you a small, glowing crystal* Take this. It will help you understand. Guide you to the truth. But remember - knowledge is power. And power... it always comes with a price.","options":[{"text":"I understand.","nextId":null,"action":{"type":"startQuest","questId":"mistwalkerSecret"}}]},{"id":"danger_acknowledgment","text":"*Korzog's eyes flare with intensity* Yes. Very dangerous. The factions will want the amulet. The Driftkin to understand it. The Loomkeepers to study it. The Emberclad to destroy it. *Their voice grows grave* But the greatest danger is not knowing. Not understanding what's happening to our world.","options":[{"text":"I'll take the risk.","nextId":"guidance_offering"},{"text":"I need more time.","nextId":"time_to_think"}]},{"id":"time_to_think","text":"*Korzog nods understandingly* The truth is not easy to face. Take your time. But remember - the fog doesn't wait. The amulet doesn't wait. And the factions... they're getting desperate. *They gesture to the exit* When you're ready to face the truth, you'll know where to find me.","options":[{"text":"Thank you for your patience.","nextId":null}]},{"id":"archive_entrance","text":"*Korzog steps aside, revealing a massive door covered in ancient runes* The Archive holds many secrets. Some will help you understand the amulet. Others... they might change you forever. *Their eyes glow brighter* Are you sure you want to proceed?","options":[{"text":"I'm ready to face whatever lies within.","nextId":"archive_warning"},{"text":"Maybe I should reconsider.","nextId":"time_to_think"}]},{"id":"archive_warning","text":"*The runes on the door begin to glow* Very well. But remember - knowledge is a double-edged sword. The amulet will respond to what you learn here. *They place a hand on the door* Once you enter, there's no turning back.","options":[{"text":"I understand. Open the door.","nextId":"guidance_offering"},{"text":"I need more time to prepare.","nextId":"time_to_think"}]},{"id":"confrontation","text":"*Korzog's eyes flare with an intense light* The Mistwalker Amulet... you've activated its true power. The runes in the chamber have shown you the truth. The fog isn't just a curse - it's a gateway. A bridge between worlds. And the amulet is the key.","options":[{"text":"What do you want with it?","nextId":"confrontation_truth"},{"text":"I won't let you take it.","nextId":"confrontation_combat","action":{"type":"startBattle"}}]},{"id":"confrontation_truth","text":"*Korzog's voice grows grave* The Old Empire didn't just create the fog - they summoned it. The amulet was meant to control it, but something went wrong. The fog became something else. Something alive. I want to understand it. To master it. The factions would just lock it away or destroy it.","options":[{"text":"I'll share what I learn, but I keep the amulet.","nextId":null,"action":{"type":"completeQuest","questId":"mistwalkerSecret"}},{"text":"I can't trust you with this power.","nextId":"confrontation_combat","action":{"type":"startBattle"}}]},{"id":"confrontation_combat","text":"So be it. The amulet's power will be mine, one way or another.","options":[{"text":"We'll see about that.","nextId":null}]}]},"korzog/korzog_base.js":{"nodes":[{"id":"start","text":"*Korzog's massive form looms in the shadows of the [Ashen Archive|ashenArchive|An ancient repository of forbidden knowledge]. His eyes, glowing with an unnatural light, study you intently* So. You've found your way here. And you carry something... interesting. The amulet. *He gestures to the Mistwalker Amulet* I've been expecting you.","options":[{"text":"You know about the amulet?","nextId":"amulet_knowledge","conditions":[{"type":"hasItem","itemId":"mistwalkerAmulet"}],"hideWhenUnavailable":true},{"text":"I'm looking for information about the fog.","nextId":"fog_inquiry"},{"text":"I should go.","nextId":null}]},{"id":"amulet_knowledge","text":"*A deep, rumbling laugh echoes through the chamber* Know about it? I helped create it. The Mistwalker Amulet was meant to be a key - a way to understand the fog, to control it. *His voice grows serious* But something went wrong. The fog... it changed. Adapted. The amulet became something else. Something dangerous.","options":[{"text":"What do you mean, dangerous?","nextId":"amulet_warning"},{"text":"How can I use it safely?","nextId":"amulet_guidance"}]},{"id":"amulet_warning","text":"*Korzog's eyes flare brighter* The amulet doesn't just let you navigate the fog - it connects you to it. The more you use it, the more it changes you. The Driftkin understand this, in their way. The Loomkeepers seek to study it. The Emberclad fear it. *He leans forward* But none of them understand its true purpose.","options":[{"text":"What is its true purpose?","nextId":"amulet_purpose"},{"text":"I need to think about this.","nextId":null}]},{"id":"amulet_purpose","text":"*Korzog's voice drops to a whisper* The amulet was meant to be a bridge. A way to communicate with the fog, to understand its nature. But the fog... it's not just a force of nature. It's a consciousness. And it's learning. Adapting. *Their eyes glow with intensity* The amulet is changing too. Becoming something new. Something powerful.","options":[{"text":"What should I do?","nextId":"understanding_quest"},{"text":"This is too dangerous.","nextId":null}]},{"id":"amulet_guidance","text":"*He shakes his massive head* There is no safe way. Only different degrees of risk. The amulet is a tool, yes, but it's also a burden. A responsibility. *His voice grows softer* If you must use it, do so sparingly. And be prepared for the consequences.","options":[{"text":"What consequences?","nextId":"consequences"},{"text":"I understand. Thank you.","nextId":null}]},{"id":"consequences","text":"*Korzog's eyes flare with intensity* The amulet changes those who use it. The more you understand the fog, the more it understands you. *They gesture to the ancient tomes* Some who used it too much... they became something else. Something that could see through the fog, but couldn't see themselves anymore.","options":[{"text":"That's... unsettling.","nextId":"understanding_quest"},{"text":"I need to think about this.","nextId":null}]},{"id":"fog_inquiry","text":"*Korzog's expression darkens* The fog is not what it seems. It's not just a force of nature, not just a curse. It's... alive. In its way. And it's growing stronger. More intelligent. *He gestures to the ancient tomes around him* The answers you seek are here, in the [Ashen Archive|ashenArchive|Where forbidden knowledge is kept]. But knowledge comes with a price.","options":[{"text":"What price?","nextId":"knowledge_price"},{"text":"Maybe I don't want to know.","nextId":null}]},{"id":"knowledge_price","text":"*His eyes narrow* Understanding changes you. Once you see the truth about the fog, about the amulet, about what happened to our world... you can't unsee it. *He stands, his form casting a long shadow* The choice is yours. But remember - ignorance is not always bliss. Sometimes it's just a slower form of death.","options":[{"text":"I want to understand.","nextId":"understanding_quest"},{"text":"I need time to think.","nextId":null}]},{"id":"understanding_quest","text":"*Korzog nods slowly* Then you'll need to prove yourself. The [Rune Chamber|runeChamber|Where the ancient secrets are kept] holds the key to understanding the amulet's true nature. But be warned - the path is not for the faint of heart. The fog will test you. The amulet will change you. Are you ready for that?","options":[{"text":"I'm ready.","action":[{"type":"startQuest","questId":"mistwalkerSecret"},{"type":"unlockPOI","mapId":"ashenArchive","poiId":"runeChamber"}]},{"text":"I need to prepare first.","nextId":null}]}]},"korzog/korzog_quest_complete.js":{"nodes":[{"id":"start","text":"*Korzog's eyes glow with an intense light as he examines the enhanced amulet* The Rune Chamber has revealed its secrets to you. The amulet is more than a tool - it's a bridge. A connection between our world and... something else. *His voice grows grave* The fog didn't just appear. It was called. Summoned. And the amulet was meant to be the key to controlling it.","options":[{"text":"Who summoned the fog?","nextId":"fog_origin"},{"text":"What does this mean for the amulet?","nextId":"amulet_future"}]},{"id":"fog_origin","text":"*He looks around cautiously* The Old Empire. They sought power beyond their understanding. The portals that once connected our world to others... they weren't just for travel. They were gates. And when they opened the wrong one... *He shakes his head* The fog was their punishment. Our punishment. The amulet was their last attempt to fix what they had broken.","options":[{"text":"Can we fix it now?","nextId":"fix_attempt"},{"text":"I need to think about this.","nextId":null,"action":{"type":"completeQuest","questId":"mistwalkerSecret"}}]},{"id":"amulet_future","text":"*He holds the amulet up, watching the light play across its surface* The amulet is changing. Adapting. Just like the fog. It's becoming something new. Something powerful. *He offers it back to you* Keep it. Use it wisely. The factions will want it - the Driftkin to understand it, the Loomkeepers to study it, the Emberclad to destroy it. But its true purpose... that's for you to discover.","options":[{"text":"I'll be careful with it.","nextId":null,"action":{"type":"completeQuest","questId":"mistwalkerSecret"}},{"text":"Maybe it should be destroyed.","nextId":null,"action":{"type":"completeQuest","questId":"mistwalkerSecret"}}]},{"id":"fix_attempt","text":"*A dark laugh echoes through the chamber* Fix it? The fog is part of our world now. It's changing us, just as we changed it. The amulet... it's not a solution. It's a tool. A weapon. A key. What you do with it... that's what matters now. *He gestures to the exit* The factions will want to know what you've learned. Choose wisely who you tell.","options":[{"text":"I understand.","nextId":null,"action":{"type":"completeQuest","questId":"mistwalkerSecret"}}]}]},"lyra_emberkin/drenvar_ritual.js":{"nodes":[{"id":"start","text":"*Drenvar stands in the center of the ritual circle, their hands moving in precise patterns as they tend the sacred flames* The ritual is almost ready. The fog has been particularly aggressive lately, trying to corrupt our sacred flames. But today... today we will show it the true power of the Emberclad.","options":[{"text":"What can I do to help?","nextId":"ritual_help"},{"text":"I'll watch and learn.","nextId":"ritual_observation"}]},{"id":"ritual_help","text":"*Drenvar's eyes glow with the reflection of the flames* Your presence here is help enough. The ritual draws strength from those who stand against the fog. *They gesture to a specific spot in the circle* Stand there. Let the flames guide you. When the time comes, you'll know what to do.","options":[{"text":"I'm ready.","nextId":"ritual_beginning"},{"text":"What should I expect?","nextId":"ritual_warning"}]},{"id":"ritual_warning","text":"*The flames flicker ominously* The fog will try to interfere. It always does. It will show you visions, whisper lies, try to turn the flames against us. *Their voice grows firm* Remember - the fire is our ally. It burns away corruption. Trust in its light.","options":[{"text":"I understand.","nextId":"ritual_beginning"},{"text":"Maybe I should just watch.","nextId":"ritual_observation"}]},{"id":"ritual_observation","text":"*Drenvar nods approvingly* Wisdom in caution. Watch closely. Learn the patterns. The flames speak to those who listen. *They begin to chant, the fire responding to their words* When you're ready to take part, you'll know.","options":[{"text":"I want to help now.","nextId":"ritual_help"},{"text":"I'll keep watching.","nextId":"ritual_beginning"}]},{"id":"ritual_beginning","text":"*The flames rise higher, forming a protective circle around the ritual space* The fog approaches. I can feel it. *Drenvar's voice takes on a rhythmic quality* Stand firm. The flames will protect us. The ritual will purify this place.","options":[{"text":"I see the fog coming.","nextId":"ritual_confrontation"},{"text":"The flames are growing stronger.","nextId":"ritual_confrontation"}]},{"id":"ritual_confrontation","text":"*The fog seeps into the ritual circle, but the flames push it back* Now! Focus your will on the flames. Let them burn away the corruption. *Drenvar's voice rises in intensity* Together, we are stronger than the fog!","options":[{"text":"I can feel the power!","nextId":"ritual_victory"},{"text":"The fog is retreating!","nextId":"ritual_victory"}]},{"id":"ritual_victory","text":"*The flames surge, driving back the fog completely* We've done it! The ritual is complete. *Drenvar's face is alight with triumph* The fog has been purged from this place. For now. *They turn to you, respect evident in their gaze* You have the heart of an Emberclad. The flames recognized your strength.","options":[{"text":"Thank you for teaching me.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}},{"text":"The fog will be back.","nextId":"ritual_warning_future"}]},{"id":"ritual_warning_future","text":"*Drenvar's expression grows serious* Yes. It always returns. Stronger. More cunning. *They gesture to the still-burning ritual flames* But so do we. Each time we drive it back, we learn. We grow. We become stronger. *They offer you a small, glowing ember* Take this. A reminder of today's victory. And a promise of future battles.","options":[{"text":"I'll be ready.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}}]}]},"lyra_emberkin/lyra_base.js":{"nodes":[{"id":"start","text":"*The air around Lyra shimmers with heat as she tends to a small flame in her palm* Welcome to [Cinderhold|cinderhold|The Emberclad's stronghold, where fire keeps the fog at bay]. I'm Lyra Emberkin, and if you're here, you either seek our protection or our knowledge. Which is it?","options":[{"text":"I've heard the Emberclad can control fire.","nextId":"fire_control"},{"text":"I need help against the fog.","nextId":"fog_threat"},{"text":"I'm just passing through.","nextId":"passing_through"}]},{"id":"fire_control","text":"*The flame in her hand grows larger, casting dancing shadows* Control? No. We don't control fire - we dance with it. The fog fears our flames, but respect is a two-way street. *She extinguishes the flame with a snap of her fingers* If you want to learn our ways, you'll need to prove yourself. The [Scorchveil Pit|scorchveilPit|Where Emberclad initiates face their trials] awaits those who seek the flame.","options":[{"text":"I want to learn your ways.","nextId":"initiation","conditions":[{"type":"questActive","questId":"embercladsTrial","negate":true},{"type":"questCompleted","questId":"embercladsTrial","negate":true}],"hideWhenUnavailable":true},{"text":"Maybe another time.","nextId":null}]},{"id":"fog_threat","text":"*Her expression darkens* The fog grows stronger every day. It's not just corrupting the land anymore - it's changing, adapting. Our flames... they're not as effective as they once were. *She looks you up and down* You seem capable. Perhaps you could help us strengthen our rituals. The [Scorchveil Pit|scorchveilPit|Where we test our mettle against the fog] could use someone like you.","options":[{"text":"I'll help strengthen your rituals.","nextId":"initiation","conditions":[{"type":"questActive","questId":"embercladsTrial","negate":true},{"type":"questCompleted","questId":"embercladsTrial","negate":true}],"hideWhenUnavailable":true},{"text":"I need to think about it.","nextId":null}]},{"id":"initiation","text":"*She nods, a small smile playing on her lips* Good. The [Scorchveil Pit|scorchveilPit|Our sacred testing ground] will be your first trial. You'll help us perform a fog-burning ritual, protect it from the corrupted constructs that lurk in the mist. *She hands you a small, glowing ember* Keep this with you. It will guide you to the ritual site.","options":[{"text":"I'm ready to begin.","action":[{"type":"startQuest","questId":"embercladsTrial"},{"type":"addItem","itemId":"emberclad_ember"},{"type":"unlockPOI","mapId":"cinderhold","poiId":"scorchveilPit"}]},{"text":"I need to prepare first.","nextId":null}]},{"id":"passing_through","text":"*She raises an eyebrow* Just passing through? In these times? *She shakes her head* Well, you're welcome to rest here. The fog doesn't dare touch [Cinderhold|cinderhold|Our flame-protected haven]. But remember - when the fog comes for you, and it will, our flames will be here. If you're willing to earn them.","options":[{"text":"Maybe I should stay a while.","nextId":"fire_control"},{"text":"I'll keep that in mind.","nextId":null}]}]},"lyra_emberkin/lyra_quest_complete.js":{"nodes":[{"id":"start","text":"*Lyra's eyes glow with the embers of the ritual* The fog recoils from our flames, but it always returns. Stronger. Hungrier. *She clenches her fist, causing small flames to dance between her fingers* You've proven yourself in the Scorchveil Pit. The Emberclad need warriors like you - those who understand that sometimes, the only way to fight darkness is with fire.","options":[{"text":"The fog seems to be getting worse.","nextId":"fog_warning"},{"text":"I'm honored to have helped the Emberclad.","nextId":"quest_complete","action":{"type":"completeQuest","questId":"embercladsTrial"}}]},{"id":"quest_complete","text":"*Lyra's eyes glow with the embers of the ritual* The fog recoils from our flames, but it always returns. Stronger. Hungrier. *She clenches her fist, causing small flames to dance between her fingers* You've proven yourself in the Scorchveil Pit. The Emberclad need warriors like you - those who understand that sometimes, the only way to fight darkness is with fire.","options":[{"text":"The fog seems to be getting worse.","nextId":"fog_warning"},{"text":"I'm honored to have helped the Emberclad.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}}]},{"id":"fog_warning","text":"*The flames in her hand grow more intense* It's not just getting worse - it's learning. Adapting. The fog that once only corrupted flesh now seeks to consume our very essence. The ritual we performed today... it's just the beginning. We need to be ready for what's coming. *She offers you the Pyromantic Rune* Take this. It's more than a reward - it's a promise. The Emberclad stand with those who fight the darkness.","options":[{"text":"I'll stand with you against the fog.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}},{"text":"Thank you for the rune.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}}]}]},"lyra_emberkin/lyra_ritual_complete.js":{"nodes":[{"id":"start","text":"*Lyra watches the last embers of the ritual fade, her expression a mix of satisfaction and concern* The fog has been driven back. For now. *She turns to you, the glow of the ritual fires still reflecting in her eyes* Drenvar tells me you showed remarkable control during the ritual. The flames responded to you as if you were born to wield them.","options":[{"text":"The ritual was... intense.","nextId":"ritual_reflection"},{"text":"I felt a connection to the flames.","nextId":"flame_connection"}]},{"id":"ritual_reflection","text":"*Lyra nods, a small smile playing on her lips* Intense is one word for it. The fog fights back harder each time we perform the ritual. It's learning. Adapting. *Her expression grows serious* But so are we. Your presence today... it made the ritual stronger than I've seen in years.","options":[{"text":"What does that mean?","nextId":"ritual_significance"},{"text":"I'm honored to have helped.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}}]},{"id":"flame_connection","text":"*Lyra's eyes light up with interest* A natural affinity for the flames. That's rare. *She steps closer, studying you intently* The Emberclad have always believed that some souls are born with a spark of the eternal flame. It seems you might be one of them.","options":[{"text":"What does that mean for me?","nextId":"emberclad_potential"},{"text":"I'm not sure I understand.","nextId":"flame_explanation"}]},{"id":"ritual_significance","text":"*Lyra gestures to the ritual circle* The fog is growing stronger. More intelligent. It's not just a force of nature anymore - it's becoming something else. Something that thinks. That plans. *Her voice grows firm* We need warriors who can stand against it. Who can wield the flames not just as a weapon, but as a shield for our people.","options":[{"text":"I want to help protect Hollowreach.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}},{"text":"The fog is changing?","nextId":"fog_evolution"}]},{"id":"emberclad_potential","text":"*Lyra's expression is both proud and solemn* It means you have a choice. The path of the Emberclad is not an easy one. The fog will test you. The flames will demand much of you. *She offers you a small, glowing rune* But if you choose to walk this path, you'll never walk it alone.","options":[{"text":"I choose to stand with the Emberclad.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}},{"text":"I need time to think.","nextId":"time_to_think"}]},{"id":"flame_explanation","text":"*Lyra's voice takes on a teaching tone* The eternal flame is more than just fire. It's the spark of resistance against the fog. The light that keeps the darkness at bay. *She gestures to the ritual circle* What you felt today was that spark recognizing you. Calling to you.","options":[{"text":"I want to learn more.","nextId":"emberclad_potential"},{"text":"I need to process this.","nextId":"time_to_think"}]},{"id":"fog_evolution","text":"*Lyra's expression darkens* Yes. It's learning from us. From our rituals. Our defenses. Each time we drive it back, it comes back stronger. More cunning. *She looks at the ritual circle* That's why we need warriors like you. People who can adapt. Who can grow with the flames.","options":[{"text":"I'll stand with you against the fog.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}}]},{"id":"time_to_think","text":"*Lyra nods understandingly* The path of the Emberclad is not one to choose lightly. *She offers you the glowing rune* Take this. When you're ready to make your choice, the flame will guide you back to us.","options":[{"text":"Thank you for understanding.","nextId":null,"action":{"type":"completeQuest","questId":"embercladsTrial"}}]}]},"mira_solace/base.js":{"nodes":[{"id":"start","text":"Eryndor's [Pulsefinders|pulsefinders|Fog cult] promise salvation, but their [fog|fog|Madness mist] implants took my brother. Can you help me stop them?","options":[{"text":"What's wrong with the implants?","nextId":"implants"},{"text":"I'm testing an implant in the [Shrine of Whispers|shrine_of_whispers|Cave].","nextId":"quest","action":{"type":"startQuest","questId":"pulse_within"},"conditions":[{"type":"skill","stat":"Charisma","value":6}]},{"text":"Can you aid my expedition?","nextId":"expedition","conditions":[{"type":"questActive","questId":"great_crossing"}]},{"text":"Goodbye.","nextId":null}]},{"id":"implants","text":"The [fog|fog|Twists minds]'s implants give visions, but they drive you mad. Eryndor ignores the danger, and [Hollowreach|hollowreach|City] suffers.","options":[{"text":"How can I stop this?","nextId":"quest"},{"text":"Goodbye.","nextId":null}]},{"id":"quest","text":"If you take an implant in the [Shrine of Whispers|shrine_of_whispers|Cave], destroy the shrine instead. The [Loomkeepers|loomkeepers|Weavers] will thank you.","options":[{"text":"I'll destroy it.","nextId":null,"action":{"type":"startQuest","questId":"pulse_within","objective":"destroy_shrine"}},{"text":"I need the vision.","nextId":null,"action":{"type":"startQuest","questId":"pulse_within"}}]},{"id":"expedition","text":"Your expedition could expose the [fog|fog|Danger]'s truth. I'll guide you without implants, but keep Eryndor's [Pulsefinders|pulsefinders|Cult] in check.","options":[{"text":"Join us.","nextId":null,"action":{"type":"startQuest","questId":"mira_expedition"}},{"text":"Not now.","nextId":null}]}]},"old_maris/base.js":{"nodes":[{"id":"start","npcId":"old_maris","text":"Taryn, sit with me. The council’s cut our funds again, those greedy fools. Orphan’s Hollow can’t keep you now—you’re sixteen, old enough to face Hollowreach on your own. This place has been your home, but the city won’t care. You’ll need to find your way, and fast.","options":[{"text":"Leave? Maris, where do I even start?","nextId":"guidance"},{"text":"I knew this day was coming. I’ll figure it out.","nextId":"farewell_gift"}]},{"id":"guidance","text":"Hollowreach is rough, Taryn. Rustmarket’s your best bet—plenty of work there if you’re clever. Renn ‘Quickfingers’ is around, making deals and dodging trouble. The factions will notice you: Loomkeepers with their tapestries, Driftkin on their barges, Pulsefinders lost in fog-worship, Emberclad burning everything they don’t trust. Choose carefully. They all want something.","options":[{"text":"Renn? Can I still trust her?","nextId":"renn_advice"},{"text":"What do I need to know to survive out there?","nextId":"survival_advice"}]},{"id":"renn_advice","text":"Renn hasn’t changed much—same sly grin, same knack for trouble. She’s in Rustmarket, offering jobs that sound too good. She’ll help if you pay, but watch out for Selka Ironjaw. She’s a Driftkin enforcer now, still mad about those old orphanage fights. Don’t let Renn pull you into anything stupid.","nextId":"farewell_gift"},{"id":"survival_advice","text":"The city’s dangerous, Taryn. The fog’s worst—it gets in your head, makes you see things. Stay off Ironspire Bridge after dark. Driftkin sell fog-wards, but they’re no good. Find Gavix ‘The Tinker’ if you need tools—his gadgets might help. And keep my herbs on you. They’ll ease the city’s sting.","nextId":"farewell_gift"},{"id":"farewell_gift","text":"Take these, Taryn—five gold pieces, all we could spare. They’ll get you food or a knife in Rustmarket, maybe both if you bargain well. Selka’s still holding that grudge, and the factions will try to pull you in. Trust what I taught you: question everything, and don’t be fooled by promises.","options":[{"text":"Thank you, Maris. I won’t let you down.","nextId":"final_words"}]},{"id":"final_words","text":"You’ve grown strong, Taryn, stronger than that kid who swiped my bread years ago. I’m proud of you. The council’s men are coming to clear out the older wards—get moving before they show up. Orphan’s Hollow will be here if you need it. Look for Gavix in Rustmarket; his contraptions could keep you alive. And if you see Tharok One-Eye on Ironspire Bridge, listen to his stories. There’s truth in them. Go now, and don’t look back.","is_final":true,"effects":[{"type":"add_gold","amount":5},{"type":"unlock_location","locationId":"rustmarket"}]}]},"old_maris/old_maris_base.js":{"nodes":[{"id":"start","text":"*Old Maris looks up from his work organizing supplies, his weathered face breaking into a warm smile* Ah, a new face in [Orphan's Hollow|orphansHollow|The last safe haven for Hollowreach's most vulnerable]. I'm Maris, though most just call me Old Maris. *He gestures to the bustling activity around them* We do what we can to keep everyone fed and safe here. The fog may take much, but it hasn't taken our community spirit.","options":[{"text":"How do you manage to feed everyone?","nextId":"food_crisis"},{"text":"I'd like to help the community.","nextId":"help_offer"},{"text":"I'm just passing through.","nextId":"passing_through"}]},{"id":"food_crisis","text":"*He sighs, leaning on his walking stick* It's getting harder. The fog makes it difficult to grow crops, and the Old Empire's caches are running dry. *His eyes light up with hope* But we've heard rumors of a hidden cache in the [Ironspire Ruin|ironspireRuin|An ancient structure that might hold supplies]. If we could find it... well, it would mean the difference between survival and starvation for many here.","options":[{"text":"I could help look for this cache.","nextId":"quest_offer","conditions":[{"type":"questActive","questId":"hollowsCache","negate":true},{"type":"questCompleted","questId":"hollowsCache","negate":true}],"hideWhenUnavailable":true},{"text":"That sounds dangerous.","nextId":"danger_acknowledgment"}]},{"id":"help_offer","text":"*His smile grows wider* That's the spirit! We can always use helping hands around here. *He looks you up and down appraisingly* You seem capable. There's something specific you could help with - we've heard of a supply cache in the [Ironspire Ruin|ironspireRuin|An ancient structure that might hold the key to our survival]. It's not without risk, but the reward... well, it could save lives.","options":[{"text":"I'll help find the cache.","nextId":"quest_offer","conditions":[{"type":"questActive","questId":"hollowsCache","negate":true},{"type":"questCompleted","questId":"hollowsCache","negate":true}],"hideWhenUnavailable":true},{"text":"I need to think about it.","nextId":null}]},{"id":"quest_offer","text":"*He straightens up, determination in his voice* The [Ironspire Ruin|ironspireRuin|Our best hope for survival] isn't far, but the fog has made it dangerous. The cache should be in a vault there. *He hands you a small, glowing crystal* This will help guide you through the fog. Bring back what you can - every bit helps these days.","options":[{"text":"I'll find the cache.","action":[{"type":"startQuest","questId":"hollowsCache"},{"type":"addItem","itemId":"fog_guide_crystal"},{"type":"unlockPOI","mapId":"hollowreach","poiId":"ironspireRuin"}]},{"text":"I need to prepare first.","nextId":null}]},{"id":"danger_acknowledgment","text":"*He nods understandingly* Aye, it is dangerous. The fog, the ruins, the things that lurk in the mist... *He looks around at the people of Orphan's Hollow* But sometimes, the greater danger is doing nothing. When you're ready to help, you'll know. And we'll be here, doing what we can to keep everyone alive.","options":[{"text":"Maybe I can help after all.","nextId":"quest_offer","conditions":[{"type":"questActive","questId":"hollowsCache","negate":true},{"type":"questCompleted","questId":"hollowsCache","negate":true}],"hideWhenUnavailable":true},{"text":"I understand. Good luck.","nextId":null}]},{"id":"passing_through","text":"*He nods, his smile never fading* Of course, of course. The [Orphan's Hollow|orphansHollow|Our little community] is open to all who need shelter. The fog's been particularly thick lately, so feel free to rest here as long as you need. *He gestures to a nearby fire* We've got warm food and warmer company.","options":[{"text":"Maybe I could help while I'm here.","nextId":"help_offer"},{"text":"Thank you for the hospitality.","nextId":null}]}]},"old_maris/old_maris_cache_return.js":{"nodes":[{"id":"start","text":"*Old Maris's weathered face breaks into a wide smile as you present the cache* By the ancestors, you found it! *They carefully take the cache, their hands trembling with age and excitement* The children... they'll have food for weeks. *They look up at you, their eyes glistening* You've done more than just find supplies. You've given us hope.","options":[{"text":"The cache was well hidden.","nextId":"cache_location"},{"text":"How will you distribute the supplies?","nextId":"supply_distribution"}]},{"id":"cache_location","text":"*Old Maris nods knowingly* The [Ironspire Ruin|ironspireRuin|An ancient fortress now overrun by the fog]. A dangerous place, even before the fog. *They carefully open the cache* The Old Empire stored their emergency supplies there. Places like this... they're becoming more important as the fog spreads.","options":[{"text":"There might be more caches.","nextId":"more_caches"},{"text":"The fog is getting worse.","nextId":"fog_warning"}]},{"id":"supply_distribution","text":"*Old Maris's expression grows serious* Fairly. That's the only way. *They gesture to the surrounding area* The [Orphan's Hollow|orphansHollow|A community of those who have lost their families to the fog] has grown since the fog came. More mouths to feed. More people to protect. *They look at you intently* We take care of our own here. Share what we have.","options":[{"text":"I can help find more supplies.","nextId":"future_help"},{"text":"The other districts might need help too.","nextId":"other_districts"}]},{"id":"more_caches","text":"*Old Maris's eyes light up* Yes! The Old Empire was thorough. They prepared for the worst. *They pull out an old, tattered map* There are rumors of other caches. In the [Scorchveil Pit|scorchveilPit|Where the Emberclad perform their rituals]. The [Rustmarket Sewers|rustmarketSewers|The labyrinthine tunnels beneath the bazaar]. *Their voice grows excited* But they're dangerous places now. The fog has changed them.","options":[{"text":"I can help search for them.","nextId":"future_help"},{"text":"The fog is getting worse.","nextId":"fog_warning"}]},{"id":"fog_warning","text":"*Old Maris's expression darkens* Yes. It's changing. Growing stronger. More... intelligent. *They look around nervously* The children have been having nightmares. They say the fog speaks to them. Shows them things. *Their voice drops to a whisper* I've lived through many changes in this city. But nothing like this.","options":[{"text":"What can we do?","nextId":"hope_offering"},{"text":"The factions are getting desperate.","nextId":"faction_tensions"}]},{"id":"future_help","text":"*Old Maris's face brightens* Your help would mean the world to us. The children... they need someone to look up to. Someone who shows them that there's still good in this world. *They offer you a small, carved token* Take this. A symbol of our gratitude. And a promise - the Hollow will always welcome you.","options":[{"text":"I'll help when I can.","nextId":null,"action":{"type":"completeQuest","questId":"hollowsCache"}}]},{"id":"other_districts","text":"*Old Maris nods thoughtfully* Yes. The fog doesn't care about district boundaries. We're all in this together. *They gesture to the cache* This is a start. A way to show that we can work together. That we can help each other. *Their expression grows determined* The Hollow will share what we have. It's the only way forward.","options":[{"text":"I'll help spread the word.","nextId":null,"action":{"type":"completeQuest","questId":"hollowsCache"}}]},{"id":"hope_offering","text":"*Old Maris's expression softens* We do what we've always done. We survive. We help each other. We remember who we are. *They gesture to the children playing nearby* They're our future. Our hope. As long as we keep them safe, keep them fed, keep them together... we'll find a way through this.","options":[{"text":"I'll help protect them.","nextId":null,"action":{"type":"completeQuest","questId":"hollowsCache"}}]},{"id":"faction_tensions","text":"*Old Maris sighs heavily* Yes. The Emberclad want to burn it away. The Driftkin want to worship it. The Loomkeepers want to study it. *They look at you intently* But here in the Hollow, we just want to live. To survive. To keep our children safe. *Their voice grows firm* That's what matters. That's what we fight for.","options":[{"text":"I'll help you protect the Hollow.","nextId":null,"action":{"type":"completeQuest","questId":"hollowsCache"}}]}]},"old_maris/old_maris_quest_complete.js":{"nodes":[{"id":"start","text":"*Old Maris carefully arranges the food rations, his weathered hands moving with practiced efficiency* The fog takes much from us, but it hasn't taken our spirit. Not yet. *He looks up, his eyes crinkling with a smile* You've done good work here, child. The cache you found will keep Hollowreach's people fed for weeks. In times like these, that's worth more than gold.","options":[{"text":"How long can we keep finding caches like this?","nextId":"future_concerns"},{"text":"I'm glad I could help the people of Hollowreach.","nextId":null,"action":{"type":"completeQuest","questId":"hollowsCache"}}]},{"id":"future_concerns","text":"*He sighs, leaning on his walking stick* The Old Empire left many caches, but they're running dry. The fog makes it harder to find them, and what we do find... well, it's not getting any fresher. *He straightens up, determination in his voice* But we'll manage. We always have. The people of Hollowreach are survivors. Take these rations - you've earned them, and who knows? Maybe you'll be the one to find the next cache when we need it most.","options":[{"text":"I'll keep an eye out for more caches.","nextId":null,"action":{"type":"completeQuest","questId":"hollowsCache"}},{"text":"Thank you for the rations.","nextId":null,"action":{"type":"completeQuest","questId":"hollowsCache"}}]}]},"renn_quickfingers/fragment_study.js":{"nodes":[{"id":"start","text":"*Renn's eyes widen as she sees the fragment* That's a Loomkeeper tapestry fragment! Where did you get that? *examines it closely* The patterns... they're unlike anything I've seen before.","options":[{"text":"I found it in the sewers. I thought you might want to study it.","nextId":"study_offer"},{"text":"I was going to return it to the Loomkeepers.","nextId":"loomkeeper_warning"}],"conditions":[{"type":"item","item":"tapestryFragment"}]},{"id":"study_offer","text":"Study it? *excited* This could be the key to understanding how the Old Empire's portal network worked! Let me examine it properly in my workshop. I have equipment that can analyze the portal shards woven into it.","options":[{"text":"Go ahead and study it.","nextId":"accept_study","action":[{"type":"removeItem","item":"tapestryFragment"},{"type":"addItem","item":"portalShard"},{"type":"completeQuest","questId":"proofForTheWeave"}]},{"text":"I should return it to the Loomkeepers.","nextId":"loomkeeper_warning"}]},{"id":"accept_study","text":"This is incredible! *carefully places the fragment under a strange device* The portal shards are still active. I can extract one for you to keep, and I'll make detailed notes about the patterns. This could help us understand how to navigate the fog!","options":[{"text":"What do you think you'll learn from it?","nextId":"explanation"},{"text":"Goodbye.","nextId":null}]},{"id":"explanation","text":"The Old Empire used these tapestries to map their portal network. Each thread represents a connection between points in the fog. If we can decode these patterns, we might be able to find safe paths through the mist. The Loomkeepers would just lock this away in their vaults, but we can actually learn from it!","options":[{"text":"Goodbye.","nextId":null}]},{"id":"loomkeeper_warning","text":"The Loomkeepers? *frowns* They'll just lock it away in their vaults. They're too afraid to actually study these things. But... it's your choice. Just know that returning it means we might never understand its secrets.","options":[{"text":"I'll let you study it after all.","nextId":"study_offer"},{"text":"I need to think about it.","nextId":null}]}]},"renn_quickfingers/mistwalker_intro.js":{"nodes":[{"id":"start","text":"Taryn! That amulet we found in the sewers... it's dangerous. The Loomkeepers will want to study it, the Driftkin to use it, and the Emberclad to weaponize it. But you know what I think? We should figure it out ourselves. The Ashen Archive might have answers, and I've got a few tricks up my sleeve for getting in there.","options":[{"text":"What do you know about the archive?","nextId":"archive_info"},{"text":"Maybe we should get help from the factions.","nextId":"faction_consideration"}]},{"id":"archive_info","text":"The Ashen Archive's full of Old Empire knowledge, but it's protected by rune-etched sentries and fog traps. I've been casing it for a while - there's a back entrance we can use. Just need to watch out for Korzog. That rogue Loomkeeper's been sniffing around there too.","options":[{"text":"Let's try the archive first.","nextId":"archive_plan"},{"text":"Maybe we should consider getting help.","nextId":"faction_consideration"}]},{"id":"faction_consideration","text":"Look, I get it. The factions have resources we don't. The Loomkeepers have knowledge, the Driftkin know the fog better than anyone, and the Emberclad... well, they've got firepower. But here's the thing - once they know about the amulet, they'll want it. Badly. We could use it as leverage, get what we need from them, but we'd have to be careful. Trust me, I know these people - they'll smile to your face while planning how to take it from you.","options":[{"text":"You're right. Let's try the archive first.","nextId":"archive_plan"},{"text":"Which faction would be safest to approach?","nextId":"faction_analysis"}]},{"id":"faction_analysis","text":"Vrenna Stoneweave's Loomkeepers are the most... predictable. They'll want to study it, but they're bound by their rules. The Driftkin under Sylvara Tidewalker? They're wild cards - they might help us navigate the fog, but they'll want to push deeper into it. And the Emberclad... Lyra Emberkin's not bad, but her people see everything as a weapon. Once they know about the amulet, they'll want to use it to burn away the fog, consequences be damned.","options":[{"text":"Let's stick to the archive plan.","nextId":"archive_plan"},{"text":"I need more time to think.","nextId":"mistwalker_reject"}]},{"id":"archive_plan","text":"Good choice! Meet me at the archive's back entrance. I'll bring some tools for the sentries, and with that amulet of yours, we should be able to handle the fog traps. Just remember - we're there for knowledge, not trouble. Though knowing Korzog, trouble might find us anyway.","options":[{"text":"I'll meet you there.","nextId":"archive_depart"}]},{"id":"mistwalker_reject","text":"Take your time. The archive isn't going anywhere, and neither are the factions. Just remember - knowledge is power in Hollowreach, and right now, we've got a chance to get ahead of everyone else. When you're ready, you know where to find me.","options":[{"text":"Goodbye.","nextId":null}]},{"id":"archive_depart","text":"Perfect. I'll get everything ready. Remember, we're looking for anything about fog control or Old Empire artifacts. And watch out for Korzog - he's been acting strange lately, even for a Loomkeeper. Something about the amulet's got him spooked.","options":[{"text":"I'll be careful.","nextId":null}]}]},"renn_quickfingers/renn_base.js":{"nodes":[{"id":"start","text":"Taryn! Well, look who finally crawled out of the [Orphan's Hollow|orphansHollow|A dilapidated orphanage on the city’s edge, where Taryn grew up.]. Been a while. The real world's a bit different from those dusty old walls, eh?","options":[{"text":"It's... a lot to take in. Good to see you, Renn.","nextId":"city_intro_1","conditions":[{"type":"questActive","questId":"fogscarHeist","negate":true},{"type":"questCompleted","questId":"fogscarHeist","negate":true}],"hideWhenUnavailable":true},{"text":"I manage. Good to see you too. What's new in your world?","nextId":"city_intro_1","conditions":[{"type":"questActive","questId":"fogscarHeist","negate":true},{"type":"questCompleted","questId":"fogscarHeist","negate":true}],"hideWhenUnavailable":true},{"text":"Renn! Just the man I was looking for. About that sewer door job...","nextId":"questAccepted_ongoing","conditions":[{"type":"questActive","questId":"fogscarHeist"}],"hideWhenUnavailable":true},{"text":"Hey Renn. That sewer door business was something else, wasn't it?","nextId":"heistAlreadyDone","conditions":[{"type":"questCompleted","questId":"fogscarHeist"}],"hideWhenUnavailable":true}]},{"id":"city_intro_1","text":"Heh. 'A lot to take in' is [Hollowreach|hollowreach|A city isolated by the collapse of interdimensional portals]'s unofficial motto. Especially down here in [Rustmarket|rustmarket|A neutral bazaar where all factions trade. Thieves and spies lurk among the stalls]. It's a chaotic mess, sure, but it's where the real opportunities are, if you know how to spot 'em. And how not to get a knife in your back.","options":[{"text":"So, care to teach me a few steps, old friend?","nextId":"city_intro_2"},{"text":"I'm a quick learner. What's the first lesson?","nextId":"city_intro_2"}]},{"id":"city_intro_2","text":"Alright, listen up. First lesson of [Rustmarket|rustmarket|A neutral bazaar where all factions trade...]: trust no one completely, not even charming old me. *Especially* not charming old me.\" She winks. \"Second: always have an escape route. Third: information is more valuable than gold, most days. Now...\" She leans in, voice a bit lower. \"You didn't just come here for survival tips, did you? You got that look in your eye, same one you had before you 'borrowed' Matron Grimshaw's keys. You looking to make a splash, Taryn? Or just test the waters?","options":[{"text":"I'm definitely looking for more than just 'getting by'.","nextId":"heist_pre_pitch"},{"text":"A bit of both, I guess. What did you have in mind?","nextId":"heist_pre_pitch"},{"text":"For now, just finding my feet. Maybe later.","nextId":"decline_early"}]},{"id":"decline_early","text":"Fair play. [Hollowreach|hollowreach|The city isolated by portal collapse] isn't going anywhere. You know where to find me in [Rustmarket|rustmarket|The central bazaar] when you're ready to stir things up. Don't be a stranger, Taryn."},{"id":"heist_pre_pitch","text":"That's the spirit! I knew that fire from the [Orphan's Hollow|orphansHollow|Our charming old home] days was still in ya. See, I've been keeping my ear to the ground, and I've stumbled onto something... significant. Something that could set us both up nicely, and maybe even make navigating this fog-choked city a damn sight easier.","options":[{"text":"You've got my full attention. What is it?","nextId":"heist_reveal"},{"text":"Sounds risky, Renn. What's the catch?","nextId":"heist_reveal"}]},{"id":"heist_reveal","text":"Risky? Taryn, my friend, everything worth doing in [Hollowreach|hollowreach|This lovely, doomed city] is risky! But the payoff for this... *chef's kiss*. I'm talking about a hidden door in the [Rustmarket Sewers|rustmarketSewers|The labyrinthine tunnels beneath the bazaar]. They say it leads to an Old Empire stash, packed with relics and who-knows-what. Right under [Rustmarket|rustmarket|The bazaar]'s nose. Imagine what we could find! So, what do you say? Fancy a bit of sewer-diving with your old pal Renn? I’ll even toss in a fine sword I ‘found’ to sweeten the deal if you’re in.","options":[{"text":"Alright, Renn. I'm in. Let's find that door. And I’ll take that sword.","action":[{"type":"startQuest","questId":"fogscarHeist"},{"type":"addItem","itemId":"simple_sword_001"},{"type":"unlockPOI","mapId":"hollowreach","poiId":"rustmarketSewersPOI"}],"nextId":"questAccepted_heist","conditions":[{"type":"questActive","questId":"fogscarHeist","negate":true},{"type":"questCompleted","questId":"fogscarHeist","negate":true}],"hideWhenUnavailable":true},{"text":"A sewer door to an Old Empire stash... Sounds incredibly dangerous.","nextId":"heist_reassurance","conditions":[{"type":"questActive","questId":"fogscarHeist","negate":true},{"type":"questCompleted","questId":"fogscarHeist","negate":true}],"hideWhenUnavailable":true},{"text":"That's a bit rich for my blood, Renn. Too risky.","nextId":"decline_heist","conditions":[{"type":"questActive","questId":"fogscarHeist","negate":true},{"type":"questCompleted","questId":"fogscarHeist","negate":true}],"hideWhenUnavailable":true}]},{"id":"heist_reassurance","text":"Dangerous? Of course! That's where the real scores are, Taryn! Look, I wouldn't drag you into something I didn't think we could handle. I'm good with locks and traps, you've got quick hands and quicker feet – or you will, after I show you a few tricks. This door in the [Rustmarket Sewers|rustmarketSewers|Those slimy tunnels] is our ticket to something big. Plus, I’ll give you that sword I mentioned – sharp enough to cut through any trouble. So, you in, or are those sewer rats too scary for ya?","options":[{"text":"Okay, okay, you convinced me. Let's do it. And don’t forget the sword.","action":[{"type":"startQuest","questId":"fogscarHeist"},{"type":"addItem","itemId":"simple_sword_001"},{"type":"unlockPOI","mapId":"hollowreach","poiId":"rustmarketSewersPOI"}],"nextId":"questAccepted_heist","conditions":[{"type":"questActive","questId":"fogscarHeist","negate":true},{"type":"questCompleted","questId":"fogscarHeist","negate":true}],"hideWhenUnavailable":true},{"text":"Rats, constructs... Yeah, I think I'll pass. Maybe I'm not cut out for this yet.","nextId":"decline_tooWeak","conditions":[{"type":"questActive","questId":"fogscarHeist","negate":true},{"type":"questCompleted","questId":"fogscarHeist","negate":true}],"hideWhenUnavailable":true}]},{"id":"questAccepted_heist","text":"Sweet! I knew I could count on you. Here’s that [Iron Sword|ironSword|A well-balanced blade, perfect for close encounters], as promised. Meet me at the [Rustmarket Sewers|rustmarketSewers|The tunnels under the bazaar]. We’ll find that door, crack it open, and see what’s waiting. It'll be a bit tricky, but don't worry. I’ll show you the ropes, teach you a thing or two about handling trouble. Think of it as a... practical lesson in Hollowreach survival.","options":[{"text":"Got it. Lets go then.","action":[{"type":"addCompanion","companionId":"renn_quickfingers"},{"type":"hidePOI","mapId":"hollowreach","poiId":"renn_quickfingers_heist"}]}]},{"id":"questAccepted_ongoing","text":"Right! The [Rustmarket Sewers|rustmarketSewers|Those slimy tunnels]. Glad you're still on board. That [Iron Sword|ironSword|Your new favorite toy] should come in handy. Ready to head down there? I was just thinking about the best way to that door. It'll be tricky, but like I said, I'll show you a few moves.","options":[{"text":"Lead the way, Renn. Let's get this done."}]},{"id":"decline_heist","text":"Your loss, Taryn. Some treasures are worth the risk, especially whatever’s behind that door in the [Rustmarket Sewers|rustmarketSewers|The underbelly of the bazaar]. But hey, if you ever grow a bigger pair... or just change your mind, you know where to find me. [Rustmarket|rustmarket|My usual haunt] is my turf."},{"id":"decline_tooWeak","text":"Hah, don't sell yourself short, Taryn! But fair enough, the [Rustmarket Sewers|rustmarketSewers|That slimy maze] is no walk in the park. Maybe another time, eh? Or for something a little less... 'rat-infested'. Stick around [Rustmarket|rustmarket|The bazaar of wonders and woes], we'll find something that suits your pace when you're ready."},{"id":"heistAlreadyDone","text":"Right you are! My memory's not what it used to be. Good job on that [Rustmarket Sewers|rustmarketSewers|That little sewer adventure] run, by the way. Whatever was behind that door must’ve been worth it... or at least made a good story, eh? So, what's next on our agenda?"}]},"renn_quickfingers/renn_firstcorridor_post_battle.js":{"nodes":[{"id":"start","text":"Whew, nasty things. Good riddance. Looks like some scavengers have moved in deeper. Probably drawn by whatever's in that vault we're looking for. They look pretty desperate... and maybe a bit touched by whatever weirdness is down here. We'll need to be careful.","action":[{"type":"unlockPOI","mapId":"rustmarketSewers","poiId":"sewer_scavengerRedoubt_POI"},{"type":"travelToMap","mapId":"rustmarketSewers"}]}]},"renn_quickfingers/renn_firstcorridor_pre_battle.js":{"nodes":[{"id":"start","text":"Alright Taryn, this is it. The air down here is ripe, eh? *sniffs* Ugh, definitely smells like rats... wait... RATS! BIG ONES! Get ready!"}]},"renn_quickfingers/renn_foggedcorridor_escape.js":{"nodes":[{"id":"start","text":"*Coughing* We... we made it! *Takes deep breaths* That was too close.","options":[{"text":"What was that thing we fought?","nextId":"explain_creature"},{"text":"Let's get out of here before more show up.","nextId":"amulet_discussion"}]},{"id":"explain_creature","text":"Some kind of fog-wraith. They say they're the spirits of people who died in the fog, twisted by its magic. *Shudders* I've never seen one up close before. Let's hope we don't see another.","options":[{"text":"So what's our next move?","nextId":"amulet_discussion"}]},{"id":"amulet_discussion","text":"That amulet... it protected us from the fog. I've heard stories about artifacts like this, but never thought I'd see one. Meet me at my house - I have some research that might help us understand what we're dealing with.","options":[{"text":"I'll meet you there.","nextId":null,"action":[{"type":"hidePOI","mapId":"rustmarketSewers","poiId":"sewer_foggedCorridor_POI"},{"type":"hidePOI","mapId":"rustmarketSewers","poiId":"sewer_vaultAntechamber_POI"},{"type":"unlockPOI","mapId":"hollowreach","poiId":"renn_quickfingers_house"},{"type":"completeQuest","questId":"fogscarHeist"},{"type":"startQuest","questId":"mistwalkerSecret"}]}]}]},"renn_quickfingers/renn_foggedcorridor_surprise.js":{"nodes":[{"id":"start","text":"*Panting* The fog... it's receding! *Looks back nervously* No time to wonder why - that thing's still after us! We can either risk the fog or face whatever's chasing us. Your call!","options":[{"text":"Into the fog! Better than whatever's behind us!","nextId":"flee_to_fog"},{"text":"We can't risk the fog!","nextId":"no_choice"}]},{"id":"flee_to_fog","text":"*Sprints ahead* Good choice! *stops suddenly* What the...?"},{"id":"no_choice","text":"We don't have a choice! *Sprints ahead* Good choice! *stops suddenly* What the...?","options":[{"text":"Fine! Let's go!","nextId":"flee_to_fog"}]}]},"renn_quickfingers/renn_foggedcorridor_warning.js":{"nodes":[{"id":"start","text":"What are you doing? Get back before the fog gets you!"}]},"renn_quickfingers/renn_secondcorridor_post_battle.js":{"nodes":[{"id":"start","text":"Ah, there it is! That corridor used to be the way to Hollowreach's docks, but now... *shudders* The mists that covered it have pulled back, but don't let that fool you. That fog'll chew you up and spit you out faster than a starving rat in a cheese shop! Trust me, I've seen what happens to folks who try to push through. Best turn back while you still can!","options":[{"text":"Like a rat...? It doesn't even make sense. But i guess i get the point. ","nextId":"getToTheDoor","action":[{"type":"unlockPOI","mapId":"rustmarketSewers","poiId":"sewer_vaultAntechamber_POI"},{"type":"unlockPOI","mapId":"rustmarketSewers","poiId":"sewer_foggedCorridor_POI"}]}]},{"id":"getToTheDoor","text":"We made it! That looks like the door, Taryn! Just like the rumors said. But why is it open? Nevermind, let's see what treasures await!","options":[{"text":"...","action":{"type":"travelToMap","mapId":"rustmarketSewers"}}]}]},"renn_quickfingers/renn_secondcorridor_pre_battle.js":{"nodes":[{"id":"start","text":"There they are. Looks like they haven't spotted us yet. Let's try to get the jump on them. Quiet now..."}]},"renn_quickfingers/renn_vault_fled.js":{"nodes":[{"id":"start","text":"*Panting heavily* That... that was too close! A real, live Sentry Golem! I haven't seen one of those active in... well, ever! *Looks back nervously* It's still coming! The main corridor collapsed behind us - our only way out is through the fogged corridor! We have to move, NOW!","options":[{"text":"The fogged corridor? But you said that was dangerous!","nextId":"dangerous_choice"},{"text":"Lead the way! Better the fog than that thing!","nextId":"flee_to_fog"}]},{"id":"dangerous_choice","text":"Yes, it's dangerous! But that golem will tear us apart! The fog might kill us, but that thing WILL kill us! We have no choice!","options":[{"text":"Fine! Let's go!","nextId":"flee_to_fog"}]},{"id":"flee_to_fog","text":"Good choice! *Renn sprints ahead* Follow me! And whatever you do, don't breathe in the fog! Hold your breath as long as you can!","action":[{"type":"equip","itemId":"mistwalkerAmulet"},{"type":"travelToMap","mapId":"rustmarketSewersCollapsed"}]}]},"renn_quickfingers/renn_vault_panic.js":{"nodes":[{"id":"start","text":" That's an Old Empire Sentry! And it looks active! TARYN, RUN! GET OUT OF HERE! This is way over our heads!"}]},"renn_scribe/base.js":{"nodes":[{"id":"start","text":"Keep your voice down, stranger. I'm Renn, once a scribe of the [Ashen Archive|ashen_archive|Fog-bound ruin]. I've got texts the [Loomkeepers|loomkeepers|Artisan collective] don't want you to see. Interested, or are you one of their spies?","options":[{"text":"What texts do you have?","nextId":"texts"},{"text":"Why are you hiding?","nextId":"hiding"},{"text":"I'm no spy. Goodbye.","nextId":null}]},{"id":"texts","text":"I've got a fragment of a portal sequence, scribbled by a mad [Pulsefinder|pulsefinders|Fog worshippers]. It's dangerous, but it could lead to a lost gate. Want it? I need a [healingPotion|healingPotion|Restores health] first—fog's eating my lungs.","options":[{"text":"Here's your potion.","nextId":null,"action":[{"type":"removeItem","item":"healingPotion"},{"type":"addItem","item":"forbidden_scroll"}],"conditions":[{"type":"item","item":"healingPotion"}]},{"text":"I don't have one.","nextId":null}]},{"id":"hiding","text":"The [Loomkeepers|loomkeepers|Artisan collective] want my head for stealing from the Archive. I saw tapestries that move, recording secrets. They'll kill to keep that quiet. You won't sell me out, will you?","options":[{"text":"Your secret's safe.","nextId":null},{"text":"I'm not getting involved.","nextId":null}]},{"id":"texts","text":"I have some texts for sale.","options":[{"text":"I'll buy one.","nextId":null,"action":{"type":"startQuest","questId":"buy_text"}}]}]},"sewer_contact/sewer_contact_base.js":{"nodes":[{"id":"start","text":"*A shadow detaches itself from the wall of the [Rustmarket Sewers|rustmarketSewers|The labyrinthine tunnels beneath the bazaar]. A figure in a tattered cloak, face hidden in darkness* You're not one of the usual rats down here. What brings you to my corner of the sewers?","options":[{"text":"I'm looking for information.","nextId":"information_trade"},{"text":"I'm just exploring.","nextId":"exploration_warning"},{"text":"I should go.","nextId":null}]},{"id":"information_trade","text":"*A dry chuckle echoes from beneath the hood* Information? That's my trade. But nothing comes free in [Hollowreach|hollowreach|The city isolated by portal collapse]. What do you want to know? The scavengers' movements? The latest artifacts found? The secrets of the fog? *The figure shifts slightly* Or perhaps... something more specific?","options":[{"text":"Tell me about the scavengers.","nextId":"scavenger_info"},{"text":"What do you know about the fog?","nextId":"fog_secrets"},{"text":"I'm looking for something specific.","nextId":"specific_inquiry"}]},{"id":"scavenger_info","text":"*The figure leans against the wall* The scavengers... they're getting bolder. Taking more risks. They've found something in the [Scavenger Redoubt|scavengerRedoubt|Their hidden base]. Something old. Something powerful. *A gloved hand extends* If you want more details, it'll cost you. Information is a valuable commodity these days.","options":[{"text":"What's the price?","nextId":"price_negotiation"},{"text":"Maybe another time.","nextId":null}]},{"id":"fog_secrets","text":"*The figure's voice grows quieter* The fog... it's not just a curse. It's a presence. It watches. It learns. *A shiver seems to run through the cloaked form* The scavengers have found ways to use it. The Driftkin worship it. The Emberclad fight it. But none of them understand it. Not really.","options":[{"text":"What do you know about the Mistwalker Amulet?","nextId":"amulet_knowledge","conditions":[{"type":"questActive","questId":"mistwalkerSecret"}],"hideWhenUnavailable":true},{"text":"That's... unsettling.","nextId":null}]},{"id":"amulet_knowledge","text":"*The figure's voice drops to a whisper* The Mistwalker Amulet... *they look around nervously* It's not just a tool for navigating the fog. It's a key. A way to understand the fog's true nature. *They lean closer* The scavengers have been searching for it. The Driftkin want to study it. The Emberclad fear it. But Korzog... Korzog knows its true purpose.","options":[{"text":"Where can I find Korzog?","nextId":"korzog_location"},{"text":"This is too dangerous.","nextId":null}]},{"id":"korzog_location","text":"*The figure points upward* The [Ashen Archive|ashenArchive|Where forbidden knowledge is kept]. That's where you'll find Korzog. But be careful - the Archive is not a place for the unprepared. The knowledge there... it changes people.","options":[{"text":"I understand. Thank you.","nextId":null}]},{"id":"specific_inquiry","text":"*The figure straightens, interest evident in their posture* Something specific? Now that's interesting. *They take a step closer* Tell me what you're looking for. Maybe I can help. For the right price, of course.","options":[{"text":"I'm looking for a tapestry fragment.","nextId":"tapestry_info","conditions":[{"type":"questActive","questId":"proofForTheWeave"}],"hideWhenUnavailable":true},{"text":"Never mind.","nextId":null}]},{"id":"tapestry_info","text":"*The figure's voice drops to a whisper* The Loomkeeper fragment? *They look around nervously* The scavengers have it. They're using it to map the fog patterns. *A gloved hand extends* For the right price, I can tell you exactly where to find them.","options":[{"text":"What's the price?","nextId":"price_negotiation"},{"text":"I'll find them myself.","nextId":null}]},{"id":"exploration_warning","text":"*The figure's voice takes on a warning tone* Exploring the sewers? Be careful. The fog seeps in through the cracks. The scavengers lurk in the shadows. And there are... other things. Things that don't belong in this world. *They gesture to a nearby tunnel* If you need a guide, or information, you know where to find me.","options":[{"text":"Maybe I do need information.","nextId":"information_trade"},{"text":"I'll be careful.","nextId":null}]},{"id":"price_negotiation","text":"*The figure's hand remains extended* Gold is always welcome. But sometimes... sometimes I trade in favors. Information for information. A helping hand when needed. *The hood tilts slightly* What are you offering?","options":[{"text":"I can pay in gold.","nextId":"gold_payment"},{"text":"What kind of favor?","nextId":"favor_details"}]},{"id":"gold_payment","text":"*The figure's posture straightens with interest* Gold speaks clearly. 100 pieces for the information you seek. *They extend a gloved hand* Payment first, then the details.","options":[{"text":"Here's the gold.","nextId":null,"action":[{"type":"removeItem","itemId":"gold","quantity":100},{"type":"unlockPOI","mapId":"rustmarketSewers","poiId":"sewer_scavengerRedoubt_POI"}]},{"text":"That's too much.","nextId":null}]},{"id":"start","text":"What brings you to the sewers?","options":[{"text":"Goodbye.","nextId":null}]}]},"sylvara_tidewalker/base.js":{"nodes":[{"id":"start","text":"The [fog|fog|Living storm]’s my home, stranger. My [Driftkin|driftkin|Fog nomads] ride its currents. You got something worth my time?","options":[{"text":"Tell me about the [Driftkin|driftkin|Nomads].","nextId":"driftkin"},{"text":"I need a portal shard from [Vortex Reach|vortex_reach|Maelstrom].","nextId":"quest","action":{"type":"startQuest","questId":"barge_over_the_brink"},"conditions":[{"type":"skill","stat":"Agility","value":8}]},{"text":"Will you join my expedition?","nextId":"expedition","conditions":[{"type":"questActive","questId":"great_crossing"}]},{"text":"Goodbye.","nextId":null}]},{"id":"driftkin","text":"We live on driftbarges, scavenging [portals|portals|Lost tech]’ shards. The [fog|fog|Twists flesh] changes us, but it’s freedom. Hollowreach fears us for it.","options":[{"text":"Can you help me navigate the fog?","nextId":"questAccepted_driftkin"},{"text":"Goodbye.","nextId":null}]},{"id":"questAccepted_driftkin","text":"A portal shard lies in [Vortex Reach|vortex_reach|Fog maelstrom]. Pilot my barge to get it, but watch for [Pulsefinders|pulsefinders|Fog cult] meddling.","options":[{"text":"I'm in.","nextId":null,"action":{"type":"startQuest","questId":"barge_over_the_brink"}},{"text":"Too risky.","nextId":null}]},{"id":"expedition","text":"Your expedition needs my barges to cross the [fog|fog|Deadly mist]. I'll lead, but we detour for [portals|portals|Tech] if I say so.","options":[{"text":"Your barges are welcome.","nextId":null,"action":{"type":"startQuest","questId":"sylvara_expedition"}},{"text":"I'll pass.","nextId":null}]}]},"sylvara_tidewalker/sylvara_quest_complete.js":{"nodes":[{"id":"start","text":"You've mastered the fog's embrace, haven't you? *She takes a deep breath, her eyes glazing over slightly* The way it dances between your fingers... the way it whispers secrets only you can hear... *She shakes her head, snapping back to focus* You've earned this compass. It'll guide you through the thickest mists.","options":[{"text":"The fog seems to affect you differently than others.","nextId":"fog_addiction"},{"text":"Thank you for the compass.","nextId":null,"action":{"type":"completeQuest","questId":"driftkinsTest"}}]},{"id":"fog_addiction","text":"*Her fingers twitch slightly* The fog... it's not just a tool or a danger. It's... *she trails off, her gaze distant* It's like a lover that both caresses and consumes. The Driftkin understand this better than most. *She forces a smile* But enough about that. Take your reward - you've earned it.","options":[{"text":"I understand.","nextId":null,"action":{"type":"completeQuest","questId":"driftkinsTest"}}]}]},"talia_emberhearth/base.js":{"nodes":[{"id":"start","text":"Welcome to my tavern, traveler. The fog’s been thicker than a dwarf’s beard lately. Folk say it’s the [portals|portals|Lost gateways] stirring again. Heard anything out there in [Hollowreach|hollowreach|Isolated city]?","options":[{"text":"What’s the talk about the fog?","nextId":"fog_lore"},{"text":"Any work around here?","nextId":"work"},{"text":"Just passing through.","nextId":null}]},{"id":"fog_lore","text":"The [Driftkin|driftkin|Fog nomads] claim the fog’s alive, hiding paths to lost worlds. [Pulsefinders|pulsefinders|Fog worshippers] call it a god. Me? I’ve seen barrels vanish in that mist, only to reappear empty. Something’s out there, and it ain’t friendly.","options":[{"text":"What about the portals?","nextId":"portals"},{"text":"Thanks for the info.","nextId":null}]},{"id":"portals","text":"Old tales say [Hollowreach|hollowreach|Isolated city] was a hub of portals, till they collapsed. [Loomkeepers|loomkeepers|Artisan collective] weave maps of where they might be, but the fog twists everything. If you’re hunting answers, try the [Ashen Archive|ashen_archive|Fog-bound ruin].","options":[{"text":"I’ll check it out.","nextId":null},{"text":"Too risky for me.","nextId":null}]},{"id":"work","text":"Plenty of trouble in [Hollowreach|hollowreach|Isolated city]. The [Driftkin|driftkin|Fog nomads] are hiring for a barge run, but it’s risky. Or talk to that scribe, Renn, by the bar—he’s always scheming something. Watch your back, though.","options":[{"text":"I’ll look into it.","nextId":null},{"text":"Not now.","nextId":null}]}]},"varkis_ironblade/base.js":{"nodes":[{"id":"start","text":"You look like you've seen a fight or two. I'm Varkis, best blade in [Hollowreach|hollowreach|Isolated city]. The fog's full of beasts—want to learn to cut 'em down proper, or are you just here for ale?","options":[{"text":"Teach me swordfighting.","nextId":"training"},{"text":"What's your story?","nextId":"story"},{"text":"Just here for ale.","nextId":null}]},{"id":"training","text":"Good. I'll teach you a [Driftkin|driftkin|Fog nomads] dueling stance—quick and deadly. Costs a [short_sword|short_sword|Basic weapon] to prove you're serious. Got one, or you wasting my time?","options":[{"text":"Here's the sword.","nextId":null,"action":{"type":"startQuest","questId":"sword_training"},"conditions":[{"type":"item","item":"short_sword"}]},{"text":"I don't have a sword.","nextId":null}]},{"id":"story","text":"Fought for the [Driftkin|driftkin|Fog nomads] till a fog-beast took half my crew. Now I teach here, away from the mist. [Hollowreach|hollowreach|Isolated city]'s safer, but mark me—those portals are waking, and trouble's coming with 'em.","options":[{"text":"Thanks for the warning.","nextId":null},{"text":"Can you teach me to fight?","nextId":"training"}]}]},"vrenna_stoneweave/base.js":{"nodes":[{"id":"start","text":"The [fog|fog|Unnatural mist] hides our past, traveler. My [Loomkeepers|loomkeepers|Artisan collective] weave its secrets into tapestries. Do you bring hope or chaos?","options":[{"text":"Tell me about the loomkeepers.","nextId":"loomkeepers"},{"text":"I have found this amulet. Can you tell me anything about it?","nextId":"mistwalker","conditions":[{"type":"item","item":"mistwalkerAmulet"}]},{"text":"I seek a portal sequence. Can you help?","nextId":"quest","action":{"type":"startQuest","questId":"lost_pattern"},"conditions":[{"type":"skill","stat":"Intelligence","value":6}]},{"text":"Can you aid my expedition?","nextId":"expedition","conditions":[{"type":"questActive","questId":"great_crossing"}]},{"text":"Goodbye.","nextId":null}]},{"id":"loomkeepers","text":"We preserve [Hollowreach|hollowreach|Isolated city]'s history in threads. Our tapestries map the [fog|fog|Hides portals], but the [portals|portals|Lost gateways]' collapse eludes us.","options":[{"text":"How can I help your work?","nextId":"quest"},{"text":"Goodbye.","nextId":null}]},{"id":"mistwalker","text":"The Mistwalker Amulet... *leans forward, eyes narrowing* I've heard tales of such artifacts. They supposedly work only on the first person that touches them. If you wish to prove its genuine, I have a task that would serve us both.","options":[{"text":"What task do you have in mind?","nextId":"questAccepted_mistwalker"},{"text":"I'll consider it later.","nextId":null}]},{"id":"questAccepted_mistwalker","text":"The Mistwalker Amulet is said to have the power to reveal hidden paths through the fog. I need you to meet with Renn Quickfingers - she's been studying similar artifacts. She might be able to help us understand its true nature.","options":[{"text":"I'll find Renn and learn more about the amulet.","nextId":null,"action":[{"type":"startQuest","questId":"mistwalkerSecret"},{"type":"unlockPOI","mapId":"hollowreach","poiId":"renn_quickfingers_house"}]},{"text":"I need to think about this.","nextId":null}]},{"id":"quest","text":"A scroll in the [Ashen Archive|ashen_archive|Fog-bound ruin] holds a portal sequence. Retrieve it, but beware the [Driftkin|driftkin|Fog nomads] who claim it.","options":[{"text":"I'll find it.","nextId":null,"action":{"type":"startQuest","questId":"goblinSlayer"}},{"text":"Not now.","nextId":null}]},{"id":"expedition","text":"Your expedition could map the [fog|fog|Twists paths]. I'll weave a tapestry for safe routes, but only if you share your [Amulet|amulet|Fog-parting relic]'s secrets.","options":[{"text":"I'll share the Amulet's data.","nextId":null,"action":{"type":"startQuest","questId":"vrenna_expedition"}},{"text":"I need time to decide.","nextId":null}]}]},"vrenna_stoneweave/proof_for_weave.js":{"nodes":[{"id":"start","text":"That amulet you wear... *studies it intently* The Mistwalker Amulet. I've only seen it in our oldest tapestries. They are rumored to only work for the first person that touches them. If you wish to prove its not fake, there's a task I have in mind. A valuable tapestry fragment was stolen from our archives - one that contains information valuable to us. It's being held by fog-touched scavengers in the Rustmarket Sewers.","options":[{"text":"The Mistwalker Amulet? Tell me more about it.","nextId":"amulet_info"},{"text":"I'll help recover the fragment.","nextId":"fragment_accept","action":{"type":"startQuest","questId":"proofForTheWeave"}},{"text":"What's in it for me?","nextId":"fragment_reward"}]},{"id":"amulet_info","text":"The Mistwalker Amulet was crafted by the Old Empire's greatest weavers. It has the power to part the fog and reveal hidden paths. The Loomkeepers have been searching for it, as it could help us understand the portal network's collapse. Now that you have it, we might finally be able to piece together what happened.","options":[{"text":"I'll help recover the fragment.","nextId":"fragment_accept","action":{"type":"startQuest","questId":"proofForTheWeave"}},{"text":"What's in it for me?","nextId":"fragment_reward"}]},{"id":"fragment_accept","text":"Excellent. The fragment is being held in the Rustmarket Sewers. You'll need to find our contact there first - they can guide you to the scavengers' hideout. Be careful - the sewers are dangerous, and the scavengers are desperate.","options":[{"text":"I'll find your contact and recover the fragment.","nextId":null,"action":[{"type":"unlockPOI","mapId":"hollowreach","poiId":"rustmarketSewersPOI"}]}]},{"id":"fragment_reward","text":"The fragment contains knowledge about the Old Empire's portal network. With it, we could map safe routes through the fog. I can offer you a copy of our portal maps in return, and the Loomkeepers' gratitude.","options":[{"text":"That sounds fair. I'll help.","nextId":"fragment_accept","action":{"type":"startQuest","questId":"proofForTheWeave"}},{"text":"I need to think about it.","nextId":null}]},{"id":"fragment_decision","text":"*Vrenna examines the recovered fragment carefully* This is exactly what we needed. The patterns here... they match our oldest records. The Mistwalker Amulet is genuine. *She looks up at you* You've proven yourself trustworthy. The Loomkeepers will remember this.","options":[{"text":"I'm glad I could help.","nextId":null,"action":{"type":"completeQuest","questId":"proofForTheWeave"}}]}]},"vrenna_stoneweave/vrenna_base.js":{"nodes":[{"id":"start","text":"*Vrenna looks up from an ancient tapestry, her fingers still tracing its patterns* Welcome to the [Threadhall|threadhall|The Loomkeepers' sanctum, where ancient knowledge is preserved in thread and weave]. I am Vrenna Stoneweave, and if you've found your way here, you must be seeking knowledge. Or perhaps... you've found some yourself?","options":[{"text":"I'm interested in the Loomkeepers' work.","nextId":"loomkeepers_intro"},{"text":"I found something that might interest you.","nextId":"artifact_inquiry"},{"text":"I'm just looking around.","nextId":"casual_visit"}]},{"id":"loomkeepers_intro","text":"*She carefully sets aside the tapestry* The Loomkeepers preserve the old ways, the forgotten knowledge. Each thread, each pattern tells a story of the world before the fog. *Her eyes light up with scholarly passion* We've discovered that the ancient weaves hold more than just stories - they contain power, knowledge that might help us understand what happened to our world.","options":[{"text":"How can I help preserve this knowledge?","nextId":"quest_offer","conditions":[{"type":"questActive","questId":"proofForTheWeave","negate":true},{"type":"questCompleted","questId":"proofForTheWeave","negate":true}],"hideWhenUnavailable":true},{"text":"That's fascinating, but I should go.","nextId":null}]},{"id":"artifact_inquiry","text":"*She leans forward, her interest clearly piqued* You've found something? *She gestures to the tapestries around her* We're always seeking fragments of the old world. Artifacts, especially those with patterns or weaves, can tell us much about what happened when the fog came. What have you discovered?","options":[{"text":"I found a tapestry fragment in the sewers.","nextId":"quest_offer","conditions":[{"type":"questActive","questId":"proofForTheWeave","negate":true},{"type":"questCompleted","questId":"proofForTheWeave","negate":true}],"hideWhenUnavailable":true},{"text":"Nothing specific yet, but I'll keep an eye out.","nextId":null}]},{"id":"quest_offer","text":"*Her eyes narrow with focused interest* A tapestry fragment in the sewers? That's... unexpected. The scavengers have been more active lately, taking what they can find. *She stands, her robes rustling* If you could recover that fragment for us, we could learn much from its patterns. The [Scavenger Redoubt|scavengerRedoubt|Where the scavengers hoard their finds] would be the place to look. Will you help us recover this piece of history?","options":[{"text":"I'll help recover the fragment.","action":[{"type":"startQuest","questId":"proofForTheWeave"},{"type":"unlockPOI","mapId":"hollowreach","poiId":"scavengerRedoubt"}]},{"text":"I need to think about it.","nextId":null}]},{"id":"casual_visit","text":"*She nods, returning to her work* The [Threadhall|threadhall|Our repository of knowledge] is open to all who seek understanding. The tapestries tell stories of the old world, of the time before the fog. *She looks up briefly* If you find anything that might help us understand our past, or perhaps our future, do bring it to us. Knowledge is our greatest weapon against the unknown.","options":[{"text":"I'll keep that in mind.","nextId":null}]}]},"vrenna_stoneweave/vrenna_fragment_return.js":{"nodes":[{"id":"start","text":"Ah, you've returned with the fragment. Let me examine it closely.","options":[{"text":"Here it is.","nextId":"fragment_return"}]},{"id":"fragment_return","text":"*Vrenna's eyes widen as you present the tapestry fragment. Her hands, usually steady, tremble slightly as she takes it* This... this is more than I dared hope for. *She carefully spreads the fragment on her worktable, the ancient threads glowing faintly* The patterns... they're intact. The weave is still strong. *She looks up at you, her expression a mix of awe and concern* Do you know what this means?","options":[{"text":"What do the patterns show?","nextId":"pattern_meaning"},{"text":"The scavengers were guarding it fiercely.","nextId":"scavenger_interest"}]},{"id":"pattern_meaning","text":"*Vrenna's fingers traced the intricate patterns* These aren't just decorative. They're a map. A record of the portals that once connected our world to others. *Her voice grew more intense* The fog... it came through one of these. The scavengers must have realized this. That's why they were protecting it.","options":[{"text":"Can we use this to stop the fog?","nextId":"fog_solution"},{"text":"What happened to the other portals?","nextId":"portal_history"}]},{"id":"scavenger_interest","text":"*Vrenna nods thoughtfully* The scavengers have been collecting artifacts from the Old Empire. They understand their value better than most. *She studies the fragment more closely* This particular piece... it shows something they've been searching for. A way to control the fog. Or at least, that's what they believe.","options":[{"text":"Is that possible?","nextId":"control_possibility"},{"text":"What do you believe?","nextId":"vrenna_belief"}]},{"id":"fog_solution","text":"*Vrenna's expression grew serious* The fog is part of our world now. It can't be simply stopped. But this... *She gestures to the fragment* This might help us understand it. Learn to live with it. Maybe even communicate with it. *Her voice dropped to a whisper* The Loomkeepers have always believed that the fog is more than just a curse. It's a presence. A consciousness.","options":[{"text":"What will you do with this knowledge?","nextId":"knowledge_use"},{"text":"The other factions won't like this.","nextId":"faction_reaction"}]},{"id":"portal_history","text":"*Vrenna's expression darkened* The Old Empire used them recklessly. They opened gates to worlds they didn't understand. Worlds that didn't want to be found. *She pointed to a specific pattern on the fragment* This one... this is where it all went wrong. Where they opened the gate to the fog's world.","options":[{"text":"Can we close it?","nextId":"gate_closure"},{"text":"What happened to the Empire?","nextId":"empire_fate"}]},{"id":"control_possibility","text":"*Vrenna shook her head* Control is the wrong word. The fog is too powerful. Too... alive. *She traced the patterns again* But understanding? Communication? That might be possible. The Loomkeepers have been studying the fog's patterns. How it moves. How it changes. This fragment... it could be the key to understanding its language.","options":[{"text":"What will you do with this knowledge?","nextId":"knowledge_use"},{"text":"The other factions won't like this.","nextId":"faction_reaction"}]},{"id":"vrenna_belief","text":"*Vrenna's eyes took on a distant look* I believed the fog is trying to tell us something. The way it moves. The patterns it creates. *She gestured to the fragment* These ancient weavers understood that. They recorded it. Preserved it. *Her voice grew more passionate* We need to learn to listen. To understand. Before it's too late.","options":[{"text":"What do you mean, too late?","nextId":"urgency_explanation"},{"text":"How can I help?","nextId":"help_offering"}]},{"id":"knowledge_use","text":"*Vrenna carefully rolled up the fragment* The Loomkeepers will study it. Learn from it. *Her expression grew determined* We need to understand the fog before the other factions try to destroy it. Or worse, try to control it. *She offered you a small, woven token* Take this. A symbol of our gratitude. And a promise - the Loomkeepers will use this knowledge wisely.","options":[{"text":"I trust you to do what's right.","nextId":null,"action":{"type":"completeQuest","questId":"proofForTheWeave"}}]},{"id":"faction_reaction","text":"*Vrenna's expression grew grave* No, they won't. The Emberclad will want to destroy it. The Driftkin will want to worship it. The scavengers will want to exploit it. *She looked at you intently* That's why we need to understand it first. To show them there's another way.","options":[{"text":"I'll help you show them.","nextId":null,"action":{"type":"completeQuest","questId":"proofForTheWeave"}}]},{"id":"gate_closure","text":"*Vrenna shook her head sadly* The gate is already closed. The fog is here. It's part of our world now. *She pointed to another pattern* But these other gates... they might still be open. Or worse, they might be opening. *Her voice grew urgent* We need to understand the patterns. Learn to read them. Before it's too late.","options":[{"text":"What can I do to help?","nextId":"help_offering"}]},{"id":"empire_fate","text":"*Vrenna's voice took on a somber tone* They paid the price for their arrogance. The fog consumed them. Changed them. *She gestured to the fragment* This is all that remains of their knowledge. Their understanding. *Her expression grew determined* We must learn from their mistakes. Not repeat them.","options":[{"text":"How can I help?","nextId":"help_offering"}]},{"id":"urgency_explanation","text":"*Vrenna's hands moved quickly as she spoke* The fog is changing. Growing stronger. More intelligent. The patterns in the fragment... they showed that this has happened before. In other worlds. *Her voice dropped to a whisper* When the fog reached a certain point, it didn't just consume. It transformed. Everything.","options":[{"text":"What can we do?","nextId":"help_offering"}]},{"id":"help_offering","text":"*Vrenna's expression brightened* You've already helped more than you know. This fragment... it's a start. *She offered you a small, woven token* Take this. A symbol of our gratitude. And a promise - the Loomkeepers will use this knowledge wisely. *She looked at you intently* But we'll need your help again. The fog is changing. We need to be ready.","options":[{"text":"I'll help when you need me.","nextId":null,"action":{"type":"completeQuest","questId":"proofForTheWeave"}}]}]},"vrenna_stoneweave/vrenna_quest_complete.js":{"nodes":[{"id":"start","text":"*Vrenna carefully examines the tapestry fragment, her fingers tracing the ancient patterns* The weave... it's more than just thread and dye. Each strand tells a story, holds a memory of the world before the fog. *She looks up, her eyes alight with scholarly fervor* You've done well, bringing this back. The Loomkeepers will preserve this knowledge, study it... perhaps even use it to understand what happened to our world.","options":[{"text":"What do you think happened to the world?","nextId":"world_theory"},{"text":"I'm glad I could help preserve this piece of history.","nextId":null,"action":{"type":"completeQuest","questId":"proofForTheWeave"}}]},{"id":"world_theory","text":"*She lowers her voice, glancing around the Threadhall* The patterns in this tapestry... they match fragments we've found in the Ashen Archive. The fog didn't just appear - it was summoned, or perhaps unleashed. The portals that once connected our world to others... they didn't just collapse. They were... transformed. *She quickly changes the subject* But that's a discussion for another time. Take your reward - you've earned it, and perhaps more importantly, you've proven yourself trustworthy to the Loomkeepers.","options":[{"text":"I'd like to learn more about these patterns.","nextId":null,"action":{"type":"completeQuest","questId":"proofForTheWeave"}},{"text":"Thank you for the reward.","nextId":null,"action":{"type":"completeQuest","questId":"proofForTheWeave"}}]}]},"zynia_velt/fragment_offer.js":{"nodes":[{"id":"start","text":"*Zynia's eyes light up as she notices the fragment* That's a Loomkeeper tapestry fragment, isn't it? I've been looking for one of those. The Driftkin would pay handsomely for it.","options":[{"text":"How much are you offering?","nextId":"offer_amount"},{"text":"It's not for sale.","nextId":"decline"}],"conditions":[{"type":"item","item":"tapestryFragment"}]},{"id":"offer_amount","text":"*Zynia's eyes gleam with anticipation* 500 gold pieces. That's more than the Loomkeepers would ever give you. And we'll put it to better use than they would.","options":[{"text":"I accept your offer.","nextId":"accept"},{"text":"I need to think about it.","nextId":"consider"},{"text":"No, I'll keep it.","nextId":"decline"}]},{"id":"accept","text":"A pleasure doing business with you. *takes the fragment carefully* The Driftkin will put this to better use than the Loomkeepers ever could.","options":[{"text":"Goodbye.","nextId":null,"action":[{"type":"removeItem","itemId":"tapestryFragment"},{"type":"addItem","itemId":"gold","quantity":500}]}]},{"id":"consider","text":"Take your time. But remember - the Loomkeepers won't offer you gold. They'll just take it and give you empty promises.","options":[{"text":"I've made my decision. I accept.","nextId":"accept"},{"text":"I've decided to keep it.","nextId":"decline"}]},{"id":"decline","text":"Your loss. The Loomkeepers will just lock it away in their vaults. At least the Driftkin would put it to use.","options":[{"text":"Goodbye.","nextId":null}]}]}};
+        
+        // Define displayDialogue function
+        window.displayDialogue = function(dialoguePath) {
+            const dialogue = window.dialogueData[dialoguePath];
+            if (!dialogue) return;
+            
+            const dialogueModal = document.getElementById('dialogue-modal');
+            const npcPortrait = document.getElementById('npc-portrait-img');
+            const npcName = document.getElementById('npc-name');
+            const dialogueText = document.getElementById('dialogue-text');
+            const optionButtons = [
+                document.getElementById('option-1'),
+                document.getElementById('option-2'),
+                document.getElementById('option-3'),
+                document.getElementById('option-4'),
+                document.getElementById('option-5'),
+                document.getElementById('option-6'),
+                document.getElementById('option-7'),
+                document.getElementById('option-8')
+            ];
+
+            function displayNode(node) {
+                if (!node) return;
+                
+                // Update dialogue text
+                npcName.textContent = 'Test NPC';
+                dialogueText.textContent = node.text;
+
+                // Clear previous options
+                optionButtons.forEach(button => {
+                    button.style.display = 'none';
+                    button.textContent = '';
+                    button.onclick = null;
+                });
+
+                // If no options, add click to close
+                if (!node.options || node.options.length === 0) {
+                    dialogueModal.onclick = () => {
+                        dialogueModal.classList.add('hidden');
+                    };
+                    return;
+                }
+
+                // Display options
+                node.options.forEach((option, index) => {
+                    if (index < optionButtons.length) {
+                        const button = optionButtons[index];
+                        button.style.display = 'block';
+                        button.textContent = option.text;
+                        button.onclick = () => {
+                            if (option.nextId) {
+                                const nextNode = dialogue.nodes.find(n => n.id === option.nextId);
+                                displayNode(nextNode);
+                            } else {
+                                dialogueModal.classList.add('hidden');
+                            }
+                        };
+                    }
+                });
+            }
+
+            // Show dialogue modal
+            dialogueModal.classList.remove('hidden');
+            
+            // Start with the start node
+            const startNode = dialogue.nodes.find(node => node.id === 'start');
+            displayNode(startNode);
+        };
+    </script>
+</body>
+</html>

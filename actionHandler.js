@@ -100,6 +100,29 @@ export function handleActions(actions) {
                     console.error('removeCompanionFromParty function is not available.');
                 }
                 break;
+            case 'removeItem':
+                if (hero && typeof hero.removeItemFromInventory === 'function') {
+                    const removeItem = allItemsCache ? allItemsCache[action.itemId] : null;
+                    if (removeItem) {
+                        const quantity = action.quantity || 1;
+                        const result = hero.removeItemFromInventory(removeItem.id, quantity);
+                        if (!result) {
+                            console.warn(`Failed to remove item ${action.itemId}: Item not found or insufficient quantity.`);
+                        }
+                    } else {
+                        console.warn(`Could not remove item ${action.itemId}: item data not found.`);
+                    }
+                } else {
+                    console.warn('Could not remove item: hero.removeItemFromInventory function is not available.');
+                }
+                break;
+            case 'startBattle':
+                if (window.startBattle) {
+                    window.startBattle(action.enemyId, action.areaId);
+                } else {
+                    console.error('startBattle function is not available.');
+                }
+                break;
             default:
                 console.log('Unknown action type:', action.type);
         }

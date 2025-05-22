@@ -2,14 +2,14 @@ export default {
     nodes: [
         {
             id: "start",
-            text: "Vrenna’s too cautious. The [fog|fog|Living chaos] can be tamed with my weaves. You got the guts to help, or you just another coward?",
+            text: "Vrenna's too cautious. The [fog|fog|Living chaos] can be tamed with my weaves. You got the guts to help, or you just another coward?",
             options: [
                 {
-                    text: "What’s your plan for the [fog|fog|Chaos mist]?",
+                    text: "What's your plan for the [fog|fog|Chaos mist]?",
                     nextId: "plan"
                 },
                 {
-                    text: "I hear you’re making a forbidden tapestry.",
+                    text: "I hear you're making a forbidden tapestry.",
                     nextId: "quest",
                     action: { type: "startQuest", questId: "korzogs_rebellion" },
                     conditions: [{ type: "skill", stat: "Dexterity", value: 7 }]
@@ -27,7 +27,7 @@ export default {
         },
         {
             id: "plan",
-            text: "My tapestries can bind [fog|fog|Monstrous mist] creatures, not just map them. Vrenna fears the risk, but I say we fight the [portals|portals|Broken gates]’ curse head-on.",
+            text: "My tapestries can bind [fog|fog|Monstrous mist] creatures, not just map them. Vrenna fears the risk, but I say we fight the [portals|portals|Broken gates]' curse head-on.",
             options: [
                 {
                     text: "Sounds dangerous. What do you need?",
@@ -41,17 +41,17 @@ export default {
         },
         {
             id: "quest",
-            text: "I’ve woven a tapestry in the [Weave Vault|weave_vault|Hidden chamber] to control fog-beasts. Steal it for me, or destroy it if you’re with Vrenna.",
+            text: "I've woven a tapestry in the [Weave Vault|weave_vault|Hidden chamber] to control fog-beasts. Steal it for me, or destroy it if you're with Vrenna.",
             options: [
                 {
-                    text: "I’ll get it.",
+                    text: "I'll get it.",
                     nextId: null,
                     action: { type: "startQuest", questId: "korzogs_rebellion" }
                 },
                 {
-                    text: "I’ll stop you.",
+                    text: "I'll stop you.",
                     nextId: null,
-                    action: { type: "factionConflict", faction: "loomkeepers", status: "oppose_korzog" }
+                    action: { type: "startQuest", questId: "oppose_korzog" }
                 }
             ]
         },
@@ -60,9 +60,9 @@ export default {
             text: "Your expedition needs fighters. My weaves can trap fog-beasts, but I want a cut of any [portals|portals|Gateways] you find.",
             options: [
                 {
-                    text: "Join us, and you’ll get a share.",
+                    text: "Join us, and you'll get a share.",
                     nextId: null,
-                    action: { type: "factionSupport", faction: "loomkeepers", resource: "beast_traps" }
+                    action: { type: "startQuest", questId: "korzog_expedition" }
                 },
                 {
                     text: "No deal.",

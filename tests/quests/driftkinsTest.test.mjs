@@ -25,7 +25,7 @@ describe('Driftkin\'s Test Quest', () => {
     describe('Quest Initialization', () => {
         it('should have correct quest metadata', () => {
             expect(driftkinsTest.id).to.equal('driftkinsTest');
-            expect(driftkinsTest.name).to.equal('Driftkin\'s Test');
+            expect(driftkinsTest.name).to.equal("Driftkin\'s Test");
             expect(driftkinsTest.giver).to.equal('Sylvara Tidewalker');
             expect(driftkinsTest.steps.length).to.equal(3);
         });
@@ -35,7 +35,7 @@ describe('Driftkin\'s Test Quest', () => {
         it('should start quest when accepting from Sylvara', () => {
             const startNode = sylvaraBase.nodes.find(node => node.id === 'start');
             const acceptOption = startNode.options.find(opt => 
-                opt.text.includes("About the fog navigation test")
+                opt.nextId === 'quest'
             );
             
             expect(acceptOption).to.exist;

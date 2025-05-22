@@ -37,6 +37,18 @@
         "requirements": {
           "quests": ["mistwalkerSecret"]
         }
+      },
+      {
+        "id": "cinderhold_entrance",
+        "name": "Cinderhold",
+        "x": 45.00,
+        "y": 35.00,
+        "icon": "Media/map/poi-emberclad.jpg",
+        "type": "travel",
+        "mapId": "cinderhold",
+        "requirements": {
+          "quests": ["embercladsTrial"]
+        }
       }
     ]
   },
@@ -321,6 +333,22 @@
         "icon": "Media/map/poi-gate.jpg",
         "type": "travel",
         "mapId": "hollowreach_Valley"
+      },
+      {
+        "id": "foggy_path",
+        "name": "Foggy Path",
+        "areaId": "FoggyPath",
+        "x": 45.00,
+        "y": 40.00,
+        "icon": "Media/map/poi-foggy-path.jpg",
+        "type": "combat",
+        "dialogueNpcId": "sylvara_tidewalker",
+        "combatStartDialogueId": "wolf_encounter",
+        "combatEndWinDialogueId": "wolfDefeated",
+        "combatEndFleeDialogueId": "wolfEvaded",
+        "requirements": {
+          "quests": ["driftkinsTest"]
+        }
       }
     ]
   },
@@ -517,6 +545,43 @@
         "npcId": "korzog",
         "dialogueId": "mistwalker_confrontation",
         "initiallyLocked": true
+      }
+    ]
+  },
+  "cinderhold": {
+    "background": "Media/map/cinderhold.jpg",
+    "pois": [
+      {
+        "id": "cinderhold_exit",
+        "name": "Exit to Valley",
+        "x": 20.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-exit.jpg",
+        "type": "travel",
+        "mapId": "hollowreach_Valley"
+      },
+      {
+        "id": "drenvar_ritual",
+        "name": "Drenvar",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/NPC/drenvar.jpg",
+        "type": "dialogue",
+        "npcId": "drenvar",
+        "dialogueId": "base"
+      },
+      {
+        "id": "scorchveil_pit",
+        "name": "Scorchveil Pit",
+        "x": 80.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-ritual-pit.jpg",
+        "type": "dialogue",
+        "npcId": "lyra_emberkin",
+        "dialogueId": "base",
+        "requirements": {
+          "quests": ["embercladsTrial"]
+        }
       }
     ]
   }

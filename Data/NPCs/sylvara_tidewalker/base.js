@@ -31,7 +31,7 @@ export default {
             options: [
                 {
                     text: "Can you help me navigate the fog?",
-                    nextId: "quest"
+                    nextId: "questAccepted_driftkin"
                 },
                 {
                     text: "Goodbye.",
@@ -40,11 +40,11 @@ export default {
             ]
         },
         {
-            id: "quest",
+            id: "questAccepted_driftkin",
             text: "A portal shard lies in [Vortex Reach|vortex_reach|Fog maelstrom]. Pilot my barge to get it, but watch for [Pulsefinders|pulsefinders|Fog cult] meddling.",
             options: [
                 {
-                    text: "I’m in.",
+                    text: "I'm in.",
                     nextId: null,
                     action: { type: "startQuest", questId: "barge_over_the_brink" }
                 },
@@ -56,15 +56,15 @@ export default {
         },
         {
             id: "expedition",
-            text: "Your expedition needs my barges to cross the [fog|fog|Deadly mist]. I’ll lead, but we detour for [portals|portals|Tech] if I say so.",
+            text: "Your expedition needs my barges to cross the [fog|fog|Deadly mist]. I'll lead, but we detour for [portals|portals|Tech] if I say so.",
             options: [
                 {
                     text: "Your barges are welcome.",
                     nextId: null,
-                    action: { type: "factionSupport", faction: "driftkin", resource: "driftbarges" }
+                    action: { type: "startQuest", questId: "sylvara_expedition" }
                 },
                 {
-                    text: "I’ll pass.",
+                    text: "I'll pass.",
                     nextId: null
                 }
             ]

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import mistwalkerSecret from '../../Data/quests/hollowreach/stage1/mistwalkerSecret.js';
 import vrennaBase from '../../Data/NPCs/vrenna_stoneweave/vrenna_base.js';
-import rennMistwalkerIntro from '../../Data/NPCs/renn_quickfingers/renn_mistwalker_intro.js';
+import rennMistwalkerIntro from '../../Data/NPCs/renn_quickfingers/mistwalker_intro.js';
 import korzogArchive from '../../Data/NPCs/korzog/korzog_archive.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';

@@ -65,9 +65,18 @@ export default {
             options: [
                 {
                     text: "I understand. I'll find the fragment.",
+                    nextId: null,
                     action: [
                         { type: 'unlockPOI', mapId: 'rustmarketSewers', poiId: 'sewer_scavengerRedoubt_POI' }
                     ]
+                },
+                {
+                    text: "I've already found it.",
+                    nextId: 'fragment_return',
+                    conditions: [
+                        { type: "hasItem", itemId: "tapestryFragment" }
+                    ],
+                    hideWhenUnavailable: true
                 }
             ]
         },
@@ -78,6 +87,10 @@ export default {
                 {
                     text: "I'll keep that in mind.",
                     nextId: null
+                },
+                {
+                    text: "Actually, I've changed my mind. I'll help.",
+                    nextId: 'fragment_accept'
                 }
             ]
         },
@@ -90,8 +103,7 @@ export default {
                     nextId: null,
                     action: [
                         { type: 'completeQuest', questId: 'proofForTheWeave' },
-                        { type: 'addItem', item: 'loomkeeperPortalMap' },
-                        { type: 'factionReputation', faction: 'Loomkeepers', value: 10 }
+                        { type: 'addItem', item: 'loomkeeperPortalMap' }
                     ]
                 }
             ]
