@@ -442,6 +442,21 @@
         "icon": "Media/map/poi-ironspine.jpg",
         "type": "travel",
         "mapId": "hollowreach"
+      },
+      {
+        "id": "fogged_cache",
+        "name": "Fogged Cache",
+        "areaId": "FoggedDocks",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-cache.jpg",
+        "type": "combat",
+        "dialogueNpcId": "old_maris",
+        "combatStartDialogueId": "cache_approach",
+        "combatEndWinDialogueId": "cache_found",
+        "requirements": {
+          "quests": ["hollowsCache"]
+        }
       }
     ]
   },

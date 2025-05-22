@@ -30,13 +30,11 @@ export default {
         },
         {
             id: "food_crisis",
-            text: "*He sighs, leaning on his walking stick* It's getting harder. The fog makes it difficult to grow crops, and the Old Empire's caches are running dry. *His eyes light up with hope* But we've heard rumors of a hidden cache in the [Ironspire Ruin|ironspireRuin|An ancient structure that might hold supplies]. If we could find it... well, it would mean the difference between survival and starvation for many here.",
+            text: "*He sighs, leaning on his walking stick* It's getting harder. The fog makes it difficult to grow crops, and the Old Empire's caches are running dry. *His eyes light up with hope* But we've heard rumors of a hidden cache in the [Fogged Docks|foggedDocks|An abandoned dock area that might hold supplies]. If we could find it... well, it would mean the difference between survival and starvation for many here.",
             options: [
                 {
                     text: "I could help look for this cache.",
                     nextId: "quest_offer"
-
-
                 },
                 {
                     text: "That sounds dangerous.",
@@ -46,7 +44,7 @@ export default {
         },
         {
             id: "help_offer",
-            text: "*His smile grows wider* That's the spirit! We can always use helping hands around here. *He looks you up and down appraisingly* You seem capable. There's something specific you could help with - we've heard of a supply cache in the [Ironspire Ruin|ironspireRuin|An ancient structure that might hold the key to our survival]. It's not without risk, but the reward... well, it could save lives.",
+            text: "*His smile grows wider* That's the spirit! We can always use helping hands around here. *He looks you up and down appraisingly* You seem capable. There's something specific you could help with - we've heard of a supply cache in the [Fogged Docks|foggedDocks|An abandoned dock area that might hold the key to our survival]. It's not without risk, but the reward... well, it could save lives.",
             options: [
                 {
                     text: "I'll help find the cache.",
@@ -65,7 +63,7 @@ export default {
         },
         {
             id: "quest_offer",
-            text: "*He straightens up, determination in his voice* The [Ironspire Ruin|ironspireRuin|Our best hope for survival] isn't far, but the fog has made it dangerous. The cache should be in a vault there. *He hands you a small, glowing crystal* This will help guide you through the fog. Bring back what you can - every bit helps these days.",
+            text: "*He straightens up, determination in his voice* The [Fogged Docks|foggedDocks|Our best hope for survival] aren't far, but the fog has made them dangerous. The cache should be hidden among the old warehouses. *He hands you a small, glowing crystal* This will help guide you through the fog. Bring back what you can - every bit helps these days.",
             options: [
                 {
                     text: "I'll find the cache.",
@@ -74,8 +72,8 @@ export default {
                         { type: "addItem", itemId: "fog_guide_crystal" },
                         {
                             type: "unlockPOI",
-                            mapId: "hollowreach",
-                            poiId: "ironspireRuin"
+                            mapId: "foggedDocks",
+                            poiId: "fogged_cache"
                         }
                     ]
                 },
