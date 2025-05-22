@@ -2,10 +2,10 @@ export default {
     nodes: [
         {
             id: "start",
-            text: "*Old Maris looks up from his work organizing supplies, his weathered face breaking into a warm smile* Ah, a new face in [Orphan's Hollow|orphansHollow|The last safe haven for Hollowreach's most vulnerable]. I'm Maris, though most just call me Old Maris. *He gestures to the bustling activity around them* We do what we can to keep everyone fed and safe here. The fog may take much, but it hasn't taken our community spirit.",
+            text: "*Old Maris looks up from her work sorting supplies, her weathered face softening into a warm, familiar smile* Well, if it ain’t Taryn, my dear heart, all grown up and back in [Orphan's Hollow|orphansHollow|The last safe haven for Hollowreach's most vulnerable]. *She adjusts her shawl and steps closer* Been too long since you’ve come ‘round, child. We’re still here, holdin’ this place together despite the fog. *She gestures to the bustling community around her* Takes all we’ve got to keep folks fed and safe, but you know we don’t give up easy.",
             options: [
                 {
-                    text: "How do you manage to feed everyone?",
+                    text: "How’re you keeping everyone fed these days, Maris?",
                     nextId: "food_crisis",
                     conditions: [
                         { type: "questActive", questId: "hollowsCache", negate: true },
@@ -14,7 +14,7 @@ export default {
                     hideWhenUnavailable: true
                 },
                 {
-                    text: "I'd like to help the community.",
+                    text: "I want to help out, Maris. For old times’ sake.",
                     nextId: "help_offer",
                     conditions: [
                         { type: "questActive", questId: "hollowsCache", negate: true },
@@ -23,72 +23,62 @@ export default {
                     hideWhenUnavailable: true
                 },
                 {
-                    text: "I'm just passing through.",
+                    text: "Just passing through, but it’s good to see you.",
                     nextId: "passing_through"
                 }
             ]
         },
         {
             id: "food_crisis",
-            text: "*He sighs, leaning on his walking stick* It's getting harder. The fog makes it difficult to grow crops, and the Old Empire's caches are running dry. *His eyes light up with hope* But we've heard rumors of a hidden cache in the [Fogged Docks|foggedDocks|An abandoned dock area that might hold supplies]. If we could find it... well, it would mean the difference between survival and starvation for many here.",
+            text: "*Maris sighs, her hands resting on her cane as her eyes grow distant* Oh, Taryn, it’s a struggle. The fog’s choked out our crops, and the Old Empire’s caches we relied on are near empty. *She leans closer, her voice dropping to a hopeful whisper* Word is, there’s a cache hidden out there, maybe in the [Fogged Docks|foggedDocks|An abandoned dock swallowed by the mist]. Trouble is, the fog’s too thick to get through right now. If we could find a way in—or find other caches—it’d mean full bellies for these folks come winter.",
             options: [
                 {
-                    text: "I could help look for this cache.",
+                    text: "I’ll keep an eye out for a way to get through the fog.",
                     nextId: "quest_offer"
                 },
                 {
-                    text: "That sounds dangerous.",
+                    text: "That sounds like a lot to handle, Maris.",
                     nextId: "danger_acknowledgment"
                 }
             ]
         },
         {
             id: "help_offer",
-            text: "*His smile grows wider* That's the spirit! We can always use helping hands around here. *He looks you up and down appraisingly* You seem capable. There's something specific you could help with - we've heard of a supply cache in the [Fogged Docks|foggedDocks|An abandoned dock area that might hold the key to our survival]. It's not without risk, but the reward... well, it could save lives.",
+            text: "*Maris’s eyes crinkle with pride* That’s my Taryn, always had a heart bigger than the Hollow itself. *She pats your arm gently* You were always runnin’ about these streets as a young’un, helpin’ where you could. Now, here’s somethin’ big: we’ve heard of a cache in the [Fogged Docks|foggedDocks|An old dock that might hold supplies]. Problem is, the fog’s so thick we can’t get in. If you could find a way to push through that mist—or sniff out other caches—it’d save lives, child.",
             options: [
                 {
-                    text: "I'll help find the cache.",
-                    nextId: "quest_offer",
-                    conditions: [
-                        { type: "questActive", questId: "hollowsCache", negate: true },
-                        { type: "questCompleted", questId: "hollowsCache", negate: true }
-                    ],
-                    hideWhenUnavailable: true
+                    text: "I’ll look for a way to get through or find other caches.",
+                    nextId: "quest_offer"
                 },
                 {
-                    text: "I need to think about it.",
+                    text: "I need some time to think it over, Maris.",
                     nextId: null
                 }
             ]
         },
         {
             id: "quest_offer",
-            text: "*He straightens up, determination in his voice* The [Fogged Docks|foggedDocks|Our best hope for survival] aren't far, but the fog has made them dangerous. The cache should be hidden among the old warehouses. *He hands you a small, glowing crystal* This will help guide you through the fog. Bring back what you can - every bit helps these days.",
+            text: "*Maris’s voice grows firm, her eyes gleaming with resolve* Bless you, Taryn. The [Fogged Docks|foggedDocks|Our best hope for survival] are locked tight by that cursed fog right now—no one’s found a way in. *She presses a small, glowing crystal into your hand* This old thing might help you spot somethin’ in the mist, or at least keep you from gettin’ lost. Keep your eyes peeled for any caches or a way to fight through that fog. The kids here are countin’ on you, same as they always did.",
             options: [
                 {
-                    text: "I'll find the cache.",
+                    text: "I’ll do my best, Maris.",
                     action: [
                         { type: "startQuest", questId: "hollowsCache" },
-                        { type: "addItem", itemId: "fog_guide_crystal" },
-                        {
-                            type: "unlockPOI",
-                            mapId: "foggedDocks",
-                            poiId: "fogged_cache"
-                        }
+                        { type: "addItem", itemId: "fog_guide_crystal" }
                     ]
                 },
                 {
-                    text: "I need to prepare first.",
+                    text: "I’ll need to gear up first.",
                     nextId: null
                 }
             ]
         },
         {
             id: "danger_acknowledgment",
-            text: "*He nods understandingly* Aye, it is dangerous. The fog, the ruins, the things that lurk in the mist... *He looks around at the people of Orphan's Hollow* But sometimes, the greater danger is doing nothing. When you're ready to help, you'll know. And we'll be here, doing what we can to keep everyone alive.",
+            text: "*Maris nods, her expression soft but heavy* It’s a hard truth, Taryn. The fog’s a beast, and what hides in it’s worse. *She glances at the children playing nearby, her voice steadying* But you know what’s worse than the fog? Lettin’ these folks starve. You grew up here—you know we fight for each other. If you change your mind, we’ll be waitin’, same as always.",
             options: [
                 {
-                    text: "Maybe I can help after all.",
+                    text: "Alright, I’ll look for a way to help.",
                     nextId: "quest_offer",
                     conditions: [
                         { type: "questActive", questId: "hollowsCache", negate: true },
@@ -97,24 +87,29 @@ export default {
                     hideWhenUnavailable: true
                 },
                 {
-                    text: "I understand. Good luck.",
+                    text: "I hope you find a way, Maris.",
                     nextId: null
                 }
             ]
         },
         {
             id: "passing_through",
-            text: "*He nods, his smile never fading* Of course, of course. The [Orphan's Hollow|orphansHollow|Our little community] is open to all who need shelter. The fog's been particularly thick lately, so feel free to rest here as long as you need. *He gestures to a nearby fire* We've got warm food and warmer company.",
+            text: "*Maris chuckles, adjusting her shawl* Passin’ through, are you? Just like when you were a scamp, always wanderin’. *Her smile warms* [Orphan's Hollow|orphansHollow|Our little family] is still your home, Taryn, fog or no fog. Stay a while—there’s stew by the fire and folks who’d love to hear your stories. You’re one of ours, always will be.",
             options: [
                 {
-                    text: "Maybe I could help while I'm here.",
-                    nextId: "help_offer"
+                    text: "Maybe I can stick around and help out.",
+                    nextId: "help_offer",
+                    conditions: [
+                        { type: "questActive", questId: "hollowsCache", negate: true },
+                        { type: "questCompleted", questId: "hollowsCache", negate: true }
+                    ],
+                    hideWhenUnavailable: true
                 },
                 {
-                    text: "Thank you for the hospitality.",
+                    text: "Thanks, Maris. It’s good to be back.",
                     nextId: null
                 }
             ]
         }
     ]
-}; 
+};

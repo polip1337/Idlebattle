@@ -56,13 +56,24 @@
     "background": "Media/map/hollowreach_town.png",
     "pois": [
       {
-        "id": "ironspine_to_docks",
+        "id": "ironspine_to_docks_locked",
+        "name": "Ironspine bridge",
+        "x": 93.00,
+        "y": 70.00,
+        "icon": "Media/map/poi-ironspine.jpg",
+        "type": "dialogue",
+        "npcId": "guard",
+        "dialogueId": "stop"
+      },
+      {
+        "id": "ironspine_to_docks_unlocked",
         "name": "Ironspine bridge",
         "x": 93.00,
         "y": 70.00,
         "icon": "Media/map/poi-ironspine.jpg",
         "type": "travel",
-        "mapId": "foggedDocks"
+        "mapId": "foggedDocks",
+        "initiallyLocked": true
       },
       {
         "name": "City Gates",
@@ -306,12 +317,12 @@
     ]
   },
   "driftmoor": {
-    "background": "Media/map/driftmoor_dockyard.png",
+    "background": "Media/map/driftmoor_sky.jpg",
     "pois": [
       {
         "name": "Sylvara's Barge",
-        "x": 58.33,
-        "y": 33.33,
+        "x": 68.33,
+        "y": 43.33,
         "icon": "Media/NPC/sylvara-tidewalker.jpg",
         "type": "dialogue",
         "npcId": "sylvara_tidewalker",
@@ -319,7 +330,7 @@
       },
       {
         "name": "Joren's Workshop",
-        "x": 75.00,
+        "x": 95.00,
         "y": 50.00,
         "icon": "Media/NPC/joren-halfhand.jpg",
         "type": "dialogue",
@@ -329,7 +340,7 @@
       {
         "name": "Exit",
         "x": 33.33,
-        "y": 50.00,
+        "y": 90.00,
         "icon": "Media/map/poi-gate.jpg",
         "type": "travel",
         "mapId": "hollowreach_Valley"
@@ -338,8 +349,8 @@
         "id": "foggy_path",
         "name": "Foggy Path",
         "areaId": "FoggyPath",
-        "x": 45.00,
-        "y": 40.00,
+        "x": 55.00,
+        "y": 45.00,
         "icon": "Media/map/poi-foggy-path.jpg",
         "type": "combat",
         "dialogueNpcId": "sylvara_tidewalker",
@@ -400,7 +411,7 @@
         "y": 65.00,
         "icon": "Media/NPC/renn_scribe.jpg",
         "type": "dialogue",
-        "npcId": "scribe_base",
+        "npcId": "base",
         "dialogueId": "base"
       },
       {
@@ -582,7 +593,7 @@
         "y": 50.00,
         "icon": "Media/NPC/drenvar.jpg",
         "type": "dialogue",
-        "npcId": "drenvar",
+        "npcId": "drenvar_base",
         "dialogueId": "base"
       },
       {
@@ -593,7 +604,7 @@
         "icon": "Media/map/poi-ritual-pit.jpg",
         "type": "dialogue",
         "npcId": "lyra_emberkin",
-        "dialogueId": "base",
+        "dialogueId": "lyra_base",
         "requirements": {
           "quests": ["embercladsTrial"]
         }
