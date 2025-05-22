@@ -70,8 +70,27 @@ export class QuestSystem {
             steps: quest.steps.length
         });
         
+        return true;
+    }
+
+    // Complete a quest
+    completeQuest(questId) {
+        if (!this.quests.has(questId)) {
+            console.error(`Attempted to complete non-existent quest: ${questId}`);
+            return false;
+        }
+
+        const quest = this.quests.get(questId);
+        quest.completed = true;
+        this.activeQuests.delete(questId);
+        this.applyRewards(quest);
+        console.log(`Completed quest: ${questId}`);
         
-    
+        // Notify quest log to update UI
+        if (window.updateQuestLog) {
+            window.updateQuestLog();
+        }
+        
         return true;
     }
 
