@@ -6,11 +6,21 @@ export default {
             options: [
                 {
                     text: "How do you manage to feed everyone?",
-                    nextId: "food_crisis"
+                    nextId: "food_crisis",
+                    conditions: [
+                        { type: "questActive", questId: "hollowsCache", negate: true },
+                        { type: "questCompleted", questId: "hollowsCache", negate: true }
+                    ],
+                    hideWhenUnavailable: true
                 },
                 {
                     text: "I'd like to help the community.",
-                    nextId: "help_offer"
+                    nextId: "help_offer",
+                    conditions: [
+                        { type: "questActive", questId: "hollowsCache", negate: true },
+                        { type: "questCompleted", questId: "hollowsCache", negate: true }
+                    ],
+                    hideWhenUnavailable: true
                 },
                 {
                     text: "I'm just passing through.",
@@ -24,12 +34,9 @@ export default {
             options: [
                 {
                     text: "I could help look for this cache.",
-                    nextId: "quest_offer",
-                    conditions: [
-                        { type: "questActive", questId: "hollowsCache", negate: true },
-                        { type: "questCompleted", questId: "hollowsCache", negate: true }
-                    ],
-                    hideWhenUnavailable: true
+                    nextId: "quest_offer"
+
+
                 },
                 {
                     text: "That sounds dangerous.",
