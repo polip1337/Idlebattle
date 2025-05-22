@@ -403,6 +403,8 @@ export function setCurrentMap(mapId) {
     mapHistory.push(currentMapId);
     loadMap(mapId, true);
     battleLog.log(`Traveled to map: ${mapId}. New location: ${currentLocation || 'Default'}`);
+    questSystem.updateQuestProgress('travel', { poiName: null, mapId: mapId });
+
 }
 
 // Expose setCurrentMap to window for dialogue system

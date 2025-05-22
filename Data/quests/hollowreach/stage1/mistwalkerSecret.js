@@ -5,7 +5,7 @@ export default {
     description: 'Uncover the Mistwalker Amulet\'s secrets and choose a faction to share them with.',
     steps: [
         {
-            description: 'Meet Renn in Rustmarket to discuss the amulet\'s origins.',
+            description: 'Meet Renn in her house to discuss the amulet\'s origins.',
             hint: 'Find Renn Quickfingers in the Rustmarket area.',
             condition: (event, data) => event === 'dialogue' && data.npc === 'Renn Quickfingers' && data.dialogueId === 'mistwalker_intro'
         },
@@ -28,11 +28,6 @@ export default {
             description: 'Confront Korzog and protect the amulet.',
             hint: 'Either negotiate with or defeat Korzog to secure the amulet.',
             condition: (event, data) => (event === 'combatComplete' || event === 'dialogue') && data.npc === 'Korzog'
-        },
-        {
-            description: 'Choose a faction to share the amulet\'s secrets with.',
-            hint: 'Decide whether to align with the Loomkeepers, Driftkin, or Emberclad.',
-            condition: (event, data) => event === 'dialogue' && ['Loomkeeper Elder', 'Driftkin Chief', 'Emberclad Commander'].includes(data.npc)
         }
     ],
     rewards: {

@@ -20,7 +20,8 @@ export default {
             options: [
                 {
                     text: "So what's our next move?",
-                    nextId: 'amulet_discussion'
+                    nextId: 'amulet_discussion',
+                    action: [{ type: 'travelToMap', mapId: 'foggedDocks' }]
                 }
             ]
         },
@@ -33,8 +34,9 @@ export default {
                     action: [
                         { type: 'hidePOI', mapId: 'rustmarketSewers', poiId: 'sewer_foggedCorridor_POI' },
                         { type: 'hidePOI', mapId: 'rustmarketSewers', poiId: 'sewer_vaultAntechamber_POI' },
-                        { type: 'unlockPOI', mapId: 'hollowreach', poiId: 'renn_quickfingers_house' },
-                        { type: 'travelToMap', mapId: 'foggedDocks' }
+                        { type: 'unlockPOI', mapId: 'hollowreach', poiId: 'renn_quickfingers_house' }
+                        { type: 'completeQuest', questId: 'fogscarHeist' }
+                        { type: 'startQuest', questId: 'hollowreach' }
                     ]
                 }
             ]
