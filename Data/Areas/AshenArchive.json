@@ -1,0 +1,105 @@
+{
+    "id": "ashenArchive",
+    "name": "Ashen Archive",
+    "description": "The archive is shrouded in an unnatural fog. Spectral wraiths drift through the air, their forms shifting between corporeal and ethereal states. The fog seems to respond to their presence, swirling and coalescing around them.",
+    "background": "Media/areas/ashen_archive_combat.jpg",
+    "music": "Media/music/combat_archive.mp3",
+    "enemies": [
+        {
+            "id": "mist_stalker",
+            "name": "Mist Stalker",
+            "type": "undead",
+            "level": 5,
+            "health": 80,
+            "attack": 18,
+            "defense": 12,
+            "abilities": [
+                {
+                    "name": "Mist Arrow",
+                    "damage": 25,
+                    "description": "A spectral arrow formed from condensed fog pierces through defenses"
+                },
+                {
+                    "name": "Fog Step",
+                    "effect": "dodge",
+                    "description": "The stalker dissolves into fog, becoming harder to hit"
+                }
+            ],
+            "drops": [
+                {
+                    "item": "fog_crystal",
+                    "chance": 0.5
+                }
+            ]
+        },
+        {
+            "id": "fog_weaver",
+            "name": "Fog Weaver",
+            "type": "undead",
+            "level": 6,
+            "health": 70,
+            "attack": 20,
+            "defense": 15,
+            "abilities": [
+                {
+                    "name": "Fog Burst",
+                    "damage": 30,
+                    "description": "A concentrated burst of fog energy explodes outward"
+                },
+                {
+                    "name": "Mist Shield",
+                    "effect": "defense_up",
+                    "description": "The weaver surrounds itself with a protective layer of fog"
+                }
+            ],
+            "drops": [
+                {
+                    "item": "fog_crystal",
+                    "chance": 0.7
+                },
+                {
+                    "item": "ancient_rune",
+                    "chance": 0.3
+                }
+            ]
+        },
+        {
+            "id": "vapor_whisperer",
+            "name": "Vapor Whisperer",
+            "type": "undead",
+            "level": 5,
+            "health": 90,
+            "attack": 12,
+            "defense": 18,
+            "abilities": [
+                {
+                    "name": "Fog Mending",
+                    "effect": "heal",
+                    "description": "The whisperer channels fog energy to heal nearby allies"
+                },
+                {
+                    "name": "Mist Bind",
+                    "effect": "stun",
+                    "description": "The whisperer wraps its target in constricting fog"
+                }
+            ],
+            "drops": [
+                {
+                    "item": "fog_crystal",
+                    "chance": 0.6
+                }
+            ]
+        }
+    ],
+    "rewards": {
+        "experience": 50,
+        "items": ["fog_crystal", "ancient_rune"],
+        "questProgress": {
+            "questId": "mistwalkerSecret",
+            "step": 3
+        }
+    },
+    "onComplete": {
+        "unlockPOI": "rune_chamber_entrance"
+    }
+} 

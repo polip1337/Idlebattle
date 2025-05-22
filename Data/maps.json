@@ -25,6 +25,18 @@
         "icon": "Media/map/poi-dock.jpg",
         "type": "travel",
         "mapId": "driftmoor"
+      },
+      {
+        "id": "ashen_archive_entrance",
+        "name": "Ashen Archive",
+        "x": 75.00,
+        "y": 45.00,
+        "icon": "Media/map/poi-archive.jpg",
+        "type": "travel",
+        "mapId": "ashenArchive",
+        "requirements": {
+          "quests": ["mistwalkerSecret"]
+        }
       }
     ]
   },
@@ -416,6 +428,95 @@
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
+      },
+      {
+        "id": "renn_mistwalker_dialogue",
+        "name": "Renn Quickfingers",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/NPC/renn_quickfingers.jpg",
+        "type": "dialogue",
+        "npcId": "renn_quickfingers",
+        "dialogueId": "mistwalker_intro"
+      }
+    ]
+  },
+  "ashenArchive": {
+    "background": "Media/map/ashen_archive.jpg",
+    "pois": [
+      {
+        "id": "archive_entrance",
+        "name": "Valley Path",
+        "x": 20.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-entrance.jpg",
+        "type": "travel",
+        "mapId": "hollowreach_Valley"
+      },
+      {
+        "id": "archive_sentries",
+        "name": "Rune-Etched Sentries",
+        "areaId": "ashenArchive",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-combat.jpg",
+        "type": "combat",
+        "dialogueNpcId": "renn_quickfingers",
+        "combatStartDialogueId": "archive_sentries_approach",
+        "combatEndWinDialogueId": "archive_sentries_defeated"
+      },
+      {
+        "id": "rune_chamber_entrance",
+        "name": "Rune Chamber",
+        "x": 80.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-chamber.jpg",
+        "type": "travel",
+        "mapId": "runeChamber",
+        "requirements": {
+          "quests": ["mistwalkerSecret"],
+          "combat": ["archive_sentries"]
+        }
+      }
+    ]
+  },
+  "runeChamber": {
+    "background": "Media/map/rune_chamber.jpg",
+    "pois": [
+      {
+        "id": "chamber_entrance",
+        "name": "Archive Hall",
+        "x": 20.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-entrance.jpg",
+        "type": "travel",
+        "mapId": "ashenArchive"
+      },
+      {
+        "id": "rune_puzzle",
+        "name": "Ancient Runes",
+        "areaId": "runeChamber",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-puzzle.jpg",
+        "type": "puzzle",
+        "puzzleId": "mistwalker_runes",
+        "onComplete": {
+          "type": "unlockPOI",
+          "poiId": "korzog_confrontation"
+        }
+      },
+      {
+        "id": "korzog_confrontation",
+        "name": "Korzog's Study",
+        "areaId": "runeChamber",
+        "x": 80.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-study.jpg",
+        "type": "dialogue",
+        "npcId": "korzog",
+        "dialogueId": "mistwalker_confrontation",
+        "initiallyLocked": true
       }
     ]
   }
