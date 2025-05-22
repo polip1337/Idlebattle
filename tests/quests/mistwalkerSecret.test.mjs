@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import mistwalkerSecret from '../../Data/quests/mistwalkerSecret.js';
+import mistwalkerSecret from '../../Data/quests/hollowreach/stage1/mistwalkerSecret.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';

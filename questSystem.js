@@ -9,9 +9,13 @@ export class QuestSystem {
         this.activeQuests = new Set(); // Track active quest IDs
         this.maps = null; // Store maps.json data
         this.questFiles = [
-        'Idlebattle/Data/quests/fogscarHeist.js',
-        'Idlebattle/Data/quests/mistwalkerSecret.js'];
-
+            'Idlebattle/Data/quests/hollowreach/stage1/fogscarHeist.js',
+            'Idlebattle/Data/quests/hollowreach/stage1/mistwalkerSecret.js',
+            'Idlebattle/Data/quests/hollowreach/stage1/proofForTheWeave.js',
+            'Idlebattle/Data/quests/hollowreach/stage1/driftkinsTest.js',
+            'Idlebattle/Data/quests/hollowreach/stage1/embercladsTrial.js',
+            'Idlebattle/Data/quests/hollowreach/stage1/hollowsCache.js'
+        ];
     }
 
     // Load maps.json for POI-to-map mapping

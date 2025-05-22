@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import fogscarHeist from '../../Data/quests/fogscarHeist.js';
+import fogscarHeist from '../../Data/quests/hollowreach/stage1/fogscarHeist.js';
 import rennBase from '../../Data/NPCs/renn_quickfingers/renn_base.js';
 import rennFirstCorridorPreBattle from '../../Data/NPCs/renn_quickfingers/renn_firstcorridor_pre_battle.js';
 import rennFirstCorridorPostBattle from '../../Data/NPCs/renn_quickfingers/renn_firstcorridor_post_battle.js';
