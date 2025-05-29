@@ -251,16 +251,7 @@
           "x": 45,
           "y": 60
         },
-        "requirements": {
-          "quests": ["proofForTheWeave"]
-        },
-        "unlockConditions": [
-          {
-            "type": "quest",
-            "questId": "proofForTheWeave",
-            "status": "active"
-          }
-        ]
+        "initiallyLocked": true
       },
       {
         "id": "sewer_scavengerRedoubt_POI",
@@ -271,17 +262,7 @@
         "location": {
           "x": 75,
           "y": 30
-        },
-        "requirements": {
-          "quests": ["proofForTheWeave"]
-        },
-        "unlockConditions": [
-          {
-            "type": "dialogue",
-            "npc": "sewer_contact",
-            "dialogueId": "reveal_location"
-          }
-        ]
+        }
       }
     ]
   },
