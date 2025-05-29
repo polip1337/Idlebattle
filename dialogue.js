@@ -201,6 +201,17 @@ export async function initializeDialogue() {
                         result = false;
                         break;
                     }
+                    
+                    // Check if we need to verify a specific branch
+                    if (condition.branch) {
+                        const currentBranch = stepQuest.currentBranch;
+                        if (!currentBranch || currentBranch !== condition.branch) {
+                            DEBUG.log(`Quest branch check failed: current=${currentBranch}, required=${condition.branch}`);
+                            result = false;
+                            break;
+                        }
+                    }
+                    
                     result = stepQuest.currentStep === condition.stepIndex;
                     DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${result}`);
                     break;
@@ -316,6 +327,17 @@ export async function initializeDialogue() {
                                 conditionMet = false;
                                 break;
                             }
+                            
+                            // Check if we need to verify a specific branch
+                            if (condition.branch) {
+                                const currentBranch = stepQuest.currentBranch;
+                                if (!currentBranch || currentBranch !== condition.branch) {
+                                    DEBUG.log(`Quest branch check failed: current=${currentBranch}, required=${condition.branch}`);
+                                    conditionMet = false;
+                                    break;
+                                }
+                            }
+                            
                             conditionMet = stepQuest.currentStep === condition.stepIndex;
                             DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${conditionMet}`);
                             break;
