@@ -51,6 +51,10 @@ export default {
                 nextId: "archive_plan"
             },
             {
+                text: "Let's get some help.",
+                nextId: "faction_help"
+            },
+            {
                 text: "I need more time to think.",
                 nextId: "mistwalker_reject"
             }
@@ -63,6 +67,16 @@ export default {
             {
                 text: "I'll meet you there.",
                 nextId: "archive_depart"
+            }
+        ]
+    },
+    {
+     id:"faction_help",
+        text: "Factions it is. Lets stick together and see what we can get.",
+        options: [
+            {
+                text: "Let's go.",
+                nextId: null
             }
         ]
     },

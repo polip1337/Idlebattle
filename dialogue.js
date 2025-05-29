@@ -219,32 +219,90 @@ export async function initializeDialogue() {
     }
 
     async function selectDialogueFile(npcId) {
-        // This logic needs to be adapted to how your NPC .js files structure their available dialogues.
-        // For example, npcFile.default.dialogues might be an array or object.
-        // Let's assume it's an array of dialogue file IDs, and we pick the first one.
         try {
             const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
             const npcDefinition = npcModule.default;
 
-            // Prioritize quest-related dialogues
-            // This is a simplified example; you'll need more robust logic
-            // to check quest steps and conditions against the NPC.
-            for (const quest of questSystem.getActiveQuests()) {
-                if (quest.steps) { // Ensure steps array exists
-                    const currentStepDetails = quest.steps[quest.currentStepIndex || 0];
-                    if (currentStepDetails && currentStepDetails.npcId === npcId && currentStepDetails.dialogueFileId) {
-                        // Check if this dialogue file exists in the NPC's list of dialogues
-                        if (npcDefinition.dialogues && npcDefinition.dialogues.includes(currentStepDetails.dialogueFileId)) {
-                            return currentStepDetails.dialogueFileId;
-                        }
+            // If dialogues is an array of strings (old format), convert to new format
+            if (Array.isArray(npcDefinition.dialogues) && typeof npcDefinition.dialogues[0] === 'string') {
+                npcDefinition.dialogues = npcDefinition.dialogues.map(id => ({
+                    id,
+                    conditions: [],
+                    priority: 0
+                }));
+            }
+
+            // Get current location from the map system
+            const currentLocation = window.currentMapId || 'unknown';
+
+            // Sort dialogues by priority (highest first)
+            const sortedDialogues = [...npcDefinition.dialogues].sort((a, b) => (b.priority || 0) - (a.priority || 0));
+
+            // Check each dialogue's conditions
+            for (const dialogue of sortedDialogues) {
+                if (!dialogue.conditions || dialogue.conditions.length === 0) {
+                    continue; // Skip dialogues with no conditions (they're fallbacks)
+                }
+
+                let allConditionsMet = true;
+                for (const condition of dialogue.conditions) {
+                    let conditionMet = false;
+
+                    switch (condition.type) {
+                        case 'quest':
+                            const quest = questSystem.quests.get(condition.questId);
+                            if (!quest) {
+                                conditionMet = false;
+                                break;
+                            }
+
+                            switch (condition.status) {
+                                case 'not_started':
+                                    conditionMet = !questSystem.activeQuests.has(condition.questId) && !quest.completed;
+                                    break;
+                                case 'active':
+                                    conditionMet = questSystem.activeQuests.has(condition.questId);
+                                    break;
+                                case 'completed':
+                                    conditionMet = quest.completed;
+                                    break;
+                                default:
+                                    console.warn(`Unknown quest status condition: ${condition.status}`);
+                                    conditionMet = false;
+                            }
+                            break;
+
+                        case 'location':
+                            conditionMet = currentLocation === condition.locationId;
+                            break;
+
+                        // Add more condition types here as needed
+                        // case 'item':
+                        // case 'skill':
+                        // case 'globalFlag':
+                        // etc.
+
+                        default:
+                            console.warn(`Unknown condition type: ${condition.type}`);
+                            conditionMet = false;
                     }
+
+                    if (!conditionMet) {
+                        allConditionsMet = false;
+                        break;
+                    }
+                }
+
+                if (allConditionsMet) {
+                    return dialogue.id;
                 }
             }
 
-            // Fallback to a default or first dialogue file
-            if (npcDefinition.dialogues && npcDefinition.dialogues.length > 0) {
-                return npcDefinition.dialogues[0]; // e.g., "default_dialogue"
+            // If no conditions were met, return the first dialogue (should be the default/base one)
+            if (npcDefinition.dialogues.length > 0) {
+                return npcDefinition.dialogues[0].id;
             }
+
             console.warn(`NPC ${npcId} has no dialogue files listed.`);
             return null;
         } catch (error) {

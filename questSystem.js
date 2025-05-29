@@ -101,7 +101,23 @@ export class QuestSystem {
             if (quest.completed || quest.currentStep >= quest.steps.length) return;
 
             const currentStep = quest.steps[quest.currentStep];
-            if (currentStep.condition(event, data)) {
+            
+            // Handle branching steps
+            if (currentStep.branches) {
+                // Check if we've chosen a branch
+                if (currentStep.condition(event, data)) {
+                    // Determine which branch was chosen based on the dialogueId
+                    const chosenBranch = data.dialogueId;
+                    if (currentStep.branches[chosenBranch]) {
+                        // Replace the remaining steps with the chosen branch's steps
+                        quest.steps = [
+                            ...quest.steps.slice(0, quest.currentStep + 1),
+                            ...currentStep.branches[chosenBranch]
+                        ];
+                        quest.currentStep++;
+                    }
+                }
+            } else if (currentStep.condition(event, data)) {
                 quest.currentStep++;
                 if (quest.currentStep >= quest.steps.length) {
                     quest.completed = true;
@@ -109,10 +125,11 @@ export class QuestSystem {
                     this.applyRewards(quest);
                     console.log(`Completed quest: ${questId}`);
                 }
-                // Notify quest log to update UI
-                if (window.updateQuestLog) {
-                    window.updateQuestLog();
-                }
+            }
+            
+            // Notify quest log to update UI
+            if (window.updateQuestLog) {
+                window.updateQuestLog();
             }
         });
     }
@@ -140,19 +157,27 @@ export class QuestSystem {
     getQuestData() {
         const questData = [];
         this.quests.forEach(quest => {
-            // Only include quests that are active or completed
             if (this.activeQuests.has(quest.id) || quest.completed) {
-                const nextStep = quest.completed ? null : quest.steps[quest.currentStep];
-                const nextPOI = nextStep?.condition.toString().match(/poiName\s*===\s*'([^']+)'/)?.[1];
+                const nextStep = (quest.completed || quest.currentStep >= quest.steps.length) ? null : quest.steps[quest.currentStep];
+                const nextPOI = nextStep?.condition.toString().match(/data\.poiName\s*===\s*'([^']+)'/)?.[1] ||
+                                nextStep?.condition.toString().match(/data\.npcId\s*===\s*'([^']+)'/)?.[1];
                 const mapId = quest.completed ? 'Completed' : (nextPOI ? this.getMapForPOI(nextPOI) : 'Unknown');
+
+                // Calculate total steps including any potential branches
+                let totalSteps = quest.steps.length;
+                if (nextStep?.branches) {
+                    // Add the maximum number of steps from any branch
+                    totalSteps += Math.max(...Object.values(nextStep.branches).map(branch => branch.length));
+                }
+
                 questData.push({
                     id: quest.id,
                     name: quest.name,
                     giver: quest.giver,
                     description: quest.description,
                     currentStep: quest.currentStep,
-                    totalSteps: quest.steps.length,
-                    nextHint: quest.completed ? 'Quest complete' : nextStep?.hint || 'No hint available',
+                    totalSteps: totalSteps,
+                    nextHint: quest.completed ? 'Quest complete' : (nextStep?.hint || 'No hint available'),
                     completed: quest.completed,
                     mapId: mapId
                 });
@@ -160,70 +185,47 @@ export class QuestSystem {
         });
         return questData;
     }
-    getQuestData() {
-            // ... (existing method)
-            const questData = [];
-            this.quests.forEach(quest => {
-                if (this.activeQuests.has(quest.id) || quest.completed) {
-                    const nextStep = (quest.completed || quest.currentStep >= quest.steps.length) ? null : quest.steps[quest.currentStep];
-                    const nextPOI = nextStep?.condition.toString().match(/data\.poiName\s*===\s*'([^']+)'/)?.[1] ||
-                                    nextStep?.condition.toString().match(/data\.npcId\s*===\s*'([^']+)'/)?.[1]; // Simplified POI/NPC extraction
-                    const mapId = quest.completed ? 'Completed' : (nextPOI ? this.getMapForPOI(nextPOI) : 'Unknown');
 
-                    questData.push({
-                        id: quest.id,
-                        name: quest.name,
-                        giver: quest.giver,
-                        description: quest.description,
-                        currentStep: quest.currentStep,
-                        totalSteps: quest.steps.length,
-                        nextHint: quest.completed ? 'Quest complete' : (nextStep?.hint || 'No hint available'),
-                        completed: quest.completed,
-                        mapId: mapId
-                    });
+    getSerializableData() {
+        const serializableQuestsState = {};
+        this.quests.forEach((questData, questId) => {
+            serializableQuestsState[questId] = {
+                currentStep: questData.currentStep,
+                completed: questData.completed,
+                steps: questData.steps // Save the current state of steps including any branch changes
+            };
+        });
+        return {
+            activeQuests: Array.from(this.activeQuests),
+            questsState: serializableQuestsState,
+        };
+    }
+
+    async restoreFromData(data) {
+        if (!data) return;
+
+        if (this.quests.size === 0) {
+            await this.loadQuests();
+        }
+
+        this.activeQuests = new Set(data.activeQuests || []);
+
+        if (data.questsState) {
+            Object.entries(data.questsState).forEach(([questId, savedState]) => {
+                if (this.quests.has(questId)) {
+                    const quest = this.quests.get(questId);
+                    quest.currentStep = savedState.currentStep;
+                    quest.completed = savedState.completed;
+                    if (savedState.steps) {
+                        quest.steps = savedState.steps; // Restore the modified steps if they exist
+                    }
+                } else {
+                    console.warn(`Quest ${questId} found in save data but not in definitions.`);
                 }
             });
-            return questData;
         }
-
-        getSerializableData() {
-            const serializableQuestsState = {};
-            this.quests.forEach((questData, questId) => {
-                // Save only the dynamic state, not the whole quest definition
-                serializableQuestsState[questId] = {
-                    currentStep: questData.currentStep,
-                    completed: questData.completed,
-                };
-            });
-            return {
-                activeQuests: Array.from(this.activeQuests),
-                questsState: serializableQuestsState,
-            };
-        }
-
-        async restoreFromData(data) {
-            if (!data) return;
-
-            // Ensure base quest definitions are loaded first
-            if (this.quests.size === 0) {
-                await this.loadQuests(); // This also loads maps
-            }
-
-            this.activeQuests = new Set(data.activeQuests || []);
-
-            if (data.questsState) {
-                Object.entries(data.questsState).forEach(([questId, savedState]) => {
-                    if (this.quests.has(questId)) {
-                        const quest = this.quests.get(questId);
-                        quest.currentStep = savedState.currentStep;
-                        quest.completed = savedState.completed;
-                    } else {
-                        console.warn(`Quest ${questId} found in save data but not in definitions.`);
-                    }
-                });
-            }
-            if (window.updateQuestLog) window.updateQuestLog(); // Update UI
-        }
+        if (window.updateQuestLog) window.updateQuestLog();
+    }
 }
 
 // Singleton instance
