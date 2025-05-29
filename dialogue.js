@@ -187,21 +187,18 @@ export async function initializeDialogue() {
                 case 'item':
                     const itemId = condition.itemId;
                     const quantity = condition.quantity || 1;
-                    const checkEquipped = condition.checkEquipped || false;
+
+                    DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
                     
-                    DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}, checkEquipped: ${checkEquipped}`);
-                    
-                    if (checkEquipped) {
-                        // Check if item is equipped
-                        result = Object.values(hero.equipment).some(slot => 
+
+                        let eqResult = Object.values(hero.equipment).some(slot =>
                             slot && slot.id === itemId
                         );
-                        DEBUG.log(`Item equipped check: ${result}`);
-                    } else {
-                        // Check if item is in inventory
-                        result = hero.hasItem(itemId, quantity);
-                        DEBUG.log(`Item inventory check: ${result}`);
-                    }
+                        DEBUG.log(`Item equipped check: ${eqResult}`);
+
+                        let invResult = hero.hasItem(itemId, quantity);
+                        DEBUG.log(`Item inventory check: ${invResult}`);
+                        result = eqResult || invResult;
                     break;
                 case 'questActive':
                     result = questSystem.activeQuests.has(condition.questId);
@@ -371,21 +368,18 @@ export async function initializeDialogue() {
                         case 'item':
                             const itemId = condition.itemId;
                             const quantity = condition.quantity || 1;
-                            const checkEquipped = condition.checkEquipped || false;
-                            
-                            DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}, checkEquipped: ${checkEquipped}`);
-                            
-                            if (checkEquipped) {
-                                // Check if item is equipped
-                                conditionMet = Object.values(hero.equipment).some(slot => 
+
+                            DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
+
+
+                                let eqResult = Object.values(hero.equipment).some(slot =>
                                     slot && slot.id === itemId
                                 );
-                                DEBUG.log(`Item equipped check: ${conditionMet}`);
-                            } else {
-                                // Check if item is in inventory
-                                conditionMet = hero.hasItem(itemId, quantity);
-                                DEBUG.log(`Item inventory check: ${conditionMet}`);
-                            }
+                                DEBUG.log(`Item equipped check: ${eqResult}`);
+
+                                let invResult = hero.hasItem(itemId, quantity);
+                                DEBUG.log(`Item inventory check: ${invResult}`);
+                                conditionMet = eqResult || invResult;
                             break;
 
                         default:

@@ -15,15 +15,6 @@ class Hero extends Member {
         this.class3 = null;
         this.skills3 = null;
 
-        // Add class history tracking
-        this.classHistory = {
-            [classInfo.id]: {
-                level: level,
-                experience: 0,
-                experienceToLevel: 100
-            }
-        };
-
         this.selectedSkills = [];
         this.selectedPassiveSkills = [];
 
@@ -551,9 +542,6 @@ class Hero extends Member {
         data.baseStats = deepCopy(this.baseStats);
         data.consumableToolbar = this.consumableToolbar.map(item => item ? item.id : null);
         
-        // Add class history to save data
-        data.classHistory = this.classHistory;
-        
         // Companion Data NEW
         data.allCompanions = this.allCompanions.map(comp => comp.getSerializableData());
         data.partyFormationPositions = this.partyFormation.map(row =>
@@ -564,16 +552,6 @@ class Hero extends Member {
 
     restoreFromData(data, allHeroClasses, allSkillsLookup, allItemsCacheInstance) {
         super.restoreFromData(data, allHeroClasses, allSkillsLookup);
-        
-        // Restore class history
-        this.classHistory = data.classHistory || {
-            [this.classId]: {
-                level: this.level,
-                experience: this.experience,
-                experienceToLevel: this.experienceToLevel
-            }
-        };
-        
         this.gold = data.gold || 0;
         this.baseStats = data.baseStats ? deepCopy(data.baseStats) : deepCopy(this.stats);
 
@@ -834,57 +812,5 @@ class Hero extends Member {
                 if (typeof updateSkillBar === "function") updateSkillBar(this.selectedSkills);
                 if (typeof updatePassiveSkillBar === "function") updatePassiveSkillBar(this.selectedPassiveSkills);
             }
-
-    // Add new method for class change
-    changeClass(newClassInfo) {
-        if (!newClassInfo || !newClassInfo.id) {
-            console.error("Invalid class info provided for class change");
-            return false;
-        }
-
-        // Store current class data in history
-        this.classHistory[this.classId] = {
-            level: this.level,
-            experience: this.experience,
-            experienceToLevel: this.experienceToLevel
-        };
-
-        // If this is a new class, initialize its history
-        if (!this.classHistory[newClassInfo.id]) {
-            this.classHistory[newClassInfo.id] = {
-                level: 1,
-                experience: 0,
-                experienceToLevel: 100
-            };
-        }
-
-        // Update current class info
-        this.classType = newClassInfo.name;
-        this.classId = newClassInfo.id;
-        this.class = newClassInfo;
-        
-        // Restore class-specific data
-        const classData = this.classHistory[newClassInfo.id];
-        this.level = classData.level;
-        this.experience = classData.experience;
-        this.experienceToLevel = classData.experienceToLevel;
-
-        // Update skills
-        this.skills = this.createSkillsFromIDs(newClassInfo.skills || []);
-        
-        // Update stats
-        this.stats = deepCopy(newClassInfo.stats);
-        this.statsPerLevel = newClassInfo.statsPerLevel;
-        
-        // Recalculate stats with current level
-        this.recalculateHeroStats(true);
-        
-        // Update UI
-        if (typeof updateStatsDisplay === "function") updateStatsDisplay(this);
-        if (typeof renderSkills === "function") renderSkills(this);
-        if (typeof renderPassiveSkills === "function") renderPassiveSkills(this);
-        
-        return true;
-    }
 }
 export default Hero;

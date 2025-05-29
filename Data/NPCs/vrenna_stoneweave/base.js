@@ -11,7 +11,7 @@ export default {
                 {
                     text: "I have found this amulet.Can you tell me anything about it?",
                     nextId: "mistwalker",
-                    conditions: [{ type: 'item', item: 'mistwalkerAmulet' }]
+                    conditions: [{ type: 'item', itemId: 'mistwalkerAmulet' }]
                 },
                 {
                     text: "I seek a portal sequence. Can you help?",
