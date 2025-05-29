@@ -194,10 +194,10 @@ export async function initializeDialogue() {
                         let eqResult = Object.values(hero.equipment).some(slot =>
                             slot && slot.id === itemId
                         );
-                        DEBUG.log(`Item equipped check: ${result}`);
+                        DEBUG.log(`Item equipped check: ${eqResult}`);
 
                         let invResult = hero.hasItem(itemId, quantity);
-                        DEBUG.log(`Item inventory check: ${result}`);
+                        DEBUG.log(`Item inventory check: ${invResult}`);
                         result = eqResult || invResult;
                     break;
                 case 'questActive':
@@ -375,10 +375,10 @@ export async function initializeDialogue() {
                                 let eqResult = Object.values(hero.equipment).some(slot =>
                                     slot && slot.id === itemId
                                 );
-                                DEBUG.log(`Item equipped check: ${result}`);
+                                DEBUG.log(`Item equipped check: ${eqResult}`);
 
                                 let invResult = hero.hasItem(itemId, quantity);
-                                DEBUG.log(`Item inventory check: ${result}`);
+                                DEBUG.log(`Item inventory check: ${invResult}`);
                                 result = eqResult || invResult;
                             break;
 
