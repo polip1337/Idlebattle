@@ -194,7 +194,22 @@ export async function initializeDialogue() {
                     const quest = questSystem.quests.get(condition.questId);
                     result = quest && quest.completed;
                     break;
-                // Add more condition types like 'questStepCompleted', 'globalFlag', etc.
+                case 'questStep':
+                    const stepQuest = questSystem.quests.get(condition.questId);
+                    if (!stepQuest) {
+                        DEBUG.log(`Quest ${condition.questId} not found for step check`);
+                        result = false;
+                        break;
+                    }
+                    result = stepQuest.currentStep === condition.stepIndex;
+                    DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${result}`);
+                    break;
+                case 'location':
+                    const currentLocation = window.currentMapId || 'unknown';
+                    result = currentLocation === condition.locationId;
+                    DEBUG.log(`Location check: ${currentLocation} === ${condition.locationId}: ${result}`);
+                    break;
+                // Add more condition types like 'globalFlag', etc.
                 default:
                     console.warn('Unknown condition type:', condition.type);
                     result = false;
@@ -292,6 +307,17 @@ export async function initializeDialogue() {
                                     console.warn(`Unknown quest status condition: ${condition.status}`);
                                     conditionMet = false;
                             }
+                            break;
+
+                        case 'questStep':
+                            const stepQuest = questSystem.quests.get(condition.questId);
+                            if (!stepQuest) {
+                                DEBUG.log(`Quest ${condition.questId} not found for step check`);
+                                conditionMet = false;
+                                break;
+                            }
+                            conditionMet = stepQuest.currentStep === condition.stepIndex;
+                            DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${conditionMet}`);
                             break;
 
                         case 'location':
