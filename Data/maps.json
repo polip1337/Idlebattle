@@ -258,7 +258,7 @@
         "name": "Drowned Ossuary",
         "areaId": "drownedOssuary",
         "x": 70.00,
-        "y": 85.00,
+        "y": 95.00,
         "icon": "Media/map/poi-crypt.jpg",
         "type": "combat",
         "dialogueNpcId": "narrator",

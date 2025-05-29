@@ -80,7 +80,7 @@ export class QuestSystem {
     }
 
     // Complete a quest
-    completeQuest(questId) {
+    async completeQuest(questId) {
         if (!this.quests.has(questId)) {
             console.error(`Attempted to complete non-existent quest: ${questId}`);
             return false;
