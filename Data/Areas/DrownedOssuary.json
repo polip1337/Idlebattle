@@ -20,7 +20,7 @@
                 {"type": "skeletonWarrior", "count": 2, "level": 2},
                 {"type": "skeletonArcher", "count": 2, "level": 2}
             ]
-        }
+        },
         {
             "stage": 3,
             "description": "At the heart of the ossuary, a grotesque construct of animated bones looms, its form pulsing with necromantic energy. Skeletons guard it, drawn to the relic’s dark power.",
