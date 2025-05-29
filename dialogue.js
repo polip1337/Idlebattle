@@ -191,7 +191,7 @@ export async function initializeDialogue() {
                     DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
                     
 
-                        result = Object.values(hero.equipment).some(slot =>
+                        let eqResult = Object.values(hero.equipment).some(slot =>
                             slot && slot.id === itemId
                         );
                         DEBUG.log(`Item equipped check: ${result}`);
@@ -372,7 +372,7 @@ export async function initializeDialogue() {
                             DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
 
 
-                                result = Object.values(hero.equipment).some(slot =>
+                                let eqResult = Object.values(hero.equipment).some(slot =>
                                     slot && slot.id === itemId
                                 );
                                 DEBUG.log(`Item equipped check: ${result}`);
