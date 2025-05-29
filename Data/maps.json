@@ -157,7 +157,7 @@
       {
         "id": "sewer_foggedCorridor_POI",
         "name": "Fogged Corridor",
-        "areaId": "FoggedCorridor",
+        "areaId": "FoggedCorridor2",
         "x": 22.50,
         "y": 52.50,
         "icon": "Media/map/poi-combat.png",
@@ -246,24 +246,22 @@
         "name": "Mysterious Figure",
         "description": "A hooded figure lurks in the shadows, watching the tunnels carefully.",
         "type": "dialogue",
-        "npc": "sewer_contact",
-        "location": {
-          "x": 45,
-          "y": 60
-        },
+        "npcId": "sewer_contact",
+        "dialogueId":"sewer_contact_base",
+        "x": 72.00,
+        "y": 85.00,
         "initiallyLocked": true
       },
-      {
-        "id": "sewer_scavengerRedoubt_POI",
-        "name": "Scavenger Redoubt",
-        "description": "A heavily guarded chamber where the fog-touched scavengers have made their base. The air crackles with fog energy.",
+      {"id": "drowned_ossuary_POI",
+        "name": "Drowned Ossuary",
+        "areaId": "drownedOssuary",
+        "x": 70.00,
+        "y": 85.00,
+        "icon": "Media/map/poi-crypt.jpg",
         "type": "combat",
-        "areaId": "scavengerRedoubt",
-        "location": {
-          "x": 75,
-          "y": 30
-        }
+        "initiallyLocked": true
       }
+
     ]
   },
   "threadhall": {
