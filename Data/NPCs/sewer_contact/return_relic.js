@@ -26,7 +26,8 @@ export default {
                     nextId: "share_secrets",
                     action: [
                         { type: "removeItem", item: "boneWhisperRelic" },
-                        { type: "completeQuest", questId: "ossuaryRelic" }
+                        { type: "completeQuest", questId: "ossuaryRelic" },
+                        {type: "openDialogue", npcId: "sewer_contact", dialogueId: "share_info"}
                     ]
                 }
             ]
