@@ -2,12 +2,9 @@ export default {
     nodes: [
         {
             id: 'start',
-            text: "That amulet you wear... *studies it intently* The Mistwalker Amulet. I've only seen it in our oldest tapestries. They are rumored to only for the first person that touches them. If you wish to prove its not fake, there's a task I have in mind. A valuable tapestry fragment was stolen from our archives - one that contains information valuable to us. It's being held by fog-touched scavengers in the Rustmarket Sewers.",
+            text: "A valuable tapestry fragment was stolen from our archives - one that contains information valuable to us. It's being held by fog-touched scavengers in the Rustmarket Sewers.",
             options: [
-                {
-                    text: "The Mistwalker Amulet? Tell me more about it.",
-                    nextId: 'amulet_info'
-                },
+
                 {
                     text: "I'll help recover the fragment.",
                     nextId: 'fragment_accept',
@@ -67,16 +64,8 @@ export default {
                     text: "I understand. I'll find the fragment.",
                     nextId: null,
                     action: [
-                        { type: 'unlockPOI', mapId: 'rustmarketSewers', poiId: 'sewer_scavengerRedoubt_POI' }
+                        { type: 'unlockPOI', mapId: 'rustmarketSewers', poiId: 'sewer_contact_POI' }
                     ]
-                },
-                {
-                    text: "I've already found it.",
-                    nextId: 'fragment_return',
-                    conditions: [
-                        { type: "hasItem", itemId: "tapestryFragment" }
-                    ],
-                    hideWhenUnavailable: true
                 }
             ]
         },

@@ -51,7 +51,6 @@ export default {
                 {
                     text: "What task do you have in mind?",
                     action: [
-                        { type: "startQuest", questId: "proofForTheWeave" },
                         {type: "openDialogue", npcId: "vrenna_stoneweave", dialogueId: "proof_for_weave"}
                     ] 
                     
