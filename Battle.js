@@ -219,7 +219,7 @@ function useTeamSkills(teamInstance) {
     teamInstance.members.forEach(member => {
         if (member.currentHealth > 0) {
             member.skills.forEach(skill => {
-                if (skill.type === "active") {
+                if (skill.type === "active" && !member.isHero) {
                     // Initialize skill element if not already set
                     if (!skill.div && member.element) {
                         const skillDivId = member.memberId + "Skill" + skill.name.replace(/\s/g, '');
