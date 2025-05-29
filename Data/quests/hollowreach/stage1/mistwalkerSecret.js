@@ -7,7 +7,7 @@ export default {
         {
             description: 'Meet Renn in her house to discuss the amulet\'s origins.',
             hint: 'Find Renn Quickfingers in the Rustmarket area.',
-            condition: (event, data) => event === 'dialogue' && data.npc === 'Renn Quickfingers' && (data.dialogueId === 'faction_help' || data.dialogueId === 'archive_plan')
+            condition: (event, data) => event === 'dialogue' && data.npc === 'Renn Quickfingers' && data.dialogueId === 'start'
         },
         {
             description: 'Choose your path: Help the faction or proceed with the archive plan.',

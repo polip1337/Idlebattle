@@ -11,7 +11,12 @@ export default {
                         type: "quest",
                         questId: "mistwalkerSecret",
                         status: "active"
-                    }
+                    },
+                     {
+                         type: "questStep",
+                         questId: "mistwalkerSecret",
+                         stepIndex: 0
+                     }
                 ],
                 priority: 3
             },
@@ -26,7 +31,7 @@ export default {
                     {
                         type: "questStep",
                         questId: "mistwalkerSecret",
-                        stepIndex: 1
+                        stepIndex: 2
                     }
                 ],
                 priority: 2
@@ -57,8 +62,8 @@ export default {
     "gold": 500,
     "barterThreshold": 0,
     "tradeInventory": [
-        { "id": "healing_potion_minor_001", "quantity": 10 },
-        { "id": "simple_sword_001", "quantity": 2 },
-        { "id": "worn_leather_helmet_001", "quantity": 1 }
+      { "id": "healing_potion_minor_001", "quantity": 10 },
+      { "id": "simple_sword_001", "quantity": 2 },
+      { "id": "worn_leather_helmet_001", "quantity": 1 }
     ],
 };
