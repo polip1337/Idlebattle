@@ -105,7 +105,7 @@ export class QuestSystem {
             // Handle branching steps
             if (currentStep.branches) {
                 // Check if we've chosen a branch
-                if (currentStep.condition(event, data)) {
+                if (currentStep.condition && currentStep.condition(event, data)) {
                     // Determine which branch was chosen based on the dialogueId
                     const chosenBranch = data.dialogueId;
                     if (currentStep.branches[chosenBranch]) {
@@ -117,7 +117,7 @@ export class QuestSystem {
                         quest.currentStep++;
                     }
                 }
-            } else if (currentStep.condition(event, data)) {
+            } else if (currentStep.condition && currentStep.condition(event, data)) {
                 quest.currentStep++;
                 if (quest.currentStep >= quest.steps.length) {
                     quest.completed = true;
