@@ -1021,7 +1021,7 @@
     ],
     "description": "A surprise attack dealing extra damage and causing bleeding.",
     "targetingModes": [
-      "Single Enemy"
+      "Random Front"
     ],
     "icon": "Media/Skills/Attack/Backstab.jpg",
     "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina", "Debuff"]
@@ -1062,7 +1062,7 @@
     ],
     "description": "Steals gold from the target.",
     "targetingModes": [
-      "Single Enemy"
+      "Random Front"
     ],
     "icon": "Media/Skills/Utility/Pickpocket.jpg",
     "tags": ["Single Target", "Utility", "Active", "Mana"]
@@ -1078,7 +1078,7 @@
     "effects": null,
     "description": "Throws a knife at the enemy, dealing physical damage.",
     "targetingModes": [
-      "Single Enemy"
+      "Random"
     ],
     "icon": "Media/Skills/Attack/ThrowingKnife.jpg",
     "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina"]
@@ -1139,7 +1139,7 @@
     ],
     "description": "Deals damage and poisons the target.",
     "targetingModes": [
-      "Single Enemy"
+      "Random Front"
     ],
     "icon": "Media/Skills/Attack/PoisonDagger.jpg",
     "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina", "Debuff"]
@@ -1175,7 +1175,7 @@
     "effects": null,
     "description": "A carefully aimed shot that deals significant damage.",
     "targetingModes": [
-      "Single Enemy"
+      "Random Back"
     ],
     "icon": "Media/Skills/Attack/AimedShot.jpg",
     "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina"]
@@ -1191,7 +1191,7 @@
     "effects": null,
     "description": "A quick shot that deals moderate damage.",
     "targetingModes": [
-      "Single Enemy"
+      "Random Back"
     ],
     "icon": "Media/Skills/Attack/QuickShot.jpg",
     "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina"]
@@ -1275,7 +1275,7 @@
     }],
     "description": "A skillful shot that increases the archer's dodge chance.",
     "targetingModes": [
-      "Single Enemy"
+      "Random Back"
     ],
     "icon": "Media/Skills/Utility/TrickShot.jpg",
     "tags": ["Single Target", "Physical", "Melee", "Active", "Stamina"]
