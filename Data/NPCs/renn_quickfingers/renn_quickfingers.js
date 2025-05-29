@@ -12,7 +12,7 @@ export default {
                 {
                     type: "quest",
                     questId: "mistwalkerSecret",
-                    status: "not_started"
+                    status: "active"
                 },
                 {
                     type: "location",
@@ -22,17 +22,25 @@ export default {
             priority: 3
         },
         {
-            id: "renn_questActive",
+            id: "renn_mistwalker_Active",
             conditions: [
                 {
                     type: "quest",
                     questId: "mistwalkerSecret",
                     status: "active"
+                },
+                {
+                    type: "questStep",
+                    questId: "mistwalkerSecret",
+                    stepIndex: 2
+                },
+                {
+                    type: "location",
+                    locationId: "rennsHouse"
                 }
             ],
             priority: 2
         },
-        
         {
             id: "renn_tavern",
             conditions: [
