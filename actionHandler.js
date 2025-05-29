@@ -70,7 +70,14 @@ export function handleActions(actions) {
                 break;
             case 'openDialogue':
                 if (window.startDialogue) {
-                    await window.startDialogue(action.npcId, action.dialogueId);
+                    try {
+                        await window.startDialogue(action.npcId, action.dialogueId);
+                    } finally {
+                        // Reset the flag after nested dialogue completes
+                        if (window.isProcessingPoiClick !== undefined) {
+                            window.isProcessingPoiClick = false;
+                        }
+                    }
                 } else {
                     console.error('startDialogue function is not available.');
                 }

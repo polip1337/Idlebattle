@@ -27,6 +27,8 @@ let expBarClass1El = null;
 let expBarClass2El = null;
 let expBarClass3El = null;
 
+// Expose isProcessingPoiClick to window for action handler
+window.isProcessingPoiClick = isProcessingPoiClick;
 
 function _updateHeroMapSidebar(heroInstance) {
     if (!heroInstance) return;
