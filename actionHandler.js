@@ -10,7 +10,7 @@ export function handleActions(actions) {
     if (!actions) return;
     
     const actionArray = Array.isArray(actions) ? actions : [actions];
-    actionArray.forEach(action => {
+    actionArray.forEach(async action => {
         switch (action.type) {
             case 'startQuest':
                 questSystem.startQuest(action.questId);
@@ -70,7 +70,7 @@ export function handleActions(actions) {
                 break;
             case 'openDialogue':
                 if (window.startDialogue) {
-                    window.startDialogue(action.npcId, action.dialogueId);
+                    await window.startDialogue(action.npcId, action.dialogueId);
                 } else {
                     console.error('startDialogue function is not available.');
                 }
