@@ -158,9 +158,14 @@ async function handleTalk(poi) {
         renderPOIs();
         battleLog.log(`Speaking at ${poi.name} (NPC: ${poi.npcId})`);
         questSystem.updateQuestProgress('talk', { poiName: poi.name, npcId: poi.npcId });
-        await window.startDialogue(poi.npcId, poi.dialogueId);
+        try {
+            await window.startDialogue(poi.npcId, poi.dialogueId);
+        } finally {
+            isProcessingPoiClick = false; // Reset the flag after dialogue completes or fails
+        }
     } else {
         alert(`No NPC defined for ${poi.name}`);
+        isProcessingPoiClick = false; // Reset the flag if there's no NPC
     }
 }
 

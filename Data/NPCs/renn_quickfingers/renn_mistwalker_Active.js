@@ -54,7 +54,7 @@ export default {
         },
         {
             id: 'archive_path',
-            text: "The archive, huh? Bold choice. Those old ruins are full of traps and tricks, but if anyone can navigate them, it's you. Just watch out for Korzog - he's been sniffing around there lately, and he's not the type to share nicely.",
+            text: "The archive, huh? Bold choice. Those old ruins are full of secrets, but if anyone can navigate them, it's us. Just watch out for Korzog - he's been sniffing around there lately, and he's not the type to share nicely.",
             options: [
                 {
                     text: "I'll keep an eye out for him.",

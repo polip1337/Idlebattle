@@ -16,7 +16,7 @@ export default {
     },
     {
      id:"archive_info",
-        text: "The Ashen Archive's full of Old Empire knowledge, but it's protected by rune-etched sentries and fog traps. I've been casing it for a while - there's a back entrance we can use. Just need to watch out for Korzog. That rogue Loomkeeper's been sniffing around there too.",
+        text: "The Ashen Archive's full of Old Empire knowledge, but it's protected by rune-etched sentries. I've been casing it for a while - there's a back entrance we can use. Just need to watch out for Korzog. That Loomkeeper been sniffing around there too.",
         options: [
             {
                 text: "Let's try the archive first.",
@@ -62,7 +62,7 @@ export default {
     },
     {
      id:"archive_plan",
-        text: "Good choice! Meet me at the archive's back entrance. I'll bring some tools for the sentries, and with that amulet of yours, we should be able to handle the fog traps. Just remember - we're there for knowledge, not trouble. Though knowing Korzog, trouble might find us anyway.",
+        text: "Good choice! Meet me at the archive's back entrance. With that amulet of yours, we should be able to navigate the place. Just remember - we're there for knowledge, not trouble. Though knowing Korzog, trouble might find us anyway.",
         options: [
             {
                 text: "I'll meet you there.",
