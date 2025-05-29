@@ -225,7 +225,8 @@ function renderPOIs() {
         poiElement.addEventListener('click', async (event) => {
             event.stopPropagation(); event.preventDefault();
             if (isProcessingPoiClick) {
-                console.warn("POI click ignored, already processing another.");
+                const currentPoi = pointsOfInterest.find(p => p.name === currentLocation);
+                console.warn(`POI click ignored, already processing ${currentPoi ? currentPoi.name : 'unknown POI'}.`);
                 return;
             }
             isProcessingPoiClick = true; // Set flag at the beginning of processing
