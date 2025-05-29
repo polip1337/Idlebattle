@@ -5,7 +5,7 @@
   "description": "",
   "main": "your_main_file.js",
   "scripts": {
-    "test": "mocha \"tests/*.test.mjs\""
+    "test": "mocha \"tests/**/*.test.mjs\""
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "@babel/register": "^7.27.1",
     "chai": "^4.3.0",
     "mocha": "^10.0.0",
-    "sinon": "^15.0.0"
+    "sinon": "^15.0.0",
+    "vitest": "^3.1.4"
   }
 }

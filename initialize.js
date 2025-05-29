@@ -33,7 +33,7 @@ import {initializeQuestLog} from './questLog.js';
 import { openSaveModal,openLoadModal, setInitializeAndLoadGame as setInitLoadFnForSaveLoad, configureAutosave as slConfigureAutosave } from './saveLoad.js'; // Added slConfigureAutosave
 import { initializeCompanionUI } from './companionUIManager.js';
 import { handleEarlyGameInit } from './slideshow.js';
-import { openClassChangeModal } from './classChange.js';
+import { openClassChangeModal, initializeClassChange } from './classChange.js';
 
 
 export let battleStatistics;
@@ -49,7 +49,7 @@ export let mobsClasses = null;
 export let allSkillsCache = null;
 export let allItemsCache = null;
 export let allCompanionsData = {};
-let allHeroClasses = {};
+export let allHeroClasses = {};
 
 
 export const NPC_MEDIA_PATH = "Media/NPC/";
@@ -127,24 +127,16 @@ async function loadMobs() {
 
 async function loadClasses() {
     try {
-        const response = await fetch('data/classes.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const classes = await response.json();
-        allHeroClasses = classes; // Store the classes data
-        classTiers = classes['tiers'] || [];
-        const heroClassDefinitions = classes['classes'] || {};
-        heroClasses = {};
+        const classesData = await loadJSON('Data/classes.json');
+        const loadedClasses = {};
+        classTiers = classesData['tiers'] || [];
+        const heroClassDefinitions = classesData['classes'] || {};
         for (const key in heroClassDefinitions) {
             const heroClassDef = heroClassDefinitions[key];
-            heroClasses[heroClassDef.id] = {...heroClassDef, skills: heroClassDef.skills || []};
+            loadedClasses[heroClassDef.id] = {...heroClassDef, skills: heroClassDef.skills || []};
         }
-        return classes;
-    } catch (error) {
-        console.error('Error loading classes:', error);
-        return {};
-    }
+        return loadedClasses;
+    } catch (error) { console.error("Failed to load classes.json:", error); return { tiers: [], classes: {} }; }
 }
 
 async function loadCompanionDefinitions() {
@@ -169,7 +161,9 @@ export async function loadGameData(savedGameState = null) {
         };
         allItemsCache = await loadItems();
         mobsClasses = await loadMobs();
+        heroClasses = await loadClasses();
         await loadCompanionDefinitions();
+        await loadClasses();
 
         if (Object.keys(heroClasses).length === 0 || Object.keys(allSkillsCache).length === 0) {
             console.error("CRITICAL: Hero classes or skills failed to load.");
@@ -450,6 +444,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeHomeScreen();
     await initializeDialogue();
     initializeQuestLog();
+    initializeClassChange();
 
     document.querySelectorAll('.back-to-map-button').forEach(button => {
         button.addEventListener('click', (event) => {
@@ -457,9 +452,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (mapNavButton) openTab({ currentTarget: mapNavButton }, 'map');
         });
     });
-
-    // Add event listener for change class button
-    document.getElementById('changeClassButton').addEventListener('click', openClassChangeModal);
 });
 
 
@@ -482,4 +474,3 @@ function togglePause() {
     });
 }
 
-export { hero, battleLog, battleStatistics, evolutionService, allSkillsCache, allHeroClasses };

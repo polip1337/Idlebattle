@@ -3,9 +3,19 @@ import { openTab } from './navigation.js';
 import { hero,allItemsCache } from './initialize.js';
 import { questSystem } from './questSystem.js';
 import { openTradeModal } from './tradeModal.js';
-import { setCurrentMap } from './map.js';
+import { setCurrentMap, currentMapId } from './map.js';
 import Item from './item.js';
 import { handleActions } from './actionHandler.js';
+
+// Debug configuration
+const DEBUG = {
+    enabled: true,
+    log: function(...args) {
+        if (this.enabled) {
+            console.log('[Dialogue Debug]', ...args);
+        }
+    }
+};
 
 export async function initializeDialogue() {
     const dialogueModal = document.getElementById('dialogue-modal');
@@ -28,6 +38,7 @@ export async function initializeDialogue() {
     let currentNode = null;
     let currentNPCData = null; // Store the NPC's own data from their .js file
     let resolveDialoguePromise = null; // For making startDialogue awaitable
+    let currentBranch = null; // Track the current dialogue branch
 
     // Load NPC and dialogue data
     async function loadDialogueData(npcId, dialogueFileId) {
@@ -174,8 +185,20 @@ export async function initializeDialogue() {
                     result = heroStat >= condition.value;
                     break;
                 case 'item':
-                    console.log(`Checking for item: ${condition.item}`);
-                    result = hero.hasItem(condition.item, condition.quantity || 1); // Assuming hero.inventory.hasItem exists
+                    const itemId = condition.itemId;
+                    const quantity = condition.quantity || 1;
+
+                    DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
+                    
+
+                        let eqResult = Object.values(hero.equipment).some(slot =>
+                            slot && slot.id === itemId
+                        );
+                        DEBUG.log(`Item equipped check: ${eqResult}`);
+
+                        let invResult = hero.hasItem(itemId, quantity);
+                        DEBUG.log(`Item inventory check: ${invResult}`);
+                        result = eqResult || invResult;
                     break;
                 case 'questActive':
                     result = questSystem.activeQuests.has(condition.questId);
@@ -184,7 +207,32 @@ export async function initializeDialogue() {
                     const quest = questSystem.quests.get(condition.questId);
                     result = quest && quest.completed;
                     break;
-                // Add more condition types like 'questStepCompleted', 'globalFlag', etc.
+                case 'questStep':
+                    const stepQuest = questSystem.quests.get(condition.questId);
+                    if (!stepQuest) {
+                        DEBUG.log(`Quest ${condition.questId} not found for step check`);
+                        result = false;
+                        break;
+                    }
+                    
+                    if (condition.branch) {
+                        const currentBranch = stepQuest.currentBranch;
+                        if (!currentBranch || currentBranch !== condition.branch) {
+                            DEBUG.log(`Quest branch check failed: current=${currentBranch}, required=${condition.branch}`);
+                            result = false;
+                            break;
+                        }
+                    }
+                    
+                    result = stepQuest.currentStep === condition.stepIndex;
+                    DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${result}`);
+                    break;
+                case 'location':
+                    const currentLocation = currentMapId || 'unknown';
+                    result = currentLocation === condition.locationId;
+                    DEBUG.log(`Location check: ${currentLocation} === ${condition.locationId}: ${result}`);
+                    break;
+                // Add more condition types like 'globalFlag', etc.
                 default:
                     console.warn('Unknown condition type:', condition.type);
                     result = false;
@@ -195,6 +243,11 @@ export async function initializeDialogue() {
 
     function handleOption(option) {
         handleActions(option.action);
+
+        // Store the branch information if this option has a branch
+        if (option.branch) {
+            currentBranch = option.branch;
+        }
 
         if (option.nextId) {
             const nextNode = currentDialogue.nodes.find(node => node.id === option.nextId);
@@ -219,33 +272,128 @@ export async function initializeDialogue() {
     }
 
     async function selectDialogueFile(npcId) {
-        // This logic needs to be adapted to how your NPC .js files structure their available dialogues.
-        // For example, npcFile.default.dialogues might be an array or object.
-        // Let's assume it's an array of dialogue file IDs, and we pick the first one.
         try {
+            DEBUG.log(`Selecting dialogue file for NPC: ${npcId}`);
             const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
             const npcDefinition = npcModule.default;
 
-            // Prioritize quest-related dialogues
-            // This is a simplified example; you'll need more robust logic
-            // to check quest steps and conditions against the NPC.
-            for (const quest of questSystem.getActiveQuests()) {
-                if (quest.steps) { // Ensure steps array exists
-                    const currentStepDetails = quest.steps[quest.currentStepIndex || 0];
-                    if (currentStepDetails && currentStepDetails.npcId === npcId && currentStepDetails.dialogueFileId) {
-                        // Check if this dialogue file exists in the NPC's list of dialogues
-                        if (npcDefinition.dialogues && npcDefinition.dialogues.includes(currentStepDetails.dialogueFileId)) {
-                            return currentStepDetails.dialogueFileId;
-                        }
-                    }
-                }
+            // If dialogues is an array of strings (old format), convert to new format
+            if (Array.isArray(npcDefinition.dialogues) && typeof npcDefinition.dialogues[0] === 'string') {
+                DEBUG.log('Converting old dialogue format to new format');
+                npcDefinition.dialogues = npcDefinition.dialogues.map(id => ({
+                    id,
+                    conditions: [],
+                    priority: 0
+                }));
             }
 
-            // Fallback to a default or first dialogue file
-            if (npcDefinition.dialogues && npcDefinition.dialogues.length > 0) {
-                return npcDefinition.dialogues[0]; // e.g., "default_dialogue"
+            // Get current location from the map system
+            const currentLocation = currentMapId || 'unknown';
+            DEBUG.log(`Current location: ${currentLocation}`);
+
+            // Get dialogues for current location, fallback to default if not found
+            let locationDialogues = npcDefinition.dialogues[currentLocation] || npcDefinition.dialogues.default;
+            if (!locationDialogues) {
+                console.warn(`No dialogues found for location ${currentLocation} or default for NPC ${npcId}`);
+                return null;
             }
-            console.warn(`NPC ${npcId} has no dialogue files listed.`);
+
+            // Sort dialogues by priority (highest first)
+            const sortedDialogues = [...locationDialogues].sort((a, b) => (b.priority || 0) - (a.priority || 0));
+            DEBUG.log(`Found ${sortedDialogues.length} dialogue options for location ${currentLocation}, sorted by priority`);
+
+            // Check conditions for each dialogue
+            for (const dialogue of sortedDialogues) {
+                DEBUG.log(`Checking dialogue: ${dialogue.id}`);
+                
+                if (!dialogue.conditions || dialogue.conditions.length === 0) {
+                    DEBUG.log(`Dialogue ${dialogue.id} has no conditions, using as fallback`);
+                    return dialogue.id;
+                }
+
+                let allConditionsMet = true;
+                for (const condition of dialogue.conditions) {
+                    let conditionMet = false;
+                    DEBUG.log(`Checking condition:`, condition);
+
+                    switch (condition.type) {
+                        case 'quest':
+                            const quest = questSystem.quests.get(condition.questId);
+                            if (!quest) {
+                                DEBUG.log(`Quest ${condition.questId} not found`);
+                                conditionMet = false;
+                                break;
+                            }
+
+                            switch (condition.status) {
+                                case 'not_started':
+                                    conditionMet = !questSystem.activeQuests.has(condition.questId) && !quest.completed;
+                                    DEBUG.log(`Quest ${condition.questId} not_started check: ${conditionMet}`);
+                                    break;
+                                case 'active':
+                                    conditionMet = questSystem.activeQuests.has(condition.questId);
+                                    DEBUG.log(`Quest ${condition.questId} active check: ${conditionMet}`);
+                                    break;
+                                case 'completed':
+                                    conditionMet = quest.completed;
+                                    DEBUG.log(`Quest ${condition.questId} completed check: ${conditionMet}`);
+                                    break;
+                                default:
+                                    console.warn(`Unknown quest status condition: ${condition.status}`);
+                                    conditionMet = false;
+                            }
+                            break;
+
+                        case 'questStep':
+                            const stepQuest = questSystem.quests.get(condition.questId);
+                            if (!stepQuest) {
+                                DEBUG.log(`Quest ${condition.questId} not found for step check`);
+                                conditionMet = false;
+                                break;
+                            }
+                            
+                            if (condition.branch) {
+                                const currentBranch = stepQuest.currentBranch;
+                                if (!currentBranch || currentBranch !== condition.branch) {
+                                    DEBUG.log(`Quest branch check failed: current=${currentBranch}, required=${condition.branch}`);
+                                    conditionMet = false;
+                                    break;
+                                }
+                            }
+                            
+                            conditionMet = stepQuest.currentStep === condition.stepIndex;
+                            DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${conditionMet}`);
+                            break;
+
+                        case 'item':
+                            const itemId = condition.itemId;
+                            const quantity = condition.quantity || 1;
+
+                            DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
+
+
+                                let eqResult = Object.values(hero.equipment).some(slot =>
+                                    slot && slot.id === itemId
+                                );
+                                DEBUG.log(`Item equipped check: ${eqResult}`);
+
+                                let invResult = hero.hasItem(itemId, quantity);
+                                DEBUG.log(`Item inventory check: ${invResult}`);
+                                conditionMet = eqResult || invResult;
+                            break;
+
+                        default:
+                            console.warn(`Unknown condition type: ${condition.type}`);
+                            conditionMet = false;
+                    }
+                    allConditionsMet = allConditionsMet && conditionMet;
+                }
+                if (allConditionsMet) {
+                    DEBUG.log(`All conditions met for dialogue: ${dialogue.id}`);
+                    return dialogue.id;
+                }
+            }
+            console.warn('No dialogue found that meets all conditions');
             return null;
         } catch (error) {
             console.error(`Error selecting dialogue file for NPC ${npcId}:`, error);

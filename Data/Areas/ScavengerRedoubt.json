@@ -17,7 +17,7 @@
       "stage": 2,
       "description": "With a grinding sound, an ancient stone sentry activates, its rune-etched eyes glowing menacingly.",
       "mobs": [
-        {"type": "fogTouchedScavenger", "count": 2, "level": 3}
+        {"type": "fogTouchedScavenger", "count": 2, "level": 3},
         {"type": "fogTouchedScavenger", "count": 1, "level": 3}
       ]
     },
@@ -25,7 +25,7 @@
       "stage": 3,
       "description": "This chamber seems to be a key junction. A well-maintained Sentry stands guard, flanked by desperate scavengers.",
       "mobs": [
-        {"type": "runeEtchedSentry", "count": 3, "level": 4},
+        {"type": "fogTouchedScavenger", "count": 3, "level": 4},
         {"type": "fogTouchedScavenger", "count": 2, "level": 3}
       ]
     }

@@ -25,8 +25,6 @@ export default {
                     action: [
                         { type: "removeItem", item: "tapestryFragment" },
                         { type: "addItem", item: "portalShard" },
-                        { type: "factionReputation", faction: "Rustmarket", value: 5 },
-                        { type: "factionReputation", faction: "Loomkeepers", value: -10 },
                         { type: "completeQuest", questId: "proofForTheWeave" }
                     ]
                 },

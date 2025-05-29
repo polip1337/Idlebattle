@@ -10,7 +10,7 @@ export function handleActions(actions) {
     if (!actions) return;
     
     const actionArray = Array.isArray(actions) ? actions : [actions];
-    actionArray.forEach(action => {
+    actionArray.forEach(async action => {
         switch (action.type) {
             case 'startQuest':
                 questSystem.startQuest(action.questId);
@@ -70,7 +70,14 @@ export function handleActions(actions) {
                 break;
             case 'openDialogue':
                 if (window.startDialogue) {
-                    window.startDialogue(action.npcId, action.dialogueId);
+                    try {
+                        await window.startDialogue(action.npcId, action.dialogueId);
+                    } finally {
+                        // Reset the flag after nested dialogue completes
+                        if (window.isProcessingPoiClick !== undefined) {
+                            window.isProcessingPoiClick = false;
+                        }
+                    }
                 } else {
                     console.error('startDialogue function is not available.');
                 }
@@ -98,6 +105,46 @@ export function handleActions(actions) {
                     window.removeCompanionFromParty(action.companionId);
                 } else {
                     console.error('removeCompanionFromParty function is not available.');
+                }
+                break;
+            case 'removeItem':
+                if (hero && typeof hero.removeItemFromInventory === 'function') {
+                    const removeItem = allItemsCache ? allItemsCache[action.itemId] : null;
+                    if (removeItem) {
+                        const quantity = action.quantity || 1;
+                        const result = hero.removeItemFromInventory(removeItem.id, quantity);
+                        if (!result) {
+                            console.warn(`Failed to remove item ${action.itemId}: Item not found or insufficient quantity.`);
+                        }
+                    } else {
+                        console.warn(`Could not remove item ${action.itemId}: item data not found.`);
+                    }
+                } else {
+                    console.warn('Could not remove item: hero.removeItemFromInventory function is not available.');
+                }
+                break;
+            case 'startBattle':
+                if (window.startBattle) {
+                    window.startBattle(action.enemyId, action.areaId);
+                } else {
+                    console.error('startBattle function is not available.');
+                }
+                break;
+            case 'addGold':
+                if (hero && typeof hero.addGold === 'function') {
+                    hero.addGold(action.amount);
+                } else {
+                    console.warn('Could not add gold: hero.addGold function is not available.');
+                }
+                break;
+            case 'removeGold':
+                if (hero && typeof hero.removeGold === 'function') {
+                    const success = hero.removeGold(action.amount);
+                    if (!success) {
+                        console.warn(`Failed to remove ${action.amount} gold: Insufficient funds.`);
+                    }
+                } else {
+                    console.warn('Could not remove gold: hero.removeGold function is not available.');
                 }
                 break;
             default:

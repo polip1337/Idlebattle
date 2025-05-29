@@ -1,0 +1,11 @@
+{
+    "id": "boneWhisperRelic",
+    "name": "Bone Whisper",
+    "type": "quest",
+    "slot": "none",
+    "icon": "Media/Items/bone_whisper.png",
+    "description": "An ancient bone etched with strange symbols that seem to writhe in the dim light. It thrums with dark energy, and the fog around it stirs uneasily. The sewer contact seems particularly interested in this relic.",
+    "rarity": "rare",
+    "value": 0
+
+} 

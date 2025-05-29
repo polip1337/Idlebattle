@@ -1451,7 +1451,126 @@
     ],
     "icon": "Media/Skills/Magic/ethereal_shift.png",
     "tags": ["Self", "Buff", "Active", "Mana"]
+  },
+  "boneRattle": {
+    "id": "boneRattle",
+    "name": "Bone Rattle",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 0,
+    "staminaCost": 10,
+    "cooldown": 20,
+    "damageType": "none",
+    "effects": [
+      {
+        "id": "reduceAccuracyFlat",
+        "value": -15,
+        "duration": 2
+      }
+    ],
+    "description": "Clatters its bones menacingly, reducing enemy accuracy.",
+    "targetingModes": ["All Enemies"],
+    "icon": "Media/Skills/Undead/bone_rattle.png",
+    "tags": ["All Enemies", "Debuff", "Active", "Stamina"]
+  },
+  "undeadResolve": {
+    "id": "undeadResolve",
+    "name": "Undead Resolve",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 0,
+    "staminaCost": 10,
+    "cooldown": 25,
+    "damageType": "none",
+    "effects": [
+      {
+        "id": "increaseArmorFlat",
+        "value": 10,
+        "duration": 3
+      }
+    ],
+    "description": "Hardens its skeletal form, increasing armor temporarily.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Undead/undead_resolve.png",
+    "tags": ["Self", "Buff", "Active", "Stamina"]
+  },
+  "boneArrow": {
+    "id": "boneArrow",
+    "name": "Bone Arrow",
+    "type": "active",
+    "damage": 12,
+    "manaCost": 8,
+    "cooldown": 10,
+    "damageType": "pierce",
+    "effects": [
+      {
+        "id": "bleed",
+        "duration": 3,
+        "damagePerTurn": 2,
+        "tickDamageType": "pierce"
+      }
+    ],
+    "description": "Fires a sharpened bone arrow that causes bleeding.",
+    "targetingModes": ["Random Back"],
+    "icon": "Media/Skills/Undead/bone_arrow.png",
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Mana", "Debuff"]
+  },
+  "boneSpear": {
+    "id": "boneSpear",
+    "name": "Bone Spear",
+    "type": "active",
+    "damage": 25,
+    "manaCost": 15,
+    "cooldown": 15,
+    "damageType": "pierce",
+    "effects": [
+      {
+        "id": "reduceArmorPercentage",
+        "value": 10,
+        "duration": 3
+      }
+    ],
+    "description": "Hurls a massive bone spear, piercing armor and dealing heavy damage.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Undead/bone_spear.png",
+    "tags": ["Single Target", "Physical", "Pierce", "Active", "Mana", "Debuff"]
+  },
+  "deathPulse": {
+    "id": "deathPulse",
+    "name": "Death Pulse",
+    "type": "active",
+    "damage": 15,
+    "manaCost": 20,
+    "cooldown": 20,
+    "damageType": "energy",
+    "effects": [
+      {
+        "id": "reduceStrengthPercentage",
+        "value": 10,
+        "duration": 3
+      }
+    ],
+    "description": "Emits a pulse of necromantic energy, weakening enemies.",
+    "targetingModes": ["All Enemies"],
+    "icon": "Media/Skills/Undead/death_pulse.png",
+    "tags": ["All Enemies", "Magic", "Energy", "Active", "Mana", "Debuff"]
+  },
+  "necromanticRegeneration": {
+    "id": "necromanticRegeneration",
+    "name": "Necromantic Regeneration",
+    "type": "active",
+    "damage": 0,
+    "heal": 20,
+    "manaCost": 25,
+    "cooldown": 30,
+    "damageType": "none",
+    "effects": null,
+    "description": "Channels necromantic energy to restore vitality.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Undead/necromantic_regeneration.png",
+    "tags": ["Self", "Heal", "Magical", "Active", "Mana"]
   }
+
 }
 
 

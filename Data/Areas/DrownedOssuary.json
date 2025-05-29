@@ -1,0 +1,35 @@
+{
+    "id": "drownedOssuary",
+    "name": "Drowned Ossuary",
+    "description": "A forgotten crypt beneath the Rustmarket Sewers, where the fog has seeped into ancient bones, stirring them with necromantic energy. The air hums with eerie whispers, and the clatter of animated skeletons echoes through damp, shadowed chambers.",
+    "background": "Media/Backgrounds/drowned_ossuary_interior.png",
+    "music": "Music/Dungeon/crypt_haunt_theme.ogg",
+    "stages": [
+        {
+            "stage": 1,
+            "description": "The crypt’s entrance is choked with damp mist, and skeletal remains litter the floor. A pair of animated skeletons lurch forward, their bones rattling ominously.",
+            "mobs": [
+                {"type": "skeletonWarrior", "count": 2, "level": 2}
+
+            ]
+        },
+        {
+            "stage": 2,
+            "description": "Deeper in the crypt, the fog thickens, and ghostly shapes flicker in the gloom. Skeletons armed with crude bows join the fray, their hollow sockets glowing faintly.",
+            "mobs": [
+                {"type": "skeletonWarrior", "count": 2, "level": 2},
+                {"type": "skeletonArcher", "count": 2, "level": 2}
+            ]
+        },
+        {
+            "stage": 3,
+            "description": "At the heart of the ossuary, a grotesque construct of animated bones looms, its form pulsing with necromantic energy. Skeletons guard it, drawn to the relic’s dark power.",
+            "mobs": [
+                {"type": "necromanticConstruct", "count": 1, "level": 4},
+                {"type": "skeletonWarrior", "count": 3, "level": 3},
+                {"type": "skeletonArcher", "count": 2, "level": 2}
+
+            ]
+        }
+    ]
+}

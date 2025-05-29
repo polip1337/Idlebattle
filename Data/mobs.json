@@ -525,5 +525,107 @@
       "mana": 5,
       "armor": 1
     }
+  },
+  "skeletonWarrior": {
+    "id": "skeletonWarrior",
+    "name": "Skeleton Warrior",
+    "portrait": "Media/Mobs/Undead/skeleton_warrior.png",
+    "positions": ["Front"],
+    "experience": 15,
+    "goldDrop": 5,
+    "skills": ["slash", "shieldBash", "boneRattle", "undeadResolve"],
+    "stats": {
+      "strength": 20,
+      "dexterity": 12,
+      "stamina": 25,
+      "vitality": 20,
+      "magicPower": 0,
+      "magicControl": 0,
+      "mana": 0,
+      "manaRegen": 0,
+      "armor": 8,
+      "resistances": {"slash": 10, "pierce": 10, "blunt": -10, "poison": 50, "fire": -5},
+      "dodge": 5,
+      "accuracy": 5,
+      "damage": 1
+    },
+    "statsPerLevel": {
+      "strength": 3,
+      "dexterity": 2,
+      "vitality": 3,
+      "dodge": 1
+    }
+  },
+  "skeletonArcher": {
+    "id": "skeletonArcher",
+    "name": "Skeleton Archer",
+    "portrait": "Media/Mobs/Undead/skeleton_archer.png",
+    "positions": ["Back"],
+    "experience": 12,
+    "goldDrop": 5,
+    "skills": ["piercingShot", "poisonArrow", "boneArrow", "eagleEye"],
+    "stats": {
+      "strength": 10,
+      "speed": 15,
+      "dexterity": 18,
+      "stamina": 12,
+      "vitality": 15,
+      "magicPower": 5,
+      "magicControl": 5,
+      "mana": 30,
+      "manaRegen": 2,
+      "armor": 4,
+      "resistances": {"slash": 10, "pierce": 10, "blunt": -10, "poison": 50, "fire": -5},
+      "dodge": 10,
+      "accuracy": 8,
+      "damage": 1
+    },
+    "statsPerLevel": {
+      "strength": 1,
+      "speed": 2,
+      "dexterity": 3,
+      "vitality": 2,
+      "magicPower": 1,
+      "mana": 3,
+      "manaRegen": 1,
+      "dodge": 2,
+      "magicControl": 1
+    }
+  },
+  "necromanticConstruct": {
+    "id": "necromanticConstruct",
+    "name": "Necromantic Construct",
+    "portrait": "Media/Mobs/Undead/necromantic_construct.png",
+    "positions": ["Front", "Any"],
+    "experience": 30,
+    "goldDrop": 20,
+    "skills": ["boneSpear", "deathPulse", "fortifiedPlating", "necromanticRegeneration"],
+    "stats": {
+      "strength": 25,
+      "dexterity": 10,
+      "stamina": 40,
+      "vitality": 30,
+      "magicPower": 20,
+      "magicControl": 15,
+      "mana": 80,
+      "manaRegen": 5,
+      "armor": 15,
+      "resistances": {"slash": 15, "pierce": 15, "blunt": -5, "poison": 75, "energy": 20, "fire": -10},
+      "dodge": 3,
+      "accuracy": 8,
+      "damage": 1
+    },
+    "statsPerLevel": {
+      "strength": 4,
+      "dexterity": 1,
+      "vitality": 5,
+      "magicPower": 3,
+      "mana": 8,
+      "manaRegen": 1,
+      "armor": 2,
+      "dodge": 1,
+      "magicControl": 2
+    }
   }
 }
+
