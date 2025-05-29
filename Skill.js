@@ -334,21 +334,30 @@ class Skill {
                 this.useSkill(member);
             } else if (this.repeat) {
                 // Add retry mechanism for both hero and non-hero skills when resources are insufficient
-                const retrySkill = () => {
+                const retrySkill = (retryCount = 0) => {
                     if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
+                        let canUse = false;
                         if (member.isHero) {
                             const heroInstance = globalHero;
                             if (heroInstance && heroInstance.selectedSkills.some(s => s && s.id === this.id)) {
-                                this.useSkill(member);
+                                canUse = true;
                             }
                         } else {
+                            canUse = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
+                        }
+
+                        if (canUse) {
                             this.useSkill(member);
+                        } else {
+                            // If still can't use, retry with increasing delay
+                            const delay = Math.min(1000 * (retryCount + 1), 5000); // Cap at 5 seconds
+                            setTimeout(() => retrySkill(retryCount + 1), delay);
                         }
                     }
                 };
 
-                // Set up the retry
-                setTimeout(retrySkill, 1000);
+                // Start the retry chain
+                setTimeout(() => retrySkill(0), 1000);
             }
         }
     }

@@ -219,7 +219,7 @@ function useTeamSkills(teamInstance) {
     teamInstance.members.forEach(member => {
         if (member.currentHealth > 0) {
             member.skills.forEach(skill => {
-                if (skill.type === "active" && !member.isHero) {
+                if (skill.type === "active") {
                     // Initialize skill element if not already set
                     if (!skill.div && member.element) {
                         const skillDivId = member.memberId + "Skill" + skill.name.replace(/\s/g, '');
@@ -470,6 +470,15 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
             if (effectsContainer) effectsContainer.innerHTML = '';
             const portraitImg = member.element.querySelector(".memberPortrait img");
             if (portraitImg && member.class.portrait) portraitImg.src = member.class.portrait;
+        }
+        // Reset skill states for companions
+        if (!member.isHero && member.skills) {
+            member.skills.forEach(skill => {
+                skill.needsInitialCooldownKickoff = true;
+                skill.onCooldown = false;
+                skill.remainingDuration = 0;
+                skill.cooldownStartTime = null;
+            });
         }
     });
 
