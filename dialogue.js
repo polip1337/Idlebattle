@@ -187,21 +187,18 @@ export async function initializeDialogue() {
                 case 'item':
                     const itemId = condition.itemId;
                     const quantity = condition.quantity || 1;
-                    const checkEquipped = condition.checkEquipped || false;
-                    
+
                     DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}, checkEquipped: ${checkEquipped}`);
                     
-                    if (checkEquipped) {
+
                         // Check if item is equipped
                         result = hero.equipment.some(slot => 
                             slot && slot.id === itemId
                         );
                         DEBUG.log(`Item equipped check: ${result}`);
-                    } else {
-                        // Check if item is in inventory
-                        result = hero.hasItem(itemId, quantity);
+
                         DEBUG.log(`Item inventory check: ${result}`);
-                    }
+
                     break;
                 case 'questActive':
                     result = questSystem.activeQuests.has(condition.questId);
