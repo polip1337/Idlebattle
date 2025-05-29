@@ -188,7 +188,7 @@ export async function initializeDialogue() {
                     const itemId = condition.itemId;
                     const quantity = condition.quantity || 1;
 
-                    DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity});
+                    DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
                     
 
                         // Check if item is equipped
