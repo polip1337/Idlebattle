@@ -50,10 +50,15 @@ export class QuestSystem {
     }
 
     // Start a quest
-    startQuest(questId) {
+    async startQuest(questId) {
         if (!this.quests.has(questId)) {
-            console.error(`Attempted to start non-existent quest: ${questId}`);
-            return false;
+            console.warn(`Quest ${questId} not found, attempting to reload quests...`);
+            await this.loadQuests();
+            
+            if (!this.quests.has(questId)) {
+                console.error(`Attempted to start non-existent quest: ${questId}`);
+                return false;
+            }
         }
         
         if (this.activeQuests.has(questId)) {

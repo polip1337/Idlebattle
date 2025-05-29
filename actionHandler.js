@@ -130,6 +130,23 @@ export function handleActions(actions) {
                     console.error('startBattle function is not available.');
                 }
                 break;
+            case 'addGold':
+                if (hero && typeof hero.addGold === 'function') {
+                    hero.addGold(action.amount);
+                } else {
+                    console.warn('Could not add gold: hero.addGold function is not available.');
+                }
+                break;
+            case 'removeGold':
+                if (hero && typeof hero.removeGold === 'function') {
+                    const success = hero.removeGold(action.amount);
+                    if (!success) {
+                        console.warn(`Failed to remove ${action.amount} gold: Insufficient funds.`);
+                    }
+                } else {
+                    console.warn('Could not remove gold: hero.removeGold function is not available.');
+                }
+                break;
             default:
                 console.log('Unknown action type:', action.type);
         }
