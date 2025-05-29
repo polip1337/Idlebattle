@@ -334,7 +334,7 @@ class Skill {
                 this.useSkill(member);
             } else if (this.repeat) {
                 // Add retry mechanism for both hero and non-hero skills when resources are insufficient
-                setTimeout(() => {
+                const retrySkill = () => {
                     if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
                         if (member.isHero) {
                             const heroInstance = globalHero;
@@ -345,7 +345,10 @@ class Skill {
                             this.useSkill(member);
                         }
                     }
-                }, 1000);
+                };
+
+                // Set up the retry
+                setTimeout(retrySkill, 1000);
             }
         }
     }
