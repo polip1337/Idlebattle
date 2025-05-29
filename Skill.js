@@ -332,6 +332,13 @@ class Skill {
 
             if (canUse) {
                 this.useSkill(member);
+            } else if (!member.isHero && this.repeat) {
+                // Add retry mechanism for non-hero skills when resources are insufficient
+                setTimeout(() => {
+                    if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
+                        this.useSkill(member);
+                    }
+                }, 1000);
             }
         }
     }
