@@ -83,24 +83,51 @@ class Skill {
     }
 
     useSkill(member) {
+        console.log(`[Skill ${this.name}] useSkill called for ${member.name}`, {
+            isHero: member.isHero,
+            needsInitialCooldownKickoff: this.needsInitialCooldownKickoff,
+            hasDiv: !!this.div,
+            hasElement: !!member.element,
+            battleStarted: battleStarted
+        });
+
         if (this.type === "active" && !member.isHero && this.needsInitialCooldownKickoff) {
-            this.div = null;
-            this.overlay = null;
-            if (this.div == null && member.element) {
+            console.log(`[Skill ${this.name}] Initializing companion skill for ${member.name}`);
+            // Initialize skill element if not already set
+            if (!this.div && member.element) {
                 const skillDivId = member.memberId + "Skill" + this.name.replace(/\s/g, '');
-                this.setElement(member.element.querySelector("#" + skillDivId)); // Use setElement
+                console.log(`[Skill ${this.name}] Looking for skill element with ID: ${skillDivId}`);
+                const skillElement = member.element.querySelector("#" + skillDivId);
+                if (skillElement) {
+                    console.log(`[Skill ${this.name}] Found skill element, setting it`);
+                    this.setElement(skillElement);
+                } else {
+                    console.log(`[Skill ${this.name}] Skill element not found for ID: ${skillDivId}`);
+                }
             }
 
+            // Start cooldown and mark as initialized
             if (this.div) {
+                console.log(`[Skill ${this.name}] Starting cooldown for ${member.name}`);
                 this.startCooldown(member);
-                this.updateCooldownAnimation;
+                this.updateCooldownAnimation(member);
                 this.needsInitialCooldownKickoff = false;
                 return true;
+            } else {
+                console.log(`[Skill ${this.name}] No div available for ${member.name}, cannot start cooldown`);
             }
         }
 
         if (this.type == "active" && battleStarted) {
+            console.log(`[Skill ${this.name}] Checking resources for ${member.name}`, {
+                currentMana: member.currentMana,
+                manaCost: this.manaCost,
+                currentStamina: member.currentStamina,
+                staminaCost: this.staminaCost
+            });
+
             if (this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina) {
+                console.log(`[Skill ${this.name}] Resources sufficient, executing skill for ${member.name}`);
                 this.startCooldown(member);
                 this.handleSkillCost(member);
                 if (member.isHero) {
@@ -114,13 +141,15 @@ class Skill {
                     })
                 }
 
+                console.log(`[Skill ${this.name}] Selected targets:`, targets.map(t => t.name));
                 targets.forEach(target => {
                     member.performAttack(member, target, this);
                 });
                 return true;
 
             } else {
-                if (this.repeat && member.isHero) { // Only hero skills retry on insufficient resources currently
+                console.log(`[Skill ${this.name}] Insufficient resources for ${member.name}`);
+                if (this.repeat && member.isHero) {
                     setTimeout(() => {
                         if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
                             const isSelected = globalHero && globalHero.selectedSkills.some(s => s && s.id === this.id);
@@ -252,7 +281,14 @@ class Skill {
     }
 
     finishCooldown(member, shouldAttemptRepeat = false) {
-        const wasTrulyOnCooldown = this.onCooldown; // Capture state before modification
+        console.log(`[Skill ${this.name}] finishCooldown called for ${member.name}`, {
+            wasOnCooldown: this.onCooldown,
+            shouldAttemptRepeat,
+            battleStarted,
+            memberHealth: member.currentHealth
+        });
+
+        const wasTrulyOnCooldown = this.onCooldown;
 
         if (this.overlay && this.boundAnimationEndCallback) {
             this.overlay.removeEventListener('animationend', this.boundAnimationEndCallback);
@@ -262,7 +298,7 @@ class Skill {
         // Reset cooldown state variables
         this.remainingDuration = 0;
         this.cooldownStartTime = null;
-        this.onCooldown = false; // OFFICIALLY OFF COOLDOWN
+        this.onCooldown = false;
 
         // Visual cleanup
         if (this.overlay) {
@@ -275,10 +311,6 @@ class Skill {
             this.div.classList.remove('disabled');
         }
 
-        // Attempt repeat if:
-        // 1. The context of calling finishCooldown suggests a repeat (shouldAttemptRepeat is true).
-        // 2. The skill was *actually* on cooldown when this process started (wasTrulyOnCooldown).
-        // 3. Battle conditions are met.
         if (shouldAttemptRepeat && wasTrulyOnCooldown &&
             battleStarted && member && member.currentHealth > 0) {
 
@@ -289,8 +321,14 @@ class Skill {
                     canUse = true;
                 }
             } else {
-                canUse = true;
+                canUse = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
             }
+
+            console.log(`[Skill ${this.name}] Attempting repeat for ${member.name}`, {
+                canUse,
+                isHero: member.isHero,
+                hasResources: this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina
+            });
 
             if (canUse) {
                 this.useSkill(member);

@@ -1011,6 +1011,7 @@
     "type": "active",
     "damage": 12,
     "manaCost": 10,
+    "staminaCost": 20,
     "cooldown": 6,
     "damageType": "physical",
     "effects": [
@@ -1031,6 +1032,7 @@
     "type": "active",
     "damage": 0,
     "manaCost": 8,
+    "staminaCost": 10,
     "cooldown": 12,
     "damageType": "None",
     "effects": [
@@ -1127,6 +1129,7 @@
     "type": "active",
     "damage": 8,
     "manaCost": 7,
+    "staminaCost": 10,
     "cooldown": 8,
     "damageType": "physical",
     "effects": [

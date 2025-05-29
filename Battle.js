@@ -219,7 +219,16 @@ function useTeamSkills(teamInstance) {
     teamInstance.members.forEach(member => {
         if (member.currentHealth > 0) {
             member.skills.forEach(skill => {
-                 if (skill.type === "active" && !member.isHero) {
+                if (skill.type === "active" && !member.isHero) {
+                    // Initialize skill element if not already set
+                    if (!skill.div && member.element) {
+                        const skillDivId = member.memberId + "Skill" + skill.name.replace(/\s/g, '');
+                        const skillElement = member.element.querySelector("#" + skillDivId);
+                        if (skillElement) {
+                            skill.setElement(skillElement);
+                        }
+                    }
+                    // Set initial cooldown kickoff and use skill
                     skill.needsInitialCooldownKickoff = true;
                     skill.useSkill(member);
                 } else if (skill.type === "passive") {
