@@ -490,8 +490,7 @@
         "y": 50.00,
         "icon": "Media/NPC/renn_quickfingers.jpg",
         "type": "dialogue",
-        "npcId": "renn_quickfingers",
-        "dialogueId": "mistwalker_intro"
+        "npcId": "renn_quickfingers"
       }
     ]
   },

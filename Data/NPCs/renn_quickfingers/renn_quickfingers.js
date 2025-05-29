@@ -22,7 +22,7 @@ export default {
             priority: 3
         },
         {
-            id: "renn_questActive",
+            id: "renn_mistwalker_Active",
             conditions: [
                 {
                     type: "quest",
