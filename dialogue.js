@@ -3,7 +3,7 @@ import { openTab } from './navigation.js';
 import { hero,allItemsCache } from './initialize.js';
 import { questSystem } from './questSystem.js';
 import { openTradeModal } from './tradeModal.js';
-import { setCurrentMap } from './map.js';
+import { setCurrentMap, currentMapId } from './map.js';
 import Item from './item.js';
 import { handleActions } from './actionHandler.js';
 
@@ -217,7 +217,7 @@ export async function initializeDialogue() {
                     DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${result}`);
                     break;
                 case 'location':
-                    const currentLocation = window.currentMapId || 'unknown';
+                    const currentLocation = currentMapId || 'unknown';
                     result = currentLocation === condition.locationId;
                     DEBUG.log(`Location check: ${currentLocation} === ${condition.locationId}: ${result}`);
                     break;
@@ -277,7 +277,7 @@ export async function initializeDialogue() {
             }
 
             // Get current location from the map system
-            const currentLocation = window.currentMapId || 'unknown';
+            const currentLocation = currentMapId || 'unknown';
             DEBUG.log(`Current location: ${currentLocation}`);
 
             // Get dialogues for current location, fallback to default if not found
