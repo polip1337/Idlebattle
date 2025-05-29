@@ -201,8 +201,15 @@ export async function initializeDialogue() {
                         result = false;
                         break;
                     }
-                    result = stepQuest.currentStep === condition.stepIndex;
-                    DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${result}`);
+                    // Check both step and branch if branch is specified
+                    if (condition.branch !== undefined) {
+                        result = stepQuest.currentStep === condition.stepIndex && 
+                                stepQuest.currentBranch === condition.branch;
+                        DEBUG.log(`Quest step and branch check: step ${stepQuest.currentStep} === ${condition.stepIndex}, branch ${stepQuest.currentBranch} === ${condition.branch}: ${result}`);
+                    } else {
+                        result = stepQuest.currentStep === condition.stepIndex;
+                        DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${result}`);
+                    }
                     break;
                 case 'location':
                     const currentLocation = window.currentMapId || 'unknown';
@@ -316,8 +323,15 @@ export async function initializeDialogue() {
                                 conditionMet = false;
                                 break;
                             }
-                            conditionMet = stepQuest.currentStep === condition.stepIndex;
-                            DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${conditionMet}`);
+                            // Check both step and branch if branch is specified
+                            if (condition.branch !== undefined) {
+                                conditionMet = stepQuest.currentStep === condition.stepIndex && 
+                                        stepQuest.currentBranch === condition.branch;
+                                DEBUG.log(`Quest step and branch check: step ${stepQuest.currentStep} === ${condition.stepIndex}, branch ${stepQuest.currentBranch} === ${condition.branch}: ${conditionMet}`);
+                            } else {
+                                conditionMet = stepQuest.currentStep === condition.stepIndex;
+                                DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${conditionMet}`);
+                            }
                             break;
 
                         case 'location':
@@ -326,73 +340,25 @@ export async function initializeDialogue() {
                             break;
 
                         default:
-                            console.warn(`Unknown condition type: ${condition.type}`);
+                            console.warn('Unknown condition type:', condition.type);
                             conditionMet = false;
                     }
-
-                    if (!conditionMet) {
-                        DEBUG.log(`Condition not met for dialogue ${dialogue.id}`);
-                        allConditionsMet = false;
-                        break;
-                    }
+                    allConditionsMet = allConditionsMet && conditionMet;
                 }
-
                 if (allConditionsMet) {
-                    DEBUG.log(`Selected dialogue file: ${dialogue.id}`);
-                    return dialogue.id;
+                    DEBUG.log(`Dialogue ${dialogue.id} conditions met`);
+                    return {
+                        id: dialogue.id,
+                        conditions: dialogue.conditions,
+                        priority: dialogue.priority
+                    };
                 }
             }
-
-            // If no conditions were met, return the first dialogue (should be the default/base one)
-            if (npcDefinition.dialogues.length > 0) {
-                DEBUG.log(`No conditions met, using default dialogue: ${npcDefinition.dialogues[0].id}`);
-                return npcDefinition.dialogues[0].id;
-            }
-
-            console.warn(`NPC ${npcId} has no dialogue files listed.`);
-            return null;
+            return null; // No dialogue found that meets all conditions
         } catch (error) {
             console.error(`Error selecting dialogue file for NPC ${npcId}:`, error);
             return null;
         }
     }
-
-    // Public function to start a dialogue
-    async function startDialogue(npcId, dialogueFileId = null) { // dialogueFileId is now optional
-        return new Promise(async (resolve) => {
-            resolveDialoguePromise = resolve;
-
-            // Ensure battle is paused during dialogue
-            if (window.battleStarted) {
-                window.isBattlePausedForDialogue = true;
-            }
-
-            const effectiveDialogueFileId = dialogueFileId || await selectDialogueFile(npcId);
-            if (!effectiveDialogueFileId) {
-                console.error(`No dialogue file could be determined for NPC ${npcId}.`);
-                hideDialogue();
-                return;
-            }
-
-            currentDialogue = await loadDialogueData(npcId, effectiveDialogueFileId);
-            if (currentDialogue) {
-                const startNode = currentDialogue.nodes.find(node => node.id === 'start');
-                if (startNode) {
-                    showDialogue();
-                    displayNode(startNode);
-                } else {
-                    console.error(`Start node not found in dialogue file: ${effectiveDialogueFileId} for NPC: ${npcId}`);
-                    hideDialogue();
-                }
-            } else {
-                 console.error(`Could not load dialogue data for NPC: ${npcId}, File: ${effectiveDialogueFileId}`);
-                hideDialogue();
-            }
-        });
-    }
-
-    // Expose startDialogue globally if not using module imports from non-module scripts
-    window.startDialogue = startDialogue;
-
-    console.log('Dialogue system initialized.');
+}
 }
