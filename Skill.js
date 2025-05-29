@@ -70,10 +70,14 @@ class Skill {
     }
 
     handleSkillCost(member) {
+        console.log(member.name + " MANA before:" +member.currentMana +" COST:" +this.manaCost)
         member.currentMana -= this.manaCost;
         member.currentStamina -= this.staminaCost;
+        console.log(member.name + " MANA After:" +member.currentMana )
+
         updateMana(member);
         updateStamina(member);
+        console.log(member.name + " MANA render:" +member.currentMana )
     }
 
     handleExpGain(member) {
@@ -92,17 +96,12 @@ class Skill {
         });
 
         if (this.type === "active" && !member.isHero && this.needsInitialCooldownKickoff) {
-            console.log(`[Skill ${this.name}] Initializing companion skill for ${member.name}`);
             // Initialize skill element if not already set
             if (!this.div && member.element) {
                 const skillDivId = member.memberId + "Skill" + this.name.replace(/\s/g, '');
-                console.log(`[Skill ${this.name}] Looking for skill element with ID: ${skillDivId}`);
                 const skillElement = member.element.querySelector("#" + skillDivId);
                 if (skillElement) {
-                    console.log(`[Skill ${this.name}] Found skill element, setting it`);
                     this.setElement(skillElement);
-                } else {
-                    console.log(`[Skill ${this.name}] Skill element not found for ID: ${skillDivId}`);
                 }
             }
 
@@ -145,6 +144,7 @@ class Skill {
                 targets.forEach(target => {
                     member.performAttack(member, target, this);
                 });
+                console.log(member.name + " MANA End:" +member.currentMana )
                 return true;
 
             } else {
