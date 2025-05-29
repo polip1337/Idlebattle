@@ -164,8 +164,8 @@
         "type": "combat",
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_foggedcorridor_surprise",
-        "combatEndWinDialogueId": "renn_foggedcorridor_escape"
-
+        "combatEndWinDialogueId": "renn_foggedcorridor_escape",
+        "showDialogueOnce": true
       }
     ]
   },
@@ -183,7 +183,8 @@
         "isStartingLocation": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_firstcorridor_pre_battle",
-        "combatEndWinDialogueId": "renn_firstcorridor_post_battle"
+        "combatEndWinDialogueId": "renn_firstcorridor_post_battle",
+        "showDialogueOnce": true
       },
       {
         "id": "sewer_foggedCorridor_POI",
@@ -196,7 +197,8 @@
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_foggedcorridor_warning",
-        "onEnterEffect": "deadlyFog"
+        "onEnterEffect": "deadlyFog",
+        "showDialogueOnce": true
       },
       {
         "id": "sewer_scavengerRedoubt_POI",
@@ -209,7 +211,8 @@
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_secondcorridor_pre_battle",
-        "combatEndWinDialogueId": "renn_secondcorridor_post_battle"
+        "combatEndWinDialogueId": "renn_secondcorridor_post_battle",
+        "showDialogueOnce": true
       },
       {
         "id": "sewer_vaultAntechamber_POI",
@@ -223,12 +226,11 @@
         "dialogueNpcId": "renn_quickfingers",
         "fleeDialogueId": "renn_vault_fled",
         "combatStartDialogueId": "renn_vault_panic",
-
+        "showDialogueOnce": true,
         "preBattleSequence": [
           {
             "type": "startSlideshow",
             "slideshowId": "slideshow2"
-
           }
         ]
       },
@@ -259,7 +261,10 @@
         "y": 85.00,
         "icon": "Media/map/poi-crypt.jpg",
         "type": "combat",
-        "initiallyLocked": true
+        "dialogueNpcId": "narrator",
+        "combatEndWinDialogueId": "gotOssuaryArtifact",
+        "initiallyLocked": true,
+        "showDialogueOnce": true
       }
 
     ]
@@ -336,6 +341,7 @@
         "combatStartDialogueId": "wolf_encounter",
         "combatEndWinDialogueId": "wolfDefeated",
         "combatEndFleeDialogueId": "wolfEvaded",
+        "showDialogueOnce": true,
         "requirements": {
           "quests": ["driftkinsTest"]
         }
@@ -495,7 +501,8 @@
         "type": "combat",
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "archive_sentries_approach",
-        "combatEndWinDialogueId": "archive_sentries_defeated"
+        "combatEndWinDialogueId": "archive_sentries_defeated",
+        "showDialogueOnce": true
       },
       {
         "id": "rune_chamber_entrance",
