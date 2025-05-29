@@ -185,8 +185,23 @@ export async function initializeDialogue() {
                     result = heroStat >= condition.value;
                     break;
                 case 'item':
-                    console.log(`Checking for item: ${condition.item}`);
-                    result = hero.hasItem(condition.item, condition.quantity || 1); // Assuming hero.inventory.hasItem exists
+                    const itemId = condition.itemId;
+                    const quantity = condition.quantity || 1;
+                    const checkEquipped = condition.checkEquipped || false;
+                    
+                    DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}, checkEquipped: ${checkEquipped}`);
+                    
+                    if (checkEquipped) {
+                        // Check if item is equipped
+                        result = hero.equipment.some(slot => 
+                            slot && slot.id === itemId
+                        );
+                        DEBUG.log(`Item equipped check: ${result}`);
+                    } else {
+                        // Check if item is in inventory
+                        result = hero.hasItem(itemId, quantity);
+                        DEBUG.log(`Item inventory check: ${result}`);
+                    }
                     break;
                 case 'questActive':
                     result = questSystem.activeQuests.has(condition.questId);
@@ -203,7 +218,6 @@ export async function initializeDialogue() {
                         break;
                     }
                     
-                    // Check if we need to verify a specific branch
                     if (condition.branch) {
                         const currentBranch = stepQuest.currentBranch;
                         if (!currentBranch || currentBranch !== condition.branch) {
@@ -354,31 +368,38 @@ export async function initializeDialogue() {
                             DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${conditionMet}`);
                             break;
 
+                        case 'item':
+                            const itemId = condition.itemId;
+                            const quantity = condition.quantity || 1;
+                            const checkEquipped = condition.checkEquipped || false;
+                            
+                            DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}, checkEquipped: ${checkEquipped}`);
+                            
+                            if (checkEquipped) {
+                                // Check if item is equipped
+                                conditionMet = hero.equipment.some(slot => 
+                                    slot && slot.id === itemId
+                                );
+                                DEBUG.log(`Item equipped check: ${conditionMet}`);
+                            } else {
+                                // Check if item is in inventory
+                                conditionMet = hero.hasItem(itemId, quantity);
+                                DEBUG.log(`Item inventory check: ${conditionMet}`);
+                            }
+                            break;
+
                         default:
                             console.warn(`Unknown condition type: ${condition.type}`);
                             conditionMet = false;
                     }
-
-                    if (!conditionMet) {
-                        DEBUG.log(`Condition not met for dialogue ${dialogue.id}`);
-                        allConditionsMet = false;
-                        break;
-                    }
+                    allConditionsMet = allConditionsMet && conditionMet;
                 }
-
                 if (allConditionsMet) {
-                    DEBUG.log(`Selected dialogue file: ${dialogue.id}`);
+                    DEBUG.log(`All conditions met for dialogue: ${dialogue.id}`);
                     return dialogue.id;
                 }
             }
-
-            // If no conditions were met, return the first dialogue (should be the default/base one)
-            if (sortedDialogues.length > 0) {
-                DEBUG.log(`No conditions met, using default dialogue: ${sortedDialogues[0].id}`);
-                return sortedDialogues[0].id;
-            }
-
-            console.warn(`NPC ${npcId} has no dialogue files listed for location ${currentLocation}.`);
+            console.warn('No dialogue found that meets all conditions');
             return null;
         } catch (error) {
             console.error(`Error selecting dialogue file for NPC ${npcId}:`, error);
