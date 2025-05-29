@@ -1,6 +1,6 @@
 // Render.js
 import Item from './item.js'; // Assuming Item.js is in the same directory
-import { hero } from './initialize.js'; // To access hero instance for drag/drop
+import { hero,battleLog } from './initialize.js'; // To access hero instance for drag/drop
 
 export function updateSkillBar(skills) {
     for (let i = 0; i < 12; i++) {
@@ -64,6 +64,7 @@ export function updateSkillBar(skills) {
                             } else {
                                 console.log(`Not enough resources to use ${currentSkill.name}.`);
                             }
+
                         }
                     } else if (currentSkill.onCooldown) {
                          if (battleLog && typeof battleLog.log === 'function') {
