@@ -38,6 +38,7 @@ export async function initializeDialogue() {
     let currentNode = null;
     let currentNPCData = null; // Store the NPC's own data from their .js file
     let resolveDialoguePromise = null; // For making startDialogue awaitable
+    let currentBranch = null; // Track the current dialogue branch
 
     // Load NPC and dialogue data
     async function loadDialogueData(npcId, dialogueFileId) {
@@ -232,6 +233,11 @@ export async function initializeDialogue() {
     function handleOption(option) {
         handleActions(option.action);
 
+        // Store the branch information if this option has a branch
+        if (option.branch) {
+            currentBranch = option.branch;
+        }
+
         if (option.nextId) {
             const nextNode = currentDialogue.nodes.find(node => node.id === option.nextId);
             if (nextNode) {
@@ -274,17 +280,24 @@ export async function initializeDialogue() {
             const currentLocation = window.currentMapId || 'unknown';
             DEBUG.log(`Current location: ${currentLocation}`);
 
-            // Sort dialogues by priority (highest first)
-            const sortedDialogues = [...npcDefinition.dialogues].sort((a, b) => (b.priority || 0) - (a.priority || 0));
-            DEBUG.log(`Found ${sortedDialogues.length} dialogue options, sorted by priority`);
+            // Get dialogues for current location, fallback to default if not found
+            let locationDialogues = npcDefinition.dialogues[currentLocation] || npcDefinition.dialogues.default;
+            if (!locationDialogues) {
+                console.warn(`No dialogues found for location ${currentLocation} or default for NPC ${npcId}`);
+                return null;
+            }
 
-            // Check each dialogue's conditions
+            // Sort dialogues by priority (highest first)
+            const sortedDialogues = [...locationDialogues].sort((a, b) => (b.priority || 0) - (a.priority || 0));
+            DEBUG.log(`Found ${sortedDialogues.length} dialogue options for location ${currentLocation}, sorted by priority`);
+
+            // Check conditions for each dialogue
             for (const dialogue of sortedDialogues) {
                 DEBUG.log(`Checking dialogue: ${dialogue.id}`);
                 
                 if (!dialogue.conditions || dialogue.conditions.length === 0) {
-                    DEBUG.log(`Dialogue ${dialogue.id} has no conditions, skipping`);
-                    continue; // Skip dialogues with no conditions (they're fallbacks)
+                    DEBUG.log(`Dialogue ${dialogue.id} has no conditions, using as fallback`);
+                    return dialogue.id;
                 }
 
                 let allConditionsMet = true;
@@ -328,7 +341,6 @@ export async function initializeDialogue() {
                                 break;
                             }
                             
-                            // Check if we need to verify a specific branch
                             if (condition.branch) {
                                 const currentBranch = stepQuest.currentBranch;
                                 if (!currentBranch || currentBranch !== condition.branch) {
@@ -340,11 +352,6 @@ export async function initializeDialogue() {
                             
                             conditionMet = stepQuest.currentStep === condition.stepIndex;
                             DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${conditionMet}`);
-                            break;
-
-                        case 'location':
-                            conditionMet = currentLocation === condition.locationId;
-                            DEBUG.log(`Location check: ${currentLocation} === ${condition.locationId}: ${conditionMet}`);
                             break;
 
                         default:
@@ -366,12 +373,12 @@ export async function initializeDialogue() {
             }
 
             // If no conditions were met, return the first dialogue (should be the default/base one)
-            if (npcDefinition.dialogues.length > 0) {
-                DEBUG.log(`No conditions met, using default dialogue: ${npcDefinition.dialogues[0].id}`);
-                return npcDefinition.dialogues[0].id;
+            if (sortedDialogues.length > 0) {
+                DEBUG.log(`No conditions met, using default dialogue: ${sortedDialogues[0].id}`);
+                return sortedDialogues[0].id;
             }
 
-            console.warn(`NPC ${npcId} has no dialogue files listed.`);
+            console.warn(`NPC ${npcId} has no dialogue files listed for location ${currentLocation}.`);
             return null;
         } catch (error) {
             console.error(`Error selecting dialogue file for NPC ${npcId}:`, error);

@@ -114,6 +114,7 @@ export class QuestSystem {
                             ...quest.steps.slice(0, quest.currentStep + 1),
                             ...currentStep.branches[chosenBranch]
                         ];
+                        quest.currentBranch = chosenBranch; // Track which branch was chosen
                         quest.currentStep++;
                     }
                 }
@@ -199,6 +200,7 @@ export class QuestSystem {
             serializableQuestsState[questId] = {
                 currentStep: questData.currentStep,
                 completed: questData.completed,
+                currentBranch: questData.currentBranch, // Save the current branch
                 steps: questData.steps // Save the current state of steps including any branch changes
             };
         });
@@ -223,6 +225,7 @@ export class QuestSystem {
                     const quest = this.quests.get(questId);
                     quest.currentStep = savedState.currentStep;
                     quest.completed = savedState.completed;
+                    quest.currentBranch = savedState.currentBranch; // Restore the current branch
                     
                     // Restore steps while preserving original condition functions
                     if (savedState.steps) {
