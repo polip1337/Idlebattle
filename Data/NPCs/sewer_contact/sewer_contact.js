@@ -18,7 +18,7 @@ export default {
                     },
                     {
                         type: "item",
-                        item: "boneWhisperRelic"
+                        itemId: "boneWhisperRelic"
                     }
                 ],
                 priority: 2
@@ -27,8 +27,9 @@ export default {
                 id: "share_info",
                 conditions: [
                     {
-                        type: "questCompleted",
-                        questId: "ossuaryRelic"
+                        type: "quest",
+                        questId: "ossuaryRelic",
+                        status: "completed"
                     }
                 ],
                 priority: 1

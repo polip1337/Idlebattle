@@ -8,7 +8,7 @@ export default {
                     text: "Here's the relic.",
                     nextId: "accept_relic",
                     conditions: [
-                        { type: "item", item: "boneWhisperRelic" }
+                        { type: "item", itemId: "boneWhisperRelic" }
                     ]
                 },
                 {
