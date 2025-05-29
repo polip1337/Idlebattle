@@ -2,14 +2,14 @@ export default {
     nodes: [
         {
             id: "start",
-            text: "Eryndor’s [Pulsefinders|pulsefinders|Fog cult] promise salvation, but their [fog|fog|Madness mist] implants took my brother. Can you help me stop them?",
+            text: "Eryndor's [Pulsefinders|pulsefinders|Fog cult] promise salvation, but their [fog|fog|Madness mist] implants took my brother. Can you help me stop them?",
             options: [
                 {
-                    text: "What’s wrong with the implants?",
+                    text: "What's wrong with the implants?",
                     nextId: "implants"
                 },
                 {
-                    text: "I’m testing an implant in the [Shrine of Whispers|shrine_of_whispers|Cave].",
+                    text: "I'm testing an implant in the [Shrine of Whispers|shrine_of_whispers|Cave].",
                     nextId: "quest",
                     action: { type: "startQuest", questId: "pulse_within" },
                     conditions: [{ type: "skill", stat: "Charisma", value: 6 }]
@@ -27,7 +27,7 @@ export default {
         },
         {
             id: "implants",
-            text: "The [fog|fog|Twists minds]’s implants give visions, but they drive you mad. Eryndor ignores the danger, and [Hollowreach|hollowreach|City] suffers.",
+            text: "The [fog|fog|Twists minds]'s implants give visions, but they drive you mad. Eryndor ignores the danger, and [Hollowreach|hollowreach|City] suffers.",
             options: [
                 {
                     text: "How can I stop this?",
@@ -44,7 +44,7 @@ export default {
             text: "If you take an implant in the [Shrine of Whispers|shrine_of_whispers|Cave], destroy the shrine instead. The [Loomkeepers|loomkeepers|Weavers] will thank you.",
             options: [
                 {
-                    text: "I’ll destroy it.",
+                    text: "I'll destroy it.",
                     nextId: null,
                     action: { type: "startQuest", questId: "pulse_within", objective: "destroy_shrine" }
                 },
@@ -57,12 +57,12 @@ export default {
         },
         {
             id: "expedition",
-            text: "Your expedition could expose the [fog|fog|Danger]’s truth. I’ll guide you without implants, but keep Eryndor’s [Pulsefinders|pulsefinders|Cult] in check.",
+            text: "Your expedition could expose the [fog|fog|Danger]'s truth. I'll guide you without implants, but keep Eryndor's [Pulsefinders|pulsefinders|Cult] in check.",
             options: [
                 {
                     text: "Join us.",
                     nextId: null,
-                    action: { type: "factionSupport", faction: "pulsefinders", resource: "safe_guides" }
+                    action: { type: "startQuest", questId: "mira_expedition" }
                 },
                 {
                     text: "Not now.",

@@ -51,7 +51,6 @@ export default {
                 {
                     text: "What task do you have in mind?",
                     action: [
-                        { type: "startQuest", questId: "proofForTheWeave" },
                         {type: "openDialogue", npcId: "vrenna_stoneweave", dialogueId: "proof_for_weave"}
                     ] 
                     
@@ -84,7 +83,7 @@ export default {
                 {
                     text: "I'll share the Amulet's data.",
                     nextId: null,
-                    action: { type: "factionSupport", faction: "loomkeepers", resource: "tapestry_map" }
+                    action: { type: "startQuest", questId: "vrenna_expedition" }
                 },
                 {
                     text: "I need time to decide.",

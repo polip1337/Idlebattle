@@ -33,6 +33,7 @@ import {initializeQuestLog} from './questLog.js';
 import { openSaveModal,openLoadModal, setInitializeAndLoadGame as setInitLoadFnForSaveLoad, configureAutosave as slConfigureAutosave } from './saveLoad.js'; // Added slConfigureAutosave
 import { initializeCompanionUI } from './companionUIManager.js';
 import { handleEarlyGameInit } from './slideshow.js';
+import { openClassChangeModal, initializeClassChange } from './classChange.js';
 
 
 export let battleStatistics;
@@ -48,6 +49,7 @@ export let mobsClasses = null;
 export let allSkillsCache = null;
 export let allItemsCache = null;
 export let allCompanionsData = {};
+export let allHeroClasses = {};
 
 
 export const NPC_MEDIA_PATH = "Media/NPC/";
@@ -161,6 +163,7 @@ export async function loadGameData(savedGameState = null) {
         mobsClasses = await loadMobs();
         heroClasses = await loadClasses();
         await loadCompanionDefinitions();
+        await loadClasses();
 
         if (Object.keys(heroClasses).length === 0 || Object.keys(allSkillsCache).length === 0) {
             console.error("CRITICAL: Hero classes or skills failed to load.");
@@ -441,6 +444,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeHomeScreen();
     await initializeDialogue();
     initializeQuestLog();
+    initializeClassChange();
 
     document.querySelectorAll('.back-to-map-button').forEach(button => {
         button.addEventListener('click', (event) => {
@@ -469,3 +473,4 @@ function togglePause() {
         }
     });
 }
+

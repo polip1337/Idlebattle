@@ -1,0 +1,56 @@
+{
+    "id": "runeChamber",
+    "name": "Rune Chamber",
+    "description": "The chamber is filled with ancient runes that pulse with power. Korzog's magical experiments have left the air thick with arcane energy.",
+    "background": "Media/areas/rune_chamber_combat.jpg",
+    "music": "Media/music/combat_chamber.mp3",
+    "enemies": [
+        {
+            "id": "korzog_arcane",
+            "name": "Korzog the Arcanist",
+            "type": "human",
+            "level": 7,
+            "health": 150,
+            "attack": 20,
+            "defense": 15,
+            "abilities": [
+                {
+                    "name": "Rune Explosion",
+                    "damage": 30,
+                    "description": "Korzog channels the chamber's runes into a devastating blast"
+                },
+                {
+                    "name": "Arcane Shield",
+                    "effect": "defense_up",
+                    "description": "Korzog creates a protective barrier of magical energy"
+                },
+                {
+                    "name": "Rune Manipulation",
+                    "effect": "attack_up",
+                    "description": "Korzog enhances his attacks using the chamber's runes"
+                }
+            ],
+            "drops": [
+                {
+                    "item": "mistwalker_amulet",
+                    "chance": 1.0
+                },
+                {
+                    "item": "ancient_rune",
+                    "chance": 0.5
+                }
+            ]
+        }
+    ],
+    "rewards": {
+        "experience": 100,
+        "items": ["mistwalker_amulet", "ancient_rune"],
+        "questProgress": {
+            "questId": "mistwalkerSecret",
+            "step": 4
+        }
+    },
+    "onComplete": {
+        "questComplete": "mistwalkerSecret"
+    }
+} 

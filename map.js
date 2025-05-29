@@ -14,6 +14,7 @@ export let pointsOfInterest = [];
 export let currentLocation = null;
 let unlockedPredefinedPois = new Set();
 let hiddenPois = new Set(); // Track hidden POIs
+let shownDialogues = new Set(); // Track shown dialogues
 let isProcessingPoiClick = false;
 let mapHistory = [];
 
@@ -27,6 +28,8 @@ let expBarClass1El = null;
 let expBarClass2El = null;
 let expBarClass3El = null;
 
+// Expose isProcessingPoiClick to window for action handler
+window.isProcessingPoiClick = isProcessingPoiClick;
 
 function _updateHeroMapSidebar(heroInstance) {
     if (!heroInstance) return;
@@ -134,10 +137,34 @@ async function handleCombat(poi) {
     const battleDialogueOptions = {};
     if (poi.dialogueNpcId) {
         battleDialogueOptions.npcId = poi.dialogueNpcId;
-        if (poi.combatStartDialogueId) battleDialogueOptions.startDialogueId = poi.combatStartDialogueId;
-        if (poi.combatEndWinDialogueId) battleDialogueOptions.endWinDialogueId = poi.combatEndWinDialogueId;
-        if (poi.combatEndLossDialogueId) battleDialogueOptions.endLossDialogueId = poi.combatEndLossDialogueId;
-        if (poi.fleeDialogueId) battleDialogueOptions.fleeDialogueId = poi.fleeDialogueId;
+        if (poi.combatStartDialogueId) {
+            const dialogueKey = `${poi.id}_start`;
+            if (!poi.showDialogueOnce || !shownDialogues.has(dialogueKey)) {
+                battleDialogueOptions.startDialogueId = poi.combatStartDialogueId;
+                shownDialogues.add(dialogueKey);
+            }
+        }
+        if (poi.combatEndWinDialogueId) {
+            const dialogueKey = `${poi.id}_win`;
+            if (!poi.showDialogueOnce || !shownDialogues.has(dialogueKey)) {
+                battleDialogueOptions.endWinDialogueId = poi.combatEndWinDialogueId;
+                shownDialogues.add(dialogueKey);
+            }
+        }
+        if (poi.combatEndLossDialogueId) {
+            const dialogueKey = `${poi.id}_loss`;
+            if (!poi.showDialogueOnce || !shownDialogues.has(dialogueKey)) {
+                battleDialogueOptions.endLossDialogueId = poi.combatEndLossDialogueId;
+                shownDialogues.add(dialogueKey);
+            }
+        }
+        if (poi.fleeDialogueId) {
+            const dialogueKey = `${poi.id}_flee`;
+            if (!poi.showDialogueOnce || !shownDialogues.has(dialogueKey)) {
+                battleDialogueOptions.fleeDialogueId = poi.fleeDialogueId;
+                shownDialogues.add(dialogueKey);
+            }
+        }
     }
 
     openTab(null, 'battlefield');
@@ -158,9 +185,14 @@ async function handleTalk(poi) {
         renderPOIs();
         battleLog.log(`Speaking at ${poi.name} (NPC: ${poi.npcId})`);
         questSystem.updateQuestProgress('talk', { poiName: poi.name, npcId: poi.npcId });
-        await window.startDialogue(poi.npcId, poi.dialogueId);
+        try {
+            await window.startDialogue(poi.npcId, poi.dialogueId);
+        } finally {
+            isProcessingPoiClick = false; // Reset the flag after dialogue completes or fails
+        }
     } else {
         alert(`No NPC defined for ${poi.name}`);
+        isProcessingPoiClick = false; // Reset the flag if there's no NPC
     }
 }
 
@@ -219,8 +251,10 @@ function renderPOIs() {
 
         poiElement.addEventListener('click', async (event) => {
             event.stopPropagation(); event.preventDefault();
+            isProcessingPoiClick = window.isProcessingPoiClick;
             if (isProcessingPoiClick) {
-                console.warn("POI click ignored, already processing another.");
+                const currentPoi = pointsOfInterest.find(p => p.name === currentLocation);
+                console.warn(`POI click ignored, already processing ${currentPoi ? currentPoi.name : 'unknown POI'}.`);
                 return;
             }
             isProcessingPoiClick = true; // Set flag at the beginning of processing
@@ -379,7 +413,8 @@ export const getMapStateForSave = () => ({
     currentLocation: currentLocation,
     mapHistory: [...mapHistory],
     unlockedPredefinedPois: Array.from(unlockedPredefinedPois),
-    hiddenPois: Array.from(hiddenPois) // Add hidden POIs to save state
+    hiddenPois: Array.from(hiddenPois),
+    shownDialogues: Array.from(shownDialogues) // Add shown dialogues to save state
 });
 
 export const setMapStateFromLoad = (state) => {
@@ -390,7 +425,8 @@ export const setMapStateFromLoad = (state) => {
     currentLocation = state.currentLocation || null;
     mapHistory = [...(state.mapHistory || [])];
     unlockedPredefinedPois = new Set(state.unlockedPredefinedPois || []);
-    hiddenPois = new Set(state.hiddenPois || []); // Restore hidden POIs
+    hiddenPois = new Set(state.hiddenPois || []);
+    shownDialogues = new Set(state.shownDialogues || []); // Restore shown dialogues
     loadMap(currentMapId);
 };
 
@@ -403,6 +439,8 @@ export function setCurrentMap(mapId) {
     mapHistory.push(currentMapId);
     loadMap(mapId, true);
     battleLog.log(`Traveled to map: ${mapId}. New location: ${currentLocation || 'Default'}`);
+    questSystem.updateQuestProgress('travel', { poiName: null, mapId: mapId });
+
 }
 
 // Expose setCurrentMap to window for dialogue system
@@ -458,3 +496,15 @@ export function showMapPOI(targetMapId, poiIdToShow) {
 // Expose hide/show functions to window for dialogue system
 window.hideMapPOI = hideMapPOI;
 window.showMapPOI = showMapPOI;
+
+// Add function to reset shown dialogues for a POI
+export function resetPOIDialogues(poiId) {
+    const dialogueTypes = ['start', 'win', 'loss', 'flee'];
+    dialogueTypes.forEach(type => {
+        shownDialogues.delete(`${poiId}_${type}`);
+    });
+    console.log(`Reset shown dialogues for POI ${poiId}`);
+}
+
+// Expose resetPOIDialogues to window for dialogue system
+window.resetPOIDialogues = resetPOIDialogues;

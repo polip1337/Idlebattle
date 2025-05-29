@@ -1,0 +1,22 @@
+{
+  "stages": [
+
+    {
+      "stage": 1,
+      "mobs": [
+        {"type": "fogWraith", "count": 3, "level": 4}
+      ],
+      "onEnterEffect": {
+        "name": "Deadly Fog",
+        "type": "debuff",
+        "subType": "delayedDamage",
+        "damageType": "Poison",
+        "value": 10000,
+        "duration": 15,
+        "icon": "Media/UI/poison-bottle.svg",
+        "description": "The deadly fog will kill you in 15 seconds!"
+      }
+    }
+
+  ]
+} 

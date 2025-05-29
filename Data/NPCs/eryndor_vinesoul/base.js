@@ -44,7 +44,7 @@ export default {
             text: "In the [Shrine of Whispers|shrine_of_whispers|Neural cave], take an implant to see the [fog|fog|God]’s path. [Loomkeepers|loomkeepers|Weavers] may try to stop you.",
             options: [
                 {
-                    text: "I’ll take the implant.",
+                    text: "I'll take the implant.",
                     nextId: null,
                     action: { type: "startQuest", questId: "pulse_within" }
                 },
@@ -61,10 +61,10 @@ export default {
                 {
                     text: "Your guides are welcome.",
                     nextId: null,
-                    action: { type: "factionSupport", faction: "pulsefinders", resource: "fog_visions" }
+                    action: { type: "startQuest", questId: "pulsefinder_expedition" }
                 },
                 {
-                    text: "I’ll pass.",
+                    text: "I'll pass.",
                     nextId: null
                 }
             ]

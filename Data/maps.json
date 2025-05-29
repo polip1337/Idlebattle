@@ -25,6 +25,30 @@
         "icon": "Media/map/poi-dock.jpg",
         "type": "travel",
         "mapId": "driftmoor"
+      },
+      {
+        "id": "ashen_archive_entrance",
+        "name": "Ashen Archive",
+        "x": 75.00,
+        "y": 45.00,
+        "icon": "Media/map/poi-archive.jpg",
+        "type": "travel",
+        "mapId": "ashenArchive",
+        "requirements": {
+          "quests": ["mistwalkerSecret"]
+        }
+      },
+      {
+        "id": "cinderhold_entrance",
+        "name": "Cinderhold",
+        "x": 45.00,
+        "y": 35.00,
+        "icon": "Media/map/poi-emberclad.jpg",
+        "type": "travel",
+        "mapId": "cinderhold",
+        "requirements": {
+          "quests": ["embercladsTrial"]
+        }
       }
     ]
   },
@@ -32,13 +56,24 @@
     "background": "Media/map/hollowreach_town.png",
     "pois": [
       {
-        "id": "ironspine_to_docks",
+        "id": "ironspine_to_docks_locked",
+        "name": "Ironspine bridge",
+        "x": 93.00,
+        "y": 70.00,
+        "icon": "Media/map/poi-ironspine.jpg",
+        "type": "dialogue",
+        "npcId": "guard",
+        "dialogueId": "stop"
+      },
+      {
+        "id": "ironspine_to_docks_unlocked",
         "name": "Ironspine bridge",
         "x": 93.00,
         "y": 70.00,
         "icon": "Media/map/poi-ironspine.jpg",
         "type": "travel",
-        "mapId": "foggedDocks"
+        "mapId": "foggedDocks",
+        "initiallyLocked": true
       },
       {
         "name": "City Gates",
@@ -80,7 +115,7 @@
         "icon": "Media/map/poi-orphanage.jpg",
         "type": "dialogue",
         "npcId": "old_maris",
-        "dialogueId": "base",
+        "dialogueId": "old_maris_base",
         "isStartingLocation": true
       },
       { 
@@ -122,15 +157,15 @@
       {
         "id": "sewer_foggedCorridor_POI",
         "name": "Fogged Corridor",
-        "areaId": "FoggedCorridor",
+        "areaId": "FoggedCorridor2",
         "x": 22.50,
         "y": 52.50,
         "icon": "Media/map/poi-combat.png",
         "type": "combat",
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_foggedcorridor_surprise",
-        "combatEndWinDialogueId": "renn_foggedcorridor_escape"
-
+        "combatEndWinDialogueId": "renn_foggedcorridor_escape",
+        "showDialogueOnce": true
       }
     ]
   },
@@ -148,7 +183,8 @@
         "isStartingLocation": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_firstcorridor_pre_battle",
-        "combatEndWinDialogueId": "renn_firstcorridor_post_battle"
+        "combatEndWinDialogueId": "renn_firstcorridor_post_battle",
+        "showDialogueOnce": true
       },
       {
         "id": "sewer_foggedCorridor_POI",
@@ -161,7 +197,8 @@
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_foggedcorridor_warning",
-        "onEnterEffect": "deadlyFog"
+        "onEnterEffect": "deadlyFog",
+        "showDialogueOnce": true
       },
       {
         "id": "sewer_scavengerRedoubt_POI",
@@ -174,7 +211,8 @@
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
         "combatStartDialogueId": "renn_secondcorridor_pre_battle",
-        "combatEndWinDialogueId": "renn_secondcorridor_post_battle"
+        "combatEndWinDialogueId": "renn_secondcorridor_post_battle",
+        "showDialogueOnce": true
       },
       {
         "id": "sewer_vaultAntechamber_POI",
@@ -188,12 +226,11 @@
         "dialogueNpcId": "renn_quickfingers",
         "fleeDialogueId": "renn_vault_fled",
         "combatStartDialogueId": "renn_vault_panic",
-
+        "showDialogueOnce": true,
         "preBattleSequence": [
           {
             "type": "startSlideshow",
             "slideshowId": "slideshow2"
-
           }
         ]
       },
@@ -211,43 +248,25 @@
         "name": "Mysterious Figure",
         "description": "A hooded figure lurks in the shadows, watching the tunnels carefully.",
         "type": "dialogue",
-        "npc": "sewer_contact",
-        "location": {
-          "x": 45,
-          "y": 60
-        },
-        "requirements": {
-          "quests": ["proofForTheWeave"]
-        },
-        "unlockConditions": [
-          {
-            "type": "quest",
-            "questId": "proofForTheWeave",
-            "status": "active"
-          }
-        ]
+        "npcId": "sewer_contact",
+
+        "x": 72.00,
+        "y": 85.00,
+        "initiallyLocked": true
       },
-      {
-        "id": "sewer_scavengerRedoubt_POI",
-        "name": "Scavenger Redoubt",
-        "description": "A heavily guarded chamber where the fog-touched scavengers have made their base. The air crackles with fog energy.",
+      {"id": "drowned_ossuary_POI",
+        "name": "Drowned Ossuary",
+        "areaId": "drownedOssuary",
+        "x": 70.00,
+        "y": 85.00,
+        "icon": "Media/map/poi-crypt.jpg",
         "type": "combat",
-        "areaId": "scavengerRedoubt",
-        "location": {
-          "x": 75,
-          "y": 30
-        },
-        "requirements": {
-          "quests": ["proofForTheWeave"]
-        },
-        "unlockConditions": [
-          {
-            "type": "dialogue",
-            "npc": "sewer_contact",
-            "dialogueId": "reveal_location"
-          }
-        ]
+        "dialogueNpcId": "narrator",
+        "combatEndWinDialogueId": "gotOssuaryArtifact",
+        "initiallyLocked": true,
+        "showDialogueOnce": true
       }
+
     ]
   },
   "threadhall": {
@@ -282,12 +301,12 @@
     ]
   },
   "driftmoor": {
-    "background": "Media/map/driftmoor_dockyard.png",
+    "background": "Media/map/driftmoor_sky.jpg",
     "pois": [
       {
         "name": "Sylvara's Barge",
-        "x": 58.33,
-        "y": 33.33,
+        "x": 68.33,
+        "y": 43.33,
         "icon": "Media/NPC/sylvara-tidewalker.jpg",
         "type": "dialogue",
         "npcId": "sylvara_tidewalker",
@@ -295,7 +314,7 @@
       },
       {
         "name": "Joren's Workshop",
-        "x": 75.00,
+        "x": 95.00,
         "y": 50.00,
         "icon": "Media/NPC/joren-halfhand.jpg",
         "type": "dialogue",
@@ -305,10 +324,27 @@
       {
         "name": "Exit",
         "x": 33.33,
-        "y": 50.00,
+        "y": 90.00,
         "icon": "Media/map/poi-gate.jpg",
         "type": "travel",
         "mapId": "hollowreach_Valley"
+      },
+      {
+        "id": "foggy_path",
+        "name": "Foggy Path",
+        "areaId": "FoggyPath",
+        "x": 55.00,
+        "y": 45.00,
+        "icon": "Media/map/poi-foggy-path.jpg",
+        "type": "combat",
+        "dialogueNpcId": "sylvara_tidewalker",
+        "combatStartDialogueId": "wolf_encounter",
+        "combatEndWinDialogueId": "wolfDefeated",
+        "combatEndFleeDialogueId": "wolfEvaded",
+        "showDialogueOnce": true,
+        "requirements": {
+          "quests": ["driftkinsTest"]
+        }
       }
     ]
   },
@@ -360,7 +396,7 @@
         "y": 65.00,
         "icon": "Media/NPC/renn_scribe.jpg",
         "type": "dialogue",
-        "npcId": "scribe_base",
+        "npcId": "base",
         "dialogueId": "base"
       },
       {
@@ -402,6 +438,21 @@
         "icon": "Media/map/poi-ironspine.jpg",
         "type": "travel",
         "mapId": "hollowreach"
+      },
+      {
+        "id": "fogged_cache",
+        "name": "Fogged Cache",
+        "areaId": "FoggedDocks",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-cache.jpg",
+        "type": "combat",
+        "dialogueNpcId": "old_maris",
+        "combatStartDialogueId": "cache_approach",
+        "combatEndWinDialogueId": "cache_found",
+        "requirements": {
+          "quests": ["hollowsCache"]
+        }
       }
     ]
   },
@@ -416,6 +467,132 @@
         "icon": "Media/map/poi-exit.jpg",
         "type": "travel",
         "mapId": "hollowreach"
+      },
+      {
+        "id": "renn_mistwalker_dialogue",
+        "name": "Renn Quickfingers",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/NPC/renn_quickfingers.jpg",
+        "type": "dialogue",
+        "npcId": "renn_quickfingers"
+      }
+    ]
+  },
+  "ashenArchive": {
+    "background": "Media/map/ashen_archive.jpg",
+    "pois": [
+      {
+        "id": "archive_entrance",
+        "name": "Valley Path",
+        "x": 20.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-entrance.jpg",
+        "type": "travel",
+        "mapId": "hollowreach_Valley"
+      },
+      {
+        "id": "archive_sentries",
+        "name": "Rune-Etched Sentries",
+        "areaId": "ashenArchive",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-combat.jpg",
+        "type": "combat",
+        "dialogueNpcId": "renn_quickfingers",
+        "combatStartDialogueId": "archive_sentries_approach",
+        "combatEndWinDialogueId": "archive_sentries_defeated",
+        "showDialogueOnce": true
+      },
+      {
+        "id": "rune_chamber_entrance",
+        "name": "Rune Chamber",
+        "x": 80.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-chamber.jpg",
+        "type": "travel",
+        "mapId": "runeChamber",
+        "requirements": {
+          "quests": ["mistwalkerSecret"],
+          "combat": ["archive_sentries"]
+        }
+      }
+    ]
+  },
+  "runeChamber": {
+    "background": "Media/map/rune_chamber.jpg",
+    "pois": [
+      {
+        "id": "chamber_entrance",
+        "name": "Archive Hall",
+        "x": 20.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-entrance.jpg",
+        "type": "travel",
+        "mapId": "ashenArchive"
+      },
+      {
+        "id": "rune_puzzle",
+        "name": "Ancient Runes",
+        "areaId": "runeChamber",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-puzzle.jpg",
+        "type": "puzzle",
+        "puzzleId": "mistwalker_runes",
+        "onComplete": {
+          "type": "unlockPOI",
+          "poiId": "korzog_confrontation"
+        }
+      },
+      {
+        "id": "korzog_confrontation",
+        "name": "Korzog's Study",
+        "areaId": "runeChamber",
+        "x": 80.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-study.jpg",
+        "type": "dialogue",
+        "npcId": "korzog",
+        "dialogueId": "mistwalker_confrontation",
+        "initiallyLocked": true
+      }
+    ]
+  },
+  "cinderhold": {
+    "background": "Media/map/cinderhold.jpg",
+    "pois": [
+      {
+        "id": "cinderhold_exit",
+        "name": "Exit to Valley",
+        "x": 20.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-exit.jpg",
+        "type": "travel",
+        "mapId": "hollowreach_Valley"
+      },
+      {
+        "id": "drenvar_ritual",
+        "name": "Drenvar",
+        "x": 50.00,
+        "y": 50.00,
+        "icon": "Media/NPC/drenvar.jpg",
+        "type": "dialogue",
+        "npcId": "drenvar_base",
+        "dialogueId": "base"
+      },
+      {
+        "id": "scorchveil_pit",
+        "name": "Scorchveil Pit",
+        "x": 80.00,
+        "y": 50.00,
+        "icon": "Media/map/poi-ritual-pit.jpg",
+        "type": "dialogue",
+        "npcId": "lyra_emberkin",
+        "dialogueId": "lyra_base",
+        "requirements": {
+          "quests": ["embercladsTrial"]
+        }
       }
     ]
   }

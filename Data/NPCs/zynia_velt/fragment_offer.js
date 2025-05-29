@@ -17,22 +17,19 @@ export default {
         },
         {
             id: "offer_amount",
-            text: "200 gold pieces. That's more than the Loomkeepers would give you. And we won't ask any questions about how you got it.",
+            text: "*Zynia's eyes gleam with anticipation* 500 gold pieces. That's more than the Loomkeepers would ever give you. And we'll put it to better use than they would.",
             options: [
                 {
-                    text: "I'll take it.",
-                    nextId: "accept",
-                    action: [
-                        { type: "removeItem", item: "tapestryFragment" },
-                        { type: "addGold", value: 200 },
-                        { type: "factionReputation", faction: "Driftkin", value: 10 },
-                        { type: "factionReputation", faction: "Loomkeepers", value: -15 },
-                        { type: "completeQuest", questId: "proofForTheWeave" }
-                    ]
+                    text: "I accept your offer.",
+                    nextId: "accept"
                 },
                 {
                     text: "I need to think about it.",
                     nextId: "consider"
+                },
+                {
+                    text: "No, I'll keep it.",
+                    nextId: "decline"
                 }
             ]
         },
@@ -42,7 +39,11 @@ export default {
             options: [
                 {
                     text: "Goodbye.",
-                    nextId: null
+                    nextId: null,
+                    action: [
+                        { type: "removeItem", itemId: "tapestryFragment" },
+                        { type: "addItem", itemId: "gold", quantity: 500 }
+                    ]
                 }
             ]
         },
@@ -51,8 +52,12 @@ export default {
             text: "Take your time. But remember - the Loomkeepers won't offer you gold. They'll just take it and give you empty promises.",
             options: [
                 {
-                    text: "Goodbye.",
-                    nextId: null
+                    text: "I've made my decision. I accept.",
+                    nextId: "accept"
+                },
+                {
+                    text: "I've decided to keep it.",
+                    nextId: "decline"
                 }
             ]
         },
