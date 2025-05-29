@@ -185,8 +185,23 @@ export async function initializeDialogue() {
                     result = heroStat >= condition.value;
                     break;
                 case 'item':
-                    console.log(`Checking for item: ${condition.item}`);
-                    result = hero.hasItem(condition.item, condition.quantity || 1); // Assuming hero.inventory.hasItem exists
+                    const itemId = condition.itemId;
+                    const quantity = condition.quantity || 1;
+                    const checkEquipped = condition.checkEquipped || false;
+                    
+                    DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}, checkEquipped: ${checkEquipped}`);
+                    
+                    if (checkEquipped) {
+                        // Check if item is equipped
+                        result = hero.equipment.some(slot => 
+                            slot && slot.id === itemId
+                        );
+                        DEBUG.log(`Item equipped check: ${result}`);
+                    } else {
+                        // Check if item is in inventory
+                        result = hero.hasItem(itemId, quantity);
+                        DEBUG.log(`Item inventory check: ${result}`);
+                    }
                     break;
                 case 'questActive':
                     result = questSystem.activeQuests.has(condition.questId);
@@ -354,6 +369,26 @@ export async function initializeDialogue() {
                             DEBUG.log(`Quest step check: ${stepQuest.currentStep} === ${condition.stepIndex}: ${conditionMet}`);
                             break;
 
+                        case 'item':
+                            const itemId = condition.itemId;
+                            const quantity = condition.quantity || 1;
+                            const checkEquipped = condition.checkEquipped || false;
+                            
+                            DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}, checkEquipped: ${checkEquipped}`);
+                            
+                            if (checkEquipped) {
+                                // Check if item is equipped
+                                conditionMet = hero.equipment.some(slot => 
+                                    slot && slot.id === itemId
+                                );
+                                DEBUG.log(`Item equipped check: ${conditionMet}`);
+                            } else {
+                                // Check if item is in inventory
+                                conditionMet = hero.hasItem(itemId, quantity);
+                                DEBUG.log(`Item inventory check: ${conditionMet}`);
+                            }
+                            break;
+
                         default:
                             console.warn(`Unknown condition type: ${condition.type}`);
                             conditionMet = false;
@@ -385,43 +420,4 @@ export async function initializeDialogue() {
             return null;
         }
     }
-
-    // Public function to start a dialogue
-    async function startDialogue(npcId, dialogueFileId = null) { // dialogueFileId is now optional
-        return new Promise(async (resolve) => {
-            resolveDialoguePromise = resolve;
-
-            // Ensure battle is paused during dialogue
-            if (window.battleStarted) {
-                window.isBattlePausedForDialogue = true;
-            }
-
-            const effectiveDialogueFileId = dialogueFileId || await selectDialogueFile(npcId);
-            if (!effectiveDialogueFileId) {
-                console.error(`No dialogue file could be determined for NPC ${npcId}.`);
-                hideDialogue();
-                return;
-            }
-
-            currentDialogue = await loadDialogueData(npcId, effectiveDialogueFileId);
-            if (currentDialogue) {
-                const startNode = currentDialogue.nodes.find(node => node.id === 'start');
-                if (startNode) {
-                    showDialogue();
-                    displayNode(startNode);
-                } else {
-                    console.error(`Start node not found in dialogue file: ${effectiveDialogueFileId} for NPC: ${npcId}`);
-                    hideDialogue();
-                }
-            } else {
-                 console.error(`Could not load dialogue data for NPC: ${npcId}, File: ${effectiveDialogueFileId}`);
-                hideDialogue();
-            }
-        });
-    }
-
-    // Expose startDialogue globally if not using module imports from non-module scripts
-    window.startDialogue = startDialogue;
-
-    console.log('Dialogue system initialized.');
 }
