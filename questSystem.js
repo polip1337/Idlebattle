@@ -159,8 +159,15 @@ export class QuestSystem {
         this.quests.forEach(quest => {
             if (this.activeQuests.has(quest.id) || quest.completed) {
                 const nextStep = (quest.completed || quest.currentStep >= quest.steps.length) ? null : quest.steps[quest.currentStep];
-                const nextPOI = nextStep?.condition.toString().match(/data\.poiName\s*===\s*'([^']+)'/)?.[1] ||
-                                nextStep?.condition.toString().match(/data\.npcId\s*===\s*'([^']+)'/)?.[1];
+                let nextPOI = null;
+                
+                // Safely handle condition function
+                if (nextStep?.condition && typeof nextStep.condition === 'function') {
+                    const conditionStr = nextStep.condition.toString();
+                    nextPOI = conditionStr.match(/data\.poiName\s*===\s*'([^']+)'/)?.[1] ||
+                             conditionStr.match(/data\.npcId\s*===\s*'([^']+)'/)?.[1];
+                }
+                
                 const mapId = quest.completed ? 'Completed' : (nextPOI ? this.getMapForPOI(nextPOI) : 'Unknown');
 
                 // Calculate total steps including any potential branches
@@ -216,8 +223,20 @@ export class QuestSystem {
                     const quest = this.quests.get(questId);
                     quest.currentStep = savedState.currentStep;
                     quest.completed = savedState.completed;
+                    
+                    // Restore steps while preserving original condition functions
                     if (savedState.steps) {
-                        quest.steps = savedState.steps; // Restore the modified steps if they exist
+                        const originalQuest = this.quests.get(questId);
+                        quest.steps = savedState.steps.map((savedStep, index) => {
+                            // If we have the original quest and step, use its condition function
+                            if (originalQuest && originalQuest.steps[index]) {
+                                return {
+                                    ...savedStep,
+                                    condition: originalQuest.steps[index].condition
+                                };
+                            }
+                            return savedStep;
+                        });
                     }
                 } else {
                     console.warn(`Quest ${questId} found in save data but not in definitions.`);
