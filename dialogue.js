@@ -379,7 +379,7 @@ export async function initializeDialogue() {
 
                                 let invResult = hero.hasItem(itemId, quantity);
                                 DEBUG.log(`Item inventory check: ${invResult}`);
-                                result = eqResult || invResult;
+                                conditionMet = eqResult || invResult;
                             break;
 
                         default:
