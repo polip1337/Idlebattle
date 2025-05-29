@@ -22,7 +22,7 @@ export default {
             priority: 3
         },
         {
-            id: "renn_mistwalker_Active",
+            id: "renn_questActive",
             conditions: [
                 {
                     type: "quest",
@@ -32,17 +32,7 @@ export default {
             ],
             priority: 2
         },
-        {
-            id: "renn_questComplete",
-            conditions: [
-                {
-                    type: "quest",
-                    questId: "mistwalkerSecret",
-                    status: "completed"
-                }
-            ],
-            priority: 2
-        },
+        
         {
             id: "renn_tavern",
             conditions: [

@@ -7,6 +7,16 @@ import { setCurrentMap } from './map.js';
 import Item from './item.js';
 import { handleActions } from './actionHandler.js';
 
+// Debug configuration
+const DEBUG = {
+    enabled: true,
+    log: function(...args) {
+        if (this.enabled) {
+            console.log('[Dialogue Debug]', ...args);
+        }
+    }
+};
+
 export async function initializeDialogue() {
     const dialogueModal = document.getElementById('dialogue-modal');
     const npcPortrait = document.getElementById('npc-portrait-img');
@@ -220,11 +230,13 @@ export async function initializeDialogue() {
 
     async function selectDialogueFile(npcId) {
         try {
+            DEBUG.log(`Selecting dialogue file for NPC: ${npcId}`);
             const npcModule = await import(`./Data/NPCs/${npcId}/${npcId}.js`);
             const npcDefinition = npcModule.default;
 
             // If dialogues is an array of strings (old format), convert to new format
             if (Array.isArray(npcDefinition.dialogues) && typeof npcDefinition.dialogues[0] === 'string') {
+                DEBUG.log('Converting old dialogue format to new format');
                 npcDefinition.dialogues = npcDefinition.dialogues.map(id => ({
                     id,
                     conditions: [],
@@ -234,24 +246,31 @@ export async function initializeDialogue() {
 
             // Get current location from the map system
             const currentLocation = window.currentMapId || 'unknown';
+            DEBUG.log(`Current location: ${currentLocation}`);
 
             // Sort dialogues by priority (highest first)
             const sortedDialogues = [...npcDefinition.dialogues].sort((a, b) => (b.priority || 0) - (a.priority || 0));
+            DEBUG.log(`Found ${sortedDialogues.length} dialogue options, sorted by priority`);
 
             // Check each dialogue's conditions
             for (const dialogue of sortedDialogues) {
+                DEBUG.log(`Checking dialogue: ${dialogue.id}`);
+                
                 if (!dialogue.conditions || dialogue.conditions.length === 0) {
+                    DEBUG.log(`Dialogue ${dialogue.id} has no conditions, skipping`);
                     continue; // Skip dialogues with no conditions (they're fallbacks)
                 }
 
                 let allConditionsMet = true;
                 for (const condition of dialogue.conditions) {
                     let conditionMet = false;
+                    DEBUG.log(`Checking condition:`, condition);
 
                     switch (condition.type) {
                         case 'quest':
                             const quest = questSystem.quests.get(condition.questId);
                             if (!quest) {
+                                DEBUG.log(`Quest ${condition.questId} not found`);
                                 conditionMet = false;
                                 break;
                             }
@@ -259,12 +278,15 @@ export async function initializeDialogue() {
                             switch (condition.status) {
                                 case 'not_started':
                                     conditionMet = !questSystem.activeQuests.has(condition.questId) && !quest.completed;
+                                    DEBUG.log(`Quest ${condition.questId} not_started check: ${conditionMet}`);
                                     break;
                                 case 'active':
                                     conditionMet = questSystem.activeQuests.has(condition.questId);
+                                    DEBUG.log(`Quest ${condition.questId} active check: ${conditionMet}`);
                                     break;
                                 case 'completed':
                                     conditionMet = quest.completed;
+                                    DEBUG.log(`Quest ${condition.questId} completed check: ${conditionMet}`);
                                     break;
                                 default:
                                     console.warn(`Unknown quest status condition: ${condition.status}`);
@@ -274,13 +296,8 @@ export async function initializeDialogue() {
 
                         case 'location':
                             conditionMet = currentLocation === condition.locationId;
+                            DEBUG.log(`Location check: ${currentLocation} === ${condition.locationId}: ${conditionMet}`);
                             break;
-
-                        // Add more condition types here as needed
-                        // case 'item':
-                        // case 'skill':
-                        // case 'globalFlag':
-                        // etc.
 
                         default:
                             console.warn(`Unknown condition type: ${condition.type}`);
@@ -288,18 +305,21 @@ export async function initializeDialogue() {
                     }
 
                     if (!conditionMet) {
+                        DEBUG.log(`Condition not met for dialogue ${dialogue.id}`);
                         allConditionsMet = false;
                         break;
                     }
                 }
 
                 if (allConditionsMet) {
+                    DEBUG.log(`Selected dialogue file: ${dialogue.id}`);
                     return dialogue.id;
                 }
             }
 
             // If no conditions were met, return the first dialogue (should be the default/base one)
             if (npcDefinition.dialogues.length > 0) {
+                DEBUG.log(`No conditions met, using default dialogue: ${npcDefinition.dialogues[0].id}`);
                 return npcDefinition.dialogues[0].id;
             }
 
