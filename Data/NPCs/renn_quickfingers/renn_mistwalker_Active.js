@@ -9,7 +9,7 @@ export default {
                     nextId: 'faction_path',
                     conditions: [
                         { type: 'questActive', questId: 'mistwalkerSecret' },
-                        { type: 'questStepCompleted', questId: 'mistwalkerSecret', stepIndex: 1, branch: 'faction_help' }
+                        { type: 'questStep', questId: 'mistwalkerSecret', stepIndex: 1, branch: 'faction_help' }
                     ],
                     hideWhenUnavailable: true
                 },
@@ -18,7 +18,7 @@ export default {
                     nextId: 'archive_path',
                     conditions: [
                         { type: 'questActive', questId: 'mistwalkerSecret' },
-                        { type: 'questStepCompleted', questId: 'mistwalkerSecret', stepIndex: 1, branch: 'archive_plan' }
+                        { type: 'questStep', questId: 'mistwalkerSecret', stepIndex: 1, branch: 'archive_plan' }
                     ],
                     hideWhenUnavailable: true
                 },

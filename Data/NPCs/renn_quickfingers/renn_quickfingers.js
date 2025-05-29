@@ -14,6 +14,11 @@ export default {
                     questId: "mistwalkerSecret",
                     status: "active"
                 },
+                  {
+                      type: "questStep",
+                      questId: "mistwalkerSecret",
+                      stepIndex: 0
+                  },
                 {
                     type: "location",
                     locationId: "rennsHouse"
@@ -32,7 +37,7 @@ export default {
                 {
                     type: "questStep",
                     questId: "mistwalkerSecret",
-                    stepIndex: 2
+                    stepIndex: 1
                 },
                 {
                     type: "location",
