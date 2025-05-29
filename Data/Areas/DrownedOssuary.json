@@ -9,7 +9,7 @@
             "stage": 1,
             "description": "The crypt’s entrance is choked with damp mist, and skeletal remains litter the floor. A pair of animated skeletons lurch forward, their bones rattling ominously.",
             "mobs": [
-                {"type": "skeletonWarrior", "count": 2, "level": 2},
+                {"type": "skeletonWarrior", "count": 2, "level": 2}
 
             ]
         },

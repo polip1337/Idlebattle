@@ -249,7 +249,7 @@
         "description": "A hooded figure lurks in the shadows, watching the tunnels carefully.",
         "type": "dialogue",
         "npcId": "sewer_contact",
-        "dialogueId":"sewer_contact_base",
+
         "x": 72.00,
         "y": 85.00,
         "initiallyLocked": true

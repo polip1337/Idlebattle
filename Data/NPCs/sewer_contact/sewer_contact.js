@@ -4,7 +4,7 @@ export default {
     dialogues: {
         default: [
             {
-                id: "base",
+                id:"sewer_contact_base",
                 conditions: [],
                 priority: 0
             },
@@ -12,8 +12,9 @@ export default {
                 id: "return_relic",
                 conditions: [
                     {
-                        type: "questActive",
-                        questId: "ossuaryRelic"
+                        type: "quest",
+                        questId: "ossuaryRelic",
+                        status: "active"
                     },
                     {
                         type: "item",

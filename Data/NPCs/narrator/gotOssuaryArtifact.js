@@ -8,10 +8,11 @@ export default {
                     text: "Take the relic",
                     nextId: null,
                     action: [
-                        { type: "addItem", itemId: "boneWhisperRelic", quantity: 1 }
+                        { type: "addItem", itemId: "boneWhisperRelic", quantity: 1 },
+                    {type: 'travelToMap',mapId: 'rustmarketSewers' }
                     ]
                 }
             ]
         }
     ]
-}; 
+};
