@@ -108,7 +108,7 @@ export function updateSkillTooltip(tooltip, skill) {
     ${skill.cooldown !== 0 ? `Cooldown: ${skill.cooldown}s<br>` : ''}
     ${skill.damageType && skill.damageType.toLowerCase() !== 'none' ? `Damage Type: ${skill.damageType}<br>` : ''}
     Description: ${skill.description}<br>
-    ${skill.experience !== undefined ? `XP: ${skill.experience}/${skill.experienceToNextLevel}<br>` : ''}
+    ${skill.experience !== undefined && skill.div && skill.div.closest('#team1') ? `XP: ${skill.experience}/${skill.experienceToNextLevel}<br>` : ''}
 `;
     if (skill.effects) {
         const effect = skill.effects; // Assuming skill.effects is a single object for this tooltip
@@ -130,7 +130,7 @@ export function updatePassiveSkillTooltip(tooltip, skill) {
     let tooltipContent = `
     <strong>${skill.name} (Lvl ${skill.level || 1})</strong> (Passive)<br>
     Description: ${skill.description}<br>
-    ${skill.experience !== undefined ? `XP: ${skill.experience}/${skill.experienceToNextLevel}<br>` : ''}
+    ${skill.experience !== undefined && skill.div && skill.div.closest('#team1') ? `XP: ${skill.experience}/${skill.experienceToNextLevel}<br>` : ''}
 `;
     let effectToDisplay = null;
     if (skill.effect) {

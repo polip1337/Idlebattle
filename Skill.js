@@ -49,10 +49,13 @@ class Skill {
     }
 
     gainExperience(amount) {
-        this.experience += amount;
-        while (this.experience >= this.experienceToNextLevel) {
-            this.levelUp();
-            renderLevelUp(this);
+        // Only allow hero team skills to gain experience
+        if (this.div && this.div.closest('#team1')) {
+            this.experience += amount;
+            while (this.experience >= this.experienceToNextLevel) {
+                this.levelUp();
+                renderLevelUp(this);
+            }
         }
     }
 

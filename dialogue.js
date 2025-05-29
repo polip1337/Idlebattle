@@ -193,7 +193,7 @@ export async function initializeDialogue() {
                     
                     if (checkEquipped) {
                         // Check if item is equipped
-                        result = hero.equipment.some(slot => 
+                        result = Object.values(hero.equipment).some(slot => 
                             slot && slot.id === itemId
                         );
                         DEBUG.log(`Item equipped check: ${result}`);
@@ -377,7 +377,7 @@ export async function initializeDialogue() {
                             
                             if (checkEquipped) {
                                 // Check if item is equipped
-                                conditionMet = hero.equipment.some(slot => 
+                                conditionMet = Object.values(hero.equipment).some(slot => 
                                     slot && slot.id === itemId
                                 );
                                 DEBUG.log(`Item equipped check: ${conditionMet}`);
