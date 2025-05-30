@@ -240,16 +240,23 @@ class Skill {
     updateCooldownAnimation(member) {
         if (!this.div) return;
 
-        if (this.overlay == null) {
-            this.overlay = this.div.querySelector(".cooldown-overlay");
-            if (!this.overlay) return;
+        // Always try to get a fresh reference to the overlay
+        this.overlay = this.div.querySelector(".cooldown-overlay");
+        if (!this.overlay) {
+            console.warn(`[Skill ${this.name}] No cooldown overlay found for ${member.name}`);
+            return;
         }
 
         // Clear previous listener and animation
         if (this.boundAnimationEndCallback) {
             this.overlay.removeEventListener('animationend', this.boundAnimationEndCallback);
+            this.boundAnimationEndCallback = null;
         }
+
+        // Reset overlay state
         this.overlay.style.animation = '';
+        this.overlay.classList.remove('hidden', 'paused');
+        this.overlay.offsetHeight; // Force reflow
 
         // If not on cooldown or duration is zero, finish (handles cleanup)
         if (!this.onCooldown || this.remainingDuration <= 0) {
@@ -264,16 +271,17 @@ class Skill {
         this.overlay.addEventListener('animationend', this.boundAnimationEndCallback, { once: true });
 
         this.div.classList.add('disabled');
-        this.overlay.classList.remove('hidden', 'paused');
-        this.overlay.offsetHeight; // Reflow
-
+        
+        // Set initial height based on remaining duration
         const remainingPercentage = Math.max(0, (this.remainingDuration / this.cooldown) * 100);
         this.overlay.style.height = `${remainingPercentage}%`;
 
-        // Only apply animation if there's a duration.
-        // A remainingDuration of 0 should have been caught by the check above.
+        // Force another reflow to ensure height is applied before animation
+        this.overlay.offsetHeight;
+
+        // Only apply animation if there's a duration
         if (this.remainingDuration > 0) {
-             this.overlay.style.animation = `fill ${this.remainingDuration}s linear forwards`;
+            this.overlay.style.animation = `fill ${this.remainingDuration}s linear forwards`;
         } else {
             // Fallback: if somehow duration is 0 here, ensure cleanup
             this.finishCooldown(member, false);
