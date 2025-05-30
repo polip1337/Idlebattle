@@ -30,21 +30,5 @@
         {"type": "empoweredFogSpecter", "count": 1, "level": 5}
       ]
     }
-  ],
-  "onEnterActions": [
-    {
-      "type": "dialogue",
-      "npcId": "rennQuickfingers",
-      "dialogueId": "fogged_cache_warning",
-      "dialogue": {
-        "speaker": "Renn Quickfingers",
-        "text": "Oi, Taryn, keep your eyes sharp. This fog ain’t just weather—it’s crawling with Old Empire magic, and that cache’s glow is like a beacon for every twisted fog creature ‘round Driftmoor. Specters love this stuff, and they ain’t keen on sharing. Stick close, or we’ll be ghost food before we nab those rations."
-      }
-    },
-    {
-      "type": "effect",
-      "effect": "denseFogHaze",
-      "duration": 300
-    }
   ]
 }

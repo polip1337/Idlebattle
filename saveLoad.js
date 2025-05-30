@@ -317,17 +317,20 @@ function populateSlots() {
 
         const importButton = document.createElement('button');
         importButton.textContent = 'Import';
+        importButton.classList.add('import-button');
         importButton.onclick = (event) => { event.stopPropagation(); handleImportAction(i, !!slotData); };
         actionsContainer.appendChild(importButton);
 
         const exportButton = document.createElement('button');
         exportButton.textContent = 'Export';
+        exportButton.classList.add('export-button');
         exportButton.disabled = !slotData;
         exportButton.onclick = (event) => { event.stopPropagation(); if(slotData) handleExportAction(i); };
         actionsContainer.appendChild(exportButton);
 
         const clearButton = document.createElement('button');
         clearButton.textContent = 'Clear';
+        clearButton.classList.add('clear-button');
         clearButton.disabled = !slotData;
         clearButton.onclick = (event) => { event.stopPropagation(); if(slotData) handleClearAction(i); };
         actionsContainer.appendChild(clearButton);
