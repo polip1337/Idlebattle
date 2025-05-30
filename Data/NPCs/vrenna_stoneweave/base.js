@@ -9,9 +9,16 @@ export default {
                     nextId: "loomkeepers"
                 },
                 {
-                    text: "I have found this amulet.Can you tell me anything about it?",
+                    text: "I have found this amulet. Can you tell me anything about it?",
                     nextId: "mistwalker",
                     conditions: [{ type: 'item', itemId: 'mistwalkerAmulet' }]
+                },
+                {
+                    text: "I need help getting into the Fogged Docks.",
+                    nextId: "docks_help",
+                    conditions: [
+                        { type: "questActive", questId: "docksAccess" }
+                    ]
                 },
                 {
                     text: "I seek a portal sequence. Can you help?",
@@ -87,6 +94,64 @@ export default {
                 },
                 {
                     text: "I need time to decide.",
+                    nextId: null
+                }
+            ]
+        },
+        {
+            id: "docks_help",
+            text: "*She sets aside her work* The Fogged Docks? That's a restricted area. *She studies you carefully* What business do you have there?",
+            options: [
+                {
+                    text: "I have this amulet that might interest you...",
+                    nextId: "amulet_show",
+                    conditions: [
+                        { type: "item", itemId: "mistwalkerAmulet" }
+                    ]
+                },
+                {
+                    text: "I can pay for your help.",
+                    nextId: "payment_help",
+                    conditions: [
+                        { type: "item", itemId: "gold", quantity: 50 }
+                    ]
+                },
+                {
+                    text: "Never mind.",
+                    nextId: null
+                }
+            ]
+        },
+        {
+            id: "amulet_show",
+            text: "*Her eyes widen as she sees the amulet* The Mistwalker Amulet! If its a fake its your own life at risk. The guard wont bother you. But we need to talk about the amulet.",
+            options: [
+                {
+                    text: "Thank you. What do you know about the it?",
+                    nextId: "mistwalker",
+                    action: [
+                        { type: "unlockPOI", mapId: "hollowreach", poiId: "foggedDocks_open" },
+                        { type: "hidePOI", mapId: "hollowreach", poiId: "foggedDocks" },
+                        { type: "travelToMap", mapId: "foggedDocks" }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "payment_help",
+            text: "*She considers for a moment* 50 gold. I'll write you a pass. The Loomkeepers have certain privileges, after all. The guard wont bother you.",
+            options: [
+                {
+                    text: "Here's your payment.",
+                    nextId: null,
+                    action: [
+                        { type: "removeGold", amount: 50 },
+                        { type: "unlockPOI", mapId: "hollowreach", poiId: "foggedDocks_open" },
+                        { type: "hidePOI", mapId: "hollowreach", poiId: "foggedDocks" }
+                    ]
+                },
+                {
+                    text: "That's too much.",
                     nextId: null
                 }
             ]

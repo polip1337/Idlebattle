@@ -5,6 +5,7 @@ import { setCurrentMap } from './map.js';
 import { openTradeModal } from './tradeModal.js';
 import { startSlideshow } from './slideshow.js';
 import Item from './item.js';
+import { gameState } from './Data/GameState';
 
 export function handleActions(actions) {
     if (!actions) return;
@@ -12,6 +13,21 @@ export function handleActions(actions) {
     const actionArray = Array.isArray(actions) ? actions : [actions];
     actionArray.forEach(async action => {
         switch (action.type) {
+            case 'setGameState':
+                switch (action.stateType) {
+                    case 'npcKnowledge':
+                        gameState.setNPCKnowledge(action.npcId, action.key, action.value);
+                        break;
+                    case 'questState':
+                        gameState.setQuestState(action.questId, action.value);
+                        break;
+                    case 'locationState':
+                        gameState.setLocationState(action.locationId, action.key, action.value);
+                        break;
+                    default:
+                        console.warn(`Unknown game state type: ${action.stateType}`);
+                }
+                break;
             case 'startQuest':
                 questSystem.startQuest(action.questId);
                 break;
