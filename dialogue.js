@@ -121,6 +121,7 @@ export async function initializeDialogue() {
             button.textContent = '';
             button.classList.remove('disabled');
             button.onclick = null;
+            button.title = ''; // Clear any existing tooltips
         });
 
         // Display new options
@@ -130,6 +131,7 @@ export async function initializeDialogue() {
                 if (visibleOptionIndex >= optionButtons.length) return;
 
                 const isEnabled = checkOptionConditions(option);
+                const missingRequirements = !isEnabled ? getMissingRequirements(option) : [];
 
                 if (!isEnabled && option.hideWhenUnavailable === true) {
                     return;
@@ -145,6 +147,10 @@ export async function initializeDialogue() {
                 } else {
                     button.classList.add('disabled');
                     button.onclick = null;
+                    // Add tooltip with missing requirements
+                    if (missingRequirements.length > 0) {
+                        button.title = `Missing requirements:\n${missingRequirements.join('\n')}`;
+                    }
                 }
                 visibleOptionIndex++;
             });
@@ -439,4 +445,50 @@ export async function initializeDialogue() {
     window.startDialogue = startDialogue;
 
     console.log('Dialogue system initialized.');
+}
+
+// Helper function to get missing requirements for an option
+function getMissingRequirements(option) {
+    if (!option.conditions) return [];
+    
+    return option.conditions.map(condition => {
+        switch (condition.type) {
+            case 'skill':
+                const heroStat = hero.baseStats[condition.stat] || 0;
+                return heroStat < condition.value ? 
+                    `Need ${condition.stat} ${condition.value} (current: ${heroStat})` : null;
+            
+            case 'item':
+                const itemId = condition.itemId;
+                const quantity = condition.quantity || 1;
+                const hasItem = hero.hasItem(itemId, quantity);
+                return !hasItem ? 
+                    `Need ${quantity}x ${allItemsCache[itemId]?.name || itemId}` : null;
+            
+            case 'questActive':
+                return !questSystem.activeQuests.has(condition.questId) ? 
+                    `Need active quest: ${condition.questId}` : null;
+            
+            case 'questCompleted':
+                const quest = questSystem.quests.get(condition.questId);
+                return !quest?.completed ? 
+                    `Need completed quest: ${condition.questId}` : null;
+            
+            case 'questStep':
+                const stepQuest = questSystem.quests.get(condition.questId);
+                if (!stepQuest) return `Quest ${condition.questId} not found`;
+                if (condition.branch && stepQuest.currentBranch !== condition.branch) {
+                    return `Need quest branch: ${condition.branch}`;
+                }
+                return stepQuest.currentStep !== condition.stepIndex ? 
+                    `Need quest step ${condition.stepIndex} (current: ${stepQuest.currentStep})` : null;
+            
+            case 'location':
+                return currentMapId !== condition.locationId ? 
+                    `Need to be in: ${condition.locationId}` : null;
+            
+            default:
+                return `Unknown requirement: ${condition.type}`;
+        }
+    }).filter(req => req !== null); // Remove null entries
 }

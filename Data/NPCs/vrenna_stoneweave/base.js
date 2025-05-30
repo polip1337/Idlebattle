@@ -11,25 +11,22 @@ export default {
                 {
                     text: "I have found this amulet. Can you tell me anything about it?",
                     nextId: "mistwalker",
-                    conditions: [{ type: 'item', itemId: 'mistwalkerAmulet' }]
+                    conditions: [{ type: 'item', itemId: 'mistwalkerAmulet' }],
+                    hideWhenUnavailable: true
                 },
                 {
                     text: "I need help getting into the Fogged Docks.",
                     nextId: "docks_help",
                     conditions: [
                         { type: "questActive", questId: "docksAccess" }
-                    ]
-                },
-                {
-                    text: "I seek a portal sequence. Can you help?",
-                    nextId: "quest",
-                    action: { type: "startQuest", questId: "lost_pattern" },
-                    conditions: [{ type: "skill", stat: "Intelligence", value: 6 }]
+                    ],
+                    hideWhenUnavailable: true
                 },
                 {
                     text: "Can you aid my expedition?",
                     nextId: "expedition",
-                    conditions: [{ type: "questActive", questId: "great_crossing" }]
+                    conditions: [{ type: "questActive", questId: "great_crossing" }],
+                    hideWhenUnavailable: true
                 },
                 {
                     text: "Goodbye.",
@@ -107,7 +104,8 @@ export default {
                     nextId: "amulet_show",
                     conditions: [
                         { type: "item", itemId: "mistwalkerAmulet" }
-                    ]
+                    ],
+                    hideWhenUnavailable: true
                 },
                 {
                     text: "I can pay for your help.",
