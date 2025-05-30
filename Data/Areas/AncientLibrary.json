@@ -1,0 +1,47 @@
+{
+  "id": "ancientLibrary",
+  "name": "Ancient Library",
+  "description": "A vast repository of forbidden knowledge, where arcane guardians protect ancient tomes. The air hums with magical energy, and the shelves stretch endlessly into the darkness.",
+  "background": "Media/Backgrounds/ancient_library_interior.png",
+  "music": "Music/Dungeon/mystical_library_theme.ogg",
+  "stages": [
+    {
+      "stage": 1,
+      "description": "The outer archives. Animated books and minor constructs patrol the dusty shelves, their movements precise and mechanical.",
+      "mobs": [
+        {"type": "animatedTome", "count": 2, "level": 3},
+        {"type": "libraryConstruct", "count": 1, "level": 3}
+      ]
+    },
+    {
+      "stage": 2,
+      "description": "The restricted section. Powerful wards flicker between the shelves as a guardian automaton stands watch over forbidden knowledge.",
+      "mobs": [
+        {"type": "libraryGuardian", "count": 1, "level": 4},
+        {"type": "animatedTome", "count": 2, "level": 3},
+        {"type": "arcaneWard", "count": 1, "level": 3}
+      ]
+    },
+    {
+      "stage": 3,
+      "description": "The inner sanctum. A massive arcane golem, its body covered in glowing runes, protects the most valuable tomes. Lesser constructs circle it protectively.",
+      "mobs": [
+        {"type": "arcaneGolem", "count": 1, "level": 5},
+        {"type": "libraryConstruct", "count": 2, "level": 4},
+        {"type": "arcaneWard", "count": 2, "level": 3}
+      ]
+    }
+  ],
+  "onEnterActions": [
+    {
+      "type": "dialogue",
+      "npcId": "librarian",
+      "dialogueId": "library_warning"
+    },
+    {
+      "type": "effect",
+      "effect": "arcaneWard",
+      "duration": 300
+    }
+  ]
+} 
