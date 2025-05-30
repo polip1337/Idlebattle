@@ -1,34 +1,50 @@
 {
   "id": "foggedCache",
   "name": "Fogged Cache",
-  "description": "An abandoned warehouse in the fog-shrouded docks. The wooden beams creak ominously, and the sound of lapping water echoes through the mist. Old Empire supply crates are scattered about.",
-  "background": "Media/Backgrounds/fogged_docks_interior.png",
-  "music": "Music/Dungeon/mist_theme.ogg",
+  "description": "A forgotten dockside warehouse in Driftmoor, shrouded in dense, unnatural fog that pulses with Old Empire magic. The air hums with latent energy, and the faint scent of preserved rations lingers amidst rusted cranes and shattered barges. The magically preserved food cache draws fog-warped creatures, their glowing eyes piercing the haze.",
+  "background": "Media/Backgrounds/fogged_docks_cache.png",
+  "music": "Music/Dungeon/fogged_docks_ambience.ogg",
   "stages": [
     {
       "stage": 1,
-      "description": "Fog-warped creatures lurk among the crates, their forms shifting unnaturally in the mist. They seem to be guarding something valuable.",
+      "description": "The outer docks, slick with fog-dampened planks and littered with broken crates. Fog specters drift silently, drawn to the cache’s magic, while giant rats scavenge nearby.",
       "mobs": [
-        {"type": "fogLurker", "count": 2, "level": 2},
-        {"type": "mistWalker", "count": 1, "level": 2}
+        {"type": "fogSpecter", "count": 2, "level": 3},
+        {"type": "giantRat", "count": 2, "level": 2}
       ]
     },
     {
       "stage": 2,
-      "description": "The fog grows thicker here, and more dangerous creatures emerge from the shadows. They seem drawn to the cache's location.",
+      "description": "A narrow pier leading to the warehouse, where the fog thickens and distorts vision. Fog specters weave through the mist, supported by a necromantic construct guarding the cache’s outer defenses.",
       "mobs": [
-        {"type": "fogLurker", "count": 2, "level": 3},
-        {"type": "mistWalker", "count": 1, "level": 3}
+        {"type": "fogSpecter", "count": 2, "level": 3},
+        {"type": "necromanticConstruct", "count": 1, "level": 4}
       ]
     },
     {
       "stage": 3,
-      "description": "The final chamber holds the cache, but it's guarded by a powerful fog entity. The air crackles with unnatural energy.",
+      "description": "The heart of the warehouse, where the magically preserved food cache glows faintly, sealed by Old Empire runes. A powerful fog specter, swollen with stolen magic, leads a group of lesser specters and rats, fiercely protecting the cache.",
       "mobs": [
-        {"type": "mistWalker", "count": 2, "level": 4},
-        {"type": "fogLurker", "count": 2, "level": 3},
-        {"type": "fogEntity", "count": 1, "level": 4}
+        {"type": "fogSpecter", "count": 2, "level": 4},
+        {"type": "giantRat", "count": 2, "level": 3},
+        {"type": "empoweredFogSpecter", "count": 1, "level": 5}
       ]
     }
+  ],
+  "onEnterActions": [
+    {
+      "type": "dialogue",
+      "npcId": "rennQuickfingers",
+      "dialogueId": "fogged_cache_warning",
+      "dialogue": {
+        "speaker": "Renn Quickfingers",
+        "text": "Oi, Taryn, keep your eyes sharp. This fog ain’t just weather—it’s crawling with Old Empire magic, and that cache’s glow is like a beacon for every twisted fog creature ‘round Driftmoor. Specters love this stuff, and they ain’t keen on sharing. Stick close, or we’ll be ghost food before we nab those rations."
+      }
+    },
+    {
+      "type": "effect",
+      "effect": "denseFogHaze",
+      "duration": 300
+    }
   ]
-} 
+}
