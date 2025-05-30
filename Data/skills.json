@@ -1012,7 +1012,7 @@
     "damage": 12,
     "manaCost": 5,
     "staminaCost": 20,
-    "cooldown": 6,
+    "cooldown": 10,
     "damageType": "physical",
     "effects": [
       {

@@ -18,7 +18,7 @@ This document explains the structure and purpose of area files in the game. Use 
 
 ## Stages
 
-Each stage represents a distinct combat encounter. Stages are processed in order, with increasing difficulty.
+Each stage represents a distinct combat encounter. Stages are processed in order, with increasing difficulty. Up to 10 stages.
 
 ```json
 {
@@ -53,7 +53,7 @@ Each stage represents a distinct combat encounter. Stages are processed in order
 
 ## OnEnterActions
 
-Actions triggered when the player first enters the area. Executed in order of appearance.
+Highly optional actions triggered when the player first enters the area. Executed in order of appearance.
 
 ```json
 {

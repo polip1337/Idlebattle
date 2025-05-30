@@ -5,7 +5,7 @@ import { setCurrentMap } from './map.js';
 import { openTradeModal } from './tradeModal.js';
 import { startSlideshow } from './slideshow.js';
 import Item from './item.js';
-import { gameState } from './Data/GameState';
+import { gameState } from './GameState.js';
 
 export function handleActions(actions) {
     if (!actions) return;

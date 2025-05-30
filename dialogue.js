@@ -457,27 +457,23 @@ function getMissingRequirements(option) {
             case 'skill':
                 const heroStat = hero.baseStats[condition.stat] || 0;
                 return heroStat < condition.value ? 
-                    `{${condition.stat} ${condition.value} (current: ${heroStat})}` : null;
-            
-            case 'skillCheck':
-                const skillValue = hero.baseStats[condition.stat] || 0;
-                return `{${condition.stat} check vs DC ${condition.difficulty || 10}}`;
+                    `{Missing: ${condition.stat} ${condition.value} (current: ${heroStat})}` : null;
             
             case 'item':
                 const itemId = condition.itemId;
                 const quantity = condition.quantity || 1;
                 const hasItem = hero.hasItem(itemId, quantity);
                 return !hasItem ? 
-                    `{${quantity}x ${allItemsCache[itemId]?.name || itemId}}` : null;
+                    `{Missing: ${quantity}x ${allItemsCache[itemId]?.name || itemId}}` : null;
             
             case 'questActive':
                 return !questSystem.activeQuests.has(condition.questId) ? 
-                    `{Active quest: ${condition.questId}}` : null;
+                    `{Missing: active quest ${condition.questId}}` : null;
             
             case 'questCompleted':
                 const quest = questSystem.quests.get(condition.questId);
                 return !quest?.completed ? 
-                    `{Completed quest: ${condition.questId}}` : null;
+                    `{Missing: completed quest ${condition.questId}}` : null;
             
             case 'questStep':
                 const stepQuest = questSystem.quests.get(condition.questId);

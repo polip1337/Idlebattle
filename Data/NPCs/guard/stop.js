@@ -6,11 +6,17 @@ export default {
             options: [
                 {
                     text: "I need to get through. Can we work something out?",
-                    nextId: "negotiate"
+                    nextId: "negotiate",
+                    action:[
+                        { type: "startQuest", questId: "docksAccess" }
+                    ]
                 },
                 {
                     text: "Fine.",
-                    nextId: null
+                    nextId: null,
+                    action:[
+                        { type: "startQuest", questId: "docksAccess" }
+                    ]
                 }
             ]
         },
@@ -29,7 +35,7 @@ export default {
                     text: "*Try to sneak past*",
                     nextId: "got_through",
                     conditions: [
-                        { type: "skill", itemId: "dexterity", quantity: 20 }
+                        { type: "skill", stat: "dexterity", value: 20 }
                     ]
                 },
                 {
@@ -70,8 +76,8 @@ export default {
             id: "got_through",
             text: "You managed to get through.",
             action: [
-            { type: "unlockPOI", mapId: "hollowreach", poiId: "foggedDocks_open" },
-            { type: "hidePOI", mapId: "hollowreach", poiId: "foggedDocks" },
+            { type: "unlockPOI", mapId: "hollowreach", poiId: "ironspine_to_docks_unlocked" },
+            { type: "hidePOI", mapId: "hollowreach", poiId: "ironspine_to_docks_locked" },
             { type: "travelToMap", mapId: "foggedDocks" }
             ]
         }

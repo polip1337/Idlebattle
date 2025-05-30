@@ -461,9 +461,6 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         member.team = team1;
         member.opposingTeam = team2;
         member.dead = false;
-        member.currentHealth = member.maxHealth;
-        member.currentMana = member.stats.mana;
-        member.currentStamina = member.stats.stamina;
         member.effects = [];
         team1.addMember(member);
     });

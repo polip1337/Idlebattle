@@ -128,9 +128,8 @@ export default {
                     text: "Thank you. What do you know about the it?",
                     nextId: "mistwalker",
                     action: [
-                        { type: "unlockPOI", mapId: "hollowreach", poiId: "foggedDocks_open" },
-                        { type: "hidePOI", mapId: "hollowreach", poiId: "foggedDocks" },
-                        { type: "travelToMap", mapId: "foggedDocks" }
+                        { type: "unlockPOI", mapId: "hollowreach", poiId: "ironspine_to_docks_unlocked" },
+                        { type: "hidePOI", mapId: "hollowreach", poiId: "ironspine_to_docks_locked" },
                     ]
                 }
             ]
@@ -144,8 +143,8 @@ export default {
                     nextId: null,
                     action: [
                         { type: "removeGold", amount: 50 },
-                        { type: "unlockPOI", mapId: "hollowreach", poiId: "foggedDocks_open" },
-                        { type: "hidePOI", mapId: "hollowreach", poiId: "foggedDocks" }
+                        { type: "unlockPOI", mapId: "hollowreach", poiId: "ironspine_to_docks_unlocked" },
+                        { type: "hidePOI", mapId: "hollowreach", poiId: "ironspine_to_docks_locked" }
                     ]
                 },
                 {

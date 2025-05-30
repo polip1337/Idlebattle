@@ -5,12 +5,12 @@ export default {
     description: 'Uncover a food cache behind Ironspire Bridge to aid Hollowreach’s food crisis.',
     steps: [
         {
-            description: 'Speak to Old Maris in Orphan’s Hollow to learn about the cache.',
-            hint: 'Find Old Maris in the Orphan’s Hollow area.',
-            condition: (event, data) => event === 'dialogue' && data.npcName === 'Old Maris' && data.dialogueNodeId === 'questAccepted_cache'
+            description: 'Enter the Fogged Docks somehow',
+            hint: 'You have to deal with the guard, or get there by accident.',
+            condition: (event, data) => event === 'travel' && data.mapId === 'foggedDocks'
         },
         {
-            description: 'Enter the Ironspire Ruin and defeat the scavengers guarding the cache.',
+            description: 'Defeat the scavengers guarding the cache.',
             hint: 'Travel to the Ironspire Ruin and win the combat encounter at the Cache Vault.',
             condition: (event, data) => event === 'combatComplete' && data.poiName === 'Cache Vault'
         },

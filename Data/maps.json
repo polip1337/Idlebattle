@@ -265,8 +265,19 @@
         "combatEndWinDialogueId": "gotOssuaryArtifact",
         "initiallyLocked": true,
         "showDialogueOnce": true
+      },
+      {
+        "id": "sewer_scavenger_cache_POI",
+        "name": "Scavenger Cache",
+        "areaId": "ScavengerCache",
+        "x": 85.00,
+        "y": 20.00,
+        "icon": "Media/map/poi-first-corridor.jpg",
+        "type": "combat",
+        "initiallyLocked": true,
+        "dialogueNpcId": "narrator",
+        "combatEndWinDialogueId": "gotSewerTapestry"
       }
-
     ]
   },
   "threadhall": {

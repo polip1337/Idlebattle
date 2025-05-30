@@ -15,7 +15,8 @@ export class QuestSystem {
             'Idlebattle/Data/quests/hollowreach/stage1/driftkinsTest.js',
             'Idlebattle/Data/quests/hollowreach/stage1/embercladsTrial.js',
             'Idlebattle/Data/quests/hollowreach/stage1/hollowsCache.js',
-            'Idlebattle/Data/quests/hollowreach/stage1/ossuaryRelic.js'
+            'Idlebattle/Data/quests/hollowreach/stage1/ossuaryRelic.js',
+            'Idlebattle/Data/quests/hollowreach/stage1/docksAccess.js'
         ];
     }
 

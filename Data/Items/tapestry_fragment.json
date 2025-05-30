@@ -1,0 +1,11 @@
+{
+    "id": "tapestryFragment",
+    "name": "Tapestry Fragment",
+    "type": "quest",
+    "slot": "none",
+    "icon": "Media/Items/tapestry_fragment.png",
+    "description": "An a piece of fabric enchanted for durability, contains information hidden in the weave.",
+    "rarity": "rare",
+    "value": 0
+
+} 
