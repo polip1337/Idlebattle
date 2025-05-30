@@ -227,8 +227,9 @@ function renderPOIs() {
     const mapHeight = mapContainer.offsetHeight;
 
     pointsOfInterest.forEach((poi) => {
-        // Skip if POI is locked or hidden
-        if (poi.isEffectivelyLocked || hiddenPois.has(poi.id)) return;
+        // Skip if POI is hidden or locked
+        if (hiddenPois.has(poi.id)) return; // First check if POI is hidden
+        if (poi.isEffectivelyLocked) return; // Then check if POI is locked
 
         const poiElement = document.createElement('div');
         poiElement.classList.add('poi', poi.type);
