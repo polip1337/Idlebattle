@@ -214,6 +214,10 @@ export async function initializeDialogue() {
                     const quest = questSystem.quests.get(condition.questId);
                     result = quest && quest.completed;
                     break;
+                case 'questActiveOrCompleted':
+                    const questActiveOrCompleted = questSystem.quests.get(condition.questId);
+                    result = questActiveOrCompleted && (questSystem.activeQuests.has(condition.questId) || questActiveOrCompleted.completed);
+                    break;
                 case 'questStep':
                     const stepQuest = questSystem.quests.get(condition.questId);
                     if (!stepQuest) {
@@ -474,6 +478,11 @@ function getMissingRequirements(option) {
                 const quest = questSystem.quests.get(condition.questId);
                 return !quest?.completed ? 
                     `{Missing: completed quest ${condition.questId}}` : null;
+            
+            case 'questActiveOrCompleted':
+                const questActiveOrCompleted = questSystem.quests.get(condition.questId);
+                return !questActiveOrCompleted || (!questSystem.activeQuests.has(condition.questId) && !questActiveOrCompleted.completed) ? 
+                    `{Missing: active or completed quest ${condition.questId}}` : null;
             
             case 'questStep':
                 const stepQuest = questSystem.quests.get(condition.questId);
