@@ -121,7 +121,6 @@ export async function initializeDialogue() {
             button.textContent = '';
             button.classList.remove('disabled');
             button.onclick = null;
-            button.title = ''; // Clear any existing tooltips
         });
 
         // Display new options
@@ -139,7 +138,13 @@ export async function initializeDialogue() {
 
                 const button = optionButtons[visibleOptionIndex];
                 button.style.display = 'block';
-                button.textContent = option.text;
+                
+                // Set button text with requirements if disabled
+                if (!isEnabled && missingRequirements.length > 0) {
+                    button.textContent = `${option.text} ${missingRequirements.join(' ')}`;
+                } else {
+                    button.textContent = option.text;
+                }
 
                 if (isEnabled) {
                     button.classList.remove('disabled');
@@ -147,10 +152,6 @@ export async function initializeDialogue() {
                 } else {
                     button.classList.add('disabled');
                     button.onclick = null;
-                    // Add tooltip with missing requirements
-                    if (missingRequirements.length > 0) {
-                        button.title = `Missing requirements:\n${missingRequirements.join('\n')}`;
-                    }
                 }
                 visibleOptionIndex++;
             });
@@ -451,7 +452,7 @@ export async function initializeDialogue() {
 function getMissingRequirements(option) {
     if (!option.conditions) return [];
     
-    const requirements = option.conditions.map(condition => {
+    return option.conditions.map(condition => {
         switch (condition.type) {
             case 'skill':
                 const heroStat = hero.baseStats[condition.stat] || 0;
@@ -495,11 +496,4 @@ function getMissingRequirements(option) {
                 return `{Unknown requirement: ${condition.type}}`;
         }
     }).filter(req => req !== null); // Remove null entries
-
-    // Add the option text if it exists
-    if (option.text) {
-        requirements.unshift(`{${option.text}}`);
-    }
-
-    return requirements;
 }
