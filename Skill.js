@@ -331,6 +331,11 @@ class Skill {
             });
 
             if (canUse) {
+                // For companions, we need to check if this is a repeat attempt
+                if (!member.isHero && this.needsInitialCooldownKickoff) {
+                    this.needsInitialCooldownKickoff = false;
+                    return; // Skip the actual skill use for initial cooldown
+                }
                 this.useSkill(member);
             } else if (this.repeat) {
                 // Add retry mechanism for both hero and non-hero skills when resources are insufficient
