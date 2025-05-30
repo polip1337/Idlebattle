@@ -229,16 +229,13 @@ function useTeamSkills(teamInstance) {
                         }
                     }
 
-                    if (member.isHero) {
-                        // For hero, just use the skill normally
-                        skill.useSkill(member);
-                    } else {
-                        // For enemies, start cooldown immediately
-                        if (skill.needsInitialCooldownKickoff) {
-                            skill.needsInitialCooldownKickoff = false;
-                            skill.startCooldown(member);
-                            skill.updateCooldownAnimation(member);
-                        }
+                    
+                    // For enemies, start cooldown immediately
+                    if (skill.needsInitialCooldownKickoff) {
+                        skill.needsInitialCooldownKickoff = false;
+                        skill.startCooldown(member);
+                        skill.updateCooldownAnimation(member);
+                    
                     }
                 } else if (skill.type === "passive") {
                     // Passive effects are usually applied at skill acquisition or start of battle
