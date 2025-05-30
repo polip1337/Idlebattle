@@ -242,8 +242,26 @@ class Hero extends Member {
         }
     }
 
-    removeItemFromInventory(itemInstance) {
-        const index = this.inventory.indexOf(itemInstance);
+    removeItemFromInventory(itemInstanceOrId, quantity = 1) {
+        // If itemInstanceOrId is a string (ID), find the item in inventory
+        if (typeof itemInstanceOrId === 'string') {
+            const itemsToRemove = this.inventory.filter(item => item.id === itemInstanceOrId);
+            if (itemsToRemove.length >= quantity) {
+                // Remove the specified quantity of items
+                for (let i = 0; i < quantity; i++) {
+                    const index = this.inventory.indexOf(itemsToRemove[i]);
+                    if (index > -1) {
+                        this.inventory.splice(index, 1);
+                    }
+                }
+                if (typeof renderHeroInventory === "function") renderHeroInventory(this); // Update UI
+                return true;
+            }
+            return false;
+        }
+
+        // If itemInstanceOrId is an item instance
+        const index = this.inventory.indexOf(itemInstanceOrId);
         if (index > -1) {
             this.inventory.splice(index, 1);
             if (typeof renderHeroInventory === "function") renderHeroInventory(this); // Update UI

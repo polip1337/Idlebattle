@@ -115,7 +115,6 @@
         "icon": "Media/map/poi-orphanage.jpg",
         "type": "dialogue",
         "npcId": "old_maris",
-        "dialogueId": "old_maris_base",
         "isStartingLocation": true
       },
       { 

@@ -4,9 +4,9 @@ export default {
     faction: "unaligned",
     dialogues: {
         // Location-based dialogue organization
-        orphansHollow: [
+        hollowreach: [
             {
-                id: "cache_return",
+                id: "old_maris_cache_return",
                 conditions: [
                     {
                         type: "item",
@@ -16,7 +16,7 @@ export default {
                 priority: 3
             },
             {
-                id: "base",
+                id: "old_maris_base",
                 conditions: [], // No conditions - this is the default dialogue
                 priority: 1
             }
@@ -24,7 +24,7 @@ export default {
         // Default dialogue for any other location
         default: [
             {
-                id: "base",
+                id: "old_maris_base",
                 conditions: [], // No conditions - this is the default dialogue
                 priority: 0
             }
