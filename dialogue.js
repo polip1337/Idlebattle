@@ -451,44 +451,55 @@ export async function initializeDialogue() {
 function getMissingRequirements(option) {
     if (!option.conditions) return [];
     
-    return option.conditions.map(condition => {
+    const requirements = option.conditions.map(condition => {
         switch (condition.type) {
             case 'skill':
                 const heroStat = hero.baseStats[condition.stat] || 0;
                 return heroStat < condition.value ? 
-                    `Need ${condition.stat} ${condition.value} (current: ${heroStat})` : null;
+                    `{${condition.stat} ${condition.value} (current: ${heroStat})}` : null;
+            
+            case 'skillCheck':
+                const skillValue = hero.baseStats[condition.stat] || 0;
+                return `{${condition.stat} check vs DC ${condition.difficulty || 10}}`;
             
             case 'item':
                 const itemId = condition.itemId;
                 const quantity = condition.quantity || 1;
                 const hasItem = hero.hasItem(itemId, quantity);
                 return !hasItem ? 
-                    `Need ${quantity}x ${allItemsCache[itemId]?.name || itemId}` : null;
+                    `{${quantity}x ${allItemsCache[itemId]?.name || itemId}}` : null;
             
             case 'questActive':
                 return !questSystem.activeQuests.has(condition.questId) ? 
-                    `Need active quest: ${condition.questId}` : null;
+                    `{Active quest: ${condition.questId}}` : null;
             
             case 'questCompleted':
                 const quest = questSystem.quests.get(condition.questId);
                 return !quest?.completed ? 
-                    `Need completed quest: ${condition.questId}` : null;
+                    `{Completed quest: ${condition.questId}}` : null;
             
             case 'questStep':
                 const stepQuest = questSystem.quests.get(condition.questId);
-                if (!stepQuest) return `Quest ${condition.questId} not found`;
+                if (!stepQuest) return `{Quest ${condition.questId} not found}`;
                 if (condition.branch && stepQuest.currentBranch !== condition.branch) {
-                    return `Need quest branch: ${condition.branch}`;
+                    return `{Quest branch: ${condition.branch}}`;
                 }
                 return stepQuest.currentStep !== condition.stepIndex ? 
-                    `Need quest step ${condition.stepIndex} (current: ${stepQuest.currentStep})` : null;
+                    `{Quest step ${condition.stepIndex} (current: ${stepQuest.currentStep})}` : null;
             
             case 'location':
                 return currentMapId !== condition.locationId ? 
-                    `Need to be in: ${condition.locationId}` : null;
+                    `{Location: ${condition.locationId}}` : null;
             
             default:
-                return `Unknown requirement: ${condition.type}`;
+                return `{Unknown requirement: ${condition.type}}`;
         }
     }).filter(req => req !== null); // Remove null entries
+
+    // Add the option text if it exists
+    if (option.text) {
+        requirements.unshift(`{${option.text}}`);
+    }
+
+    return requirements;
 }
