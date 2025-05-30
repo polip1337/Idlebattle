@@ -276,7 +276,7 @@
         "type": "combat",
         "initiallyLocked": true,
         "dialogueNpcId": "narrator",
-        "combatEndWinDialogueId": "gotSewerTapestry"
+        "combatEndWinDialogueId": "gotSewerCacheArtifact"
       }
     ]
   },

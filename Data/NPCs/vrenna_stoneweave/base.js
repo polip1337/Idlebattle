@@ -11,12 +11,15 @@ export default {
                 {
                     text: "I have found this amulet. Can you tell me anything about it?",
                     nextId: "mistwalker",
-                    conditions: [{ type: 'item', itemId: 'mistwalkerAmulet' }],
+                    conditions: [
+                    { type: 'item', itemId: 'mistwalkerAmulet' },
+                    { type: 'questActive', questId: 'proofForTheWeave', negate:true }
+                    ],
                     hideWhenUnavailable: true
                 },
                 {
                     text: "I have a tapestry fragment you might be interested in.",
-                    nextId: "fragment_dialogue",
+                    nextId: "null",
                     conditions: [{ type: 'item', itemId: 'tapestryFragment' }],
                     hideWhenUnavailable: true,
                     action: [
@@ -112,7 +115,17 @@ export default {
                     text: "I have this amulet that might interest you...",
                     nextId: "amulet_show",
                     conditions: [
-                        { type: "item", itemId: "mistwalkerAmulet" }
+                        { type: "item", itemId: "mistwalkerAmulet" },
+                        { type: 'questActiveOrCompleted', questId: 'proofForTheWeave', negate:true }
+                    ],
+                    hideWhenUnavailable: true
+                },
+                {
+                    text: "I've got the mistwalker amulet, its safe for me to pass.",
+                    nextId: "amulet_show",
+                    conditions: [
+                        { type: "item", itemId: "mistwalkerAmulet" },
+                        { type: 'questActiveOrCompleted', questId: 'proofForTheWeave'}
                     ],
                     hideWhenUnavailable: true
                 },

@@ -8,7 +8,7 @@ export default {
                     text: "Take the shard",
                     nextId: null,
                     action: [
-                        { type: "addItem", itemId: "fogShardRelic", quantity: 1 },
+                        { type: "addItem", itemId: "tapestryFragment", quantity: 1 },
                         { type: "travelToMap", mapId: "rustmarketSewers" }
                     ]
                 }

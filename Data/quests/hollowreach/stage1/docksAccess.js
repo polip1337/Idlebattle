@@ -7,7 +7,7 @@ export default {
         {
             description: 'Find a way past the guard at the docks entrance.',
             hint: 'Try talking to the guard or seek help from Vrenna at the Threadhall.',
-            condition: (event, data) => event === 'dialogue' && data.npc === 'guard' && data.dialogueId === 'start'
+            condition: (event, data) => event === 'dialogue' && data.npc === 'Guard' && data.dialogueId === 'start'
         },
         {
             description: 'Choose your approach: Sneak past, bribe the guard, or seek Vrenna\'s help.',

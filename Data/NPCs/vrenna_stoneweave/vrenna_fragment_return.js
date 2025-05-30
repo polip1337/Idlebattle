@@ -34,12 +34,7 @@ export default {
                 },
                 {
                     text: "I'll take both the gold and meet the weaver.",
-                    nextId: "accept_both",
-                    action: [
-                        { type: "removeItem", itemId: "tapestryFragment", quantity: 1 },
-                        { type: "addGold", amount: 200 },
-                        { type: "openDialogue", npcId: "sewer_contact", dialogueId: "share_info" }
-                    ]
+                    nextId: "accept_both"
                 },
                 {
                     text: "I need time to think about this.",
@@ -57,12 +52,7 @@ export default {
                 },
                 {
                     text: "I'll take both the gold and meet the weaver.",
-                    nextId: "accept_both",
-                    action: [
-                        { type: "removeItem", itemId: "tapestryFragment", quantity: 1 },
-                        { type: "addGold", amount: 200 },
-                        { type: "openDialogue", npcId: "sewer_contact", dialogueId: "share_info" }
-                    ]
+                    nextId: "accept_both"
                 },
                 {
                     text: "I need time to think about this.",
@@ -76,12 +66,7 @@ export default {
             options: [
                 {
                     text: "I'll take both the gold and meet Thalindir.",
-                    nextId: "accept_both",
-                    action: [
-                        { type: "removeItem", itemId: "tapestryFragment", quantity: 1 },
-                        { type: "addGold", amount: 200 },
-                        { type: "openDialogue", npcId: "sewer_contact", dialogueId: "share_info" }
-                    ]
+                    nextId: "accept_both"
                 },
                 {
                     text: "I need time to think about this.",
@@ -95,7 +80,13 @@ export default {
             options: [
                 {
                     text: "Thank you for the introduction.",
-                    nextId: null
+                    nextId: null,
+
+                action: [
+                    { type: "removeItem", itemId: "tapestryFragment", quantity: 1 },
+                    { type: "addGold", amount: 200 },
+                    { type: "openDialogue", npcId: "elrin_loomsong", dialogueId: "introduction" }
+                ]
                 }
             ]
         }
