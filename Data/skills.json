@@ -1010,7 +1010,7 @@
     "name": "Backstab",
     "type": "active",
     "damage": 12,
-    "manaCost": 10,
+    "manaCost": 5,
     "staminaCost": 20,
     "cooldown": 6,
     "damageType": "physical",

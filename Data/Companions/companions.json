@@ -112,7 +112,7 @@
         "stamina": 8
       }
     },
-    "skills": ["backstab", "stealth", "poisonDagger"],
+    "skills": ["backstab"],
     "passives": ["sharpReflexes", "marksmanship", "shadowMastery"],
     "experienceToLevelMultiplier": 1.1
   }

@@ -165,8 +165,7 @@ class Member {
                 new EffectClass(target, skill.effects);
                 skill.gainExperience(10); // Award experience for effect application
             }
-            this.currentMana -= skill.manaCost;
-            updateMana(this);
+
             if (skill.damageType && skill.damage != 0) {
                 const damage = skill.calculateDamage(this);
                 const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
