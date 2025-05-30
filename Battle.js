@@ -228,8 +228,14 @@ function useTeamSkills(teamInstance) {
                             skill.setElement(skillElement);
                         }
                     }
-                    // Set initial cooldown kickoff and use skill
-                    skill.needsInitialCooldownKickoff = true;
+                    // For companions, we need to ensure the skill is properly initialized
+                    if (skill.needsInitialCooldownKickoff) {
+                        skill.needsInitialCooldownKickoff = false;
+                        // Start cooldown and update animation immediately
+                        skill.startCooldown(member);
+                        skill.updateCooldownAnimation(member);
+                    }
+                    // Use skill after cooldown is set up
                     skill.useSkill(member);
                 } else if (skill.type === "passive") {
                     // Passive effects are usually applied at skill acquisition or start of battle
@@ -474,10 +480,22 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         // Reset skill states for companions
         if (!member.isHero && member.skills) {
             member.skills.forEach(skill => {
+                // Reset all cooldown-related properties
                 skill.needsInitialCooldownKickoff = true;
                 skill.onCooldown = false;
                 skill.remainingDuration = 0;
                 skill.cooldownStartTime = null;
+                // Reset overlay if it exists
+                if (skill.overlay) {
+                    skill.overlay.classList.add('hidden');
+                    skill.overlay.style.animation = '';
+                    skill.overlay.style.height = '0%';
+                    skill.overlay.classList.remove('paused');
+                }
+                // Reset div state if it exists
+                if (skill.div) {
+                    skill.div.classList.remove('disabled');
+                }
             });
         }
     });
