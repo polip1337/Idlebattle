@@ -219,7 +219,7 @@ function useTeamSkills(teamInstance) {
     teamInstance.members.forEach(member => {
         if (member.currentHealth > 0) {
             member.skills.forEach(skill => {
-                if (skill.type === "active" && !member.isHero) {
+                if (skill.type === "active") {
                     // Initialize skill element if not already set
                     if (!skill.div && member.element) {
                         const skillDivId = member.memberId + "Skill" + skill.name.replace(/\s/g, '');
@@ -228,15 +228,18 @@ function useTeamSkills(teamInstance) {
                             skill.setElement(skillElement);
                         }
                     }
-                    // For companions, we need to ensure the skill is properly initialized
-                    if (skill.needsInitialCooldownKickoff) {
-                        skill.needsInitialCooldownKickoff = false;
-                        // Start cooldown and update animation immediately
-                        skill.startCooldown(member);
-                        skill.updateCooldownAnimation(member);
+
+                    if (member.isHero) {
+                        // For hero, just use the skill normally
+                        skill.useSkill(member);
+                    } else {
+                        // For enemies, start cooldown immediately
+                        if (skill.needsInitialCooldownKickoff) {
+                            skill.needsInitialCooldownKickoff = false;
+                            skill.startCooldown(member);
+                            skill.updateCooldownAnimation(member);
+                        }
                     }
-                    // Use skill after cooldown is set up
-                    skill.useSkill(member);
                 } else if (skill.type === "passive") {
                     // Passive effects are usually applied at skill acquisition or start of battle
                 }
