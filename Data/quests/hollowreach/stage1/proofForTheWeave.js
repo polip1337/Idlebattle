@@ -7,12 +7,12 @@ export default {
         {
             description: 'Enter the Rustmarket Sewers to search for information about the scavengers.',
             hint: 'Navigate to the Rustmarket Sewers and look for someone who might know about the scavengers.',
-            condition: (event, data) => event === 'areaEnter' && data.areaId === 'rustmarketSewers'
+            condition: (event, data) => event === 'travel' && data.mapId === 'rustmarketSewers'
         },
         {
             description: 'Find and speak to the sewer contact about the scavengers\' location.',
             hint: 'Look for a hooded figure in the sewers who might have information.',
-            condition: (event, data) => event === 'dialogue' && data.npc === 'sewer_contact' && data.dialogueId === 'reveal_location'
+            condition: (event, data) => event === 'dialogue' && data.npc === 'Sewer Contact' && data.dialogueId === 'weave_cache_guide'
         },
         {
             description: 'Deal with the fog-touched scavengers guarding the fragment.',
@@ -22,7 +22,7 @@ export default {
         {
             description: 'Decide what to do with the fragment.',
             hint: 'Choose whether to return it to Vrenna, sell it to the Driftkin, or keep it for study.',
-            condition: (event, data) => event === 'dialogue' && data.npc === 'Vrenna Stoneweave' && data.dialogueId === 'fragment_decision'
+            condition: (event, data) => event === 'dialogue' && data.npc === 'Vrenna Stoneweave' && data.dialogueId === 'accept_both'
         }
     ],
     rewards: {
