@@ -343,7 +343,6 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         }
     });
 
-
     membersToRender.forEach(member => {
         const targetRowIndex = (member.position === "Back") ? 1 : 0;
         let rowElement = teamRows[targetRowIndex];
@@ -362,8 +361,24 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         rowElement.appendChild(memberElement);
 
         if (typeof member.initializeDOMElements === 'function') {
-             member.initializeDOMElements();
+            member.initializeDOMElements();
         }
+
+        // Update skill element references after rendering
+        if (member.skills) {
+            member.skills.forEach(skill => {
+                if (skill.type === "active") {
+                    const skillDivId = member.memberId + "Skill" + skill.name.replace(/\s/g, '');
+                    const skillElement = memberElement.querySelector("#" + skillDivId);
+                    if (skillElement) {
+                        skill.setElement(skillElement);
+                        // Reset overlay reference to ensure we get a fresh one
+                        skill.overlay = null;
+                    }
+                }
+            });
+        }
+
         updateHealth(member); updateMana(member); updateStamina(member);
     });
 }
