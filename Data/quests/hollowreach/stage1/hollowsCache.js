@@ -12,7 +12,7 @@ export default {
         {
             description: 'Defeat the scavengers guarding the cache.',
             hint: 'Travel to the Ironspire Ruin and win the combat encounter at the Cache Vault.',
-            condition: (event, data) => event === 'combatComplete' && data.poiName === 'Cache Vault'
+            condition: (event, data) => event === 'combatComplete' && data.poiName === 'Fogged Cache'
         },
         {
             description: 'Decide the fate of the food cache.',
