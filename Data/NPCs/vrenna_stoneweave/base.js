@@ -15,6 +15,15 @@ export default {
                     hideWhenUnavailable: true
                 },
                 {
+                    text: "I have a tapestry fragment you might be interested in.",
+                    nextId: "fragment_dialogue",
+                    conditions: [{ type: 'item', itemId: 'tapestryFragment' }],
+                    hideWhenUnavailable: true,
+                    action: [
+                        { type: "openDialogue", npcId: "vrenna_stoneweave", dialogueId: "vrenna_fragment_return" }
+                    ]
+                },
+                {
                     text: "I need help getting into the Fogged Docks.",
                     nextId: "docks_help",
                     conditions: [

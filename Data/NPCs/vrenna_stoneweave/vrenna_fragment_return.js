@@ -2,21 +2,11 @@ export default {
     nodes: [
         {
             id: "start",
-            text: "Ah, you've returned with the fragment. Let me examine it closely.",
+            text: "*Vrenna's eyes widen as she notices the fragment in your possession* Ah, you've found it! *She quickly composes herself, but you notice a flicker of satisfaction in her eyes* The scavengers had it, didn't they? I knew they would. ",
             options: [
                 {
-                    text: "Here it is.",
-                    nextId: "fragment_return"
-                }
-            ]
-        },
-        {
-            id: "fragment_return",
-            text: "*Vrenna's eyes widen as you present the tapestry fragment. Her hands, usually steady, tremble slightly as she takes it* This... this is more than I dared hope for. *She carefully spreads the fragment on her worktable, the ancient threads glowing faintly* The patterns... they're intact. The weave is still strong. *She looks up at you, her expression a mix of awe and concern* Do you know what this means?",
-            options: [
-                {
-                    text: "What do the patterns show?",
-                    nextId: "pattern_meaning"
+                    text: "I didnt need the amulet, there was no fog where the scavengers lived.",
+                    nextId: "reveal_motive"
                 },
                 {
                     text: "The scavengers were guarding it fiercely.",
@@ -25,158 +15,120 @@ export default {
             ]
         },
         {
-            id: "pattern_meaning",
-            text: "*Vrenna's fingers traced the intricate patterns* These aren't just decorative. They're a map. A record of the portals that once connected our world to others. *Her voice grew more intense* The fog... it came through one of these. The scavengers must have realized this. That's why they were protecting it.",
+            id: "reveal_motive",
+            text: "*Vrenna's expression shifts, a small smile playing on her lips* The Mistwalker Amulet was never in doubt. I've read about its kind before. But the fragment... *she gestures to it* That was the real prize. The scavengers stole it from our archives last month. I needed someone to retrieve it. Someone with... unique contacts.",
             options: [
                 {
-                    text: "Can we use this to stop the fog?",
-                    nextId: "fog_solution"
+                    text: "What's so important about this fragment?",
+                    nextId: "fragment_importance"
+                }
+            ]
+        },
+        {
+            id: "acknowledge_deception",
+            text: "*Vrenna's smile fades, replaced by a look of earnestness* I did what was necessary. The fragment contains patterns that could help us understand the fog's nature. The scavengers would have used it for their own ends. *She gestures to the fragment* But you've done well. Better than I expected. I'm willing to offer you 200 gold for it, or... *she hesitates* I could introduce you to someone who might be interested in joining your cause.",
+            options: [
+                {
+                    text: "I'll take the gold.",
+                    nextId: "take_gold",
+                    action: [
+                        { type: "removeItem", itemId: "tapestryFragment", quantity: 1 },
+                        { type: "addGold", amount: 200 }
+                    ]
                 },
                 {
-                    text: "What happened to the other portals?",
-                    nextId: "portal_history"
+                    text: "Tell me about this potential companion.",
+                    nextId: "companion_info"
+                },
+                {
+                    text: "I need time to think about this.",
+                    nextId: null
+                }
+            ]
+        },
+        {
+            id: "fragment_importance",
+            text: "*Vrenna's eyes light up with scholarly interest* The patterns in this fragment predate the Great Collapse. They show how the fog first entered our world. The scavengers believe they can use it to control the fog, but that's not its true purpose. *She looks at you intently* It's a map. A record of the portals that once connected our world to others. I can offer you 200 gold for it, or introduce you to someone who might help you understand its true value.",
+            options: [
+                {
+                    text: "I'll take the gold.",
+                    nextId: "take_gold",
+                    action: [
+                        { type: "removeItem", itemId: "tapestryFragment", quantity: 1 },
+                        { type: "addGold", amount: 200 }
+                    ]
+                },
+                {
+                    text: "Tell me about this potential companion.",
+                    nextId: "companion_info"
+                },
+                {
+                    text: "I need time to think about this.",
+                    nextId: null
                 }
             ]
         },
         {
             id: "scavenger_interest",
-            text: "*Vrenna nods thoughtfully* The scavengers have been collecting artifacts from the Old Empire. They understand their value better than most. *She studies the fragment more closely* This particular piece... it shows something they've been searching for. A way to control the fog. Or at least, that's what they believe.",
+            text: "*Vrenna nods thoughtfully* They've been collecting artifacts from the Old Empire. This fragment... it shows something they've been searching for. A way to control the fog. Or at least, that's what they believe. *She studies the fragment more closely* But its true value lies elsewhere. I can offer you 200 gold for it, or introduce you to someone who might help you understand its significance.",
             options: [
                 {
-                    text: "Is that possible?",
-                    nextId: "control_possibility"
+                    text: "I'll take the gold.",
+                    nextId: "take_gold",
+                    action: [
+                        { type: "removeItem", itemId: "tapestryFragment", quantity: 1 },
+                        { type: "addGold", amount: 200 }
+                    ]
                 },
                 {
-                    text: "What do you believe?",
-                    nextId: "vrenna_belief"
-                }
-            ]
-        },
-        {
-            id: "fog_solution",
-            text: "*Vrenna's expression grew serious* The fog is part of our world now. It can't be simply stopped. But this... *She gestures to the fragment* This might help us understand it. Learn to live with it. Maybe even communicate with it. *Her voice dropped to a whisper* The Loomkeepers have always believed that the fog is more than just a curse. It's a presence. A consciousness.",
-            options: [
-                {
-                    text: "What will you do with this knowledge?",
-                    nextId: "knowledge_use"
+                    text: "Tell me about this potential companion.",
+                    nextId: "companion_info"
                 },
                 {
-                    text: "The other factions won't like this.",
-                    nextId: "faction_reaction"
+                    text: "I need time to think about this.",
+                    nextId: null
                 }
             ]
         },
         {
-            id: "portal_history",
-            text: "*Vrenna's expression darkened* The Old Empire used them recklessly. They opened gates to worlds they didn't understand. Worlds that didn't want to be found. *She pointed to a specific pattern on the fragment* This one... this is where it all went wrong. Where they opened the gate to the fog's world.",
+            id: "take_gold",
+            text: "*She carefully takes the fragment and hands you a pouch of gold* Thank you. This will help us preserve more of our history. The patterns in this fragment will be studied carefully. *She looks at you with a mix of gratitude and something else* You've proven yourself more capable than I initially thought.",
             options: [
                 {
-                    text: "Can we close it?",
-                    nextId: "gate_closure"
+                    text: "Goodbye.",
+                    nextId: null
+                }
+            ]
+        },
+        {
+            id: "companion_info",
+            text: "There's a contact in the sewers who has been... let's say, helping people navigate the darker corners of Hollowreach. They're skilled in finding hidden paths and have a network of informants. If you're interested, I can arrange an introduction. They might help you understand the true nature of artifacts like this fragment.",
+            options: [
+                {
+                    text: "I'd like to meet this contact.",
+                    nextId: "introduce_contact",
+                    action: [
+                        { type: "removeItem", itemId: "tapestryFragment", quantity: 1 },
+                        { type: "openDialogue", npcId: "sewer_contact", dialogueId: "share_info" }
+                    ]
                 },
                 {
-                    text: "What happened to the Empire?",
-                    nextId: "empire_fate"
-                }
-            ]
-        },
-        {
-            id: "control_possibility",
-            text: "*Vrenna shook her head* Control is the wrong word. The fog is too powerful. Too... alive. *She traced the patterns again* But understanding? Communication? That might be possible. The Loomkeepers have been studying the fog's patterns. How it moves. How it changes. This fragment... it could be the key to understanding its language.",
-            options: [
-                {
-                    text: "What will you do with this knowledge?",
-                    nextId: "knowledge_use"
+                    text: "I'll take the gold instead.",
+                    nextId: "take_gold"
                 },
                 {
-                    text: "The other factions won't like this.",
-                    nextId: "faction_reaction"
+                    text: "I need to think about this.",
+                    nextId: null
                 }
             ]
         },
         {
-            id: "vrenna_belief",
-            text: "*Vrenna's eyes took on a distant look* I believed the fog is trying to tell us something. The way it moves. The patterns it creates. *She gestured to the fragment* These ancient weavers understood that. They recorded it. Preserved it. *Her voice grew more passionate* We need to learn to listen. To understand. Before it's too late.",
+            id: "introduce_contact",
+            text: "Excellent choice. I'll send word ahead. You'll find them in the lower sewers, near the old water treatment plant. Just mention my name and show them the fragment's pattern - they'll know what to look for. *She gives you a knowing look* They might even tell you things about the fragment that I haven't shared.",
             options: [
                 {
-                    text: "What do you mean, too late?",
-                    nextId: "urgency_explanation"
-                },
-                {
-                    text: "How can I help?",
-                    nextId: "help_offering"
-                }
-            ]
-        },
-        {
-            id: "knowledge_use",
-            text: "*Vrenna carefully rolled up the fragment* The Loomkeepers will study it. Learn from it. *Her expression grew determined* We need to understand the fog before the other factions try to destroy it. Or worse, try to control it. *She offered you a small, woven token* Take this. A symbol of our gratitude. And a promise - the Loomkeepers will use this knowledge wisely.",
-            options: [
-                {
-                    text: "I trust you to do what's right.",
-                    nextId: null,
-                    action: { 
-                        type: "completeQuest",
-                        questId: "proofForTheWeave"
-                    }
-                }
-            ]
-        },
-        {
-            id: "faction_reaction",
-            text: "*Vrenna's expression grew grave* No, they won't. The Emberclad will want to destroy it. The Driftkin will want to worship it. The scavengers will want to exploit it. *She looked at you intently* That's why we need to understand it first. To show them there's another way.",
-            options: [
-                {
-                    text: "I'll help you show them.",
-                    nextId: null,
-                    action: { 
-                        type: "completeQuest",
-                        questId: "proofForTheWeave"
-                    }
-                }
-            ]
-        },
-        {
-            id: "gate_closure",
-            text: "*Vrenna shook her head sadly* The gate is already closed. The fog is here. It's part of our world now. *She pointed to another pattern* But these other gates... they might still be open. Or worse, they might be opening. *Her voice grew urgent* We need to understand the patterns. Learn to read them. Before it's too late.",
-            options: [
-                {
-                    text: "What can I do to help?",
-                    nextId: "help_offering"
-                }
-            ]
-        },
-        {
-            id: "empire_fate",
-            text: "*Vrenna's voice took on a somber tone* They paid the price for their arrogance. The fog consumed them. Changed them. *She gestured to the fragment* This is all that remains of their knowledge. Their understanding. *Her expression grew determined* We must learn from their mistakes. Not repeat them.",
-            options: [
-                {
-                    text: "How can I help?",
-                    nextId: "help_offering"
-                }
-            ]
-        },
-        {
-            id: "urgency_explanation",
-            text: "*Vrenna's hands moved quickly as she spoke* The fog is changing. Growing stronger. More intelligent. The patterns in the fragment... they showed that this has happened before. In other worlds. *Her voice dropped to a whisper* When the fog reached a certain point, it didn't just consume. It transformed. Everything.",
-            options: [
-                {
-                    text: "What can we do?",
-                    nextId: "help_offering"
-                }
-            ]
-        },
-        {
-            id: "help_offering",
-            text: "*Vrenna's expression brightened* You've already helped more than you know. This fragment... it's a start. *She offered you a small, woven token* Take this. A symbol of our gratitude. And a promise - the Loomkeepers will use this knowledge wisely. *She looked at you intently* But we'll need your help again. The fog is changing. We need to be ready.",
-            options: [
-                {
-                    text: "I'll help when you need me.",
-                    nextId: null,
-                    action: { 
-                        type: "completeQuest",
-                        questId: "proofForTheWeave"
-                    }
+                    text: "Thank you for the introduction.",
+                    nextId: null
                 }
             ]
         }
