@@ -35,10 +35,10 @@ export default {
                 {
                     text: "Lead the way.",
                     nextId: null,
-                    action: {
-                        type: "completeQuest",
-                        questId: "hollowsCache"
-                    }
+                    action:[
+                        { type: "addItem", itemId: "foodSupplies", quantity: 1 },
+                        { type: "travelToMap", mapId: "foggedDocks" }
+                    ]
                 }
             ]
         },
@@ -47,9 +47,11 @@ export default {
             text: "*Renn's voice drops to a whisper* The fog... it's changing. Getting smarter. More... aware. *He glances around nervously* I've heard stories from the Driftkin. They say it's not just mist anymore. It's something else. Something that remembers. *He shakes his head* But that's a problem for another day. Right now, we need to get these supplies to safety.",
             options: [
                 {
-                    text: "You're right. Let's go.",
-                    nextId: "moving_out"
+                    text: "We should hurry back to the Hollow.",
+                    nextId: "moving_out",
+
                 }
+
             ]
         }
     ]

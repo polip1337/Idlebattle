@@ -1,0 +1,11 @@
+{
+    "id": "foodSupplies",
+    "name": "Food Supplies",
+    "type": "quest",
+    "slot": "none",
+    "icon": "Media/Items/food_supplies.png",
+    "description": "A cache of old empire food. Somehow still fresh.",
+    "rarity": "rare",
+    "value": 0
+
+} 
