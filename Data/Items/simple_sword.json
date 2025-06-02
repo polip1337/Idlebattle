@@ -9,7 +9,7 @@
     "value": 10,
     "stats": {
         "strength": 1,
-        "damage": 2
+        "damage": 0.25
     },
     "effects": [],
     "weaponSkillIds": ["basic_slash"]

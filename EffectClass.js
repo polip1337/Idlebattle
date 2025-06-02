@@ -1,4 +1,4 @@
-import {mobsClasses, renderTeamMembers, hero} from './initialize.js';
+import {mobsClasses, renderTeamMembers, hero, battleStatistics} from './initialize.js';
 import Member from './Member.js'
 import {deepCopy} from './Render.js';
 

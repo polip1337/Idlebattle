@@ -49,15 +49,15 @@ function resetFleeButtonState() {
 function updateStageDisplay() {
     const stageDisplay = document.getElementById('battle-stage-display');
     const increaseStageButton = document.getElementById('increase-stage');
-    
+
     if (stageDisplay && currentBattleArea) {
         stageDisplay.textContent = `Stage ${currentBattleStageNumber} of ${currentBattleArea.stages.length}`;
     }
-    
+
     // Update next stage button state
     if (increaseStageButton) {
-        const canAdvance = currentBattleArea && 
-                          currentBattleStageNumber < currentBattleArea.stages.length && 
+        const canAdvance = currentBattleArea &&
+                          currentBattleStageNumber < currentBattleArea.stages.length &&
                           completedStages.has(currentBattleStageNumber);
         increaseStageButton.disabled = !canAdvance;
         increaseStageButton.style.opacity = canAdvance ? '1' : '0.5';
@@ -164,8 +164,8 @@ async function handleBattleWin() {
     questSystem.updateQuestProgress('combatComplete', { poiName: currentPoiName, stage: currentBattleStageNumber });
 
     // Show post-combat dialogue only after completing the highest stage
-    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && 
-        currentBattleDialogueOptions.endWinDialogueId && 
+    if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId &&
+        currentBattleDialogueOptions.endWinDialogueId &&
         currentBattleStageNumber === currentBattleArea.stages.length) {
         isBattlePausedForDialogue = true;
         battleLog.log(`Starting post-battle (win) dialogue: ${currentBattleDialogueOptions.endWinDialogueId}`);
@@ -193,7 +193,7 @@ async function handleBattleLoss() {
         isBattlePausedForDialogue = false;
         return; // Skip popup if dialogue was shown
     }
-    
+
     // Only show popup if no dialogue was shown
     showPopup("Defeat!", "Your team has been defeated.");
 }
@@ -229,7 +229,7 @@ function useTeamSkills(teamInstance) {
                         }
                     }
 
-                    
+
                     // For enemies, start cooldown immediately
                                         // For enemies, start cooldown and trigger skill immediately
                 if (!member.isHero) {
@@ -298,7 +298,7 @@ function calculateFleeChance() {
 function handleSuccessfulFlee(fleeChance, randomRoll) {
     battleLog.log(`Successfully fled from battle! (Chance: ${fleeChance.toFixed(0)}%, Rolled: ${randomRoll.toFixed(0)})`);
     battleStatistics.addSuccessfulFlee();
-    
+
     // Check for flee dialogue before stopping battle
     if (currentBattleDialogueOptions && currentBattleDialogueOptions.npcId && currentBattleDialogueOptions.fleeDialogueId) {
         isBattlePausedForDialogue = true;
@@ -319,7 +319,7 @@ function handleSuccessfulFlee(fleeChance, randomRoll) {
         handleEscapeActions();
         stopBattle(true); // Pass true to indicate fled
     }
-    
+
     questSystem.updateQuestProgress('escape', { poiName: currentPoiName});
 }
 
@@ -540,7 +540,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
     }
 
     // Show pre-combat dialogue only at the start of the first stage
-    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId && 
+    if (dialogueOptions && dialogueOptions.npcId && dialogueOptions.startDialogueId &&
         !hasShownPreCombatDialogue && currentBattleStageNumber === 1) {
         battleLog.log(`Starting pre-battle dialogue: ${dialogueOptions.startDialogueId}`);
         await window.startDialogue(dialogueOptions.npcId, dialogueOptions.startDialogueId);
@@ -570,7 +570,7 @@ async function startBattle(poiData, dialogueOptions = null, stageNum = 1) {
         clearInterval(battleInterval);
     }
     battleInterval = setInterval(gameTick, 1000);
-    
+
     // Update stage display
     updateStageDisplay();
 
