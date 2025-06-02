@@ -113,8 +113,7 @@ class EvolutionService {
         // Create a deep copy of hero stats
         const statsSnapshot = {
             ...hero,
-            ...(hero.stats || {}),
-            ...(hero.battleStatistics || {})
+            ...(hero.stats || {})
         };
 
         // Remove non-stat properties
@@ -122,26 +121,25 @@ class EvolutionService {
         delete statsSnapshot.canEvolve;
         delete statsSnapshot.class1Evolve;
 
-        // Add computed stats from battle statistics
-        if (hero.battleStatistics) {
+        // Get battle statistics from the global battleStatistics instance
+        const battleStats = window.battleStatistics;
+        if (battleStats) {
             // Add damage type stats
-            if (hero.battleStatistics.damageDealt) {
-                statsSnapshot.meleeDamage = hero.battleStatistics.meleeDamageDealt || 0;
-                statsSnapshot.rangedDamage = hero.battleStatistics.rangedDamageDealt || 0;
-                statsSnapshot.fireDamage = hero.battleStatistics.damageDealt['Fire'] || 0;
-                statsSnapshot.iceDamage = hero.battleStatistics.damageDealt['Ice'] || 0;
-                statsSnapshot.lightningDamage = hero.battleStatistics.damageDealt['Lightning'] || 0;
-                statsSnapshot.earthDamage = hero.battleStatistics.damageDealt['Earth'] || 0;
-                statsSnapshot.physicalDamageTaken = hero.battleStatistics.damageReceived['Physical'] || 0;
-            }
+            statsSnapshot.meleeDamage = battleStats.meleeDamageDealt || 0;
+            statsSnapshot.rangedDamage = battleStats.rangedDamageDealt || 0;
+            statsSnapshot.fireDamage = battleStats.damageDealt['Fire'] || 0;
+            statsSnapshot.iceDamage = battleStats.damageDealt['Ice'] || 0;
+            statsSnapshot.lightningDamage = battleStats.damageDealt['Lightning'] || 0;
+            statsSnapshot.earthDamage = battleStats.damageDealt['Earth'] || 0;
+            statsSnapshot.physicalDamageTaken = battleStats.damageReceived['Physical'] || 0;
 
             // Add other relevant stats
-            statsSnapshot.enemiesDefeated = Object.values(hero.battleStatistics.enemiesDefeated || {}).reduce((a, b) => a + b, 0);
-            statsSnapshot.criticalHits = hero.battleStatistics.criticalHits || 0;
-            statsSnapshot.spellsCast = Object.values(hero.battleStatistics.skillUsage || {}).reduce((a, b) => a + b, 0);
-            statsSnapshot.manaUsed = hero.battleStatistics.manaSpent || 0;
-            statsSnapshot.hpHealed = hero.battleStatistics.healingDone || 0;
-            statsSnapshot.buffsCast = hero.battleStatistics.buffsCast || 0;
+            statsSnapshot.enemiesDefeated = Object.values(battleStats.enemiesDefeated || {}).reduce((a, b) => a + b, 0);
+            statsSnapshot.criticalHits = battleStats.criticalHits || 0;
+            statsSnapshot.spellsCast = Object.values(battleStats.skillUsage || {}).reduce((a, b) => a + b, 0);
+            statsSnapshot.manaUsed = battleStats.manaSpent || 0;
+            statsSnapshot.hpHealed = battleStats.healingDone || 0;
+            statsSnapshot.buffsCast = battleStats.buffsCast || 0;
         }
 
         return statsSnapshot;
