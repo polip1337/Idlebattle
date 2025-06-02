@@ -110,12 +110,40 @@ class EvolutionService {
     }
 
     _getStatsSnapshot() {
+        // Create a deep copy of hero stats
         const statsSnapshot = {
             ...hero,
             ...(hero.stats || {}),
             ...(hero.battleStatistics || {})
         };
+
+        // Remove non-stat properties
         delete statsSnapshot.availableClasses;
+        delete statsSnapshot.canEvolve;
+        delete statsSnapshot.class1Evolve;
+
+        // Add computed stats from battle statistics
+        if (hero.battleStatistics) {
+            // Add damage type stats
+            if (hero.battleStatistics.damageDealt) {
+                statsSnapshot.meleeDamage = hero.battleStatistics.meleeDamageDealt || 0;
+                statsSnapshot.rangedDamage = hero.battleStatistics.rangedDamageDealt || 0;
+                statsSnapshot.fireDamage = hero.battleStatistics.damageDealt['Fire'] || 0;
+                statsSnapshot.iceDamage = hero.battleStatistics.damageDealt['Ice'] || 0;
+                statsSnapshot.lightningDamage = hero.battleStatistics.damageDealt['Lightning'] || 0;
+                statsSnapshot.earthDamage = hero.battleStatistics.damageDealt['Earth'] || 0;
+                statsSnapshot.physicalDamageTaken = hero.battleStatistics.damageReceived['Physical'] || 0;
+            }
+
+            // Add other relevant stats
+            statsSnapshot.enemiesDefeated = Object.values(hero.battleStatistics.enemiesDefeated || {}).reduce((a, b) => a + b, 0);
+            statsSnapshot.criticalHits = hero.battleStatistics.criticalHits || 0;
+            statsSnapshot.spellsCast = Object.values(hero.battleStatistics.skillUsage || {}).reduce((a, b) => a + b, 0);
+            statsSnapshot.manaUsed = hero.battleStatistics.manaSpent || 0;
+            statsSnapshot.hpHealed = hero.battleStatistics.healingDone || 0;
+            statsSnapshot.buffsCast = hero.battleStatistics.buffsCast || 0;
+        }
+
         return statsSnapshot;
     }
 
@@ -175,10 +203,14 @@ class EvolutionService {
         const newAvailableClasses = [];
         let classesCheckedCount = 0;
 
+        // Get current stats snapshot
+        const statsSnapshot = this._getStatsSnapshot();
+
         this.evolutionData.tiers.forEach(tier => {
             tier.classes.forEach(classDef => {
                 classesCheckedCount++;
 
+                // Skip special classes (Adept, Master) if they don't have valid requirements
                 if (["Adept", "Master"].includes(classDef.name)) {
                     const reqStrForRarity = classDef.requirements[heroRarity];
                     const reqStrCommon = classDef.requirements.common;
@@ -188,6 +220,7 @@ class EvolutionService {
                     }
                 }
 
+                // Check if this class is a valid evolution path
                 let isCandidatePath = false;
                 if (currentHeroClass === "Novice") {
                     if (!classDef.from) {
@@ -203,20 +236,26 @@ class EvolutionService {
                     return;
                 }
 
+                // Get the appropriate requirement string based on rarity
                 const requirementString = classDef.requirements[heroRarity] || classDef.requirements['common'];
                 if (!requirementString) {
                     return;
                 }
 
-                const statsSnapshot = this._getStatsSnapshot();
+                // Create evaluation context with previous class info
                 const evaluationContext = {
                     ...statsSnapshot,
                     previousClass: currentHeroClass
                 };
 
+                // Check if requirements are met
                 if (this.meetsRequirements(requirementString, evaluationContext)) {
                     if (!newAvailableClasses.some(ac => ac.name === classDef.name)) {
-                        newAvailableClasses.push({ ...classDef, tierName: tier.name });
+                        newAvailableClasses.push({ 
+                            ...classDef, 
+                            tierName: tier.name,
+                            requirements: requirementString // Store the requirement string for UI display
+                        });
                     }
                 }
             });
@@ -226,7 +265,10 @@ class EvolutionService {
         hero.availableClasses = newAvailableClasses.slice(0, this._displayedClassesCount);
         hero.canEvolve = newAvailableClasses.length > 0;
 
-        console.log(`Evolution check: ${classesCheckedCount} class definitions processed. ${newAvailableClasses.length} evolutions available for ${hero.classType || 'Novice'}.`);
+        if (this._debugMode) {
+            console.log(`Evolution check: ${classesCheckedCount} class definitions processed. ${newAvailableClasses.length} evolutions available for ${hero.classType || 'Novice'}.`);
+            console.log('Available classes:', newAvailableClasses);
+        }
     }
 
     /**
@@ -237,8 +279,26 @@ class EvolutionService {
      */
     meetsRequirements(requirementString, statsContext) {
         try {
-            const requirementFn = new Function('stats', `return (${requirementString})(stats);`);
-            return requirementFn(statsContext);
+            // Create a safe evaluation context
+            const safeContext = {
+                ...statsContext,
+                // Add any helper functions or constants needed for requirements
+                Math: Math,
+                Number: Number,
+                Boolean: Boolean,
+                String: String,
+                Array: Array,
+                Object: Object
+            };
+
+            // Create the requirement function with the safe context
+            const requirementFn = new Function('stats', `
+                with (stats) {
+                    return (${requirementString})(stats);
+                }
+            `);
+
+            return requirementFn(safeContext);
         } catch (error) {
             console.error(
                 `Error evaluating requirement function.

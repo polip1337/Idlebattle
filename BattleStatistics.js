@@ -24,6 +24,15 @@ class BattleStatistics {
         this.totalDebuffsApplied = 0; // Debuffs applied by the player
         this.successfulFlees = 0; // New: Track successful flees
         this.goldCollected = 0; // New: Track gold collected
+        this.meleeAttacks = 0;
+        this.rangedAttacks = 0;
+        this.buffsApplied = 0;
+        this.skillTagsUsed = {};
+
+        // Add new tracking for damage by skill type
+        this.meleeDamageDealt = 0;
+        this.rangedDamageDealt = 0;
+        this.buffsCast = 0;
     }
     reset() {
         this.damageDealt = {};
@@ -50,14 +59,32 @@ class BattleStatistics {
         this.totalDebuffsApplied = 0; // Debuffs applied by the player
         this.successfulFlees = 0; // New: Track successful flees
         this.goldCollected = 0; // New: Track gold collected
+        this.meleeAttacks = 0;
+        this.rangedAttacks = 0;
+        this.buffsApplied = 0;
+        this.skillTagsUsed = {};
+
+        // Reset new tracking properties
+        this.meleeDamageDealt = 0;
+        this.rangedDamageDealt = 0;
+        this.buffsCast = 0;
     }
-    addDamageDealt(type, amount) {
+    addDamageDealt(type, amount, skillTags = []) {
         if (this.damageDealt[type] !== undefined) {
             this.damageDealt[type] += amount;
         } else {
             this.damageDealt[type] = amount;
         }
         this.damageDealt['Total'] = (this.damageDealt['Total'] || 0) + amount;
+
+        // Track damage by skill type based on tags
+        if (skillTags && Array.isArray(skillTags)) {
+            if (skillTags.includes('Melee')) {
+                this.meleeDamageDealt += amount;
+            } else if (skillTags.includes('Ranged')) {
+                this.rangedDamageDealt += amount;
+            }
+        }
     }
 
     addDamageReceived(type, amount) {
@@ -98,11 +125,36 @@ class BattleStatistics {
         this.criticalDamage += damageAmount; // Assuming damageAmount is the full critical hit damage
     }
 
-    addSkillUsage(skillName) {
+    addSkillUsage(skillName, skillTags = []) {
         if (this.skillUsage[skillName]) {
             this.skillUsage[skillName]++;
         } else {
             this.skillUsage[skillName] = 1;
+        }
+
+        // Track skill usage by tags
+        if (skillTags && Array.isArray(skillTags)) {
+            skillTags.forEach(tag => {
+                if (this.skillTagsUsed[tag]) {
+                    this.skillTagsUsed[tag]++;
+                } else {
+                    this.skillTagsUsed[tag] = 1;
+                }
+
+                // Track specific tag types
+                if (tag === 'Melee') {
+                    this.meleeAttacks++;
+                } else if (tag === 'Ranged') {
+                    this.rangedAttacks++;
+                } else if (tag === 'Buff') {
+                    this.buffsApplied++;
+                }
+            });
+        }
+
+        // Track buff casting
+        if (skillTags && Array.isArray(skillTags) && skillTags.includes('Buff')) {
+            this.buffsCast++;
         }
     }
 
@@ -112,6 +164,7 @@ class BattleStatistics {
 
     addTotalBuffsApplied() {
         this.totalBuffsApplied++;
+        this.buffsApplied++;
     }
 
     addTotalDebuffsApplied() {
@@ -153,7 +206,8 @@ class BattleStatistics {
     addGoldCollected(amount) {
         this.goldCollected += amount;
     }
- getSerializableData() {
+
+    getSerializableData() {
         // Return a plain object copy of all properties
         return {
             damageDealt: { ...this.damageDealt },
@@ -180,6 +234,13 @@ class BattleStatistics {
             totalDebuffsApplied: this.totalDebuffsApplied,
             successfulFlees: this.successfulFlees,
             goldCollected: this.goldCollected,
+            meleeAttacks: this.meleeAttacks,
+            rangedAttacks: this.rangedAttacks,
+            buffsApplied: this.buffsApplied,
+            skillTagsUsed: { ...this.skillTagsUsed },
+            meleeDamageDealt: this.meleeDamageDealt,
+            rangedDamageDealt: this.rangedDamageDealt,
+            buffsCast: this.buffsCast
         };
     }
 
@@ -248,7 +309,10 @@ class BattleStatistics {
             'successful-blocks': this.successfulBlocks || 0,
             'enemies-defeated': enemiesDefeatedString,
             'successful-flees': this.successfulFlees || 0,
-            'gold-collected': this.goldCollected || 0
+            'gold-collected': this.goldCollected || 0,
+            'melee-damage-dealt': Math.round(this.meleeDamageDealt || 0),
+            'ranged-damage-dealt': Math.round(this.rangedDamageDealt || 0),
+            'buffs-cast': this.buffsCast || 0
         };
 
         // Update each stat in the UI
