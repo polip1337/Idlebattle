@@ -115,3 +115,6 @@ export function openStatsTab(evt, tabName) {
     document.getElementById(tabName).classList.add('active');
     evt.currentTarget.classList.add('active');
 }
+
+// Make openStatsTab available globally for onclick handlers
+window.openStatsTab = openStatsTab;
