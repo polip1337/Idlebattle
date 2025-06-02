@@ -3,6 +3,7 @@ import { battleStatistics, hero } from './initialize.js';
 import { updateProgressBar, renderBattleConsumableBar, renderSkills, renderPassiveSkills, updateStatsDisplay, updateHealth, updateMana, updateStamina } from './Render.js'; // Added missing Render functions
 import { updateQuestLog } from './questLog.js';
 import { refreshMapElements } from './map.js'; // Removed updateHeroMapStats as it's handled in map.js
+import tutorialOverlay from './tutorialOverlay.js';
 
 export function openTab(evt, tabName) {
     const tabContents = document.getElementsByClassName('tabcontent');
@@ -94,6 +95,11 @@ export function openTab(evt, tabName) {
     if (tabName === 'map') {
         // updateHeroMapStats is handled within map.js's refreshMapElements or its internal _updateHeroMapSidebar
         if (typeof refreshMapElements === 'function') refreshMapElements();
+        tutorialOverlay.checkAndShowTutorial('map');
+    } else if (tabName === 'heroContent') {
+        tutorialOverlay.checkAndShowTutorial('party');
+    } else if (tabName === 'battlefield') {
+        tutorialOverlay.checkAndShowTutorial('battle');
     }
 }
 
@@ -114,6 +120,30 @@ export function openStatsTab(evt, tabName) {
     // Show the selected tab content and mark its button as active
     document.getElementById(tabName).classList.add('active');
     evt.currentTarget.classList.add('active');
+}
+
+// Function to handle hero sub-tab switching
+export function openHeroSubTab(evt, tabName) {
+    // Hide all tab content
+    const tabContents = document.getElementsByClassName('hero-sub-tab-content');
+    for (let content of tabContents) {
+        content.classList.remove('active');
+    }
+
+    // Remove active class from all tab buttons
+    const tabButtons = document.getElementsByClassName('hero-sub-tab-button');
+    for (let button of tabButtons) {
+        button.classList.remove('active');
+    }
+
+    // Show the selected tab content and mark its button as active
+    document.getElementById(tabName).classList.add('active');
+    evt.currentTarget.classList.add('active');
+
+    // Show tutorial for companions tab
+    if (tabName === 'heroCompanions') {
+        tutorialOverlay.checkAndShowTutorial('companions');
+    }
 }
 
 // Make openStatsTab available globally for onclick handlers
