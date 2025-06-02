@@ -267,6 +267,10 @@ class EffectClass {
         this.interval = setInterval(() => {
             const finalDamage = target.calculateFinalDamage(damage, damageType);
             target.takeDamage(finalDamage);
+            if (target.isHero) {
+                battleStatistics.addDamageReceived(damageType, finalDamage);
+                battleStatistics.dotDamage += finalDamage;
+            }
             this.updateTooltip();
         }, 1000);
         //console.log("This Interval id:" + this.interval + damageType);
