@@ -21,6 +21,55 @@
     text-shadow: 1px 1px 2px #000;
 }
 
+/* Stats tabs styling */
+.stats-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #4a3c2b;
+    padding-bottom: 10px;
+}
+
+.stats-tab-button {
+    background: rgba(74, 60, 43, 0.7);
+    border: 1px solid #4a3c2b;
+    color: #d4b68a;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-family: 'IM Fell English', serif;
+    transition: all 0.3s ease;
+}
+
+.stats-tab-button:hover {
+    background: rgba(74, 60, 43, 0.9);
+    color: #ffd700;
+}
+
+.stats-tab-button.active {
+    background: rgba(74, 60, 43, 1);
+    color: #ffd700;
+    border-color: #ffd700;
+}
+
+/* Stats tab content */
+.stats-tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.stats-tab-content.active {
+    display: block;
+}
+
+.stats-tab-content h2 {
+    color: #ffd700;
+    font-family: 'Cinzel', serif;
+    text-align: center;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px #000;
+}
+
 /* Individual statistic item */
 .statistic-item {
     display: flex;
@@ -42,4 +91,22 @@
 .statistic-value {
     font-size: 1.2em;
     color: #fff0b3; /* Slightly brighter gold/white for values */
+}
+
+/* Animation for tab content */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Ensure proper spacing for multi-line values */
+.statistic-value {
+    text-align: right;
+    min-width: 100px;
+}
+
+/* Style for enemies defeated and skill usage which can have multiple lines */
+#enemies-defeated, #skill-usage {
+    white-space: pre-line;
+    text-align: right;
 }

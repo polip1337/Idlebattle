@@ -202,70 +202,66 @@ class BattleStatistics {
     }
 
     updateBattleStatistics() {
+        // Format damage dealt with types
         let damageDealtString = Object.entries(this.damageDealt)
             .map(([key, value]) => `${key}: ${Math.round(value)}`)
-            .join('<br>');
+            .join('\n');
         if (!this.damageDealt || Object.keys(this.damageDealt).length === 0) damageDealtString = "0";
 
-
+        // Format damage received with types
         let damageReceivedString = Object.entries(this.damageReceived)
             .map(([key, value]) => `${key}: ${Math.round(value)}`)
-            .join('<br>');
+            .join('\n');
         if (!this.damageReceived || Object.keys(this.damageReceived).length === 0) damageReceivedString = "0";
 
+        // Format enemies defeated
+        let enemiesDefeatedString = Object.entries(this.enemiesDefeated)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join('\n');
+        if (!this.enemiesDefeated || Object.keys(this.enemiesDefeated).length === 0) enemiesDefeatedString = "None";
+
+        // Format skill usage
         let skillUsageString = Object.entries(this.skillUsage)
             .map(([key, value]) => `${key}: ${value}`)
-            .join('<br>');
+            .join('\n');
         if (!this.skillUsage || Object.keys(this.skillUsage).length === 0) skillUsageString = "None";
 
+        // Update all stats in the UI
+        const stats = {
+            'total-damage-dealt': damageDealtString,
+            'total-damage-received': damageReceivedString,
+            'healing-done': Math.round(this.healingDone || 0),
+            'total-healing-received': Math.round(this.totalHealingReceived || 0),
+            'critical-hits': this.criticalHits || 0,
+            'critical-damage': Math.round(this.criticalDamage || 0),
+            'multi-kills': this.multiHits || 0,
+            'misses': this.misses || 0,
+            'dot-damage': Math.round(this.dotDamage || 0),
+            'mana-spent': this.manaSpent || 0,
+            'mana-regenerated': Math.round(this.manaRegenerated || 0),
+            'stamina-spent': this.staminaSpent || 0,
+            'stamina-regenerated': Math.round(this.staminaRegenerated || 0),
+            'skill-usage': skillUsageString,
+            'total-buffs-applied': this.totalBuffsApplied || 0,
+            'total-debuffs-applied': this.totalDebuffsApplied || 0,
+            'successful-dodges': this.successfulDodges || 0,
+            'successful-blocks': this.successfulBlocks || 0,
+            'enemies-defeated': enemiesDefeatedString,
+            'successful-flees': this.successfulFlees || 0,
+            'gold-collected': this.goldCollected || 0
+        };
 
-        const elTotalDamageDealt = document.getElementById('total-damage-dealt');
-        if (elTotalDamageDealt) elTotalDamageDealt.innerHTML = damageDealtString;
-
-        const elTotalDamageReceived = document.getElementById('total-damage-received');
-        if (elTotalDamageReceived) elTotalDamageReceived.innerHTML = damageReceivedString;
-
-        const elTotalHealingReceived = document.getElementById('total-healing-received');
-        if (elTotalHealingReceived) elTotalHealingReceived.innerText = Math.round(this.totalHealingReceived || 0);
-
-        const elTotalBuffsApplied = document.getElementById('total-buffs-applied');
-        if (elTotalBuffsApplied) elTotalBuffsApplied.innerText = this.totalBuffsApplied || 0;
-
-        const elTotalDebuffsApplied = document.getElementById('total-debuffs-applied');
-        if (elTotalDebuffsApplied) elTotalDebuffsApplied.innerText = this.totalDebuffsApplied || 0;
-
-        const elManaRegenerated = document.getElementById('mana-regenerated');
-        if (elManaRegenerated) elManaRegenerated.innerText = Math.round(this.manaRegenerated || 0);
-
-        const elStaminaRegenerated = document.getElementById('stamina-regenerated');
-        if (elStaminaRegenerated) elStaminaRegenerated.innerText = Math.round(this.staminaRegenerated || 0);
-
-        const elStaminaSpent = document.getElementById('stamina-spent');
-        if (elStaminaSpent) elStaminaSpent.innerText = this.staminaSpent || 0;
-
-        const elManaSpent = document.getElementById('mana-spent');
-        if (elManaSpent) elManaSpent.innerText = this.manaSpent || 0;
-
-        const elMultiKills = document.getElementById('multi-kills');
-        if (elMultiKills) elMultiKills.innerText = this.multiHits || 0;
-
-        const elCriticalHits = document.getElementById('critical-hits');
-        if (elCriticalHits) elCriticalHits.innerText = this.criticalHits || 0;
-
-        const elCriticalDamage = document.getElementById('critical-damage');
-        if (elCriticalDamage) elCriticalDamage.innerText = Math.round(this.criticalDamage || 0);
-
-        const elMisses = document.getElementById('misses');
-        if (elMisses) elMisses.innerText = this.misses || 0;
-
-        const elSkillUsage = document.getElementById('skill-usage');
-        if (elSkillUsage) elSkillUsage.innerHTML = skillUsageString;
-
-        const elSuccessfulFlees = document.getElementById('successful-flees');
-        if (elSuccessfulFlees) elSuccessfulFlees.innerText = this.successfulFlees || 0;
-
-        const elGoldCollected = document.getElementById('gold-collected');
-        if (elGoldCollected) elGoldCollected.innerText = this.goldCollected || 0;
+        // Update each stat in the UI
+        Object.entries(stats).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                if (typeof value === 'string' && value.includes('\n')) {
+                    element.innerHTML = value.replace(/\n/g, '<br>');
+                } else {
+                    element.textContent = value;
+                }
+            }
+        });
     }
 
 }

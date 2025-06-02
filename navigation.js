@@ -96,3 +96,22 @@ export function openTab(evt, tabName) {
         if (typeof refreshMapElements === 'function') refreshMapElements();
     }
 }
+
+// Function to handle battle statistics tab switching
+export function openStatsTab(evt, tabName) {
+    // Hide all tab content
+    const tabContents = document.getElementsByClassName('stats-tab-content');
+    for (let content of tabContents) {
+        content.classList.remove('active');
+    }
+
+    // Remove active class from all tab buttons
+    const tabButtons = document.getElementsByClassName('stats-tab-button');
+    for (let button of tabButtons) {
+        button.classList.remove('active');
+    }
+
+    // Show the selected tab content and mark its button as active
+    document.getElementById(tabName).classList.add('active');
+    evt.currentTarget.classList.add('active');
+}

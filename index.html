@@ -587,69 +587,117 @@
 <div class="tabcontent statistics-page" id="battle-statistics">
     <button class="back-to-map-button">Back to Map</button>
     <h1>Battle Statistics</h1>
-    <div class="statistic-item">
-        <span class="statistic-name">Total Damage Dealt:</span>
-        <span class="statistic-value" id="total-damage-dealt">0</span>
+    
+    <div class="stats-tabs">
+        <button class="stats-tab-button active" onclick="openStatsTab(event, 'combat-stats')">Combat</button>
+        <button class="stats-tab-button" onclick="openStatsTab(event, 'resource-stats')">Resources</button>
+        <button class="stats-tab-button" onclick="openStatsTab(event, 'skill-stats')">Skills</button>
+        <button class="stats-tab-button" onclick="openStatsTab(event, 'defense-stats')">Defense</button>
+        <button class="stats-tab-button" onclick="openStatsTab(event, 'battle-summary')">Summary</button>
     </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Total Damage Received:</span>
-        <span class="statistic-value" id="total-damage-received">0</span>
+
+    <div id="combat-stats" class="stats-tab-content active">
+        <h2>Combat Statistics</h2>
+        <div class="statistic-item">
+            <span class="statistic-name">Damage Dealt:</span>
+            <span class="statistic-value" id="total-damage-dealt">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Damage Received:</span>
+            <span class="statistic-value" id="total-damage-received">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Healing Done:</span>
+            <span class="statistic-value" id="healing-done">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Healing Received:</span>
+            <span class="statistic-value" id="total-healing-received">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Critical Hits:</span>
+            <span class="statistic-value" id="critical-hits">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Critical Damage:</span>
+            <span class="statistic-value" id="critical-damage">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Multi-Hits:</span>
+            <span class="statistic-value" id="multi-kills">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Misses:</span>
+            <span class="statistic-value" id="misses">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">DoT Damage:</span>
+            <span class="statistic-value" id="dot-damage">0</span>
+        </div>
     </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Total Healing Received:</span>
-        <span class="statistic-value" id="total-healing-received">0</span>
+
+    <div id="resource-stats" class="stats-tab-content">
+        <h2>Resource Statistics</h2>
+        <div class="statistic-item">
+            <span class="statistic-name">Mana Spent:</span>
+            <span class="statistic-value" id="mana-spent">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Mana Regenerated:</span>
+            <span class="statistic-value" id="mana-regenerated">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Stamina Spent:</span>
+            <span class="statistic-value" id="stamina-spent">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Stamina Regenerated:</span>
+            <span class="statistic-value" id="stamina-regenerated">0</span>
+        </div>
     </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Total Buffs Applied:</span>
-        <span class="statistic-value" id="total-buffs-applied">0</span>
+
+    <div id="skill-stats" class="stats-tab-content">
+        <h2>Skill Statistics</h2>
+        <div class="statistic-item">
+            <span class="statistic-name">Skill Usage:</span>
+            <span class="statistic-value" id="skill-usage">None</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Buffs Applied:</span>
+            <span class="statistic-value" id="total-buffs-applied">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Debuffs Applied:</span>
+            <span class="statistic-value" id="total-debuffs-applied">0</span>
+        </div>
     </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Total Debuffs Applied:</span>
-        <span class="statistic-value" id="total-debuffs-applied">0</span>
+
+    <div id="defense-stats" class="stats-tab-content">
+        <h2>Defense Statistics</h2>
+        <div class="statistic-item">
+            <span class="statistic-name">Successful Dodges:</span>
+            <span class="statistic-value" id="successful-dodges">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Successful Blocks:</span>
+            <span class="statistic-value" id="successful-blocks">0</span>
+        </div>
     </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Mana Regenerated:</span>
-        <span class="statistic-value" id="mana-regenerated">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Stamina Regenerated:</span>
-        <span class="statistic-value" id="stamina-regenerated">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Stamina Spent:</span>
-        <span class="statistic-value" id="stamina-spent">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Mana Spent:</span>
-        <span class="statistic-value" id="mana-spent">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Multi-Kills/Hits:</span> <!-- Clarified name -->
-        <span class="statistic-value" id="multi-kills">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Critical Hits:</span>
-        <span class="statistic-value" id="critical-hits">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Critical Damage:</span>
-        <span class="statistic-value" id="critical-damage">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Misses:</span>
-        <span class="statistic-value" id="misses">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Skill Usage:</span>
-        <span class="statistic-value" id="skill-usage">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Successful Flees:</span>
-        <span class="statistic-value" id="successful-flees">0</span>
-    </div>
-    <div class="statistic-item">
-        <span class="statistic-name">Gold Collected:</span>
-        <span class="statistic-value" id="gold-collected">0</span>
+
+    <div id="battle-summary" class="stats-tab-content">
+        <h2>Battle Summary</h2>
+        <div class="statistic-item">
+            <span class="statistic-name">Enemies Defeated:</span>
+            <span class="statistic-value" id="enemies-defeated">None</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Successful Flees:</span>
+            <span class="statistic-value" id="successful-flees">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Gold Collected:</span>
+            <span class="statistic-value" id="gold-collected">0</span>
+        </div>
     </div>
 </div>
 
