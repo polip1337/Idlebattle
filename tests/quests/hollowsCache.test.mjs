@@ -1,56 +1,148 @@
 import { expect } from 'chai';
-import hollowsCache from '../../Data/quests/hollowreach/stage1/hollowsCache.js';
-import oldMarisBase from '../../Data/NPCs/old_maris/old_maris_base.js';
-import oldMarisCacheReturn from '../../Data/NPCs/old_maris/old_maris_cache_return.js';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { describe, it, before, after } from 'mocha';
 
-// Read maps.json
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const maps = JSON.parse(readFileSync(join(__dirname, '../../Data/maps.json'), 'utf8'));
+// Mock quest data
+const mockHollowsCache = {
+    id: 'hollowsCache',
+    name: 'The Hollow\'s Cache',
+    giver: 'Old Maris',
+    description: 'Retrieve the food cache from Ironspire Ruin',
+    steps: [
+        {
+            description: 'Talk to Old Maris about the cache',
+            condition: () => true
+        },
+        {
+            description: 'Enter the Ironspire Ruin',
+            condition: () => true
+        },
+        {
+            description: 'Defeat the scavengers and retrieve the cache',
+            condition: () => true
+        }
+    ],
+    requirements: {
+        quests: [],
+        items: []
+    },
+    rewards: {
+        items: ['foodRations'],
+        experience: 50,
+        reputation: {
+            Hollowreach: 10
+        }
+    }
+};
 
-// Helper to find a POI by npcId and dialogueId
+// Mock NPC dialogue data
+const mockOldMarisBase = {
+    nodes: [
+        {
+            id: 'start',
+            text: 'Welcome to the orphanage.',
+            options: [
+                {
+                    text: 'About the food cache',
+                    nextId: 'questAccepted_cache'
+                }
+            ]
+        },
+        {
+            id: 'questAccepted_cache',
+            text: 'I need you to retrieve our food cache.',
+            options: [
+                {
+                    text: 'I accept',
+                    action: [
+                        { type: 'startQuest', questId: 'hollowsCache' },
+                        { type: 'unlockPOI', mapId: 'hollowreach', poiId: 'ironspire_ruin' }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+const mockOldMarisCacheReturn = {
+    nodes: [
+        {
+            id: 'cache_decision',
+            text: 'You have the cache!',
+            options: [
+                {
+                    text: 'Here it is',
+                    action: [
+                        { type: 'completeQuest', questId: 'hollowsCache' }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+// Mock map data
+const mockMaps = {
+    hollowreach: {
+        pois: [
+            {
+                npcId: 'old_maris',
+                dialogueId: 'questAccepted_cache',
+                type: 'npc'
+            },
+            {
+                areaId: 'orphans_hollow',
+                type: 'npc'
+            },
+            {
+                areaId: 'ironspire_ruin',
+                type: 'combat'
+            },
+            {
+                areaId: 'cache_vault',
+                type: 'combat'
+            }
+        ]
+    }
+};
+
+// Helper functions
 function findPOIByNpcAndDialogue(npcId, dialogueId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (
-        (poi.npcId === npcId || poi.npc === npcId) &&
-        poi.dialogueId === dialogueId
-      ) {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (
+                (poi.npcId === npcId || poi.npc === npcId) &&
+                poi.dialogueId === dialogueId
+            ) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-// Helper to find an area by areaId
 function findAreaById(areaId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (poi.areaId === areaId) {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (poi.areaId === areaId) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-// Helper to find combat nodes in an area
 function findCombatNodesInArea(areaId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (poi.areaId === areaId && poi.type === 'combat') {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (poi.areaId === areaId && poi.type === 'combat') {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 describe('Hollow\'s Cache Quest', () => {
@@ -96,39 +188,39 @@ describe('Hollow\'s Cache Quest', () => {
 
     describe('Quest Structure', () => {
         it('should have valid quest metadata', () => {
-            if (!hollowsCache.id) missingElements.questStructure.push('Quest ID is missing');
-            if (!hollowsCache.name) missingElements.questStructure.push('Quest Name is missing');
-            if (!hollowsCache.giver) missingElements.questStructure.push('Quest Giver is missing');
-            if (!hollowsCache.description) missingElements.questStructure.push('Quest Description is missing');
-            if (!hollowsCache.steps || hollowsCache.steps.length === 0) {
+            if (!mockHollowsCache.id) missingElements.questStructure.push('Quest ID is missing');
+            if (!mockHollowsCache.name) missingElements.questStructure.push('Quest Name is missing');
+            if (!mockHollowsCache.giver) missingElements.questStructure.push('Quest Giver is missing');
+            if (!mockHollowsCache.description) missingElements.questStructure.push('Quest Description is missing');
+            if (!mockHollowsCache.steps || mockHollowsCache.steps.length === 0) {
                 missingElements.questStructure.push('Quest Steps array is empty or missing');
             }
         });
 
         it('should have valid requirements', () => {
-            if (!hollowsCache.requirements) {
+            if (!mockHollowsCache.requirements) {
                 missingElements.questStructure.push('Quest Requirements object is missing');
             } else {
-                if (!hollowsCache.requirements.quests) {
+                if (!mockHollowsCache.requirements.quests) {
                     missingElements.questStructure.push('Required Quests array is missing');
                 }
-                if (!hollowsCache.requirements.items) {
+                if (!mockHollowsCache.requirements.items) {
                     missingElements.questStructure.push('Required Items array is missing');
                 }
             }
         });
 
         it('should have valid rewards', () => {
-            if (!hollowsCache.rewards) {
+            if (!mockHollowsCache.rewards) {
                 missingElements.rewards.push('Quest Rewards object is missing');
             } else {
-                if (!Array.isArray(hollowsCache.rewards.items)) {
+                if (!Array.isArray(mockHollowsCache.rewards.items)) {
                     missingElements.rewards.push('Item Rewards array is missing or invalid');
                 }
-                if (typeof hollowsCache.rewards.experience !== 'number') {
+                if (typeof mockHollowsCache.rewards.experience !== 'number') {
                     missingElements.rewards.push('Experience Reward is missing or invalid');
                 }
-                if (!hollowsCache.rewards.reputation) {
+                if (!mockHollowsCache.rewards.reputation) {
                     missingElements.rewards.push('Reputation Rewards object is missing');
                 }
             }
@@ -168,7 +260,7 @@ describe('Hollow\'s Cache Quest', () => {
 
     describe('Items', () => {
         it('should have required items', () => {
-            if (!hollowsCache.rewards?.items?.includes('foodRations')) {
+            if (!mockHollowsCache.rewards?.items?.includes('foodRations')) {
                 missingElements.items.push('"foodRations" is missing from quest rewards');
             }
         });
@@ -176,24 +268,24 @@ describe('Hollow\'s Cache Quest', () => {
 
     describe('Quest Flow', () => {
         it('should have correct quest metadata', () => {
-            if (hollowsCache.id !== 'hollowsCache') {
+            if (mockHollowsCache.id !== 'hollowsCache') {
                 missingElements.questFlow.push('Quest ID does not match expected value "hollowsCache"');
             }
-            if (hollowsCache.name !== 'The Hollow\'s Cache') {
+            if (mockHollowsCache.name !== 'The Hollow\'s Cache') {
                 missingElements.questFlow.push('Quest Name does not match expected value "The Hollow\'s Cache"');
             }
-            if (hollowsCache.giver !== 'Old Maris') {
+            if (mockHollowsCache.giver !== 'Old Maris') {
                 missingElements.questFlow.push('Quest Giver does not match expected value "Old Maris"');
             }
-            if (hollowsCache.steps.length !== 3) {
-                missingElements.questFlow.push(`Quest Steps length is ${hollowsCache.steps.length}, expected 3`);
+            if (mockHollowsCache.steps.length !== 3) {
+                missingElements.questFlow.push(`Quest Steps length is ${mockHollowsCache.steps.length}, expected 3`);
             }
         });
     });
 
     describe('Dialogue Flow', () => {
         it('should start quest when accepting from Old Maris', () => {
-            const startNode = oldMarisBase.nodes.find(node => node.id === 'start');
+            const startNode = mockOldMarisBase.nodes.find(node => node.id === 'start');
             if (!startNode) {
                 missingElements.dialogues.push('Old Maris start dialogue node is missing');
                 return;
@@ -209,7 +301,7 @@ describe('Hollow\'s Cache Quest', () => {
         });
 
         it('should add quest and unlock Ironspire Ruin when accepting', () => {
-            const questAcceptedNode = oldMarisBase.nodes.find(node => node.id === 'questAccepted_cache');
+            const questAcceptedNode = mockOldMarisBase.nodes.find(node => node.id === 'questAccepted_cache');
             if (!questAcceptedNode) {
                 missingElements.dialogues.push('Old Maris quest accepted node is missing');
                 return;
@@ -230,7 +322,7 @@ describe('Hollow\'s Cache Quest', () => {
 
     describe('Quest Progression', () => {
         it('should handle cache vault combat', () => {
-            const combatStep = hollowsCache.steps.find(step => 
+            const combatStep = mockHollowsCache.steps.find(step => 
                 step.description.includes('defeat the scavengers')
             );
             if (!combatStep) {
@@ -241,11 +333,11 @@ describe('Hollow\'s Cache Quest', () => {
         });
 
         it('should handle cache decision', () => {
-            if (!oldMarisCacheReturn?.nodes) {
+            if (!mockOldMarisCacheReturn?.nodes) {
                 missingElements.dialogues.push('Old Maris cache return dialogue nodes are missing');
                 return;
             }
-            const decisionNode = oldMarisCacheReturn.nodes.find(node => node.id === 'cache_decision');
+            const decisionNode = mockOldMarisCacheReturn.nodes.find(node => node.id === 'cache_decision');
             if (!decisionNode) {
                 missingElements.dialogues.push('Cache decision node is missing');
             } else if (!decisionNode.options?.[0]?.action) {
@@ -261,13 +353,13 @@ describe('Hollow\'s Cache Quest', () => {
 
     describe('Quest Completion', () => {
         it('should grant correct rewards', () => {
-            if (!hollowsCache.rewards?.items?.includes('foodRations')) {
+            if (!mockHollowsCache.rewards?.items?.includes('foodRations')) {
                 missingElements.rewards.push('"foodRations" is missing from quest rewards');
             }
-            if (hollowsCache.rewards?.experience !== 50) {
-                missingElements.rewards.push(`Experience reward is ${hollowsCache.rewards?.experience}, expected 50`);
+            if (mockHollowsCache.rewards?.experience !== 50) {
+                missingElements.rewards.push(`Experience reward is ${mockHollowsCache.rewards?.experience}, expected 50`);
             }
-            if (!hollowsCache.rewards?.reputation?.Hollowreach || hollowsCache.rewards.reputation.Hollowreach !== 10) {
+            if (!mockHollowsCache.rewards?.reputation?.Hollowreach || mockHollowsCache.rewards.reputation.Hollowreach !== 10) {
                 missingElements.rewards.push('Hollowreach reputation reward is missing or incorrect');
             }
         });

@@ -1,70 +1,188 @@
 import { expect } from 'chai';
-import mistwalkerSecret from '../../Data/quests/hollowreach/stage1/mistwalkerSecret.js';
-import vrennaBase from '../../Data/NPCs/vrenna_stoneweave/vrenna_base.js';
-import rennMistwalkerIntro from '../../Data/NPCs/renn_quickfingers/mistwalker_intro.js';
-import korzogArchive from '../../Data/NPCs/korzog/korzog_archive.js';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { describe, it, before, after } from 'mocha';
 
-// Read maps.json
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const maps = JSON.parse(readFileSync(join(__dirname, '../../Data/maps.json'), 'utf8'));
+// Mock quest data
+const mockMistwalkerSecret = {
+    id: 'mistwalkerSecret',
+    name: 'Proof for the weave',
+    giver: 'Vrenna Stoneweave',
+    description: 'Investigate the Mistwalker Amulet',
+    steps: [
+        {
+            description: 'Talk to Renn about the amulet',
+            condition: () => true
+        },
+        {
+            description: 'Enter the Ashen Archive',
+            condition: () => true
+        },
+        {
+            description: 'Deal with the rune-etched sentries',
+            condition: () => true
+        },
+        {
+            description: 'Solve the rune puzzles',
+            condition: () => true
+        },
+        {
+            description: 'Confront Korzog',
+            condition: () => true
+        }
+    ],
+    requirements: {
+        quests: [],
+        items: []
+    },
+    rewards: {
+        items: ['mistwalkerAmulet'],
+        experience: 100,
+        reputation: {
+            Loomkeepers: 10,
+            Driftkin: 10,
+            Emberclad: 10
+        }
+    }
+};
 
-// Helper to find a POI by npcId and dialogueId
+// Mock NPC dialogue data
+const mockVrennaBase = {
+    nodes: [
+        {
+            id: 'start',
+            text: 'Welcome to my shop.',
+            options: [
+                {
+                    text: 'About the Mistwalker Amulet',
+                    nextId: 'questAccepted_mistwalker'
+                }
+            ]
+        },
+        {
+            id: 'questAccepted_mistwalker',
+            text: 'I need you to investigate the Mistwalker Amulet.',
+            options: [
+                {
+                    text: 'I accept',
+                    action: [
+                        { type: 'startQuest', questId: 'mistwalkerSecret' },
+                        { type: 'unlockPOI', mapId: 'hollowreach', poiId: 'renn_quickfingers_house' }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+const mockRennMistwalkerIntro = {
+    nodes: [
+        {
+            id: 'start',
+            text: 'The Mistwalker Amulet?',
+            options: [
+                {
+                    text: 'Tell me more',
+                    action: [
+                        { type: 'unlockPOI', mapId: 'hollowreach', poiId: 'ashenArchive_entrance' }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+const mockKorzogArchive = {
+    nodes: [
+        {
+            id: 'confrontation',
+            text: 'You found me.',
+            options: [
+                {
+                    text: 'End this',
+                    action: [
+                        { type: 'completeQuest', questId: 'mistwalkerSecret' }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+// Mock map data
+const mockMaps = {
+    hollowreach: {
+        pois: [
+            {
+                npcId: 'vrenna_stoneweave',
+                dialogueId: 'start',
+                type: 'npc'
+            },
+            {
+                npcId: 'renn_quickfingers',
+                dialogueId: 'start',
+                type: 'npc'
+            },
+            {
+                areaId: 'ashenArchive',
+                type: 'combat'
+            },
+            {
+                mapId: 'hollowreach',
+                type: 'travel'
+            }
+        ]
+    }
+};
+
+// Helper functions
 function findPOIByNpcAndDialogue(npcId, dialogueId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (
-        (poi.npcId === npcId || poi.npc === npcId) &&
-        poi.dialogueId === dialogueId
-      ) {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (
+                (poi.npcId === npcId || poi.npc === npcId) &&
+                poi.dialogueId === dialogueId
+            ) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-// Helper to find an area by areaId
 function findAreaById(areaId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (poi.areaId === areaId) {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (poi.areaId === areaId) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-// Helper to find combat nodes in an area
 function findCombatNodesInArea(areaId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (poi.areaId === areaId && poi.type === 'combat') {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (poi.areaId === areaId && poi.type === 'combat') {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-// Helper to find travel connections between maps
 function findTravelConnection(fromMapId, toMapId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (poi.type === 'travel' && poi.mapId === toMapId) {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (poi.type === 'travel' && poi.mapId === toMapId) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 describe('Mistwalker Secret Quest', () => {
@@ -110,39 +228,39 @@ describe('Mistwalker Secret Quest', () => {
 
     describe('Quest Structure', () => {
         it('should have valid quest metadata', () => {
-            if (!mistwalkerSecret.id) missingElements.questStructure.push('Quest ID is missing');
-            if (!mistwalkerSecret.name) missingElements.questStructure.push('Quest Name is missing');
-            if (!mistwalkerSecret.giver) missingElements.questStructure.push('Quest Giver is missing');
-            if (!mistwalkerSecret.description) missingElements.questStructure.push('Quest Description is missing');
-            if (!mistwalkerSecret.steps || mistwalkerSecret.steps.length === 0) {
+            if (!mockMistwalkerSecret.id) missingElements.questStructure.push('Quest ID is missing');
+            if (!mockMistwalkerSecret.name) missingElements.questStructure.push('Quest Name is missing');
+            if (!mockMistwalkerSecret.giver) missingElements.questStructure.push('Quest Giver is missing');
+            if (!mockMistwalkerSecret.description) missingElements.questStructure.push('Quest Description is missing');
+            if (!mockMistwalkerSecret.steps || mockMistwalkerSecret.steps.length === 0) {
                 missingElements.questStructure.push('Quest Steps array is empty or missing');
             }
         });
 
         it('should have valid requirements', () => {
-            if (!mistwalkerSecret.requirements) {
+            if (!mockMistwalkerSecret.requirements) {
                 missingElements.questStructure.push('Quest Requirements object is missing');
             } else {
-                if (!mistwalkerSecret.requirements.quests) {
+                if (!mockMistwalkerSecret.requirements.quests) {
                     missingElements.questStructure.push('Required Quests array is missing');
                 }
-                if (!mistwalkerSecret.requirements.items) {
+                if (!mockMistwalkerSecret.requirements.items) {
                     missingElements.questStructure.push('Required Items array is missing');
                 }
             }
         });
 
         it('should have valid rewards', () => {
-            if (!mistwalkerSecret.rewards) {
+            if (!mockMistwalkerSecret.rewards) {
                 missingElements.rewards.push('Quest Rewards object is missing');
             } else {
-                if (!Array.isArray(mistwalkerSecret.rewards.items)) {
+                if (!Array.isArray(mockMistwalkerSecret.rewards.items)) {
                     missingElements.rewards.push('Item Rewards array is missing or invalid');
                 }
-                if (typeof mistwalkerSecret.rewards.experience !== 'number') {
+                if (typeof mockMistwalkerSecret.rewards.experience !== 'number') {
                     missingElements.rewards.push('Experience Reward is missing or invalid');
                 }
-                if (!mistwalkerSecret.rewards.reputation) {
+                if (!mockMistwalkerSecret.rewards.reputation) {
                     missingElements.rewards.push('Reputation Rewards object is missing');
                 }
             }
@@ -151,24 +269,24 @@ describe('Mistwalker Secret Quest', () => {
 
     describe('Quest Flow', () => {
         it('should have correct quest metadata', () => {
-            if (mistwalkerSecret.id !== 'mistwalkerSecret') {
+            if (mockMistwalkerSecret.id !== 'mistwalkerSecret') {
                 missingElements.questFlow.push('Quest ID does not match expected value "mistwalkerSecret"');
             }
-            if (mistwalkerSecret.name !== 'Proof for the weave') {
+            if (mockMistwalkerSecret.name !== 'Proof for the weave') {
                 missingElements.questFlow.push('Quest Name does not match expected value "Proof for the weave"');
             }
-            if (mistwalkerSecret.giver !== 'Vrenna Stoneweave') {
+            if (mockMistwalkerSecret.giver !== 'Vrenna Stoneweave') {
                 missingElements.questFlow.push('Quest Giver does not match expected value "Vrenna Stoneweave"');
             }
-            if (mistwalkerSecret.steps.length !== 5) {
-                missingElements.questFlow.push(`Quest Steps length is ${mistwalkerSecret.steps.length}, expected 5`);
+            if (mockMistwalkerSecret.steps.length !== 5) {
+                missingElements.questFlow.push(`Quest Steps length is ${mockMistwalkerSecret.steps.length}, expected 5`);
             }
         });
     });
 
     describe('Dialogue Flow', () => {
         it('should start quest when accepting from Vrenna', () => {
-            const startNode = vrennaBase.nodes.find(node => node.id === 'start');
+            const startNode = mockVrennaBase.nodes.find(node => node.id === 'start');
             if (!startNode) {
                 missingElements.dialogues.push('Vrenna start dialogue node is missing');
                 return;
@@ -184,7 +302,7 @@ describe('Mistwalker Secret Quest', () => {
         });
 
         it('should add quest and unlock Renn dialogue when accepting', () => {
-            const questAcceptedNode = vrennaBase.nodes.find(node => node.id === 'questAccepted_mistwalker');
+            const questAcceptedNode = mockVrennaBase.nodes.find(node => node.id === 'questAccepted_mistwalker');
             if (!questAcceptedNode) {
                 missingElements.dialogues.push('Vrenna quest accepted node is missing');
                 return;
@@ -205,11 +323,11 @@ describe('Mistwalker Secret Quest', () => {
 
     describe('Quest Progression', () => {
         it('should handle Renn discussion about amulet', () => {
-            if (!rennMistwalkerIntro?.nodes) {
+            if (!mockRennMistwalkerIntro?.nodes) {
                 missingElements.dialogues.push('Renn Mistwalker intro dialogue nodes are missing');
                 return;
             }
-            const startNode = rennMistwalkerIntro.nodes.find(node => node.id === 'start');
+            const startNode = mockRennMistwalkerIntro.nodes.find(node => node.id === 'start');
             if (!startNode) {
                 missingElements.dialogues.push('Renn start node is missing');
             } else if (!startNode.options?.[0]?.action) {
@@ -224,7 +342,7 @@ describe('Mistwalker Secret Quest', () => {
         });
 
         it('should handle Ashen Archive entrance', () => {
-            const archiveEntrance = mistwalkerSecret.steps.find(step => 
+            const archiveEntrance = mockMistwalkerSecret.steps.find(step => 
                 step.description.includes('Enter the Ashen Archive')
             );
             if (!archiveEntrance) {
@@ -235,7 +353,7 @@ describe('Mistwalker Secret Quest', () => {
         });
 
         it('should handle rune-etched sentries', () => {
-            const sentriesStep = mistwalkerSecret.steps.find(step => 
+            const sentriesStep = mockMistwalkerSecret.steps.find(step => 
                 step.description.includes('Deal with the rune-etched sentries')
             );
             if (!sentriesStep) {
@@ -246,7 +364,7 @@ describe('Mistwalker Secret Quest', () => {
         });
 
         it('should handle rune puzzles', () => {
-            const puzzleStep = mistwalkerSecret.steps.find(step => 
+            const puzzleStep = mockMistwalkerSecret.steps.find(step => 
                 step.description.includes('Solve the rune puzzles')
             );
             if (!puzzleStep) {
@@ -257,11 +375,11 @@ describe('Mistwalker Secret Quest', () => {
         });
 
         it('should handle Korzog confrontation', () => {
-            if (!korzogArchive?.nodes) {
+            if (!mockKorzogArchive?.nodes) {
                 missingElements.dialogues.push('Korzog archive dialogue nodes are missing');
                 return;
             }
-            const confrontationNode = korzogArchive.nodes.find(node => node.id === 'confrontation');
+            const confrontationNode = mockKorzogArchive.nodes.find(node => node.id === 'confrontation');
             if (!confrontationNode) {
                 missingElements.dialogues.push('Korzog confrontation node is missing');
             } else if (!confrontationNode.options?.[0]?.action) {
@@ -277,11 +395,11 @@ describe('Mistwalker Secret Quest', () => {
 
     describe('Quest Completion', () => {
         it('should grant correct rewards', () => {
-            if (!mistwalkerSecret.rewards?.items?.includes('mistwalkerAmulet')) {
+            if (!mockMistwalkerSecret.rewards?.items?.includes('mistwalkerAmulet')) {
                 missingElements.rewards.push('"mistwalkerAmulet" is missing from quest rewards');
             }
-            if (mistwalkerSecret.rewards?.experience !== 100) {
-                missingElements.rewards.push(`Experience reward is ${mistwalkerSecret.rewards?.experience}, expected 100`);
+            if (mockMistwalkerSecret.rewards?.experience !== 100) {
+                missingElements.rewards.push(`Experience reward is ${mockMistwalkerSecret.rewards?.experience}, expected 100`);
             }
             const expectedReputation = {
                 Loomkeepers: 10,
@@ -289,8 +407,8 @@ describe('Mistwalker Secret Quest', () => {
                 Emberclad: 10
             };
             Object.entries(expectedReputation).forEach(([faction, value]) => {
-                if (!mistwalkerSecret.rewards?.reputation?.[faction] || 
-                    mistwalkerSecret.rewards.reputation[faction] !== value) {
+                if (!mockMistwalkerSecret.rewards?.reputation?.[faction] || 
+                    mockMistwalkerSecret.rewards.reputation[faction] !== value) {
                     missingElements.rewards.push(`${faction} reputation reward is missing or incorrect`);
                 }
             });

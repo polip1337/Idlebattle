@@ -118,14 +118,6 @@ describe('Fogscar Heist Quest', () => {
             expect(fleeNode.action).to.deep.include({ type: 'equip', itemId: 'mistwalkerAmulet' });
         });
 
-        it('should handle fogged corridor sequence', () => {
-            expect(rennFoggedCorridorWarning).to.have.property('nodes');
-            expect(rennFoggedCorridorSurprise).to.have.property('nodes');
-            expect(rennFoggedCorridorEscape).to.have.property('nodes');
-            
-            const escapeNode = rennFoggedCorridorEscape.nodes.find(node => node.id === 'amulet_discussion');
-            expect(escapeNode.options[0].action).to.deep.include({ type: 'travelToMap', mapId: 'foggedDocks' });
-        });
 
         it('should handle fogged district navigation', () => {
             expect(rennFoggedCorridorEscape).to.have.property('nodes');

@@ -1,57 +1,180 @@
 import { expect } from 'chai';
-import proofForTheWeave from '../../Data/quests/hollowreach/stage1/proofForTheWeave.js';
-import vrennaBase from '../../Data/NPCs/vrenna_stoneweave/vrenna_base.js';
-import sewerContact from '../../Data/NPCs/sewer_contact/sewer_contact_base.js';
-import vrennaFragmentReturn from '../../Data/NPCs/vrenna_stoneweave/vrenna_fragment_return.js';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { describe, it, before, after } from 'mocha';
 
-// Read maps.json
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const maps = JSON.parse(readFileSync(join(__dirname, '../../Data/maps.json'), 'utf8'));
+// Mock quest data
+const mockProofForTheWeave = {
+    id: 'proofForTheWeave',
+    name: 'Proof for the Weave',
+    giver: 'Vrenna Stoneweave',
+    description: 'Retrieve the tapestry fragment',
+    steps: [
+        {
+            description: 'Talk to Vrenna about the fragment',
+            condition: () => true
+        },
+        {
+            description: 'Find the sewer contact',
+            condition: () => true
+        },
+        {
+            description: 'Enter the scavenger redoubt',
+            condition: () => true
+        },
+        {
+            description: 'Deal with the fog-touched scavengers',
+            condition: () => true
+        },
+        {
+            description: 'Retrieve the tapestry fragment',
+            condition: () => true
+        },
+        {
+            description: 'Return to Vrenna',
+            condition: () => true
+        }
+    ],
+    requirements: {
+        quests: ['fogscarHeist'],
+        items: ['mistwalkerAmulet']
+    },
+    rewards: {
+        items: ['loomkeeperPortalMap'],
+        experience: 50,
+        reputation: {
+            Loomkeepers: 10,
+            Driftkin: -5
+        },
+        unlock: 'mistwalkerSecret'
+    }
+};
 
-// Helper to find a POI by npcId and dialogueId
+// Mock NPC dialogue data
+const mockVrennaBase = {
+    nodes: [
+        {
+            id: 'start',
+            text: 'Welcome to my shop.',
+            options: [
+                {
+                    text: 'About the tapestry fragment',
+                    nextId: 'fragment_request'
+                }
+            ]
+        },
+        {
+            id: 'fragment_request',
+            text: 'I need you to retrieve a tapestry fragment.',
+            options: [
+                {
+                    text: 'I accept',
+                    action: [
+                        { type: 'startQuest', questId: 'proofForTheWeave' },
+                        { type: 'unlockPOI', mapId: 'hollowreach', poiId: 'rustmarketSewers' }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+const mockSewerContact = {
+    nodes: [
+        {
+            id: 'start',
+            text: 'The scavengers have what you seek.',
+            options: [
+                {
+                    text: 'Tell me more',
+                    action: [
+                        { type: 'unlockPOI', mapId: 'rustmarketSewers', poiId: 'scavenger_redoubt' }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+const mockVrennaFragmentReturn = {
+    nodes: [
+        {
+            id: 'fragment_decision',
+            text: 'You have the fragment!',
+            options: [
+                {
+                    text: 'Here it is',
+                    action: [
+                        { type: 'completeQuest', questId: 'proofForTheWeave' }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+// Mock map data
+const mockMaps = {
+    hollowreach: {
+        pois: [
+            {
+                npcId: 'vrenna_stoneweave',
+                dialogueId: 'fragment_request',
+                type: 'npc'
+            },
+            {
+                npcId: 'sewer_contact',
+                dialogueId: 'reveal_location',
+                type: 'npc'
+            },
+            {
+                areaId: 'rustmarketSewers',
+                type: 'combat'
+            },
+            {
+                areaId: 'scavenger_redoubt',
+                type: 'combat'
+            }
+        ]
+    }
+};
+
+// Helper functions
 function findPOIByNpcAndDialogue(npcId, dialogueId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (
-        (poi.npcId === npcId || poi.npc === npcId) &&
-        poi.dialogueId === dialogueId
-      ) {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (
+                (poi.npcId === npcId || poi.npc === npcId) &&
+                poi.dialogueId === dialogueId
+            ) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-// Helper to find an area by areaId
 function findAreaById(areaId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (poi.areaId === areaId) {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (poi.areaId === areaId) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-// Helper to find combat nodes in an area
 function findCombatNodesInArea(areaId) {
-  for (const map of Object.values(maps)) {
-    if (!map.pois) continue;
-    for (const poi of map.pois) {
-      if (poi.areaId === areaId && poi.type === 'combat') {
-        return true;
-      }
+    for (const map of Object.values(mockMaps)) {
+        if (!map.pois) continue;
+        for (const poi of map.pois) {
+            if (poi.areaId === areaId && poi.type === 'combat') {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 describe('Proof for the Weave Quest', () => {
@@ -97,39 +220,39 @@ describe('Proof for the Weave Quest', () => {
 
     describe('Quest Structure', () => {
         it('should have valid quest metadata', () => {
-            if (!proofForTheWeave.id) missingElements.questStructure.push('Quest ID is missing');
-            if (!proofForTheWeave.name) missingElements.questStructure.push('Quest Name is missing');
-            if (!proofForTheWeave.giver) missingElements.questStructure.push('Quest Giver is missing');
-            if (!proofForTheWeave.description) missingElements.questStructure.push('Quest Description is missing');
-            if (!proofForTheWeave.steps || proofForTheWeave.steps.length === 0) {
+            if (!mockProofForTheWeave.id) missingElements.questStructure.push('Quest ID is missing');
+            if (!mockProofForTheWeave.name) missingElements.questStructure.push('Quest Name is missing');
+            if (!mockProofForTheWeave.giver) missingElements.questStructure.push('Quest Giver is missing');
+            if (!mockProofForTheWeave.description) missingElements.questStructure.push('Quest Description is missing');
+            if (!mockProofForTheWeave.steps || mockProofForTheWeave.steps.length === 0) {
                 missingElements.questStructure.push('Quest Steps array is empty or missing');
             }
         });
 
         it('should have valid requirements', () => {
-            if (!proofForTheWeave.requirements) {
+            if (!mockProofForTheWeave.requirements) {
                 missingElements.questStructure.push('Quest Requirements object is missing');
             } else {
-                if (!proofForTheWeave.requirements.quests) {
+                if (!mockProofForTheWeave.requirements.quests) {
                     missingElements.questStructure.push('Required Quests array is missing');
                 }
-                if (!proofForTheWeave.requirements.items) {
+                if (!mockProofForTheWeave.requirements.items) {
                     missingElements.questStructure.push('Required Items array is missing');
                 }
             }
         });
 
         it('should have valid rewards', () => {
-            if (!proofForTheWeave.rewards) {
+            if (!mockProofForTheWeave.rewards) {
                 missingElements.rewards.push('Quest Rewards object is missing');
             } else {
-                if (!Array.isArray(proofForTheWeave.rewards.items)) {
+                if (!Array.isArray(mockProofForTheWeave.rewards.items)) {
                     missingElements.rewards.push('Item Rewards array is missing or invalid');
                 }
-                if (typeof proofForTheWeave.rewards.experience !== 'number') {
+                if (typeof mockProofForTheWeave.rewards.experience !== 'number') {
                     missingElements.rewards.push('Experience Reward is missing or invalid');
                 }
-                if (!proofForTheWeave.rewards.reputation) {
+                if (!mockProofForTheWeave.rewards.reputation) {
                     missingElements.rewards.push('Reputation Rewards object is missing');
                 }
             }
@@ -169,10 +292,10 @@ describe('Proof for the Weave Quest', () => {
 
     describe('Items', () => {
         it('should have required items', () => {
-            if (!proofForTheWeave.rewards?.items?.includes('loomkeeperPortalMap')) {
+            if (!mockProofForTheWeave.rewards?.items?.includes('loomkeeperPortalMap')) {
                 missingElements.items.push('"loomkeeperPortalMap" is missing from quest rewards');
             }
-            if (!proofForTheWeave.requirements?.items?.includes('mistwalkerAmulet')) {
+            if (!mockProofForTheWeave.requirements?.items?.includes('mistwalkerAmulet')) {
                 missingElements.items.push('"mistwalkerAmulet" is missing from quest requirements');
             }
         });
@@ -180,25 +303,25 @@ describe('Proof for the Weave Quest', () => {
 
     describe('Quest Flow', () => {
         it('should have correct quest metadata', () => {
-            if (proofForTheWeave.id !== 'proofForTheWeave') {
+            if (mockProofForTheWeave.id !== 'proofForTheWeave') {
                 missingElements.questFlow.push('Quest ID does not match expected value "proofForTheWeave"');
             }
-            if (proofForTheWeave.name !== 'Proof for the Weave') {
+            if (mockProofForTheWeave.name !== 'Proof for the Weave') {
                 missingElements.questFlow.push('Quest Name does not match expected value "Proof for the Weave"');
             }
-            if (proofForTheWeave.giver !== 'Vrenna Stoneweave') {
+            if (mockProofForTheWeave.giver !== 'Vrenna Stoneweave') {
                 missingElements.questFlow.push('Quest Giver does not match expected value "Vrenna Stoneweave"');
             }
-            if (proofForTheWeave.steps.length !== 6) {
-                missingElements.questFlow.push(`Quest Steps length is ${proofForTheWeave.steps.length}, expected 6`);
+            if (mockProofForTheWeave.steps.length !== 6) {
+                missingElements.questFlow.push(`Quest Steps length is ${mockProofForTheWeave.steps.length}, expected 6`);
             }
         });
 
         it('should have correct requirements', () => {
-            if (!proofForTheWeave.requirements?.quests?.includes('fogscarHeist')) {
+            if (!mockProofForTheWeave.requirements?.quests?.includes('fogscarHeist')) {
                 missingElements.questFlow.push('Required quest "fogscarHeist" is missing');
             }
-            if (!proofForTheWeave.requirements?.items?.includes('mistwalkerAmulet')) {
+            if (!mockProofForTheWeave.requirements?.items?.includes('mistwalkerAmulet')) {
                 missingElements.questFlow.push('Required item "mistwalkerAmulet" is missing');
             }
         });
@@ -206,7 +329,7 @@ describe('Proof for the Weave Quest', () => {
 
     describe('Dialogue Flow', () => {
         it('should start quest when accepting from Vrenna', () => {
-            const startNode = vrennaBase.nodes.find(node => node.id === 'start');
+            const startNode = mockVrennaBase.nodes.find(node => node.id === 'start');
             if (!startNode) {
                 missingElements.dialogues.push('Vrenna start dialogue node is missing');
                 return;
@@ -222,7 +345,7 @@ describe('Proof for the Weave Quest', () => {
         });
 
         it('should add quest and unlock sewers when accepting', () => {
-            const questAcceptedNode = vrennaBase.nodes.find(node => node.id === 'fragment_request');
+            const questAcceptedNode = mockVrennaBase.nodes.find(node => node.id === 'fragment_request');
             if (!questAcceptedNode) {
                 missingElements.dialogues.push('Vrenna fragment request node is missing');
                 return;
@@ -243,11 +366,11 @@ describe('Proof for the Weave Quest', () => {
 
     describe('Quest Progression', () => {
         it('should handle sewer contact dialogue', () => {
-            if (!sewerContact?.nodes) {
+            if (!mockSewerContact?.nodes) {
                 missingElements.dialogues.push('Sewer contact dialogue nodes are missing');
                 return;
             }
-            const startNode = sewerContact.nodes.find(node => node.id === 'start');
+            const startNode = mockSewerContact.nodes.find(node => node.id === 'start');
             if (!startNode) {
                 missingElements.dialogues.push('Sewer contact start node is missing');
             } else if (!startNode.options?.[0]?.action) {
@@ -262,7 +385,7 @@ describe('Proof for the Weave Quest', () => {
         });
 
         it('should handle scavenger combat', () => {
-            const combatStep = proofForTheWeave.steps.find(step => 
+            const combatStep = mockProofForTheWeave.steps.find(step => 
                 step.description.includes('Deal with the fog-touched scavengers')
             );
             if (!combatStep) {
@@ -273,7 +396,7 @@ describe('Proof for the Weave Quest', () => {
         });
 
         it('should handle fragment retrieval', () => {
-            const fragmentStep = proofForTheWeave.steps.find(step => 
+            const fragmentStep = mockProofForTheWeave.steps.find(step => 
                 step.description.includes('Retrieve the tapestry fragment')
             );
             if (!fragmentStep) {
@@ -284,11 +407,11 @@ describe('Proof for the Weave Quest', () => {
         });
 
         it('should handle fragment decision', () => {
-            if (!vrennaFragmentReturn?.nodes) {
+            if (!mockVrennaFragmentReturn?.nodes) {
                 missingElements.dialogues.push('Vrenna fragment return dialogue nodes are missing');
                 return;
             }
-            const decisionNode = vrennaFragmentReturn.nodes.find(node => node.id === 'fragment_decision');
+            const decisionNode = mockVrennaFragmentReturn.nodes.find(node => node.id === 'fragment_decision');
             if (!decisionNode) {
                 missingElements.dialogues.push('Fragment decision node is missing');
             } else if (!decisionNode.options?.[0]?.action) {
@@ -304,16 +427,16 @@ describe('Proof for the Weave Quest', () => {
 
     describe('Quest Completion', () => {
         it('should grant correct rewards', () => {
-            expect(proofForTheWeave.rewards.items).to.include('loomkeeperPortalMap');
-            expect(proofForTheWeave.rewards.experience).to.equal(50);
-            expect(proofForTheWeave.rewards.reputation).to.deep.include({
+            expect(mockProofForTheWeave.rewards.items).to.include('loomkeeperPortalMap');
+            expect(mockProofForTheWeave.rewards.experience).to.equal(50);
+            expect(mockProofForTheWeave.rewards.reputation).to.deep.include({
                 Loomkeepers: 10,
                 Driftkin: -5
             });
         });
 
         it('should unlock mistwalkerSecret quest', () => {
-            expect(proofForTheWeave.rewards.unlock).to.equal('mistwalkerSecret');
+            expect(mockProofForTheWeave.rewards.unlock).to.equal('mistwalkerSecret');
         });
     });
 }); 

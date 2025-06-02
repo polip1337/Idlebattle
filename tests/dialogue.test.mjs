@@ -75,7 +75,9 @@ const validActionTypes = [
     'startBattle',
     'addCompanion',
     'removeCompanion',
-
+    'setGameState',
+    'addGold',
+    'removeGold'
 ];
 
 // Add HTML reporter class
