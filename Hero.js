@@ -571,7 +571,12 @@ class Hero extends Member {
     restoreFromData(data, allHeroClasses, allSkillsLookup, allItemsCacheInstance) {
         super.restoreFromData(data, allHeroClasses, allSkillsLookup);
         this.gold = data.gold || 0;
-        this.baseStats = data.baseStats ? deepCopy(data.baseStats) : deepCopy(this.stats);
+        
+        // Store the current stats before we modify them
+        const currentStats = deepCopy(this.stats);
+        
+        // Set base stats from save data
+        this.baseStats = data.baseStats ? deepCopy(data.baseStats) : deepCopy(currentStats);
 
         this.inventory = [];
         if (data.inventory && allItemsCacheInstance) {
@@ -585,7 +590,7 @@ class Hero extends Member {
             });
         }
 
-        this.equipment = {}; 
+        this.equipment = {};
         if (data.equipment && allItemsCacheInstance) {
             for (const slot in data.equipment) {
                 const itemId = data.equipment[slot];
@@ -594,8 +599,6 @@ class Hero extends Member {
                     if (itemData) {
                         const itemInstance = new Item(itemData);
                         this.equipment[slot] = itemInstance;
-                        // _applyItemStats and _applyItemEffects are implicitly handled by recalculateHeroStats
-                        // and equipping items one by one, but for direct load:
                         if (itemInstance.type === "weapon" && itemInstance.weaponSkills.length > 0) {
                             itemInstance.weaponSkills.forEach(skill => {
                                 if (!this.skills.find(s => s.id === skill.id)) {
@@ -612,17 +615,15 @@ class Hero extends Member {
                 }
             }
         }
-         // Apply all item stats after equipment is loaded
+
+        // Restore the current stats that were saved
+        this.stats = currentStats;
         this.itemStatBonuses = {}; // Reset before recalculating from loaded equipment
-        for (const slot in this.equipment) {
-            if (this.equipment[slot]) {
-                this._applyItemStats(this.equipment[slot]); // Accumulate into this.itemStatBonuses
-                this._applyItemEffects(this.equipment[slot]); // Apply persistent effects
-            }
-        }
 
+        // Apply equipment stats only once through recalculateHeroStats
+        this.recalculateHeroStats(false);
 
-        this.consumableToolbar = [null, null, null]; 
+        this.consumableToolbar = [null, null, null];
         if (data.consumableToolbar && allItemsCacheInstance) {
             data.consumableToolbar.forEach((itemId, index) => {
                 if (itemId) {
