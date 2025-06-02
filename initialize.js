@@ -264,7 +264,7 @@ function createAndInitHero(classes, playerTeamContext, opposingTeamContext) {
         return skillData ? new Skill(skillData, skillData.effects) : null;
     }).filter(Boolean);
 
-    hero = new Hero("Hero", baseClassInfo, heroSkillsInstances, 1, playerTeamContext, opposingTeamContext);
+    hero = new Hero("Hero", baseClassInfo, heroSkillsInstances, 1, playerTeamContext, opposingTeamContext,true);
     hero.placeHeroInFirstAvailableSlot();
 
 
