@@ -413,7 +413,7 @@
         "name": "Talia Emberhearth",
         "x": 87.67,
         "y": 62.00,
-        "icon": "Media/npc/talia_emberhearth.jpg",
+        "icon": "Media/NPC/talia_emberhearth.jpg",
         "type": "dialogue",
         "npcId": "talia_emberhearth",
         "dialogueId": "base"
