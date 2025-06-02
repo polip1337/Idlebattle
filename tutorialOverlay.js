@@ -20,7 +20,7 @@ const TUTORIAL_SCREENS = {
 
 class TutorialOverlay {
     constructor() {
-        this.visitedScreens = JSON.parse(localStorage.getItem('visitedScreens') || '{}');
+        this.visitedScreens = {};
         this.createOverlayContainer();
         this.setupEventListeners();
     }
@@ -50,7 +50,6 @@ class TutorialOverlay {
         
         // Mark screen as visited
         this.visitedScreens[screenId] = true;
-        localStorage.setItem('visitedScreens', JSON.stringify(this.visitedScreens));
     }
 
     hideOverlay() {
@@ -61,6 +60,23 @@ class TutorialOverlay {
         if (!this.visitedScreens[screenId]) {
             this.showOverlay(screenId);
         }
+    }
+
+    // New methods for save/load integration
+    getSerializableData() {
+        return {
+            visitedScreens: this.visitedScreens
+        };
+    }
+
+    loadFromData(data) {
+        if (data && data.visitedScreens) {
+            this.visitedScreens = data.visitedScreens;
+        }
+    }
+
+    reset() {
+        this.visitedScreens = {};
     }
 }
 

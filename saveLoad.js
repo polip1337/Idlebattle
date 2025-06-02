@@ -2,6 +2,7 @@ import { hero, battleStatistics } from './initialize.js'; // Removed currentStag
 import { questSystem } from './questSystem.js';
 import { getMapStateForSave, setMapStateFromLoad } from './map.js';
 import { reputationSystem } from './reputation.js';
+import tutorialOverlay from './tutorialOverlay.js';
 
 let initializeAndLoadGame;
 
@@ -100,6 +101,7 @@ function getGameState() {
         questSystemData: questSystem ? questSystem.getSerializableData() : null,
         mapStateData: mapState,
         reputationData: reputationSystem ? reputationSystem.getSerializableData() : null,
+        tutorialData: tutorialOverlay.getSerializableData(),
         gameVersion: '0.1.2'
     };
     return gameState;
@@ -170,6 +172,11 @@ export async function loadGame(slotIndex) {
         // Load reputation data if available
         if (savedGameState.reputationData && reputationSystem) {
             reputationSystem.loadFromData(savedGameState.reputationData);
+        }
+
+        // Load tutorial data if available
+        if (savedGameState.tutorialData && tutorialOverlay) {
+            tutorialOverlay.loadFromData(savedGameState.tutorialData);
         }
 
         const loadSuccessful = await initializeAndLoadGame(savedGameState);
