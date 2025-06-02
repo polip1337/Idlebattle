@@ -171,7 +171,7 @@ class Member {
                 const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
 
                 target.takeDamage(finalDamage);
-                if (isHero) { // Check if the attacker is the hero
+                if (this.isHero) { // Check if the attacker is the hero
                     skill.gainExperience(finalDamage);
                     battleStatistics.addDamageDealt(skill.damageType, finalDamage);
                 }
