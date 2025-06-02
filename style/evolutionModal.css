@@ -2,25 +2,36 @@
 
 /* Modal container */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: auto;
 }
 
 /* Modal content box */
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    background-color: #1a140f;
+    color: #f0e6d2;
+    margin: 5% auto;
+    padding: 25px;
+    border: 2px solid #4a3c2b;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+.modal-content h2 {
+    color: #c89b3c;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
 
 /* Close button */
@@ -40,24 +51,89 @@
 
 /* Evolution options container */
 .evolution-options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
 /* Individual evolution option */
 .evolution-option {
-    background-color: #eee;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 10px;
-    width: 150px;
-    text-align: center;
+    background-color: #2a221b;
+    border: 1px solid #4a3c2b;
+    border-radius: 6px;
+    padding: 15px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
 .evolution-option:hover {
-    background-color: #ddd;
+    transform: translateY(-2px);
+    border-color: #c89b3c;
+}
+
+.evolution-option h3 {
+    color: #c89b3c;
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+}
+
+.evolution-option p {
+    color: #f0e6d2;
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+.evolution-debug {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #4a3c2b;
+}
+
+.evolution-debug button {
+    background-color: #4a3c2b;
+    color: #f0e6d2;
+    border: 1px solid #c89b3c;
+    border-radius: 4px;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.evolution-debug button:hover {
+    background-color: #6b5a3e;
+}
+
+#debug-info {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #2a221b;
+    border: 1px solid #4a3c2b;
+    border-radius: 4px;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
+.modal-footer {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.modal-footer button {
+    background-color: #4a3c2b;
+    color: #f0e6d2;
+    border: 1px solid #c89b3c;
+    border-radius: 4px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modal-footer button:hover {
+    background-color: #6b5a3e;
+}
+
+.hidden {
+    display: none;
 }
