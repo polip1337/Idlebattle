@@ -1,18 +1,8 @@
 import {
-    // updateHealth, // Not used in this class directly
-    // updateMana, // Not used in this class directly
-    // updateStamina, // Not used in this class directly
-    // updateExp, // Not used in this class directly
-    // deepCopy, // Not used in this class directly
     updateExpBarText,
     expBarTextAddGlow,
     openEvolutionModal
 } from './Render.js';
-import {
-    hero
-    // classTiers and heroClasses from initialize.js are no longer the primary source
-    // for evolution paths as evolutions.json will be used.
-} from './initialize.js';
 
 class EvolutionService {
     constructor() {
@@ -22,6 +12,8 @@ class EvolutionService {
         this._debugMode = false;
         this._displayedClassesCount = 5;
         this._allAvailableClasses = [];
+        this._currentClass = "Novice"; // Default starting class
+        this._currentRarity = "common"; // Default rarity
     }
 
     /**
@@ -46,6 +38,14 @@ class EvolutionService {
             this.evolutionData = null;
             this.isInitialized = false;
         }
+    }
+
+    /**
+     * Sets the current class and rarity for evolution checks
+     */
+    setCurrentClass(classType, rarity = "common") {
+        this._currentClass = classType || "Novice";
+        this._currentRarity = rarity;
     }
 
     _setupDebugHandlers() {
@@ -80,12 +80,10 @@ class EvolutionService {
         const debugInfo = document.getElementById('debug-info');
         if (!debugInfo) return;
 
-        const currentHeroClass = hero.classType || "Novice";
-        const heroRarity = hero.rarity || 'common';
         const statsSnapshot = this._getStatsSnapshot();
 
-        let debugText = `Current Class: ${currentHeroClass}\n`;
-        debugText += `Hero Rarity: ${heroRarity}\n\n`;
+        let debugText = `Current Class: ${this._currentClass}\n`;
+        debugText += `Hero Rarity: ${this._currentRarity}\n\n`;
         debugText += `Available Classes: ${this._allAvailableClasses.length}\n`;
         debugText += `Displayed Classes: ${this._displayedClassesCount}\n\n`;
         debugText += `Current Stats:\n`;
@@ -110,20 +108,9 @@ class EvolutionService {
     }
 
     _getStatsSnapshot() {
-        // Create a deep copy of hero stats
-        const statsSnapshot = {
-            ...hero,
-            ...(hero.stats || {})
-        };
-
-        // Remove non-stat properties
-        delete statsSnapshot.availableClasses;
-        delete statsSnapshot.canEvolve;
-        delete statsSnapshot.class1Evolve;
-
-        // Get battle statistics from the global battleStatistics instance
-        const battleStats = window.battleStatistics;
-        if (battleStats) {
+        const statsSnapshot = {};
+        
+        if (battleStatistics) {
             // Add damage type stats
             statsSnapshot.meleeDamage = battleStats.meleeDamageDealt || 0;
             statsSnapshot.rangedDamage = battleStats.rangedDamageDealt || 0;
@@ -146,7 +133,7 @@ class EvolutionService {
     }
 
     /**
-     * Called when a condition (e.g., hero level-up) suggests evolutions might be available.
+     * Called when a condition (e.g., level-up) suggests evolutions might be available.
      * Checks for evolutions and updates UI elements like the experience bar.
      */
     levelThresholdReached() {
@@ -155,14 +142,12 @@ class EvolutionService {
             return;
         }
 
-        this.checkClassAvailability();
-
+        const availableClasses = this.checkClassAvailability();
         const progressBar = document.getElementById('level-progress-bar');
 
-        if (hero.canEvolve) {
-            updateExpBarText((hero.classType || "Hero") + " can evolve! Click here!");
+        if (availableClasses.length > 0) {
+            updateExpBarText(`${this._currentClass} can evolve! Click here!`);
             expBarTextAddGlow();
-            hero.class1Evolve = true;
 
             if (progressBar && !progressBar.dataset.evolutionListenerAttached) {
                 this._evolutionModalHandler = () => {
@@ -173,7 +158,6 @@ class EvolutionService {
                 progressBar.dataset.evolutionListenerAttached = 'true';
             }
         } else {
-            hero.class1Evolve = false;
             if (progressBar && progressBar.dataset.evolutionListenerAttached) {
                 if (this._evolutionModalHandler) {
                     progressBar.removeEventListener('click', this._evolutionModalHandler);
@@ -182,22 +166,20 @@ class EvolutionService {
                 this._evolutionModalHandler = null;
             }
         }
+
+        return availableClasses;
     }
 
     /**
-     * Checks available class evolutions based on hero's current state and evolution rules from JSON.
-     * Updates `hero.availableClasses` and `hero.canEvolve`.
+     * Checks available class evolutions based on current class and battle statistics.
+     * Returns array of available classes.
      */
     checkClassAvailability() {
         if (!this.isInitialized || !this.evolutionData) {
             console.warn("EvolutionService not initialized or data not loaded. Cannot check class availability.");
-            hero.availableClasses = [];
-            hero.canEvolve = false;
-            return;
+            return [];
         }
 
-        const currentHeroClass = hero.classType || "Novice";
-        const heroRarity = hero.rarity || 'common';
         const newAvailableClasses = [];
         let classesCheckedCount = 0;
 
@@ -210,7 +192,7 @@ class EvolutionService {
 
                 // Skip special classes (Adept, Master) if they don't have valid requirements
                 if (["Adept", "Master"].includes(classDef.name)) {
-                    const reqStrForRarity = classDef.requirements[heroRarity];
+                    const reqStrForRarity = classDef.requirements[this._currentRarity];
                     const reqStrCommon = classDef.requirements.common;
                     if ((reqStrForRarity && reqStrForRarity.trim() === "() => true") ||
                         (!reqStrForRarity && reqStrCommon && reqStrCommon.trim() === "() => true")) {
@@ -220,12 +202,12 @@ class EvolutionService {
 
                 // Check if this class is a valid evolution path
                 let isCandidatePath = false;
-                if (currentHeroClass === "Novice") {
+                if (this._currentClass === "Novice") {
                     if (!classDef.from) {
                         isCandidatePath = true;
                     }
                 } else {
-                    if (classDef.from === currentHeroClass) {
+                    if (classDef.from === this._currentClass) {
                         isCandidatePath = true;
                     }
                 }
@@ -235,7 +217,7 @@ class EvolutionService {
                 }
 
                 // Get the appropriate requirement string based on rarity
-                const requirementString = classDef.requirements[heroRarity] || classDef.requirements['common'];
+                const requirementString = classDef.requirements[this._currentRarity] || classDef.requirements['common'];
                 if (!requirementString) {
                     return;
                 }
@@ -243,7 +225,7 @@ class EvolutionService {
                 // Create evaluation context with previous class info
                 const evaluationContext = {
                     ...statsSnapshot,
-                    previousClass: currentHeroClass
+                    previousClass: this._currentClass
                 };
 
                 // Check if requirements are met
@@ -252,7 +234,7 @@ class EvolutionService {
                         newAvailableClasses.push({ 
                             ...classDef, 
                             tierName: tier.name,
-                            requirements: requirementString // Store the requirement string for UI display
+                            requirements: requirementString
                         });
                     }
                 }
@@ -260,27 +242,23 @@ class EvolutionService {
         });
 
         this._allAvailableClasses = newAvailableClasses;
-        hero.availableClasses = newAvailableClasses.slice(0, this._displayedClassesCount);
-        hero.canEvolve = newAvailableClasses.length > 0;
 
         if (this._debugMode) {
-            console.log(`Evolution check: ${classesCheckedCount} class definitions processed. ${newAvailableClasses.length} evolutions available for ${hero.classType || 'Novice'}.`);
+            console.log(`Evolution check: ${classesCheckedCount} class definitions processed. ${newAvailableClasses.length} evolutions available for ${this._currentClass}.`);
             console.log('Available classes:', newAvailableClasses);
         }
+
+        return newAvailableClasses;
     }
 
     /**
-     * Evaluates if the hero's statistics meet the class evolution requirements.
-     * @param {string} requirementString - A string representing an executable JS arrow function.
-     * @param {object} statsContext - An object containing the hero's current statistics and 'previousClass'.
-     * @returns {boolean} - True if requirements are met, false otherwise.
+     * Evaluates if the statistics meet the class evolution requirements.
      */
     meetsRequirements(requirementString, statsContext) {
         try {
             // Create a safe evaluation context
             const safeContext = {
                 ...statsContext,
-                // Add any helper functions or constants needed for requirements
                 Math: Math,
                 Number: Number,
                 Boolean: Boolean,
