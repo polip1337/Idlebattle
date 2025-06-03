@@ -32,6 +32,7 @@ class Skill {
         this.overlay = null;
         this.boundAnimationEndCallback = null;
         this.needsInitialCooldownKickoff;
+        this.tags = skillData.tags;
     }
 
     setElement(element) {
