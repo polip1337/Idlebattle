@@ -6,9 +6,7 @@
           "name": "Rogue",
           "description": "An agile and cunning individual, skilled in stealth, subterfuge, and precise attacks.",
           "from": null,
-          "combination": {
-            "Rogue": true
-          },
+          "combination": "Rogue",
           "requirements": {
             "common": "() => true",
             "uncommon": "() => true",
@@ -21,9 +19,7 @@
           "name": "Warrior",
           "description": "A brave and strong combatant, adept with various weapons and excelling in direct confrontation.",
           "from": null,
-          "combination": {
-            "Warrior": true
-          },
+          "combination": "Warrior",
           "requirements": {
             "common": "() => true",
             "uncommon": "() => true",
@@ -36,9 +32,7 @@
           "name": "Mage",
           "description": "A wielder of arcane energies, capable of casting powerful spells to manipulate elements and reality.",
           "from": null,
-          "combination": {
-            "Mage": true
-          },
+          "combination": "Mage",
           "requirements": {
             "common": "() => true",
             "uncommon": "() => true",
@@ -51,9 +45,7 @@
           "name": "Priest",
           "description": "A devout individual who channels divine power to heal allies, smite foes, and provide spiritual guidance.",
           "from": null,
-          "combination": {
-            "Priest": true
-          },
+          "combination": "Priest",
           "requirements": {
             "common": "() => true",
             "uncommon": "() => true",
@@ -70,10 +62,7 @@
           "name": "Dagger Savant",
           "description": "A Rogue who has begun to master the art of fighting with daggers, focusing on quick and precise strikes.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dagger": true
-          },
+          "combination": "Dagger_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 25 && stats.meleeAttacks >= 50",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 50 && stats.meleeAttacks >= 100 && stats.criticalHits >= 5",
@@ -86,10 +75,7 @@
           "name": "Bow Expert",
           "description": "A Rogue who has honed their skills with the bow, delivering accurate shots from a distance.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Bow": true
-          },
+          "combination": "Bow_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 25 && stats.rangedAttacks >= 50",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 50 && stats.rangedAttacks >= 100 && stats.rangedDamageDealt >= 1000",
@@ -102,10 +88,7 @@
           "name": "Twin Blade Fencer",
           "description": "A Rogue adept at wielding two weapons simultaneously, a whirlwind of flashing steel.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dual Wielding": true
-          },
+          "combination": "Dual Wielding_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 25 && stats.meleeAttacks >= 60",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 50 && stats.meleeAttacks >= 120 && stats.multiHits >= 5",
@@ -118,10 +101,7 @@
           "name": "Blade Master",
           "description": "A Warrior who has chosen the path of the single one-handed weapon, balancing offense and agility.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true
-          },
+          "combination": "One Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 30 && stats.meleeDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 60 && stats.meleeDamageDealt >= 2000 && stats.staminaSpent >= 200",
@@ -134,11 +114,7 @@
           "name": "Guardian Knight",
           "description": "A Warrior who combines the offense of a one-handed weapon with the defense of a shield.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Shield": true
-          },
+          "combination": "One Handed_Shield_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 30 && stats.successfulBlocks >= 20",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 60 && stats.successfulBlocks >= 40 && (stats.totalDamageBlocked || 0) >= 500",
@@ -151,10 +127,7 @@
           "name": "Great Weapon Fighter",
           "description": "A Warrior specializing in the devastating power of two-handed weapons, delivering mighty blows.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "Two Handed": true
-          },
+          "combination": "Two Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 30 && stats.meleeDamageDealt >= 1500",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 60 && stats.meleeDamageDealt >= 3000 && stats.criticalDamage >= 500",
@@ -167,10 +140,7 @@
           "name": "Pyromancer Adept",
           "description": "A Mage who has begun to specialize in the destructive and illuminating powers of fire magic.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true
-          },
+          "combination": "Fire_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && stats.magicalDamageDealt >= 2000 && (stats.damageDealt?.['Fire'] || 0) >= 1000",
@@ -183,10 +153,7 @@
           "name": "Geomancer Adept",
           "description": "A Mage who taps into the power of the earth, manipulating stone and terrain.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true
-          },
+          "combination": "Earth_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && stats.magicalDamageDealt >= 2000 && (stats.damageDealt?.['Earth'] || 0) >= 1000",
@@ -199,10 +166,7 @@
           "name": "Hydromancer Adept",
           "description": "A Mage specializing in the versatile and powerful magic of water.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true
-          },
+          "combination": "Mage_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && stats.magicalDamageDealt >= 2000 && (stats.damageDealt?.['Water'] || 0) >= 1000",
@@ -215,10 +179,7 @@
           "name": "Aeromancer Adept",
           "description": "A Mage who commands the winds and skies, wielding the power of air magic.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true
-          },
+          "combination": "Air_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && stats.magicalDamageDealt >= 2000 && (stats.damageDealt?.['Air'] || 0) >= 1000",
@@ -231,10 +192,7 @@
           "name": "Summoner Initiate",
           "description": "A Mage who has begun to walk the path of summoning, calling forth otherworldly entities.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Summoner": true
-          },
+          "combination": "Mage_Summoner",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 15 && (stats.minionsSummoned || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 30 && (stats.minionsSummoned || 0) >= 20 && (stats.totalDamageBySummons || 0) >= 500",
@@ -247,10 +205,7 @@
           "name": "Arcanist Scholar",
           "description": "A Mage dedicated to the study and manipulation of pure arcane energies.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true
-          },
+          "combination": "Arcane_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && stats.magicalDamageDealt >= 1200 && stats.manaSpent >= 500",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && stats.magicalDamageDealt >= 2400 && (stats.damageDealt?.['Arcane'] || 0) >= 1200 && stats.manaSpent >= 1000",
@@ -263,10 +218,7 @@
           "name": "Divine Smiter",
           "description": "A Priest who channels divine wrath, smiting foes with holy power.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Smite": true
-          },
+          "combination": "Priest_Smite",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 25 && (stats.damageDealt?.['Holy'] || 0) >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 50 && (stats.damageDealt?.['Holy'] || 0) >= 2000 && stats.manaSpent >= 300",
@@ -279,10 +231,7 @@
           "name": "Devout Healer",
           "description": "A Priest dedicated to the art of healing, mending wounds and restoring vitality.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Heal": true
-          },
+          "combination": "Heal_Priest",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 25 && stats.healingDone >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 50 && stats.healingDone >= 2500 && stats.manaSpent >= 300",
@@ -295,10 +244,7 @@
           "name": "Support Acolyte",
           "description": "A Priest who focuses on a variety of utility spells to aid allies and control the battlefield.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Utility": true
-          },
+          "combination": "Priest_Utility",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 20 && stats.totalBuffsApplied >= 20 && stats.manaSpent >= 400",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 40 && stats.totalBuffsApplied >= 40 && stats.totalDebuffsApplied >= 5 && stats.manaSpent >= 700",
@@ -315,11 +261,7 @@
           "name": "Shadowsting Assassin",
           "description": "A Rogue specializing in daggers to deliver precise, critical strikes, often laced with deadly effects.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dagger": true,
-            "Critical Hits": true
-          },
+          "combination": "Critical Hits_Dagger_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 30 && stats.criticalHits >= 15",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 60 && stats.criticalHits >= 30 && stats.criticalDamage >= 500",
@@ -332,11 +274,7 @@
           "name": "Swiftblade Phantom",
           "description": "A Dagger Rogue who strikes with blinding speed, overwhelming foes before they can react.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dagger": true,
-            "Speed": true
-          },
+          "combination": "Dagger_Rogue_Speed",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 30 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 60 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 20 && stats.meleeAttacks >= 100",
@@ -349,11 +287,7 @@
           "name": "Crimson Fang",
           "description": "This Dagger Rogue specializes in causing grievous, bleeding wounds that weaken enemies over time.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dagger": true,
-            "Bleed": true
-          },
+          "combination": "Bleed_Dagger_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 30 && (stats.skillTagsUsed?.['Bleed'] || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 60 && (stats.skillTagsUsed?.['Bleed'] || 0) >= 20 && (stats.dotDamage || 0) >= 300",
@@ -366,11 +300,7 @@
           "name": "Venomshank Trickster",
           "description": "A Dagger Rogue adept at using poisons to debilitate and slowly kill their targets.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dagger": true,
-            "Poison": true
-          },
+          "combination": "Dagger_Poison_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 30 && (stats.skillTagsUsed?.['Poison'] || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 60 && (stats.skillTagsUsed?.['Poison'] || 0) >= 20 && (stats.dotDamage || 0) >= 300 && stats.totalDebuffsApplied >= 10",
@@ -383,11 +313,7 @@
           "name": "Nightwind Acrobat",
           "description": "An evasive Dagger Rogue who dances around foes, avoiding attacks with uncanny agility.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dagger": true,
-            "Evasion": true
-          },
+          "combination": "Dagger_Evasion_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 30 && stats.successfulDodges >= 15",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Dagger'] || 0) >= 60 && stats.successfulDodges >= 30 && (stats.skillTagsUsed?.['Evasion'] || 0) >= 10",
@@ -400,11 +326,7 @@
           "name": "Deadeye Marksman",
           "description": "A Bow Rogue renowned for lethal critical shots from afar.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Bow": true,
-            "Critical Hits": true
-          },
+          "combination": "Bow_Critical Hits_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 30 && stats.criticalHits >= 15 && stats.rangedDamageDealt >= 500",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 60 && stats.criticalHits >= 30 && stats.criticalDamage >= 600 && stats.rangedDamageDealt >= 1000",
@@ -417,11 +339,7 @@
           "name": "Windrunner Archer",
           "description": "This Bow Rogue unleashes arrows with incredible speed, peppering targets with rapid volleys.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Bow": true,
-            "Speed": true
-          },
+          "combination": "Bow_Rogue_Speed",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 30 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 10 && stats.rangedAttacks >= 70",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 60 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 20 && stats.rangedAttacks >= 120",
@@ -434,11 +352,7 @@
           "name": "Barbed Fletcher",
           "description": "A Bow Rogue whose arrows are designed to tear flesh and cause lingering, bleeding injuries.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Bow": true,
-            "Bleed": true
-          },
+          "combination": "Bleed_Bow_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 30 && (stats.skillTagsUsed?.['Bleed'] || 0) >= 10 && stats.rangedDamageDealt >= 400",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 60 && (stats.skillTagsUsed?.['Bleed'] || 0) >= 20 && (stats.dotDamage || 0) >= 300 && stats.rangedDamageDealt >= 800",
@@ -451,11 +365,7 @@
           "name": "Viper Striker",
           "description": "This Bow Rogue tips their arrows with potent toxins, ensuring a slow and agonizing fate for their victims.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Bow": true,
-            "Poison": true
-          },
+          "combination": "Bow_Poison_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 30 && (stats.skillTagsUsed?.['Poison'] || 0) >= 10 && stats.rangedDamageDealt >= 400",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 60 && (stats.skillTagsUsed?.['Poison'] || 0) >= 20 && (stats.dotDamage || 0) >= 300 && stats.totalDebuffsApplied >= 10 && stats.rangedDamageDealt >= 800",
@@ -468,11 +378,7 @@
           "name": "Mistwalker Ranger",
           "description": "An elusive Bow Rogue who uses their agility to evade incoming attacks while firing from unexpected angles.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Bow": true,
-            "Evasion": true
-          },
+          "combination": "Bow_Evasion_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 30 && stats.successfulDodges >= 15 && stats.rangedAttacks >= 50",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['Bow'] || 0) >= 60 && stats.successfulDodges >= 30 && (stats.skillTagsUsed?.['Evasion'] || 0) >= 10 && stats.rangedAttacks >= 100",
@@ -485,11 +391,7 @@
           "name": "Twin Fang Blademaster",
           "description": "A master of dual-wielding, focusing on landing frequent and painful critical hits.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dual Wielding": true,
-            "Critical Hits": true
-          },
+          "combination": "Critical Hits_Dual Wielding_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 30 && stats.criticalHits >= 20",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 60 && stats.criticalHits >= 40 && stats.criticalDamage >= 700",
@@ -502,11 +404,7 @@
           "name": "Whirlwind Marauder",
           "description": "A Dual-Wielding Rogue who becomes a blur of motion, striking rapidly with both weapons.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dual Wielding": true,
-            "Speed": true
-          },
+          "combination": "Dual Wielding_Rogue_Speed",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 30 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 15 && stats.meleeAttacks >= 120",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 60 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 30 && stats.meleeAttacks >= 200",
@@ -519,11 +417,7 @@
           "name": "Goredancer",
           "description": "This Dual-Wielding Rogue leaves a trail of bleeding enemies with their vicious twin attacks.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dual Wielding": true,
-            "Bleed": true
-          },
+          "combination": "Bleed_Dual Wielding_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 30 && (stats.skillTagsUsed?.['Bleed'] || 0) >= 15",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 60 && (stats.skillTagsUsed?.['Bleed'] || 0) >= 30 && (stats.dotDamage || 0) >= 400",
@@ -536,11 +430,7 @@
           "name": "Plaguebringer Duelist",
           "description": "A Dual-Wielding Rogue whose blades are coated in debilitating poisons.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dual Wielding": true,
-            "Poison": true
-          },
+          "combination": "Dual Wielding_Poison_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 30 && (stats.skillTagsUsed?.['Poison'] || 0) >= 15",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 60 && (stats.skillTagsUsed?.['Poison'] || 0) >= 30 && (stats.dotDamage || 0) >= 400 && stats.totalDebuffsApplied >= 15",
@@ -553,11 +443,7 @@
           "name": "Shadowdancer Bladeweaver",
           "description": "This Dual-Wielding Rogue is a master of evasion, using their twin weapons as much for defense as offense.",
           "from": "Rogue",
-          "combination": {
-            "Rogue": true,
-            "Dual Wielding": true,
-            "Evasion": true
-          },
+          "combination": "Dual Wielding_Evasion_Rogue",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 30 && stats.successfulDodges >= 20",
             "uncommon": "(stats, hero) => stats.previousClass === 'Rogue' && (stats.skillTagsUsed?.['DualWielding'] || 0) >= 60 && stats.successfulDodges >= 40 && (stats.skillTagsUsed?.['Evasion'] || 0) >= 15",
@@ -570,11 +456,7 @@
           "name": "Frenzied Ravager",
           "description": "A Warrior who wields a single one-handed weapon with savage, berserk fury.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Berserk": true
-          },
+          "combination": "Berserk_One Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 40 && (stats.skillTagsUsed?.['Berserk'] || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 80 && (stats.skillTagsUsed?.['Berserk'] || 0) >= 20 && (stats.damageDealtWhileLowHealth || 0) >= 500",
@@ -587,11 +469,7 @@
           "name": "Ironclad Duelist",
           "description": "A durable Warrior proficient with a one-handed weapon, capable of weathering many blows.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Durability": true
-          },
+          "combination": "Durability_One Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 40 && (stats.damageReceived?.['Total'] || 0) >= 1000 && stats.successfulBlocks >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 80 && (stats.damageReceived?.['Total'] || 0) >= 2000 && stats.successfulBlocks >= 20 && (stats.totalDamageBlocked || 0) >= 300",
@@ -604,11 +482,7 @@
           "name": "Executioner Blade",
           "description": "A Warrior specializing in powerful, single-target takedowns with a one-handed weapon.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Single Target": true
-          },
+          "combination": "One Handed_Single Target_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 40 && (stats.skillTagsUsed?.['SingleTarget'] || 0) >= 15 && stats.meleeDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 80 && (stats.skillTagsUsed?.['SingleTarget'] || 0) >= 30 && stats.meleeDamageDealt >= 2000 && (stats.overkillDamageDealt || 0) >= 200",
@@ -621,11 +495,7 @@
           "name": "Juggernaut Striker",
           "description": "This Warrior focuses on raw power, delivering crushing blows with their one-handed weapon.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Power": true
-          },
+          "combination": "One Handed_Power_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 40 && (stats.skillTagsUsed?.['Power'] || 0) >= 15 && stats.meleeDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 80 && (stats.skillTagsUsed?.['Power'] || 0) >= 30 && stats.meleeDamageDealt >= 2500 && stats.criticalDamage >= 500",
@@ -638,11 +508,7 @@
           "name": "Blade Dancer",
           "description": "A Warrior who moves with exceptional speed, their one-handed weapon a blur of motion.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Speed": true
-          },
+          "combination": "One Handed_Speed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 40 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 15 && stats.meleeAttacks >= 150",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 80 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 30 && stats.meleeAttacks >= 250",
@@ -655,11 +521,7 @@
           "name": "Warlord Tactician",
           "description": "A one-handed Warrior who inspires allies with powerful rallies, turning the tide of battle.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Rally": true
-          },
+          "combination": "One Handed_Rally_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 40 && (stats.skillTagsUsed?.['Rally'] || 0) >= 5 && stats.totalBuffsApplied >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHanded'] || 0) >= 80 && (stats.skillTagsUsed?.['Rally'] || 0) >= 10 && stats.totalBuffsApplied >= 20 && (stats.alliesInspiredByRally || 0) >= 5",
@@ -672,12 +534,7 @@
           "name": "Bulwark Sentinel",
           "description": "The epitome of defense, this Warrior uses a one-handed weapon and shield to withstand any assault.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Shield": true,
-            "Durability": true
-          },
+          "combination": "Durability_One Handed_Shield_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 50 && stats.successfulBlocks >= 20",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 100 && stats.successfulBlocks >= 40 && (stats.totalDamageBlocked || 0) >= 1000",
@@ -690,12 +547,7 @@
           "name": "Phalanx Breaker",
           "description": "A Warrior skilled with one-handed weapon and shield, excelling at dismantling single, formidable foes.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Shield": true,
-            "Single Target": true
-          },
+          "combination": "One Handed_Shield_Single Target_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 50 && (stats.skillTagsUsed?.['SingleTarget'] || 0) >= 20 && stats.meleeDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 100 && (stats.skillTagsUsed?.['SingleTarget'] || 0) >= 40 && stats.meleeDamageDealt >= 2500 && (stats.shieldBashStuns || 0) >= 5",
@@ -708,12 +560,7 @@
           "name": "Shield Wall Storm",
           "description": "This Warrior uses their one-handed weapon and shield to control crowds and strike multiple opponents.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Shield": true,
-            "Multiple Target": true
-          },
+          "combination": "Multiple Target_One Handed_Shield_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 50 && (stats.skillTagsUsed?.['MultiTarget'] || 0) >= 10 && stats.multiHits >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 100 && (stats.skillTagsUsed?.['MultiTarget'] || 0) >= 20 && stats.multiHits >= 25 && (stats.enemiesHitSimultaneouslyCount || 0) >= 30",
@@ -726,12 +573,7 @@
           "name": "Guardian Commander",
           "description": "A Warrior with one-handed weapon and shield, combining potent attacks with defensive might.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Shield": true,
-            "Power": true
-          },
+          "combination": "One Handed_Power_Shield_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 50 && (stats.skillTagsUsed?.['Power'] || 0) >= 20 && stats.meleeDamageDealt >= 1500",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 100 && (stats.skillTagsUsed?.['Power'] || 0) >= 40 && stats.meleeDamageDealt >= 3000 && stats.successfulBlocks >= 15",
@@ -744,12 +586,7 @@
           "name": "Swift Protector",
           "description": "This Warrior uses speed and precision with their one-handed weapon and shield, a dancing wall of steel.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Shield": true,
-            "Speed": true
-          },
+          "combination": "One Handed_Shield_Speed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 50 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 20 && stats.meleeAttacks >= 180",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 100 && (stats.skillTagsUsed?.['SpeedFocus'] || 0) >= 40 && stats.meleeAttacks >= 300 && stats.successfulDodges >= 10",
@@ -762,12 +599,7 @@
           "name": "Field Marshal",
           "description": "A Warrior with one-handed weapon and shield who excels at rallying allies and bolstering their resolve.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "One Handed": true,
-            "Shield": true,
-            "Rally": true
-          },
+          "combination": "One Handed_Rally_Shield_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 50 && (stats.skillTagsUsed?.['Rally'] || 0) >= 10 && stats.totalBuffsApplied >= 15",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['OneHandedShield'] || 0) >= 100 && (stats.skillTagsUsed?.['Rally'] || 0) >= 20 && stats.totalBuffsApplied >= 30 && (stats.alliesInspiredByRally || 0) >= 10",
@@ -780,11 +612,7 @@
           "name": "Raging Behemoth",
           "description": "A Warrior wielding a massive two-handed weapon, channeling berserk strength into devastating attacks.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "Two Handed": true,
-            "Berserk": true
-          },
+          "combination": "Berserk_Two Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 30 && (stats.skillTagsUsed?.['Berserk'] || 0) >= 15 && stats.meleeDamageDealt >= 1500",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 60 && (stats.skillTagsUsed?.['Berserk'] || 0) >= 30 && stats.meleeDamageDealt >= 3000 && (stats.damageDealtWhileLowHealth || 0) >= 700",
@@ -797,11 +625,7 @@
           "name": "Colossus Vanguard",
           "description": "This Warrior uses their two-handed weapon not just for offense, but also to endure incredible punishment.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "Two Handed": true,
-            "Durability": true
-          },
+          "combination": "Durability_Two Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 30 && (stats.damageReceived?.['Total'] || 0) >= 1500 && (stats.skillTagsUsed?.['Durability'] || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 60 && (stats.damageReceived?.['Total'] || 0) >= 3000 && (stats.skillTagsUsed?.['Durability'] || 0) >= 20 && (stats.damageMitigatedByStance || 0) >= 500",
@@ -814,11 +638,7 @@
           "name": "Greatweapon Master",
           "description": "A Warrior specializing in felling powerful foes with precise and devastating two-handed strikes.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "Two Handed": true,
-            "Single Target": true
-          },
+          "combination": "Single Target_Two Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 30 && (stats.skillTagsUsed?.['SingleTarget'] || 0) >= 20 && stats.meleeDamageDealt >= 1800",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 60 && (stats.skillTagsUsed?.['SingleTarget'] || 0) >= 40 && stats.meleeDamageDealt >= 3500 && (stats.overkillDamageDealt || 0) >= 500",
@@ -831,11 +651,7 @@
           "name": "Reaper of Armies",
           "description": "This Warrior wields a two-handed weapon to cleave through multiple enemies with sweeping attacks.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "Two Handed": true,
-            "Multiple Target": true
-          },
+          "combination": "Multiple Target_Two Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 30 && (stats.skillTagsUsed?.['MultiTarget'] || 0) >= 15 && stats.multiHits >= 15",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 60 && (stats.skillTagsUsed?.['MultiTarget'] || 0) >= 30 && stats.multiHits >= 35 && (stats.enemiesHitSimultaneouslyCount || 0) >= 40",
@@ -848,11 +664,7 @@
           "name": "Earthshatter Titan",
           "description": "A Warrior whose two-handed attacks carry immense power, capable of shattering defenses.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "Two Handed": true,
-            "Power": true
-          },
+          "combination": "Power_Two Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 30 && (stats.skillTagsUsed?.['Power'] || 0) >= 20 && stats.meleeDamageDealt >= 2000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 60 && (stats.skillTagsUsed?.['Power'] || 0) >= 40 && stats.meleeDamageDealt >= 4000 && stats.criticalDamage >= 800",
@@ -865,11 +677,7 @@
           "name": "Battlefield Captain",
           "description": "This two-handed Warrior is a beacon of inspiration, rallying allies with powerful warcries.",
           "from": "Warrior",
-          "combination": {
-            "Warrior": true,
-            "Two Handed": true,
-            "Rally": true
-          },
+          "combination": "Rally_Two Handed_Warrior",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 30 && (stats.skillTagsUsed?.['Rally'] || 0) >= 10 && stats.totalBuffsApplied >= 12 && stats.meleeDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Warrior' && (stats.skillTagsUsed?.['TwoHanded'] || 0) >= 60 && (stats.skillTagsUsed?.['Rally'] || 0) >= 20 && stats.totalBuffsApplied >= 25 && (stats.alliesInspiredByRally || 0) >= 12 && stats.meleeDamageDealt >= 2000",
@@ -882,11 +690,7 @@
           "name": "Magma Weaver",
           "description": "A Mage who commands both fire and earth, shaping molten rock and unleashing volcanic fury.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Lava": true
-          },
+          "combination": "Fire_Lava_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Earth'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && stats.magicalDamageDealt >= 2000 && (stats.damageDealt?.['Fire'] || 0) >= 1000",
@@ -899,11 +703,7 @@
           "name": "Obsidian Heart Geomancer",
           "description": "A Mage blending fire and stone to create resilient defenses and explosive assaults.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Stone": true
-          },
+          "combination": "Fire_Mage_Stone",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Stone'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Stone'] || 0) >= 20 && stats.magicalDamageDealt >= 2000 && (stats.damageDealt?.['Fire'] || 0) >= 800 && (stats.damageDealt?.['Earth'] || 0) >= 800",
@@ -916,11 +716,7 @@
           "name": "Thermal Sorcerer",
           "description": "A master of temperature extremes, wielding both scorching flames and biting frost.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Ice": true
-          },
+          "combination": "Fire_Ice_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Ice'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Ice'] || 0) >= 20 && (stats.damageDealt?.['Fire'] || 0) >= 750 && (stats.damageDealt?.['Ice'] || 0) >= 750",
@@ -933,11 +729,7 @@
           "name": "Inferno Conduit",
           "description": "A Mage who channels raw fire and volatile lightning into devastating electrical infernos.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Lightning": true
-          },
+          "combination": "Fire_Lightning_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 20 && (stats.damageDealt?.['Fire'] || 0) >= 750 && (stats.damageDealt?.['Lightning'] || 0) >= 750",
@@ -950,11 +742,7 @@
           "name": "Scalding Miasmist",
           "description": "This Mage combines fire and water to create superheated steam and boiling mists.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Steam": true
-          },
+          "combination": "Fire_Mage_Steam",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Water'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.damageDealt?.['Fire'] || 0) >= 700 && (stats.damageDealt?.['Water'] || 0) >= 700 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 5",
@@ -967,11 +755,7 @@
           "name": "Runic Pyromancer",
           "description": "A Mage who inscribes fiery runes to amplify their destructive pyromancy.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Runestone": true
-          },
+          "combination": "Fire_Mage_Runestone",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 5 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 10 && (stats.damageDealt?.['Fire'] || 0) >= 1500 && (stats.runesActivated || 0) >= 10",
@@ -984,11 +768,7 @@
           "name": "Crimsonflame Invoker",
           "description": "This Mage uses forbidden blood magic to fuel their destructive fire spells.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Blood": true
-          },
+          "combination": "Blood_Fire_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 5 && stats.magicalDamageDealt >= 1000 && (stats.healthSacrificedForPower || 0) >= 100",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 10 && (stats.damageDealt?.['Fire'] || 0) >= 1500 && (stats.healthSacrificedForPower || 0) >= 250",
@@ -1001,11 +781,7 @@
           "name": "Soulfire Lich",
           "description": "A dark Mage who wreathes necromantic energies in hellish fire.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Necromancy": true
-          },
+          "combination": "Fire_Mage_Necromancy",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 5 && stats.magicalDamageDealt >= 1000 && (stats.undeadMinionsSummoned || 0) >= 5",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 10 && (stats.damageDealt?.['Fire'] || 0) >= 1200 && (stats.undeadMinionsSummoned || 0) >= 10 && (stats.damageDealt?.['Necrotic'] || 0) >= 300",
@@ -1018,11 +794,7 @@
           "name": "Wildfire Druid",
           "description": "This Mage commands both the untamed growth of nature and the cleansing power of fire.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Nature": true
-          },
+          "combination": "Fire_Mage_Nature",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Nature'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Nature'] || 0) >= 20 && (stats.damageDealt?.['Fire'] || 0) >= 800 && (stats.damageDealt?.['Nature'] || 0) >= 800",
@@ -1035,11 +807,7 @@
           "name": "Phoenix Caller",
           "description": "A Mage who uses fire to burn enemies and then draw life essence from the flames.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Fire": true,
-            "Lifesteal": true
-          },
+          "combination": "Fire_Lifesteal_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 5 && (stats.damageDealt?.['Fire'] || 0) >= 1000 && (stats.healthStolen || 0) >= 200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Fire'] || 0) >= 40 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 10 && (stats.damageDealt?.['Fire'] || 0) >= 2000 && (stats.healthStolen || 0) >= 400",
@@ -1052,11 +820,7 @@
           "name": "Stonecharged Conduit",
           "description": "A Mage who imbues earthen constructs with crackling lightning, creating mobile shock defenses.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Lightning": true
-          },
+          "combination": "Earth_Lightning_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 20 && (stats.damageDealt?.['Earth'] || 0) >= 750 && (stats.damageDealt?.['Lightning'] || 0) >= 750",
@@ -1069,11 +833,7 @@
           "name": "Geyser Mystic",
           "description": "This Mage manipulates water and heat to create powerful geysers and scalding mists.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Steam": true
-          },
+          "combination": "Mage_Steam_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['Fire'] || 0) >= 10 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 5 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 10 && (stats.damageDealt?.['Water'] || 0) >= 700 && (stats.damageDealt?.['Fire'] || 0) >= 700",
@@ -1086,11 +846,7 @@
           "name": "Gale Lich",
           "description": "A Mage who binds restless spirits to powerful winds, creating spectral gales and raising undead from those slain by the storm.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Necromancy": true
-          },
+          "combination": "Air_Mage_Necromancy",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 5 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 10 && (stats.damageDealt?.['Air'] || 0) >= 800 && (stats.damageDealt?.['Necrotic'] || 0) >= 300 && (stats.undeadMinionsSummoned || 0) >= 5",
@@ -1103,11 +859,7 @@
           "name": "Primal Conduit",
           "description": "A Mage who summons powerful elemental beings, embodying the raw forces of nature.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Summoner": true,
-            "Elementalist": true
-          },
+          "combination": "Elementalist_Mage_Summoner",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 15 && (stats.skillTagsUsed?.['Elementalist'] || 0) >= 10 && (stats.elementalMinionsSummoned || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 30 && (stats.skillTagsUsed?.['Elementalist'] || 0) >= 20 && (stats.elementalMinionsSummoned || 0) >= 20 && (stats.totalDamageBySummons || 0) >= 1000",
@@ -1120,11 +872,7 @@
           "name": "Sanguine Arcanist",
           "description": "This Mage delves into the dangerous fusion of pure arcane energy and forbidden blood magic.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Blood": true
-          },
+          "combination": "Arcane_Blood_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 5 && stats.magicalDamageDealt >= 1200 && (stats.healthSacrificedForPower || 0) >= 150",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 10 && (stats.damageDealt?.['Arcane'] || 0) >= 1000 && (stats.healthSacrificedForPower || 0) >= 300",
@@ -1137,11 +885,7 @@
           "name": "Volcanic Heart Shaper",
           "description": "A Mage who commands the raw power of earth and fire, shaping molten rock and unleashing volcanic fury.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Lava": true
-          },
+          "combination": "Earth_Lava_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Fire'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && stats.magicalDamageDealt >= 2000 && (stats.damageDealt?.['Earth'] || 0) >= 1000 && (stats.damageDealt?.['Fire'] || 0) >= 500",
@@ -1154,11 +898,7 @@
           "name": "Bedrock Bastion",
           "description": "A Mage who commands the unyielding strength of stone, raising impenetrable defenses and crushing foes with terrestrial might.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Stone": true
-          },
+          "combination": "Earth_Mage_Stone",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 25 && (stats.skillTagsUsed?.['Stone'] || 0) >= 15 && stats.magicalDamageDealt >= 800",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 50 && (stats.skillTagsUsed?.['Stone'] || 0) >= 30 && stats.magicalDamageDealt >= 1800 && (stats.damageDealt?.['Earth'] || 0) >= 1500 && (stats.stoneBarriersErected || 0) >= 5",
@@ -1171,11 +911,7 @@
           "name": "Permafrost Geomancer",
           "description": "This Mage fuses the resilience of earth with the arresting power of ice, creating frozen fortresses and shattering glacial spikes.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Ice": true
-          },
+          "combination": "Earth_Ice_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Ice'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Ice'] || 0) >= 20 && (stats.damageDealt?.['Earth'] || 0) >= 800 && (stats.damageDealt?.['Ice'] || 0) >= 800",
@@ -1188,11 +924,7 @@
           "name": "Thunderstone Sage",
           "description": "A Mage who channels the earth's resonant energies, imbuing stone with shocking lightning power.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Lightning": true
-          },
+          "combination": "Earth_Lightning_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 20 && (stats.damageDealt?.['Earth'] || 0) >= 750 && (stats.damageDealt?.['Lightning'] || 0) >= 750",
@@ -1205,11 +937,7 @@
           "name": "Thermal Vent Warden",
           "description": "This Mage commands earth and water, creating superheated steam vents and scalding mudflows.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Steam": true
-          },
+          "combination": "Earth_Mage_Steam",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Water'] || 0) >= 10 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 5 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 10 && (stats.damageDealt?.['Earth'] || 0) >= 700 && (stats.damageDealt?.['Water'] || 0) >= 700",
@@ -1222,11 +950,7 @@
           "name": "Earthscribe Runelord",
           "description": "A Mage who carves powerful runes into the very earth, unleashing terrestrial magic of immense potency.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Runestone": true
-          },
+          "combination": "Earth_Mage_Runestone",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 5 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 10 && (stats.damageDealt?.['Earth'] || 0) >= 1500 && (stats.runesActivated || 0) >= 10",
@@ -1239,11 +963,7 @@
           "name": "Sanguine Geomancer",
           "description": "This dark Mage uses forbidden blood magic to animate and empower the earth itself.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Blood": true
-          },
+          "combination": "Blood_Earth_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 5 && stats.magicalDamageDealt >= 1000 && (stats.healthSacrificedForPower || 0) >= 100",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 10 && (stats.damageDealt?.['Earth'] || 0) >= 1500 && (stats.healthSacrificedForPower || 0) >= 250",
@@ -1256,11 +976,7 @@
           "name": "Gravedirt Shaman",
           "description": "A Mage who commands the earth and the dead, raising earthen undead and corrupting the land.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Necromancy": true
-          },
+          "combination": "Earth_Mage_Necromancy",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 5 && stats.magicalDamageDealt >= 1000 && (stats.undeadMinionsSummoned || 0) >= 5",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 10 && (stats.damageDealt?.['Earth'] || 0) >= 1200 && (stats.undeadMinionsSummoned || 0) >= 10 && (stats.damageDealt?.['Necrotic'] || 0) >= 300",
@@ -1273,11 +989,7 @@
           "name": "Verdant Earthwarden",
           "description": "This Mage melds the enduring strength of earth with the vibrant life of nature, cultivating powerful guardians and life-giving terrain.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Nature": true
-          },
+          "combination": "Earth_Mage_Nature",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Nature'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Nature'] || 0) >= 20 && (stats.damageDealt?.['Earth'] || 0) >= 800 && (stats.damageDealt?.['Nature'] || 0) >= 800",
@@ -1290,11 +1002,7 @@
           "name": "Geode Siphoner",
           "description": "A Mage who draws life essence from the earth itself, healing through terrestrial power and draining foes.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Earth": true,
-            "Lifesteal": true
-          },
+          "combination": "Earth_Lifesteal_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 5 && (stats.damageDealt?.['Earth'] || 0) >= 1000 && (stats.healthStolen || 0) >= 200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Earth'] || 0) >= 40 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 10 && (stats.damageDealt?.['Earth'] || 0) >= 2000 && (stats.healthStolen || 0) >= 400",
@@ -1307,11 +1015,7 @@
           "name": "Tidal Scolder",
           "description": "This Mage combines the relentless flow of water with searing lava, creating hydro-volcanic assaults.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Lava": true
-          },
+          "combination": "Lava_Mage_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['Fire'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.damageDealt?.['Water'] || 0) >= 1000 && (stats.damageDealt?.['Fire'] || 0) >= 500",
@@ -1324,11 +1028,7 @@
           "name": "Aquamancer Stonecaller",
           "description": "A Mage who merges the fluidity of water with the solidity of stone, creating tidal waves of rock and sentient water elementals encased in stone.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Stone": true
-          },
+          "combination": "Mage_Stone_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['Earth'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.damageDealt?.['Water'] || 0) >= 800 && (stats.damageDealt?.['Earth'] || 0) >= 800",
@@ -1341,11 +1041,7 @@
           "name": "Glacier Warden",
           "description": "A Mage who embodies the relentless might of ice and water, commanding blizzards and flash freezes.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Ice": true
-          },
+          "combination": "Ice_Mage_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 25 && (stats.skillTagsUsed?.['Ice'] || 0) >= 15 && stats.magicalDamageDealt >= 800",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 50 && (stats.skillTagsUsed?.['Ice'] || 0) >= 30 && stats.magicalDamageDealt >= 1800 && (stats.damageDealt?.['Water'] || 0) >= 800 && (stats.damageDealt?.['Ice'] || 0) >= 800 && (stats.enemiesFrozen || 0) >= 5",
@@ -1358,11 +1054,7 @@
           "name": "Maelstrom Conduit",
           "description": "This Mage commands the chaotic power of water and lightning, creating electrified maelstroms and shocking deluges.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Lightning": true
-          },
+          "combination": "Lightning_Mage_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 20 && (stats.damageDealt?.['Water'] || 0) >= 750 && (stats.damageDealt?.['Lightning'] || 0) >= 750",
@@ -1375,11 +1067,7 @@
           "name": "Aquatic Runeweaver",
           "description": "A Mage who inscribes potent runes upon water itself, controlling tides and summoning powerful aquatic constructs.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Runestone": true
-          },
+          "combination": "Mage_Runestone_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 5 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 10 && (stats.damageDealt?.['Water'] || 0) >= 1500 && (stats.runesActivated || 0) >= 10",
@@ -1392,11 +1080,7 @@
           "name": "Sanguine Tidemaster",
           "description": "This dark Mage uses forbidden blood magic to control the very essence of water, creating tides of blood and summoning gruesome aquatic horrors.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Blood": true
-          },
+          "combination": "Blood_Mage_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 5 && stats.magicalDamageDealt >= 1000 && (stats.healthSacrificedForPower || 0) >= 100",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 10 && (stats.damageDealt?.['Water'] || 0) >= 1500 && (stats.healthSacrificedForPower || 0) >= 250",
@@ -1409,11 +1093,7 @@
           "name": "Drowned Soul Caller",
           "description": "A Mage who commands the restless spirits of the drowned, weaving necromantic energies with the power of water.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Necromancy": true
-          },
+          "combination": "Mage_Necromancy_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 5 && stats.magicalDamageDealt >= 1000 && (stats.undeadMinionsSummoned || 0) >= 5",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 10 && (stats.damageDealt?.['Water'] || 0) >= 1200 && (stats.undeadMinionsSummoned || 0) >= 10 && (stats.damageDealt?.['Necrotic'] || 0) >= 300",
@@ -1426,11 +1106,7 @@
           "name": "Coral Whisperer",
           "description": "This Mage melds the life-giving properties of water with the growth of nature, cultivating vibrant aquatic ecosystems and commanding oceanic flora and fauna.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Nature": true
-          },
+          "combination": "Mage_Nature_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['Nature'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['Nature'] || 0) >= 20 && (stats.damageDealt?.['Water'] || 0) >= 800 && (stats.damageDealt?.['Nature'] || 0) >= 800",
@@ -1443,11 +1119,7 @@
           "name": "Tidal Leech",
           "description": "A Mage who uses the power of water to drain life essence from foes, healing themselves with stolen vitality.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Water": true,
-            "Lifesteal": true
-          },
+          "combination": "Lifesteal_Mage_Water",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 5 && (stats.damageDealt?.['Water'] || 0) >= 1000 && (stats.healthStolen || 0) >= 200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Water'] || 0) >= 40 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 10 && (stats.damageDealt?.['Water'] || 0) >= 2000 && (stats.healthStolen || 0) >= 400",
@@ -1460,11 +1132,7 @@
           "name": "Cinderstorm Zephyr",
           "description": "This Mage blends the fury of fire with the swiftness of air, creating burning cyclones and lava-infused gales.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Lava": true
-          },
+          "combination": "Air_Lava_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && (stats.skillTagsUsed?.['Fire'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.damageDealt?.['Air'] || 0) >= 1000 && (stats.damageDealt?.['Fire'] || 0) >= 500",
@@ -1477,11 +1145,7 @@
           "name": "Sandstorm Sculptor",
           "description": "A Mage who commands air and earth to whip up blinding sandstorms and shape devastating stone projectiles.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Stone": true
-          },
+          "combination": "Air_Mage_Stone",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && (stats.skillTagsUsed?.['Earth'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.damageDealt?.['Air'] || 0) >= 800 && (stats.damageDealt?.['Earth'] || 0) >= 800",
@@ -1494,11 +1158,7 @@
           "name": "Hoarfrost Tempest",
           "description": "This Mage commands the biting winds of winter and the freezing power of ice, creating blizzards and ice storms.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Ice": true
-          },
+          "combination": "Air_Ice_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 25 && (stats.skillTagsUsed?.['Ice'] || 0) >= 15 && stats.magicalDamageDealt >= 800",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 50 && (stats.skillTagsUsed?.['Ice'] || 0) >= 30 && stats.magicalDamageDealt >= 1800 && (stats.damageDealt?.['Air'] || 0) >= 800 && (stats.damageDealt?.['Ice'] || 0) >= 800 && (stats.enemiesChilled || 0) >= 10",
@@ -1511,11 +1171,7 @@
           "name": "Stormcaller Skywrath",
           "description": "A Mage who embodies the storm, commanding fierce winds and devastating lightning strikes.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Lightning": true
-          },
+          "combination": "Air_Lightning_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 25 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 15 && stats.magicalDamageDealt >= 800",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 50 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 30 && stats.magicalDamageDealt >= 1800 && (stats.damageDealt?.['Air'] || 0) >= 800 && (stats.damageDealt?.['Lightning'] || 0) >= 800 && (stats.enemiesShocked || 0) >= 10",
@@ -1528,11 +1184,7 @@
           "name": "Mistral Vaporweaver",
           "description": "This Mage masterfully combines air and water, creating disorienting mists, superheated steam, and powerful updrafts.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Steam": true
-          },
+          "combination": "Air_Mage_Steam",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && (stats.skillTagsUsed?.['Water'] || 0) >= 10 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 5 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 10 && (stats.damageDealt?.['Air'] || 0) >= 700 && (stats.damageDealt?.['Water'] || 0) >= 700",
@@ -1545,11 +1197,7 @@
           "name": "Windscribe Runemaster",
           "description": "A Mage who etches powerful runes upon the very winds, commanding gales and storms with inscribed magic.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Runestone": true
-          },
+          "combination": "Air_Mage_Runestone",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 5 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 10 && (stats.damageDealt?.['Air'] || 0) >= 1500 && (stats.runesActivated || 0) >= 10",
@@ -1562,11 +1210,7 @@
           "name": "Sanguine Tempestarii",
           "description": "This dark Mage fuels their command over air with forbidden blood magic, creating life-draining winds and bloodstorms.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Blood": true
-          },
+          "combination": "Air_Blood_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 5 && stats.magicalDamageDealt >= 1000 && (stats.healthSacrificedForPower || 0) >= 100",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 10 && (stats.damageDealt?.['Air'] || 0) >= 1500 && (stats.healthSacrificedForPower || 0) >= 250",
@@ -1579,11 +1223,7 @@
           "name": "Sky Sylph Matron/Patron",
           "description": "This Mage commands the air and life, summoning nature spirits on the wind and fostering aerial ecosystems.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Nature": true
-          },
+          "combination": "Air_Mage_Nature",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && (stats.skillTagsUsed?.['Nature'] || 0) >= 10 && stats.magicalDamageDealt >= 1000",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && (stats.skillTagsUsed?.['Nature'] || 0) >= 20 && (stats.damageDealt?.['Air'] || 0) >= 800 && (stats.damageDealt?.['Nature'] || 0) >= 800",
@@ -1596,11 +1236,7 @@
           "name": "Zephyr Leech",
           "description": "A Mage who uses the swiftness of air to drain life essence from foes, healing themselves with stolen vitality on the winds.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Air": true,
-            "Lifesteal": true
-          },
+          "combination": "Air_Lifesteal_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 20 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 5 && (stats.damageDealt?.['Air'] || 0) >= 1000 && (stats.healthStolen || 0) >= 200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Air'] || 0) >= 40 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 10 && (stats.damageDealt?.['Air'] || 0) >= 2000 && (stats.healthStolen || 0) >= 400",
@@ -1613,11 +1249,7 @@
           "name": "Grave Lord Summoner",
           "description": "A Mage who summons forth legions of undead, commanding vast armies of skeletal warriors and spectral horrors.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Summoner": true,
-            "Necromancy": true
-          },
+          "combination": "Mage_Necromancy_Summoner",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 15 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 10 && (stats.undeadMinionsSummoned || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 30 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 20 && (stats.undeadMinionsSummoned || 0) >= 20 && (stats.totalDamageBySummons || 0) >= 800",
@@ -1630,11 +1262,7 @@
           "name": "Wilderness Caller",
           "description": "This Mage summons the very spirits and beasts of nature, commanding a wild host of flora and fauna.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Summoner": true,
-            "Nature": true
-          },
+          "combination": "Mage_Nature_Summoner",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 15 && (stats.skillTagsUsed?.['Nature'] || 0) >= 10 && (stats.natureSpiritsSummoned || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 30 && (stats.skillTagsUsed?.['Nature'] || 0) >= 20 && (stats.natureSpiritsSummoned || 0) >= 20 && (stats.totalDamageBySummons || 0) >= 800",
@@ -1647,11 +1275,7 @@
           "name": "Blood Pact Conjurer",
           "description": "A dark Mage who forges pacts in blood to summon powerful entities and animate sanguine constructs.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Summoner": true,
-            "Blood": true
-          },
+          "combination": "Blood_Mage_Summoner",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 15 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 10 && (stats.healthSacrificedForPower || 0) >= 150 && (stats.bloodConstructsSummoned || 0) >= 5",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Summoner'] || 0) >= 30 && (stats.skillTagsUsed?.['BloodMagic'] || 0) >= 20 && (stats.healthSacrificedForPower || 0) >= 300 && (stats.bloodConstructsSummoned || 0) >= 10",
@@ -1664,11 +1288,7 @@
           "name": "Arcane Magma-shaper",
           "description": "This Mage infuses raw arcane power into molten earth, creating explosive and unpredictable lava constructs.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Lava": true
-          },
+          "combination": "Arcane_Lava_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Fire'] || 0) >= 10 && (stats.skillTagsUsed?.['Earth'] || 0) >= 5 && stats.magicalDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Fire'] || 0) >= 20 && (stats.skillTagsUsed?.['Earth'] || 0) >= 10 && (stats.damageDealt?.['Arcane'] || 0) >= 800 && (stats.damageDealt?.['Fire'] || 0) >= 400",
@@ -1681,11 +1301,7 @@
           "name": "Aetheric Stoneweaver",
           "description": "A Mage who imbues stone with pure arcane energy, creating crystalline defenses and reality-warping monoliths.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Stone": true
-          },
+          "combination": "Arcane_Mage_Stone",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Earth'] || 0) >= 10 && (stats.skillTagsUsed?.['Stone'] || 0) >= 5 && stats.magicalDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Earth'] || 0) >= 20 && (stats.damageDealt?.['Arcane'] || 0) >= 800 && (stats.damageDealt?.['Earth'] || 0) >= 400",
@@ -1698,11 +1314,7 @@
           "name": "Cryo-Arcanist",
           "description": "This Mage fuses the cold precision of ice with the boundless potential of arcane magic, creating shards of frozen mana and temporal stasis fields.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Ice": true
-          },
+          "combination": "Arcane_Ice_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Ice'] || 0) >= 10 && stats.magicalDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Ice'] || 0) >= 20 && (stats.damageDealt?.['Arcane'] || 0) >= 800 && (stats.damageDealt?.['Ice'] || 0) >= 400",
@@ -1715,11 +1327,7 @@
           "name": "Electro-Arcanist",
           "description": "A Mage who channels raw arcane energy into bolts of pure lightning and manipulates electro-magical fields.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Lightning": true
-          },
+          "combination": "Arcane_Lightning_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 10 && stats.magicalDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Lightning'] || 0) >= 20 && (stats.damageDealt?.['Arcane'] || 0) >= 800 && (stats.damageDealt?.['Lightning'] || 0) >= 400",
@@ -1732,11 +1340,7 @@
           "name": "Aetheric Geyserlord",
           "description": "This Mage commands arcane-infused steam, creating disorienting fogs of pure mana and scalding aetheric eruptions.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Steam": true
-          },
+          "combination": "Arcane_Mage_Steam",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Water'] || 0) >= 10 && (stats.skillTagsUsed?.['Fire'] || 0) >= 5 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 5 && stats.magicalDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Water'] || 0) >= 20 && (stats.skillTagsUsed?.['SteamFocus'] || 0) >= 10 && (stats.damageDealt?.['Arcane'] || 0) >= 800",
@@ -1749,11 +1353,7 @@
           "name": "Arcane Glyptographer",
           "description": "A Mage who inscribes runes of pure arcane power, manipulating reality and unleashing devastating spells through ancient symbols.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Runestone": true
-          },
+          "combination": "Arcane_Mage_Runestone",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 5 && stats.magicalDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Runestone'] || 0) >= 10 && (stats.damageDealt?.['Arcane'] || 0) >= 1500 && (stats.runesActivated || 0) >= 10",
@@ -1766,11 +1366,7 @@
           "name": "Umbral Arcanist",
           "description": "This dark Mage channels arcane energies through necromantic rituals, weaving spells of shadow and undeath.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Necromancy": true
-          },
+          "combination": "Arcane_Mage_Necromancy",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 5 && stats.magicalDamageDealt >= 1200 && (stats.undeadMinionsSummoned || 0) >= 3",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Necromancy'] || 0) >= 10 && (stats.damageDealt?.['Arcane'] || 0) >= 1000 && (stats.damageDealt?.['Necrotic'] || 0) >= 500 && (stats.undeadMinionsSummoned || 0) >= 7",
@@ -1783,11 +1379,7 @@
           "name": "Leyline Naturalist",
           "description": "A Mage who taps into the arcane ley lines to amplify nature's power, creating vibrant magical flora and commanding primal energies.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Nature": true
-          },
+          "combination": "Arcane_Mage_Nature",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Nature'] || 0) >= 10 && stats.magicalDamageDealt >= 1200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Nature'] || 0) >= 20 && (stats.damageDealt?.['Arcane'] || 0) >= 800 && (stats.damageDealt?.['Nature'] || 0) >= 800",
@@ -1800,11 +1392,7 @@
           "name": "Aetheric Vampyre",
           "description": "This Mage uses potent arcane energies to siphon life force, healing through devastating spells and draining enemies to fuel their magic.",
           "from": "Mage",
-          "combination": {
-            "Mage": true,
-            "Arcane": true,
-            "Lifesteal": true
-          },
+          "combination": "Arcane_Lifesteal_Mage",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 20 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 5 && (stats.damageDealt?.['Arcane'] || 0) >= 1000 && (stats.healthStolen || 0) >= 200",
             "uncommon": "(stats, hero) => stats.previousClass === 'Mage' && (stats.skillTagsUsed?.['Arcane'] || 0) >= 40 && (stats.skillTagsUsed?.['Lifesteal'] || 0) >= 10 && (stats.damageDealt?.['Arcane'] || 0) >= 2000 && (stats.healthStolen || 0) >= 400",
@@ -1817,11 +1405,7 @@
           "name": "Blessed Judicator",
           "description": "A Priest who smites foes with holy power while bolstering allies with divine blessings.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Smite": true,
-            "Blessing": true
-          },
+          "combination": "Blessing_Priest_Smite",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 20 && (stats.skillTagsUsed?.['Blessing'] || 0) >= 10 && (stats.damageDealt?.['Holy'] || 0) >= 800 && stats.totalBuffsApplied >= 15",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 40 && (stats.skillTagsUsed?.['Blessing'] || 0) >= 20 && (stats.damageDealt?.['Holy'] || 0) >= 1600 && stats.totalBuffsApplied >= 30",
@@ -1834,11 +1418,7 @@
           "name": "Sacred Chanter",
           "description": "This Priest uses powerful chants to enhance their smiting abilities and inspire allies.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Smite": true,
-            "Chant": true
-          },
+          "combination": "Chant_Priest_Smite",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 20 && (stats.skillTagsUsed?.['Chant'] || 0) >= 10 && (stats.damageDealt?.['Holy'] || 0) >= 800 && (stats.chantUptimeSeconds || 0) >= 120",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 40 && (stats.skillTagsUsed?.['Chant'] || 0) >= 20 && (stats.damageDealt?.['Holy'] || 0) >= 1600 && (stats.chantUptimeSeconds || 0) >= 240",
@@ -1851,11 +1431,7 @@
           "name": "Purifying Lightbringer",
           "description": "A Priest who scours evil with holy smites and purges afflictions from allies and corruption from foes.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Smite": true,
-            "Purge": true
-          },
+          "combination": "Priest_Purge_Smite",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 20 && (stats.skillTagsUsed?.['Purge'] || 0) >= 10 && (stats.damageDealt?.['Holy'] || 0) >= 800 && stats.totalDebuffsApplied >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 40 && (stats.skillTagsUsed?.['Purge'] || 0) >= 20 && (stats.damageDealt?.['Holy'] || 0) >= 1600 && stats.totalDebuffsApplied >= 20 && (stats.enemyBuffsPurged || 0) >= 5",
@@ -1868,11 +1444,7 @@
           "name": "Exorcist Inquisitor",
           "description": "This Priest specializes in smiting unholy entities and performing powerful exorcisms to banish evil.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Smite": true,
-            "Exorcism": true
-          },
+          "combination": "Exorcism_Priest_Smite",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 20 && (stats.skillTagsUsed?.['Exorcism'] || 0) >= 5 && (stats.damageDealt?.['Holy'] || 0) >= 800 && (stats.undeadOrDemonsDamaged || 0) >= 100",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 40 && (stats.skillTagsUsed?.['Exorcism'] || 0) >= 10 && (stats.damageDealt?.['Holy'] || 0) >= 1600 && (stats.undeadOrDemonsDamaged || 0) >= 250",
@@ -1885,11 +1457,7 @@
           "name": "Soul Warden",
           "description": "A Priest who smites foes with divine judgment and binds souls, protecting allies or damning enemies.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Smite": true,
-            "Soulbind": true
-          },
+          "combination": "Priest_Smite_Soulbind",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 20 && (stats.skillTagsUsed?.['Soulbind'] || 0) >= 5 && (stats.damageDealt?.['Holy'] || 0) >= 800 && (stats.soulsManipulated || 0) >= 5",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Smite'] || 0) >= 40 && (stats.skillTagsUsed?.['Soulbind'] || 0) >= 10 && (stats.damageDealt?.['Holy'] || 0) >= 1600 && (stats.soulsManipulated || 0) >= 10",
@@ -1902,11 +1470,7 @@
           "name": "Benevolent Healer",
           "description": "A Priest dedicated to mending wounds and bestowing powerful blessings upon their allies.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Heal": true,
-            "Blessing": true
-          },
+          "combination": "Blessing_Heal_Priest",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 20 && (stats.skillTagsUsed?.['Blessing'] || 0) >= 10 && stats.healingDone >= 1000 && stats.totalBuffsApplied >= 15",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 40 && (stats.skillTagsUsed?.['Blessing'] || 0) >= 20 && stats.healingDone >= 2000 && stats.totalBuffsApplied >= 30",
@@ -1919,11 +1483,7 @@
           "name": "Harmonic Mender",
           "description": "This Priest uses sacred chants to amplify their healing capabilities and soothe allies' wounds.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Heal": true,
-            "Chant": true
-          },
+          "combination": "Chant_Heal_Priest",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 20 && (stats.skillTagsUsed?.['Chant'] || 0) >= 10 && stats.healingDone >= 1000 && (stats.chantUptimeSeconds || 0) >= 120",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 40 && (stats.skillTagsUsed?.['Chant'] || 0) >= 20 && stats.healingDone >= 2000 && (stats.chantUptimeSeconds || 0) >= 240",
@@ -1936,11 +1496,7 @@
           "name": "Aegis Guardian",
           "description": "A Priest who excels at shielding allies from harm with divine barriers and mending their wounds.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Heal": true,
-            "Shield": true
-          },
+          "combination": "Heal_Priest_Shield",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 20 && (stats.skillTagsUsed?.['Shield'] || 0) >= 10 && stats.healingDone >= 800 && (stats.damageAbsorbedByShields || 0) >= 500",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 40 && (stats.skillTagsUsed?.['Shield'] || 0) >= 20 && stats.healingDone >= 1600 && (stats.damageAbsorbedByShields || 0) >= 1000",
@@ -1953,11 +1509,7 @@
           "name": "Cleansing Hand",
           "description": "This Priest focuses on healing afflictions and purging harmful effects while restoring vitality.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Heal": true,
-            "Purge": true
-          },
+          "combination": "Heal_Priest_Purge",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 20 && (stats.skillTagsUsed?.['Purge'] || 0) >= 10 && stats.healingDone >= 1000 && (stats.debuffsDispelledFromAllies || 0) >= 10",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 40 && (stats.skillTagsUsed?.['Purge'] || 0) >= 20 && stats.healingDone >= 2000 && (stats.debuffsDispelledFromAllies || 0) >= 20",
@@ -1970,11 +1522,7 @@
           "name": "Sanctified Exorcist",
           "description": "A Priest who heals the body and spirit, specializing in banishing evil influences and mending spiritual wounds.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Heal": true,
-            "Exorcism": true
-          },
+          "combination": "Exorcism_Heal_Priest",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 20 && (stats.skillTagsUsed?.['Exorcism'] || 0) >= 5 && stats.healingDone >= 1000 && (stats.cursesRemoved || 0) >= 3",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 40 && (stats.skillTagsUsed?.['Exorcism'] || 0) >= 10 && stats.healingDone >= 2000 && (stats.cursesRemoved || 0) >= 7",
@@ -1987,11 +1535,7 @@
           "name": "Spirit Binder Healer",
           "description": "This Priest mends wounds by binding benevolent spirits to allies or linking souls for shared vitality.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Heal": true,
-            "Soulbind": true
-          },
+          "combination": "Heal_Priest_Soulbind",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 20 && (stats.skillTagsUsed?.['Soulbind'] || 0) >= 5 && stats.healingDone >= 1000 && (stats.soulsManipulated || 0) >= 5",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Heal'] || 0) >= 40 && (stats.skillTagsUsed?.['Soulbind'] || 0) >= 10 && stats.healingDone >= 2000 && (stats.soulsManipulated || 0) >= 10",
@@ -2004,11 +1548,7 @@
           "name": "Divine Proctor",
           "description": "A versatile Priest who supports allies with an array of blessings and utility spells.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Utility": true,
-            "Blessing": true
-          },
+          "combination": "Blessing_Priest_Utility",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 15 && (stats.skillTagsUsed?.['Blessing'] || 0) >= 10 && stats.totalBuffsApplied >= 20 && stats.manaSpent >= 300",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 30 && (stats.skillTagsUsed?.['Blessing'] || 0) >= 20 && stats.totalBuffsApplied >= 40 && stats.manaSpent >= 600",
@@ -2021,11 +1561,7 @@
           "name": "Holy Orator",
           "description": "This Priest employs potent chants and utility spells to sway the battlefield and support their comrades.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Utility": true,
-            "Chant": true
-          },
+          "combination": "Chant_Priest_Utility",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 15 && (stats.skillTagsUsed?.['Chant'] || 0) >= 10 && (stats.chantUptimeSeconds || 0) >= 150 && stats.manaSpent >= 300",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 30 && (stats.skillTagsUsed?.['Chant'] || 0) >= 20 && (stats.chantUptimeSeconds || 0) >= 300 && stats.manaSpent >= 600",
@@ -2038,11 +1574,7 @@
           "name": "Bastion Warden",
           "description": "A Priest specializing in protective shields and versatile utility magic to safeguard allies.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Utility": true,
-            "Shield": true
-          },
+          "combination": "Priest_Shield_Utility",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 15 && (stats.skillTagsUsed?.['Shield'] || 0) >= 10 && (stats.damageAbsorbedByShields || 0) >= 600 && stats.manaSpent >= 300",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 30 && (stats.skillTagsUsed?.['Shield'] || 0) >= 20 && (stats.damageAbsorbedByShields || 0) >= 1200 && stats.manaSpent >= 600",
@@ -2055,11 +1587,7 @@
           "name": "Adjudicator of Purity",
           "description": "This Priest uses utility magic to purge negative effects and cleanse corruption from the battlefield.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Utility": true,
-            "Purge": true
-          },
+          "combination": "Priest_Purge_Utility",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 15 && (stats.skillTagsUsed?.['Purge'] || 0) >= 10 && (stats.debuffsDispelledFromAllies || 0) >= 15 && stats.manaSpent >= 300",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 30 && (stats.skillTagsUsed?.['Purge'] || 0) >= 20 && (stats.debuffsDispelledFromAllies || 0) >= 30 && (stats.enemyBuffsPurged || 0) >= 5 && stats.manaSpent >= 600",
@@ -2072,11 +1600,7 @@
           "name": "Consecrated Vanquisher",
           "description": "A Priest skilled in various utility spells, specializing in exorcising evil spirits and banishing unholy presences.",
           "from": "Priest",
-          "combination": {
-            "Priest": true,
-            "Utility": true,
-            "Exorcism": true
-          },
+          "combination": "Exorcism_Priest_Utility",
           "requirements": {
             "common": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 15 && (stats.skillTagsUsed?.['Exorcism'] || 0) >= 5 && (stats.cursesRemoved || 0) >= 5 && stats.manaSpent >= 300",
             "uncommon": "(stats, hero) => stats.previousClass === 'Priest' && (stats.skillTagsUsed?.['Utility'] || 0) >= 30 && (stats.skillTagsUsed?.['Exorcism'] || 0) >= 10 && (stats.cursesRemoved || 0) >= 10 && (stats.undeadOrDemonsBanished || 0) >= 1 && stats.manaSpent >= 600",
