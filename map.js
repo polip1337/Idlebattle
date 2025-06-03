@@ -548,6 +548,12 @@ function handleOutOfCombatRegeneration() {
             }
         }
     });
+
+    // Always update the hero portrait, regardless of which tab is active
+    if (hero) {
+        renderHeroPortrait();
+        _updateHeroMapSidebar(hero);
+    }
 }
 
 // Add cleanup function
