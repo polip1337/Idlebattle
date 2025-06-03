@@ -1,4 +1,5 @@
 import { renderTeamMembers, updateHealth, updateMana, updateStamina } from './Render.js';
+import { BattleUI } from './battleUI.js';
 
 // Team Management
 export class TeamManager {
@@ -21,7 +22,7 @@ export class TeamManager {
             updateHealth(member);
             updateMana(member);
             updateStamina(member);
-            this.updateMemberUI(member);
+            BattleUI.updateMemberUI(member);
         });
     }
 
