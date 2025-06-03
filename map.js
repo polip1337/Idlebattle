@@ -30,6 +30,7 @@ let expBarClass3El = null;
 
 // Add regeneration interval variable
 let regenerationInterval = null;
+window.regenerationInterval = null; // Expose to window for battle system
 
 // Expose isProcessingPoiClick to window for action handler
 window.isProcessingPoiClick = isProcessingPoiClick;
@@ -367,6 +368,7 @@ export function initializeMap() {
         clearInterval(regenerationInterval);
     }
     regenerationInterval = setInterval(handleOutOfCombatRegeneration, 2000);
+    window.regenerationInterval = regenerationInterval; // Expose to window
 
     async function loadMapDataAndRenderInitial() {
         try {
@@ -546,4 +548,16 @@ function handleOutOfCombatRegeneration() {
             }
         }
     });
+}
+
+// Add cleanup function
+export function cleanupMap() {
+    if (regenerationInterval) {
+        clearInterval(regenerationInterval);
+        regenerationInterval = null;
+    }
+    if (window.regenerationInterval) {
+        clearInterval(window.regenerationInterval);
+        window.regenerationInterval = null;
+    }
 }
