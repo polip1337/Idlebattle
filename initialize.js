@@ -292,7 +292,7 @@ function selectInitialSkills() {
     const passiveSkillBoxes = document.querySelectorAll("#passiveSkills .skill-box");
     let passiveSelectedCount = 0;
     hero.skills.forEach(skill => {
-        if (skill.type !== "active" && passiveSelectedCount < 4 && passiveSkillBoxes[passiveSelectedCount]) {
+        if (skill.type !== "active" && passiveSelectedCount < 2 && passiveSkillBoxes[passiveSelectedCount]) {
              const skillBox = Array.from(passiveSkillBoxes).find(sb => sb.id === 'skill-box-' + skill.name.replace(/\s/g, ''));
             if(skillBox) hero.selectSkill(skill, skillBox, true);
             passiveSelectedCount++;

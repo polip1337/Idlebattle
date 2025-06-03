@@ -705,8 +705,8 @@ class Hero extends Member {
 
         selectSkill(skill, skillBox, isPassive = false) {
         const selectedSkillsArray = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
-        const maxSkills = 4; // Max skills of one type (active/passive) hero can select for BAR
-        // This logic is for the 4-slot skill BAR, not the list of all learnable skills.
+        const maxSkills = isPassive ? 2 : 4; // Max skills of one type (active/passive) hero can select for BAR
+        // This logic is for the skill BAR, not the list of all learnable skills.
 
         const existingSkillIndex = selectedSkillsArray.findIndex(s => s === skill);
 
@@ -782,9 +782,9 @@ class Hero extends Member {
         }
 
         reselectSkillsAfterLoad() {
-                // For the 4-slot skill bars
+                // For the skill bars
                 const numActiveBarSlots = 4; 
-                const numPassiveBarSlots = 4;
+                const numPassiveBarSlots = 2;
 
                 this.selectedSkills = new Array(numActiveBarSlots).fill(null);
                 this.selectedPassiveSkills = new Array(numPassiveBarSlots).fill(null);
