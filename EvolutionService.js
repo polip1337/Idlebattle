@@ -3,7 +3,7 @@ import {
     expBarTextAddGlow,
     openEvolutionModal
 } from './Render.js';
-import battleStatistics from './BattleStatistics.js';
+import { battleStatistics} from './initialize.js';
 
 class EvolutionService {
     constructor() {
