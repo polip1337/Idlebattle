@@ -173,7 +173,7 @@ class Member {
                 target.takeDamage(finalDamage);
                 if (this.isHero) { // Check if the attacker is the hero
                     skill.gainExperience(finalDamage);
-                    battleStatistics.addDamageDealt(skill.damageType, finalDamage);
+                    battleStatistics.addDamageDealt(skill.damageType, finalDamage, skill.tags || []);
                 }
                 if (target.isHero) { // Check if the target is the hero
                     battleStatistics.addDamageReceived(skill.damageType, finalDamage);

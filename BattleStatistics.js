@@ -32,6 +32,7 @@ class BattleStatistics {
         // Add new tracking for damage by skill type
         this.meleeDamageDealt = 0;
         this.rangedDamageDealt = 0;
+        this.magicalDamageDealt = 0; // Add magical damage tracking
         this.buffsCast = 0;
     }
     reset() {
@@ -67,6 +68,7 @@ class BattleStatistics {
         // Reset new tracking properties
         this.meleeDamageDealt = 0;
         this.rangedDamageDealt = 0;
+        this.magicalDamageDealt = 0; // Reset magical damage
         this.buffsCast = 0;
     }
     addDamageDealt(type, amount, skillTags = []) {
@@ -83,6 +85,8 @@ class BattleStatistics {
                 this.meleeDamageDealt += amount;
             } else if (skillTags.includes('Ranged')) {
                 this.rangedDamageDealt += amount;
+            } else if (skillTags.includes('Magical')) {
+                this.magicalDamageDealt += amount;
             }
         }
     }
@@ -240,6 +244,7 @@ class BattleStatistics {
             skillTagsUsed: { ...this.skillTagsUsed },
             meleeDamageDealt: this.meleeDamageDealt,
             rangedDamageDealt: this.rangedDamageDealt,
+            magicalDamageDealt: this.magicalDamageDealt,
             buffsCast: this.buffsCast
         };
     }
@@ -312,6 +317,7 @@ class BattleStatistics {
             'gold-collected': this.goldCollected || 0,
             'melee-damage-dealt': Math.round(this.meleeDamageDealt || 0),
             'ranged-damage-dealt': Math.round(this.rangedDamageDealt || 0),
+            'magical-damage-dealt': Math.round(this.magicalDamageDealt || 0),
             'buffs-cast': this.buffsCast || 0
         };
 

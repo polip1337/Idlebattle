@@ -115,6 +115,7 @@ class EvolutionService {
             // Add damage type stats
             statsSnapshot.meleeDamage = battleStats.meleeDamageDealt || 0;
             statsSnapshot.rangedDamage = battleStats.rangedDamageDealt || 0;
+            statsSnapshot.magicalDamage = battleStats.magicalDamageDealt || 0;
             statsSnapshot.fireDamage = battleStats.damageDealt['Fire'] || 0;
             statsSnapshot.iceDamage = battleStats.damageDealt['Ice'] || 0;
             statsSnapshot.lightningDamage = battleStats.damageDealt['Lightning'] || 0;
