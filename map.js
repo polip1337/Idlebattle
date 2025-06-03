@@ -28,6 +28,9 @@ let expBarClass1El = null;
 let expBarClass2El = null;
 let expBarClass3El = null;
 
+// Add regeneration interval variable
+let regenerationInterval = null;
+
 // Expose isProcessingPoiClick to window for action handler
 window.isProcessingPoiClick = isProcessingPoiClick;
 
@@ -359,6 +362,11 @@ export function initializeMap() {
     expBarClass2El = document.getElementById('exp-bar-class2');
     expBarClass3El = document.getElementById('exp-bar-class3');
 
+    // Start regeneration interval (every 2 seconds)
+    if (regenerationInterval) {
+        clearInterval(regenerationInterval);
+    }
+    regenerationInterval = setInterval(handleOutOfCombatRegeneration, 2000);
 
     async function loadMapDataAndRenderInitial() {
         try {
@@ -509,3 +517,33 @@ export function resetPOIDialogues(poiId) {
 
 // Expose resetPOIDialogues to window for dialogue system
 window.resetPOIDialogues = resetPOIDialogues;
+
+function handleOutOfCombatRegeneration() {
+    if (!team1 || !team1.members) return;
+    
+    team1.members.forEach(member => {
+        if (member.currentHealth > 0) {
+            // Health regeneration (1% of max health per tick)
+            const healthRegenAmount = parseFloat((0.01 * member.maxHealth).toFixed(2));
+            if (member.currentHealth < member.maxHealth) {
+                member.currentHealth = Math.min(member.maxHealth, member.currentHealth + healthRegenAmount);
+                member.currentHealth = parseFloat(member.currentHealth.toFixed(2));
+                updateHealth(member);
+            }
+
+            // Mana regeneration (based on manaRegen stat)
+            const manaRegenAmount = member.stats.manaRegen || 1;
+            if (member.currentMana < member.stats.mana) {
+                member.currentMana = Math.min(member.stats.mana, member.currentMana + manaRegenAmount);
+                updateMana(member);
+            }
+
+            // Stamina regeneration (10% of vitality per tick)
+            const staminaRegenAmount = Math.floor(0.1 * member.stats.vitality) || 1;
+            if (member.currentStamina < member.stats.stamina) {
+                member.currentStamina = Math.min(member.stats.stamina, member.currentStamina + staminaRegenAmount);
+                updateStamina(member);
+            }
+        }
+    });
+}

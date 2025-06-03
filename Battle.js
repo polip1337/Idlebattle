@@ -581,6 +581,15 @@ function stopBattle(fled = false) {
     window.isBattlePausedForDialogue = false; // Update window object
     resetFleeButtonState(); // Reset flee button, e.g. if battle stopped externally
 
+    // Finish all hero cooldowns
+    if (hero && hero.skills) {
+        hero.skills.forEach(skill => {
+            if (skill && typeof skill.finishCooldown === 'function') {
+                skill.finishCooldown(hero, false); // Pass false to prevent auto-repeat
+            }
+        });
+    }
+
     // Skills are typically stopped by checkBattleOutcome.
     // If fleeing or stopping externally, ensure skills are stopped.
     if (fled || !team1.members.some(m => m.currentHealth > 0) || !team2.members.some(m => m.currentHealth > 0)) {
