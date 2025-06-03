@@ -114,6 +114,11 @@ class EffectClass {
                 this.createBlightInterval(this.value);
                 break;
             case 'Bleed':
+                // Track max bleed stacks
+                const currentBleedStacks = this.target.effects.filter(e => e.effect.subType === 'Bleed').length;
+                battleStatistics.updateMaxBleedStacks(currentBleedStacks);
+                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+                break;
             case 'Burn':
             case 'Poison':
             case 'WildfireBurn':
@@ -270,10 +275,22 @@ class EffectClass {
             if (target.isHero) {
                 battleStatistics.addDamageReceived(damageType, finalDamage);
                 battleStatistics.dotDamage += finalDamage;
+            } else {
+                // Track DoT damage dealt by player
+                battleStatistics.addDamageDealt(damageType, finalDamage);
+                battleStatistics.dotDamage += finalDamage;
+                
+                // Track enemies defeated by specific DoT types
+                if (target.currentHealth <= 0) {
+                    if (damageType === 'Bleed') {
+                        battleStatistics.addEnemyDefeatedByBleed();
+                    } else if (damageType === 'Poison') {
+                        battleStatistics.addEnemyDefeatedByPoison();
+                    }
+                }
             }
             this.updateTooltip();
         }, 1000);
-        //console.log("This Interval id:" + this.interval + damageType);
     }
 
     createHealOverTimeInterval(heal, target) {
@@ -291,6 +308,7 @@ class EffectClass {
                 this.deepCopy(mobsClasses[who].skills),
                 target.level);
             member.initialize(target.opposingTeam, target.team, target.team.length + 1);
+            member.isSummon = true; // Set the isSummon flag
             renderTeamMembers([member], 'team2', false);
             member.skills.forEach(skill => {
                 skill.useSkill(member);
@@ -298,6 +316,15 @@ class EffectClass {
 
             target.team.addMembers([member]);
             target.summons += 1;
+
+            // Track minion summons by type
+            if (who.toLowerCase().includes('undead')) {
+                battleStatistics.addMinionSummoned('undead');
+            } else if (who.toLowerCase().includes('elemental')) {
+                battleStatistics.addMinionSummoned('elemental');
+            } else if (who.toLowerCase().includes('nature')) {
+                battleStatistics.addMinionSummoned('nature');
+            }
         } else {
 
         }
@@ -400,6 +427,7 @@ class EffectClass {
         }
         return copy;
     }
+
 }
 
 export default EffectClass;

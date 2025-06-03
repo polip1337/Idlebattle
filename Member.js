@@ -21,6 +21,11 @@ class Member {
         this.position = this.positions ? this.positions[0] : "Front";
         this.dead = false;
         this.goldDrop = classInfo.goldDrop || 0;
+        this.isSummon = false; // New field to track if this member is a summon
+
+        // Initialize critical hit stats if not present
+        if (!this.stats.critChance) this.stats.critChance = 5; // Base 5% crit chance
+        if (!this.stats.critDamageMultiplier) this.stats.critDamageMultiplier = 2.0; // 200% damage on crit
 
         this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
@@ -170,6 +175,16 @@ class Member {
                 const damage = skill.calculateDamage(this);
                 const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
 
+                // Track simultaneous hits for multi-target skills
+                if (skill.targetCount && skill.targetCount > 1) {
+                    battleStatistics.addEnemiesHitSimultaneously(skill.targetCount);
+                }
+
+                // Track minion damage
+                if (this.isSummon) {
+                    battleStatistics.addDamageBySummons(finalDamage);
+                }
+
                 target.takeDamage(finalDamage);
                 if (this.isHero) { // Check if the attacker is the hero
                     skill.gainExperience(finalDamage);
@@ -190,6 +205,16 @@ class Member {
     }
 
     calculateFinalDamage(damage, damageType) {
+        // Check for critical hit first
+        const isCrit = this.checkCriticalHit();
+        if (isCrit) {
+            damage *= this.stats.critDamageMultiplier;
+            battleLog.log(`${this.name} landed a critical hit!`);
+            if (this.isHero) {
+                battleStatistics.addCriticalHit(damage);
+            }
+        }
+
         if (damageType != 'Bleed') {
             damage = this.applyBlock(damage);
             damage = this.applyArmor(damage);
@@ -228,6 +253,19 @@ class Member {
 
     takeDamage(damage) {
         if (!this.dead) {
+            // Track overkill damage
+            if (this.currentHealth < damage && !this.isHero) {
+                const overkillAmount = damage - this.currentHealth;
+                battleStatistics.addOverkillDamage(overkillAmount);
+            }
+
+            // Track lifesteal
+            if (this.lifesteal && !this.isHero) {
+                const healthStolen = Math.floor(damage * (this.lifesteal / 100));
+                battleStatistics.addHealthStolen(healthStolen);
+                this.healDamage(healthStolen);
+            }
+
             this.currentHealth -= damage;
             if (this.currentHealth < 0) {
                 this.currentHealth = 0; // Ensure health doesn't go negative before death check
@@ -418,7 +456,11 @@ class Member {
             // This `restoreFromData` would primarily be for stats and health if saved mid-combat.
         }
 
-
+    checkCriticalHit() {
+        // Base crit chance is 5% + 0.1% per point of dexterity
+        const critChance = this.stats.critChance;
+        return Math.random() * 100 < critChance;
+    }
 }
 
 export default Member;

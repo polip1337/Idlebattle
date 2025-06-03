@@ -152,6 +152,13 @@ async function handleBattleWin() {
         battleStatistics.addGoldCollected(totalGoldDropped);
     }
 
+    // Track enemies defeated by critical hits
+    team2.members.forEach(mob => {
+        if (mob.currentHealth <= 0 && mob.wasDefeatedByCrit) {
+            battleStatistics.addEnemyDefeatedWithCrit();
+        }
+    });
+
     const xpFromBattle = calculateStageXP();
     if (xpFromBattle > 0 && hero) {
         battleLog.log(`Party gained ${xpFromBattle} XP!`);
