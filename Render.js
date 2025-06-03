@@ -1130,3 +1130,54 @@ export function updateHeroMapStats(heroInstance) { // For the hero display on th
         `;
     }
 }
+
+export function renderTeamMembers(members, teamId, clearFirst = false) {
+    const teamContainer = document.getElementById(teamId);
+    if (!teamContainer) return;
+
+    if (clearFirst) {
+        teamContainer.innerHTML = '';
+    }
+
+    members.forEach(member => {
+        const memberElement = document.createElement('div');
+        memberElement.className = 'member';
+        memberElement.id = member.memberId;
+
+        const portraitDiv = document.createElement('div');
+        portraitDiv.className = 'memberPortrait';
+        const portraitImg = document.createElement('img');
+        portraitImg.src = member.class.portrait || 'Media/UI/defaultPortrait.jpeg';
+        portraitDiv.appendChild(portraitImg);
+
+        const healthBar = document.createElement('div');
+        healthBar.className = 'health-bar';
+        const healthOverlay = document.createElement('div');
+        healthOverlay.className = 'health-overlay';
+        healthBar.appendChild(healthOverlay);
+
+        const manaBar = document.createElement('div');
+        manaBar.className = 'mana-bar';
+        const manaOverlay = document.createElement('div');
+        manaOverlay.className = 'mana-overlay';
+        manaBar.appendChild(manaOverlay);
+
+        const staminaBar = document.createElement('div');
+        staminaBar.className = 'stamina-bar';
+        const staminaOverlay = document.createElement('div');
+        staminaOverlay.className = 'stamina-overlay';
+        staminaBar.appendChild(staminaOverlay);
+
+        const effectsContainer = document.createElement('div');
+        effectsContainer.className = 'effects';
+
+        memberElement.appendChild(portraitDiv);
+        memberElement.appendChild(healthBar);
+        memberElement.appendChild(manaBar);
+        memberElement.appendChild(staminaBar);
+        memberElement.appendChild(effectsContainer);
+
+        teamContainer.appendChild(memberElement);
+        member.element = memberElement;
+    });
+}
