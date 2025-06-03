@@ -10,7 +10,7 @@ export class BattleState {
         this.currentBattleArea = null;
         this.currentBattleStageNumber = 1;
         this.completedStages = new Set();
-        this.flee = new FleeManager();
+        this.flee = new FleeManager(this);
     }
 
     reset(poiName = null, stageNum = 1) {
@@ -61,7 +61,8 @@ export class BattleState {
 
 // Flee Management
 class FleeManager {
-    constructor() {
+    constructor(battleState) {
+        this.battleState = battleState;
         this.isOnCooldown = false;
         this.cooldownSeconds = 10;
     }
