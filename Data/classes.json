@@ -29,9 +29,9 @@
         "dexterity": 10,
         "magicControl": 10,
         "vitality": 25,
-        "mana": 150,
+        "mana": 100,
         "stamina": 50,
-        "manaRegen": 5,
+        "manaRegen": 3,
         "accuracy": 5,
         "dodge": 5,
         "armor": 0,
@@ -41,12 +41,12 @@
       },
       "statsPerLevel": {
         "strength": 2,
-        "magicPower": 1,
+        "magicPower": 2,
         "dexterity": 2,
-        "magicControl": 1,
+        "magicControl": 2,
         "vitality": 3,
-        "mana": 10,
-        "stamina": 20,
+        "mana": 8,
+        "stamina": 15,
         "manaRegen": 1,
         "accuracy": 1,
         "dodge": 1,
@@ -64,19 +64,38 @@
         "battleCry",
         "weaponMastery"
       ],
+      "stats": {
+        "strength": 15,
+        "magicPower": 5,
+        "dexterity": 12,
+        "magicControl": 5,
+        "vitality": 30,
+        "mana": 50,
+        "stamina": 80,
+        "manaRegen": 2,
+        "accuracy": 8,
+        "dodge": 5,
+        "armor": 5,
+        "blockChance": 5,
+        "damage": 1,
+        "resistances": {
+          "physical": 5,
+          "slash": 5
+        }
+      },
       "statsPerLevel": {
         "strength": 3,
-        "magicPower": 0,
-        "dexterity": 3,
-        "magicControl": 0,
+        "magicPower": 1,
+        "dexterity": 2,
+        "magicControl": 1,
         "vitality": 3,
-        "mana": 0,
-        "stamina": 30,
-        "manaRegen": 0,
+        "mana": 5,
+        "stamina": 20,
+        "manaRegen": 1,
         "accuracy": 1,
         "dodge": 1,
-        "armor": 0,
-        "blockChance": 0
+        "armor": 1,
+        "blockChance": 1
       },
       "requirements": {
         "damageDealt": {
@@ -107,31 +126,38 @@
         "lightArmorExpertise"
       ],
       "stats": {
-        "strength": 8,
-        "magicPower": 5,
-        "dexterity": 18,
-        "magicControl": 5,
-        "vitality": 60,
-        "mana": 120,
+        "strength": 10,
+        "magicPower": 8,
+        "dexterity": 20,
+        "magicControl": 8,
+        "vitality": 25,
+        "mana": 80,
         "stamina": 70,
-        "manaRegen": 4,
-        "accuracy": 10,
-        "dodge": 8,
-        "armor": 1,
+        "manaRegen": 3,
+        "accuracy": 12,
+        "dodge": 12,
+        "armor": 2,
         "blockChance": 2,
-        "damage": 2,
-        "resistances": {}
+        "damage": 1,
+        "resistances": {
+          "shadow": 10,
+          "poison": 5
+        }
       },
       "statsPerLevel": {
         "strength": 1,
-        "speed": 2,
+        "magicPower": 1,
         "dexterity": 3,
+        "magicControl": 1,
         "vitality": 2,
-        "defense": 1,
+        "mana": 6,
+        "stamina": 15,
+        "manaRegen": 1,
         "accuracy": 2,
-        "evasion": 2
+        "dodge": 2,
+        "armor": 0,
+        "blockChance": 0
       },
-
       "requirements": {
         "successfulDodges": 20,
         "manaUsed": 50,
@@ -141,50 +167,66 @@
         }
       }
     },
-
-  "Fletchling": {
-    "id": "fletchling",
-    "name": "Fletchling",
-    "portrait": "Media/fletchling_portrait.jpg",
-    "skills": ["aimedShot", "quickShot", "piercingArrow", "multishot", "eagleEye", "arrowRain", "trickShot", "explosiveArrow", "steadyHand", "precision", "archeryMastery", "camouflage", "fleetFoot", "sharpReflexes", "concentration", "marksmanship"],
-    "stats": {
-      "strength": 7,
-      "magicPower": 4,
-      "dexterity": 20,
-      "magicControl": 5,
-      "vitality": 65,
-      "mana": 100,
-      "stamina": 80,
-      "manaRegen": 3,
-      "accuracy": 15,
-      "dodge": 5,
-      "armor": 1,
-      "blockChance": 1,
-      "damage": 3,
-      "resistances": {}
-    },
-    "statsPerLevel": {
-      "strength": 4,
-      "magicPower": 1,
-      "dexterity": 4,
-      "magicControl": 1,
-      "vitality": 2,
-      "mana": 5,
-      "stamina": 20,
-      "manaRegen": 1,
-      "accuracy": 1,
-      "dodge": 1,
-      "armor": 0,
-      "blockChance": 0
-    },
-    "requirements": {
-      "totalDamageBySkill": {
-        "Throw Rock": 200
+    "Fletchling": {
+      "id": "fletchling",
+      "name": "Fletchling",
+      "portrait": "Media/fletchling_portrait.jpg",
+      "skills": [
+        "aimedShot",
+        "quickShot",
+        "piercingArrow",
+        "multishot",
+        "eagleEye",
+        "arrowRain",
+        "trickShot",
+        "explosiveArrow",
+        "steadyHand",
+        "precision",
+        "archeryMastery",
+        "camouflage",
+        "fleetFoot",
+        "sharpReflexes",
+        "concentration",
+        "marksmanship"
+      ],
+      "stats": {
+        "strength": 8,
+        "magicPower": 8,
+        "dexterity": 20,
+        "magicControl": 8,
+        "vitality": 25,
+        "mana": 80,
+        "stamina": 70,
+        "manaRegen": 3,
+        "accuracy": 15,
+        "dodge": 8,
+        "armor": 2,
+        "blockChance": 1,
+        "damage": 1,
+        "resistances": {
+          "pierce": 10
+        }
+      },
+      "statsPerLevel": {
+        "strength": 1,
+        "magicPower": 1,
+        "dexterity": 3,
+        "magicControl": 1,
+        "vitality": 2,
+        "mana": 6,
+        "stamina": 15,
+        "manaRegen": 1,
+        "accuracy": 2,
+        "dodge": 1,
+        "armor": 0,
+        "blockChance": 0
+      },
+      "requirements": {
+        "totalDamageBySkill": {
+          "Throw Rock": 200
+        }
       }
     }
   }
-
-
-}
 }
 
