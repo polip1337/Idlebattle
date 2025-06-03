@@ -4,8 +4,7 @@ import { openTab } from './navigation.js';
 import { startBattle } from './Battle.js'; // Battle.js manages its own Area loading
 import { team1, team2, battleLog, hero } from './initialize.js'; // No more stage/area specific imports from initialize for map UI
 import { questSystem } from './questSystem.js';
-// Removed updateHeroMapStats from Render.js import as we'll handle its presumed functionality locally for sidebar.
-import { renderHero, updateHealth, updateMana, updateStamina } from './Render.js';
+import { renderHero, updateHealth, updateMana, updateStamina, updateHeroMapStats } from './Render.js';
 
 
 export let mapsData = null;
@@ -29,7 +28,6 @@ let expBarClass2El = null;
 let expBarClass3El = null;
 
 // Add regeneration interval variable
-let regenerationInterval = null;
 window.regenerationInterval = null; // Expose to window for battle system
 
 // Expose isProcessingPoiClick to window for action handler
@@ -308,6 +306,7 @@ function renderPOIs() {
             });
             poiListUI.appendChild(listItem);
         }
+        updateHeroMapStats(hero);
     });
 }
 
@@ -364,11 +363,10 @@ export function initializeMap() {
     expBarClass3El = document.getElementById('exp-bar-class3');
 
     // Start regeneration interval (every 2 seconds)
-    if (regenerationInterval) {
-        clearInterval(regenerationInterval);
+    if (window.regenerationInterval) {
+        clearInterval(window.regenerationInterval);
     }
-    regenerationInterval = setInterval(handleOutOfCombatRegeneration, 2000);
-    window.regenerationInterval = regenerationInterval; // Expose to window
+    window.regenerationInterval = setInterval(handleOutOfCombatRegeneration, 2000);
 
     async function loadMapDataAndRenderInitial() {
         try {
@@ -520,37 +518,11 @@ export function resetPOIDialogues(poiId) {
 // Expose resetPOIDialogues to window for dialogue system
 window.resetPOIDialogues = resetPOIDialogues;
 
-function handleOutOfCombatRegeneration() {
+export function handleOutOfCombatRegeneration() {
     if (!hero) return;
-    
-    // Regenerate hero
-    if (hero.currentHealth > 0) {
-        // Health regeneration (1% of max health per tick)
-        const healthRegenAmount = parseFloat((0.01 * hero.maxHealth).toFixed(2));
-        if (hero.currentHealth < hero.maxHealth) {
-            hero.currentHealth = Math.min(hero.maxHealth, hero.currentHealth + healthRegenAmount);
-            hero.currentHealth = parseFloat(hero.currentHealth.toFixed(2));
-            updateHealth(hero);
-        }
-
-        // Mana regeneration (based on manaRegen stat)
-        const manaRegenAmount = hero.stats.manaRegen || 1;
-        if (hero.currentMana < hero.stats.mana) {
-            hero.currentMana = Math.min(hero.stats.mana, hero.currentMana + manaRegenAmount);
-            updateMana(hero);
-        }
-
-        // Stamina regeneration (10% of vitality per tick)
-        const staminaRegenAmount = Math.floor(0.1 * hero.stats.vitality) || 1;
-        if (hero.currentStamina < hero.stats.stamina) {
-            hero.currentStamina = Math.min(hero.stats.stamina, hero.currentStamina + staminaRegenAmount);
-            updateStamina(hero);
-        }
-    }
-
     // Regenerate companions if they exist
-    if (hero.companions && hero.companions.length > 0) {
-        hero.companions.forEach(companion => {
+    if (hero.getActivePartyMembers() && hero.getActivePartyMembers().length > 0) {
+        hero.getActivePartyMembers().forEach(companion => {
             if (companion.currentHealth > 0) {
                 // Health regeneration (1% of max health per tick)
                 const healthRegenAmount = parseFloat((0.01 * companion.maxHealth).toFixed(2));
@@ -585,10 +557,6 @@ function handleOutOfCombatRegeneration() {
 
 // Add cleanup function
 export function cleanupMap() {
-    if (regenerationInterval) {
-        clearInterval(regenerationInterval);
-        regenerationInterval = null;
-    }
     if (window.regenerationInterval) {
         clearInterval(window.regenerationInterval);
         window.regenerationInterval = null;

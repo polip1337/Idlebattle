@@ -9,7 +9,7 @@ import { openTab } from './navigation.js';
 import { updateHealth, updateMana, updateStamina } from './Render.js';
 import EffectClass from './EffectClass.js';
 import { handleActions } from './actionHandler.js';
-import { refreshMapElements } from './map.js'; // Add import for map refresh
+import { refreshMapElements, handleOutOfCombatRegeneration } from './map.js'; // Add import for map refresh
 
 
 let battleStarted = false;
@@ -606,11 +606,7 @@ function stopBattle(fled = false) {
 
     // Restart map regeneration interval when leaving battle
     if (!window.regenerationInterval) {
-        window.regenerationInterval = setInterval(() => {
-            if (document.getElementById('map').classList.contains('active')) {
-                refreshMapElements(); // Update map UI including hero portrait
-            }
-        }, 2000);
+        window.regenerationInterval = setInterval(handleOutOfCombatRegeneration, 2000);
     }
 
     if (fled) { // Only if explicitly fled
