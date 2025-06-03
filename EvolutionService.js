@@ -3,6 +3,7 @@ import {
     expBarTextAddGlow,
     openEvolutionModal
 } from './Render.js';
+import battleStatistics from './BattleStatistics.js';
 
 class EvolutionService {
     constructor() {
@@ -109,7 +110,7 @@ class EvolutionService {
 
     _getStatsSnapshot() {
         const statsSnapshot = {};
-        
+        let battleStats = battleStatistics;
         if (battleStatistics) {
             // Add damage type stats
             statsSnapshot.meleeDamage = battleStats.meleeDamageDealt || 0;
