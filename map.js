@@ -521,39 +521,66 @@ export function resetPOIDialogues(poiId) {
 window.resetPOIDialogues = resetPOIDialogues;
 
 function handleOutOfCombatRegeneration() {
-    if (!team1 || !team1.members) return;
+    if (!hero) return;
     
-    team1.members.forEach(member => {
-        if (member.currentHealth > 0) {
-            // Health regeneration (1% of max health per tick)
-            const healthRegenAmount = parseFloat((0.01 * member.maxHealth).toFixed(2));
-            if (member.currentHealth < member.maxHealth) {
-                member.currentHealth = Math.min(member.maxHealth, member.currentHealth + healthRegenAmount);
-                member.currentHealth = parseFloat(member.currentHealth.toFixed(2));
-                updateHealth(member);
-            }
-
-            // Mana regeneration (based on manaRegen stat)
-            const manaRegenAmount = member.stats.manaRegen || 1;
-            if (member.currentMana < member.stats.mana) {
-                member.currentMana = Math.min(member.stats.mana, member.currentMana + manaRegenAmount);
-                updateMana(member);
-            }
-
-            // Stamina regeneration (10% of vitality per tick)
-            const staminaRegenAmount = Math.floor(0.1 * member.stats.vitality) || 1;
-            if (member.currentStamina < member.stats.stamina) {
-                member.currentStamina = Math.min(member.stats.stamina, member.currentStamina + staminaRegenAmount);
-                updateStamina(member);
-            }
+    // Regenerate hero
+    if (hero.currentHealth > 0) {
+        // Health regeneration (1% of max health per tick)
+        const healthRegenAmount = parseFloat((0.01 * hero.maxHealth).toFixed(2));
+        if (hero.currentHealth < hero.maxHealth) {
+            hero.currentHealth = Math.min(hero.maxHealth, hero.currentHealth + healthRegenAmount);
+            hero.currentHealth = parseFloat(hero.currentHealth.toFixed(2));
+            updateHealth(hero);
         }
-    });
 
-    // Always update the hero portrait, regardless of which tab is active
-    if (hero) {
-        renderHeroPortrait();
-        _updateHeroMapSidebar(hero);
+        // Mana regeneration (based on manaRegen stat)
+        const manaRegenAmount = hero.stats.manaRegen || 1;
+        if (hero.currentMana < hero.stats.mana) {
+            hero.currentMana = Math.min(hero.stats.mana, hero.currentMana + manaRegenAmount);
+            updateMana(hero);
+        }
+
+        // Stamina regeneration (10% of vitality per tick)
+        const staminaRegenAmount = Math.floor(0.1 * hero.stats.vitality) || 1;
+        if (hero.currentStamina < hero.stats.stamina) {
+            hero.currentStamina = Math.min(hero.stats.stamina, hero.currentStamina + staminaRegenAmount);
+            updateStamina(hero);
+        }
     }
+
+    // Regenerate companions if they exist
+    if (hero.companions && hero.companions.length > 0) {
+        hero.companions.forEach(companion => {
+            if (companion.currentHealth > 0) {
+                // Health regeneration (1% of max health per tick)
+                const healthRegenAmount = parseFloat((0.01 * companion.maxHealth).toFixed(2));
+                if (companion.currentHealth < companion.maxHealth) {
+                    companion.currentHealth = Math.min(companion.maxHealth, companion.currentHealth + healthRegenAmount);
+                    companion.currentHealth = parseFloat(companion.currentHealth.toFixed(2));
+                    updateHealth(companion);
+                }
+
+                // Mana regeneration (based on manaRegen stat)
+                const manaRegenAmount = companion.stats.manaRegen || 1;
+                if (companion.currentMana < companion.stats.mana) {
+                    companion.currentMana = Math.min(companion.stats.mana, companion.currentMana + manaRegenAmount);
+                    updateMana(companion);
+                }
+
+                // Stamina regeneration (10% of vitality per tick)
+                const staminaRegenAmount = Math.floor(0.1 * companion.stats.vitality) || 1;
+                if (companion.currentStamina < companion.stats.stamina) {
+                    companion.currentStamina = Math.min(companion.stats.stamina, companion.currentStamina + staminaRegenAmount);
+                    updateStamina(companion);
+                }
+            }
+        });
+    }
+
+    // Always update the hero portrait and sidebar
+    renderHeroPortrait();
+    _updateHeroMapSidebar(hero);
+    updateHeroMapStats(hero);
 }
 
 // Add cleanup function
