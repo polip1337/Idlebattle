@@ -445,7 +445,7 @@
       "magicControl": 0,
       "mana": 0,
       "manaRegen": 0,
-      "armor": 2,
+      "armor": 1,
       "resistances": {
         "pierce": -5,
         "poison": 15,

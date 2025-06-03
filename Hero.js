@@ -25,7 +25,7 @@ class Hero extends Member {
         this.class1Evolve = false;
         this.class2Evolve = false;
         this.class3Evolve = false;
-        this.gold = 0;
+        this.gold = 20;
 
         this.equipment = {
             weaponSlot: null, shieldSlot: null, helmetSlot: null, chestArmorSlot: null,
