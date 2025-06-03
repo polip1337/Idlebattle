@@ -112,6 +112,14 @@
     "value": 2,
     "duration": 5
   },
+  "increaseDodgeFlat": {
+    "name": "Increase Dodge",
+    "type": "buff",
+    "subType": "flatChange",
+    "stat": "armor",
+    "value": 2,
+    "duration": 5
+  },
   "increaseArmorPercentage": {
     "name": "Increase Armor %",
     "type": "buff",

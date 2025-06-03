@@ -323,14 +323,14 @@ class Member {
     handleRegeneration() {
         if (this.currentHealth <= 0) return;
 
-        const manaRegenAmount = this.stats.manaRegen || 0;
+        const manaRegenAmount = this.stats.manaRegen || 1;
         if (this.currentMana < this.stats.mana) {
             this.currentMana = Math.min(this.stats.mana, this.currentMana + manaRegenAmount);
             if (this.isHero && manaRegenAmount > 0) battleStatistics.addManaRegenerated(manaRegenAmount);
             updateMana(this);
         }
 
-        const staminaRegenAmount = Math.floor(0.1 * this.stats.vitality) || 0;
+        const staminaRegenAmount = Math.floor(0.1 * this.stats.vitality) || 1;
         if (this.currentStamina < this.stats.stamina) {
             this.currentStamina = Math.min(this.stats.stamina, this.currentStamina + staminaRegenAmount);
             if (this.isHero && staminaRegenAmount > 0) battleStatistics.addStaminaRegenerated(staminaRegenAmount);
