@@ -77,6 +77,33 @@ async function checkDailyLimit() {
 }
 
 /**
+ * Fetches all skill IDs from the Skills/ path in the database
+ * @return {Promise<Array<string>>} Returns an array of skill IDs
+ */
+async function getAllSkillIds() {
+    const db = admin.database();
+    const skillsRef = db.ref('Skills/');
+    
+    try {
+        const snapshot = await skillsRef.once('value');
+        const skills = snapshot.val();
+        
+        if (!skills) {
+            logger.info('No skills found in database');
+            return [];
+        }
+        
+        // Convert the object to an array of skill IDs
+        const skillIds = Object.keys(skills);
+        logger.info('Retrieved skill IDs', { count: skillIds.length });
+        return skillIds;
+    } catch (error) {
+        logger.error('Error fetching skill IDs', error);
+        throw error;
+    }
+}
+
+/**
  * Cloud Function to process tags and return or generate class data
  * @param {Object} req - The request object
  * @param {Object} res - The response object
@@ -207,7 +234,9 @@ exports.processTags = onRequest({
 
         // 7. If no response found, call LLM API
         logger.info("No existing data found, calling LLM API");
-        const llmResponse = await getOpenAIResponse(tags);
+        const skillIds = await getAllSkillIds();
+
+        const llmResponse = await getOpenAIResponse(tags, skillIds);
         logger.info("Received LLM response", { name: llmResponse.name });
 
         // 8. Save response to database
@@ -237,7 +266,7 @@ exports.processTags = onRequest({
     }
 });
 
-async function getOpenAIResponse(tags) {
+async function getOpenAIResponse(tags, skillIds) {
     // Get API key from Firebase environment configuration
     const openaiApiKey = process.env.OPENAI_API_KEY;
     if (!openaiApiKey) {
@@ -250,7 +279,9 @@ async function getOpenAIResponse(tags) {
         messages: [
             {
                 role: "system",
-                content: "Based on the tags, generate a class name and description.Generate the requirements for the class. The description should be a short and flavorful description of the class. The description should be 2-3 sentences. Format the response as a JSON object with the following properties: name, description, requirements."
+                content: "Based on the tags, generate a class name and description. Generate the requirements for the class. The description should be a short and flavorful description of the class." +
+                " The description should be 2-3 sentences. Format the response as a JSON object with the following properties: name, description, requirements." +
+                "Use this class as a reference for the requirements: " + JSON.stringify(skillIds)
             },
             {
                 role: "user",

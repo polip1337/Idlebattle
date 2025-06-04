@@ -1,0 +1,366 @@
+[debug] [2025-06-04T12:39:57.003Z] ----------------------------------------------------------------------
+[debug] [2025-06-04T12:39:57.005Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\konra\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2025-06-04T12:39:57.005Z] CLI Version:   14.5.1
+[debug] [2025-06-04T12:39:57.006Z] Platform:      win32
+[debug] [2025-06-04T12:39:57.006Z] Node Version:  v22.15.1
+[debug] [2025-06-04T12:39:57.006Z] Time:          Wed Jun 04 2025 14:39:57 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2025-06-04T12:39:57.006Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-06-04T12:39:57.237Z] Field "/functions" in "firebase.json" is possibly invalid: must be object
+[debug] [2025-06-04T12:39:57.238Z] Object "/functions/0" in "firebase.json" has unknown property: {"additionalProperty":"containerImageRetention"}
+[debug] [2025-06-04T12:39:57.238Z] Field "/functions" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-06-04T12:39:57.242Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-06-04T12:39:57.242Z] > authorizing via signed-in user (konrad.czamanski@gmail.com)
+[debug] [2025-06-04T12:39:57.291Z] openjdk version "21.0.7" 2025-04-15 LTS
+
+[debug] [2025-06-04T12:39:57.291Z] OpenJDK Runtime Environment Temurin-21.0.7+6 (build 21.0.7+6-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.7+6 (build 21.0.7+6-LTS, mixed mode, sharing)
+
+[debug] [2025-06-04T12:39:57.308Z] Parsed Java major version: 21
+[info] i  emulators: Starting emulators: functions, database, extensions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, database, extensions"}}
+[debug] [2025-06-04T12:39:57.310Z] Checked if tokens are valid: true, expires at: 1749044142488
+[debug] [2025-06-04T12:39:57.310Z] Checked if tokens are valid: true, expires at: 1749044142488
+[debug] [2025-06-04T12:39:57.311Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/classes-ec2da/services/cloudresourcemanager.googleapis.com [none]
+[debug] [2025-06-04T12:39:57.311Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/classes-ec2da/services/cloudresourcemanager.googleapis.com x-goog-quota-user=projects/classes-ec2da
+[debug] [2025-06-04T12:39:58.456Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/classes-ec2da/services/cloudresourcemanager.googleapis.com 200
+[debug] [2025-06-04T12:39:58.456Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/classes-ec2da/services/cloudresourcemanager.googleapis.com [omitted]
+[debug] [2025-06-04T12:39:58.456Z] Checked if tokens are valid: true, expires at: 1749044142488
+[debug] [2025-06-04T12:39:58.456Z] Checked if tokens are valid: true, expires at: 1749044142488
+[debug] [2025-06-04T12:39:58.456Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/classes-ec2da [none]
+[debug] [2025-06-04T12:39:59.229Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/classes-ec2da 200
+[debug] [2025-06-04T12:39:59.229Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/classes-ec2da {"projectNumber":"151269127477","projectId":"classes-ec2da","lifecycleState":"ACTIVE","name":"Classes","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2025-06-03T14:39:06.011340Z"}
+[debug] [2025-06-04T12:39:59.238Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-06-04T12:39:59.238Z] [database] Database Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-06-04T12:39:59.238Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"database":[{"address":"127.0.0.1","family":"IPv4","port":9001}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project classes-ec2da. This may result in unexpected behavior. 
+[debug] [2025-06-04T12:39:59.243Z] [hub] writing locator at C:\Users\konra\AppData\Local\Temp\hub-classes-ec2da.json
+[debug] [2025-06-04T12:39:59.249Z] [Extensions] Started Extensions emulator, this is a noop.
+[debug] [2025-06-04T12:39:59.253Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-06-04T12:39:59.253Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-06-04T12:39:59.253Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-06-04T12:39:59.253Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"database":[{"address":"127.0.0.1","family":"IPv4","port":9001}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9499}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, auth, firestore, hosting, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, auth, firestore, hosting, pubsub, storage, dataconnect\u001b[22m"}}
+[debug] [2025-06-04T12:39:59.267Z] defaultcredentials: writing to file C:\Users\konra\AppData\Roaming\firebase\konrad_czamanski_gmail.com_application_default_credentials.json
+[debug] [2025-06-04T12:39:59.269Z] Setting GAC to C:\Users\konra\AppData\Roaming\firebase\konrad_czamanski_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\konra\\AppData\\Roaming\\firebase\\konrad_czamanski_gmail.com_application_default_credentials.json"}}
+[debug] [2025-06-04T12:39:59.269Z] Checked if tokens are valid: true, expires at: 1749044142488
+[debug] [2025-06-04T12:39:59.269Z] Checked if tokens are valid: true, expires at: 1749044142488
+[debug] [2025-06-04T12:39:59.269Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/classes-ec2da/adminSdkConfig [none]
+[debug] [2025-06-04T12:39:59.643Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/classes-ec2da/adminSdkConfig 200
+[debug] [2025-06-04T12:39:59.643Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/classes-ec2da/adminSdkConfig {"projectId":"classes-ec2da","databaseURL":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"classes-ec2da.firebasestorage.app"}
+[debug] [2025-06-04T12:39:59.681Z] Checked if tokens are valid: true, expires at: 1749044142488
+[debug] [2025-06-04T12:39:59.681Z] Checked if tokens are valid: true, expires at: 1749044142488
+[debug] [2025-06-04T12:39:59.681Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/classes-ec2da [none]
+[debug] [2025-06-04T12:39:59.908Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/classes-ec2da 200
+[debug] [2025-06-04T12:39:59.908Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/classes-ec2da {"projectId":"classes-ec2da","projectNumber":"151269127477","displayName":"Classes","name":"projects/classes-ec2da","resources":{"hostingSite":"classes-ec2da","realtimeDatabaseInstance":"classes-ec2da-default-rtdb"},"state":"ACTIVE","etag":"1_56fa7c9e-b7f5-4d19-964b-4aa29470a653"}
+[debug] [2025-06-04T12:39:59.909Z] database rules config:  []
+[warn] !  database: Did not find a Realtime Database rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration. {"metadata":{"emulator":{"name":"database"},"message":"Did not find a Realtime Database rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration."}}
+[debug] [2025-06-04T12:39:59.910Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2025-06-04T12:39:59.910Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-06-04T12:39:59.910Z] Ignoring unsupported arg: rules {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: rules"}}
+[debug] [2025-06-04T12:39:59.910Z] Starting Database Emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\konra\\.cache\\firebase\\emulators\\firebase-database-emulator-v4.11.2.jar","--host","127.0.0.1","--port",9001,"--single_project_mode","Warning","--functions_emulator_host","127.0.0.1","--functions_emulator_port",5001],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host","single_project_mode"],"joinArgs":false,"shell":false,"port":9001} {"metadata":{"emulator":{"name":"database"},"message":"Starting Database Emulator with command {\"binary\":\"java\",\"args\":[\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\konra\\\\.cache\\\\firebase\\\\emulators\\\\firebase-database-emulator-v4.11.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",9001,\"--single_project_mode\",\"Warning\",\"--functions_emulator_host\",\"127.0.0.1\",\"--functions_emulator_port\",5001],\"optionalArgs\":[\"port\",\"host\",\"functions_emulator_port\",\"functions_emulator_host\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":9001}"}}
+[info] i  database: Database Emulator logging to database-debug.log {"metadata":{"emulator":{"name":"database"},"message":"Database Emulator logging to \u001b[1mdatabase-debug.log\u001b[22m"}}
+[debug] [2025-06-04T12:40:00.758Z] 14:40:00.757 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+ {"metadata":{"emulator":{"name":"database"},"message":"14:40:00.757 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started\r\n"}}
+[debug] [2025-06-04T12:40:00.883Z] 14:40:00.883 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9001
+ {"metadata":{"emulator":{"name":"database"},"message":"14:40:00.883 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9001\r\n"}}
+[debug] [2025-06-04T12:40:00.959Z] [Extensions] Connecting Extensions emulator, this is a noop.
+[info] i  functions: Watching "C:\Users\konra\CurosIdleBattle\Idlebattle\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\" for Cloud Functions..."}}
+[debug] [2025-06-04T12:40:00.967Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2025-06-04T12:40:01.651Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.11.0",
+    "firebase-functions": "^4.5.0",
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2025-06-04T12:40:01.652Z] Building nodejs source
+[debug] [2025-06-04T12:40:01.652Z] Failed to find version of module node: reached end of search path C:\Users\konra\CurosIdleBattle\Idlebattle\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "22". Using node@22 from host. 
+[info] i  functions: You are using a version of firebase-functions SDK (4.9.0) that does not have support for the newest Firebase Extensions features. Please update firebase-functions SDK to >=5.1.0 to use them correctly 
+[debug] [2025-06-04T12:40:01.654Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-06-04T12:40:01.659Z] Found firebase-functions binary at 'C:\Users\konra\CurosIdleBattle\Idlebattle\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8241
+
+[debug] [2025-06-04T12:40:02.062Z] Got response from /__/functions.yaml {"endpoints":{"processTags":{"availableMemoryMb":256,"timeoutSeconds":60,"minInstances":0,"maxInstances":10,"ingressSettings":null,"concurrency":80,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"processTags"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2025-06-04T12:40:05.136Z] [work-queue] {"queuedWork":["/classes-ec2da/us-central1/processTags-2025-06-04T12:40:05.136Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-06-04T12:40:05.137Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/classes-ec2da/us-central1/processTags-2025-06-04T12:40:05.136Z"],"workRunningCount":1}
+[debug] [2025-06-04T12:40:05.137Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[info] +  functions: Loaded functions definitions from source: processTags. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processTags."}}
+[info] +  functions[us-central1-processTags]: http function initialized (http://127.0.0.1:5001/classes-ec2da/us-central1/processTags). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/classes-ec2da/us-central1/processTags)."}}
+[debug] [2025-06-04T12:40:06.089Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────┬────────────────┬──────────────────────────────────┐
+│ Emulator   │ Host:Port      │ View in Emulator UI              │
+├────────────┼────────────────┼──────────────────────────────────┤
+│ Functions  │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions  │
+├────────────┼────────────────┼──────────────────────────────────┤
+│ Database   │ 127.0.0.1:9001 │ http://127.0.0.1:4000/database   │
+├────────────┼────────────────┼──────────────────────────────────┤
+│ Extensions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/extensions │
+└────────────┴────────────────┴──────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500
+┌─────────────────────────┬───────────────┬─────────────────────┐
+│ Extension Instance Name │ Extension Ref │ View in Emulator UI │
+└─────────────────────────┴───────────────┴─────────────────────┘
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2025-06-04T12:40:09.382Z] [work-queue] {"queuedWork":["/classes-ec2da/us-central1/processTags-2025-06-04T12:40:09.382Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-06-04T12:40:09.382Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/classes-ec2da/us-central1/processTags-2025-06-04T12:40:09.382Z"],"workRunningCount":1}
+[debug] [2025-06-04T12:40:09.382Z] Accepted request GET /classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits --> us-central1-processTags
+[debug] [2025-06-04T12:40:09.382Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-06-04T12:40:09.383Z] [functions] Got req.url=/classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits, mapping to path=/?tags=Rogue,Dagger,Critical%20Hits {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits, mapping to path=/?tags=Rogue,Dagger,Critical%20Hits"}}
+[debug] [2025-06-04T12:40:09.390Z] [worker-pool] addWorker(us-central1-processTags) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-processTags)"}}
+[debug] [2025-06-04T12:40:09.391Z] [worker-pool] Adding worker with key us-central1-processTags, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-processTags, total=1"}}
+[debug] [2025-06-04T12:40:10.420Z] [runtime-status] [71104] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2025-06-04T12:40:10.421Z] [runtime-status] [71104] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}"}}
+[debug] [2025-06-04T12:40:10.421Z] [runtime-status] [71104] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2025-06-04T12:40:10.421Z] [runtime-status] [71104] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}"}}
+[debug] [2025-06-04T12:40:10.720Z] [runtime-status] [71104] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Checked functions.config() {\"config\":{}}"}}
+[debug] [2025-06-04T12:40:10.720Z] [runtime-status] [71104] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}}"}}
+[debug] [2025-06-04T12:40:10.720Z] [runtime-status] [71104] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}"}}
+[debug] [2025-06-04T12:40:10.721Z] [runtime-status] [71104] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2025-06-04T12:40:10.723Z] [runtime-status] [71104] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}"}}
+[debug] [2025-06-04T12:40:10.724Z] [runtime-status] [71104] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"11.11.1","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}}"}}
+[debug] [2025-06-04T12:40:10.767Z] [runtime-status] [71104] initializeApp(DEFAULT) {"databaseURL":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app","projectId":"classes-ec2da"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] initializeApp(DEFAULT) {\"databaseURL\":\"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app\",\"projectId\":\"classes-ec2da\"}"}}
+[debug] [2025-06-04T12:40:10.773Z] [runtime-status] [71104] Functions runtime initialized. {"cwd":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions","node_version":"22.15.1"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Functions runtime initialized. {\"cwd\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\",\"node_version\":\"22.15.1\"}"}}
+[debug] [2025-06-04T12:40:10.774Z] [runtime-status] [71104] Listening to port: \\?\pipe\fire_emu_5311531bb8f36720 {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [71104] Listening to port: \\\\?\\pipe\\fire_emu_5311531bb8f36720"}}
+[debug] [2025-06-04T12:40:10.826Z] [worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: IDLE"}}
+[debug] [2025-06-04T12:40:10.826Z] [worker-pool] submitRequest(triggerId=us-central1-processTags) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processTags)"}}
+[info] i  functions: Beginning execution of "us-central1-processTags" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Beginning execution of \"us-central1-processTags\""}}
+[debug] [2025-06-04T12:40:10.827Z] [worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: BUSY"}}
+[info] >  {"query":{"tags":"Rogue,Dagger,Critical Hits"},"severity":"INFO","message":"processTags function started"} {"user":{"query":{"tags":"Rogue,Dagger,Critical Hits"},"severity":"INFO","message":"processTags function started"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"query\":{\"tags\":\"Rogue,Dagger,Critical Hits\"},\"severity\":\"INFO\",\"message\":\"processTags function started\"}"}}
+[warn] !  functions: The Realtime Database emulator is not running, so calls to Realtime Database will affect production. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"The Realtime Database emulator is not running, so calls to Realtime Database will affect production."}}
+[info] >  {"tags":["Rogue","Dagger","Critical Hits"],"severity":"INFO","message":"Received tags"} {"user":{"tags":["Rogue","Dagger","Critical Hits"],"severity":"INFO","message":"Received tags"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tags\":[\"Rogue\",\"Dagger\",\"Critical Hits\"],\"severity\":\"INFO\",\"message\":\"Received tags\"}"}}
+[info] >  {"tier1":["Rogue"],"tier2":["Dagger"],"tier3":["Critical Hits"],"severity":"INFO","message":"Tag tier distribution"} {"user":{"tier1":["Rogue"],"tier2":["Dagger"],"tier3":["Critical Hits"],"severity":"INFO","message":"Tag tier distribution"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tier1\":[\"Rogue\"],\"tier2\":[\"Dagger\"],\"tier3\":[\"Critical Hits\"],\"severity\":\"INFO\",\"message\":\"Tag tier distribution\"}"}}
+[info] >  {"orderedTags":["Critical Hits","Dagger","Rogue"],"combination":"Critical Hits_Dagger_Rogue","severity":"INFO","message":"Created combination"} {"user":{"orderedTags":["Critical Hits","Dagger","Rogue"],"combination":"Critical Hits_Dagger_Rogue","severity":"INFO","message":"Created combination"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"orderedTags\":[\"Critical Hits\",\"Dagger\",\"Rogue\"],\"combination\":\"Critical Hits_Dagger_Rogue\",\"severity\":\"INFO\",\"message\":\"Created combination\"}"}}
+[info] >  {"tier":"tier3","severity":"INFO","message":"Determined tier"} {"user":{"tier":"tier3","severity":"INFO","message":"Determined tier"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tier\":\"tier3\",\"severity\":\"INFO\",\"message\":\"Determined tier\"}"}}
+[info] >  {"ref":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes","url":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json","query":{"orderBy":"combination","equalTo":"Critical Hits_Dagger_Rogue"},"severity":"INFO","message":"Database reference details"} {"user":{"ref":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes","url":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json","query":{"orderBy":"combination","equalTo":"Critical Hits_Dagger_Rogue"},"severity":"INFO","message":"Database reference details"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"ref\":\"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes\",\"url\":\"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json\",\"query\":{\"orderBy\":\"combination\",\"equalTo\":\"Critical Hits_Dagger_Rogue\"},\"severity\":\"INFO\",\"message\":\"Database reference details\"}"}}
+[info] >  {"found":true,"severity":"INFO","message":"Database query result"} {"user":{"found":true,"severity":"INFO","message":"Database query result"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"found\":true,\"severity\":\"INFO\",\"message\":\"Database query result\"}"}}
+[info] >  {"name":"Shadowsting Assassin","severity":"INFO","message":"Returning existing class data"} {"user":{"name":"Shadowsting Assassin","severity":"INFO","message":"Returning existing class data"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"name\":\"Shadowsting Assassin\",\"severity\":\"INFO\",\"message\":\"Returning existing class data\"}"}}
+[debug] [2025-06-04T12:40:11.240Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processTags" in 413.3393ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finished \"us-central1-processTags\" in 413.3393ms"}}
+[debug] [2025-06-04T12:40:11.241Z] [worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: IDLE"}}
+[debug] [2025-06-04T12:40:11.241Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-06-04T12:40:11.241Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-06-04T12:40:11.241Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-06-04T12:40:39.596Z] File C:\Users\konra\CurosIdleBattle\Idlebattle\functions\index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\index.js changed, reloading triggers"}}
+[debug] [2025-06-04T12:40:40.602Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2025-06-04T12:40:41.308Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.11.0",
+    "firebase-functions": "^4.5.0",
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2025-06-04T12:40:41.308Z] Building nodejs source
+[debug] [2025-06-04T12:40:41.308Z] Failed to find version of module node: reached end of search path C:\Users\konra\CurosIdleBattle\Idlebattle\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "22". Using node@22 from host. 
+[info] i  functions: You are using a version of firebase-functions SDK (4.9.0) that does not have support for the newest Firebase Extensions features. Please update firebase-functions SDK to >=5.1.0 to use them correctly 
+[debug] [2025-06-04T12:40:41.310Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-06-04T12:40:41.314Z] Found firebase-functions binary at 'C:\Users\konra\CurosIdleBattle\Idlebattle\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8218
+
+[debug] [2025-06-04T12:40:41.711Z] Got response from /__/functions.yaml {"endpoints":{"processTags":{"availableMemoryMb":256,"timeoutSeconds":60,"minInstances":0,"maxInstances":10,"ingressSettings":null,"concurrency":80,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"processTags"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2025-06-04T12:40:44.427Z] [work-queue] {"queuedWork":["/classes-ec2da/us-central1/processTags-2025-06-04T12:40:44.427Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-06-04T12:40:44.428Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/classes-ec2da/us-central1/processTags-2025-06-04T12:40:44.427Z"],"workRunningCount":1}
+[debug] [2025-06-04T12:40:44.428Z] Accepted request GET /classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits --> us-central1-processTags
+[debug] [2025-06-04T12:40:44.430Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-06-04T12:40:44.430Z] [functions] Got req.url=/classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits, mapping to path=/?tags=Rogue,Dagger,Critical%20Hits {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits, mapping to path=/?tags=Rogue,Dagger,Critical%20Hits"}}
+[debug] [2025-06-04T12:40:44.430Z] [worker-pool] submitRequest(triggerId=us-central1-processTags) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processTags)"}}
+[info] i  functions: Beginning execution of "us-central1-processTags" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Beginning execution of \"us-central1-processTags\""}}
+[debug] [2025-06-04T12:40:44.431Z] [worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: BUSY"}}
+[info] >  {"query":{"tags":"Rogue,Dagger,Critical Hits"},"severity":"INFO","message":"processTags function started"} {"user":{"query":{"tags":"Rogue,Dagger,Critical Hits"},"severity":"INFO","message":"processTags function started"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"query\":{\"tags\":\"Rogue,Dagger,Critical Hits\"},\"severity\":\"INFO\",\"message\":\"processTags function started\"}"}}
+[info] >  {"tags":["Rogue","Dagger","Critical Hits"],"severity":"INFO","message":"Received tags"} {"user":{"tags":["Rogue","Dagger","Critical Hits"],"severity":"INFO","message":"Received tags"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tags\":[\"Rogue\",\"Dagger\",\"Critical Hits\"],\"severity\":\"INFO\",\"message\":\"Received tags\"}"}}
+[info] >  {"tier1":["Rogue"],"tier2":["Dagger"],"tier3":["Critical Hits"],"severity":"INFO","message":"Tag tier distribution"} {"user":{"tier1":["Rogue"],"tier2":["Dagger"],"tier3":["Critical Hits"],"severity":"INFO","message":"Tag tier distribution"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tier1\":[\"Rogue\"],\"tier2\":[\"Dagger\"],\"tier3\":[\"Critical Hits\"],\"severity\":\"INFO\",\"message\":\"Tag tier distribution\"}"}}
+[info] >  {"orderedTags":["Critical Hits","Dagger","Rogue"],"combination":"Critical Hits_Dagger_Rogue","severity":"INFO","message":"Created combination"} {"user":{"orderedTags":["Critical Hits","Dagger","Rogue"],"combination":"Critical Hits_Dagger_Rogue","severity":"INFO","message":"Created combination"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"orderedTags\":[\"Critical Hits\",\"Dagger\",\"Rogue\"],\"combination\":\"Critical Hits_Dagger_Rogue\",\"severity\":\"INFO\",\"message\":\"Created combination\"}"}}
+[info] >  {"tier":"tier3","severity":"INFO","message":"Determined tier"} {"user":{"tier":"tier3","severity":"INFO","message":"Determined tier"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tier\":\"tier3\",\"severity\":\"INFO\",\"message\":\"Determined tier\"}"}}
+[info] >  {"ref":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes","url":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json","query":{"orderBy":"combination","equalTo":"Critical Hits_Dagger_Rogue"},"severity":"INFO","message":"Database reference details"} {"user":{"ref":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes","url":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json","query":{"orderBy":"combination","equalTo":"Critical Hits_Dagger_Rogue"},"severity":"INFO","message":"Database reference details"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"ref\":\"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes\",\"url\":\"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json\",\"query\":{\"orderBy\":\"combination\",\"equalTo\":\"Critical Hits_Dagger_Rogue\"},\"severity\":\"INFO\",\"message\":\"Database reference details\"}"}}
+[info] >  {"found":true,"severity":"INFO","message":"Database query result"} {"user":{"found":true,"severity":"INFO","message":"Database query result"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"found\":true,\"severity\":\"INFO\",\"message\":\"Database query result\"}"}}
+[debug] [2025-06-04T12:40:44.530Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processTags" in 99.5031ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finished \"us-central1-processTags\" in 99.5031ms"}}
+[debug] [2025-06-04T12:40:44.531Z] [worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: IDLE"}}
+[debug] [2025-06-04T12:40:44.531Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-06-04T12:40:44.531Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-06-04T12:40:44.531Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[info] >  {"name":"Shadowsting Assassin","severity":"INFO","message":"Returning existing class data"} {"user":{"name":"Shadowsting Assassin","severity":"INFO","message":"Returning existing class data"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"name\":\"Shadowsting Assassin\",\"severity\":\"INFO\",\"message\":\"Returning existing class data\"}"}}
+[info] +  functions: Loaded functions definitions from source: processTags. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processTags."}}
+[debug] [2025-06-04T12:40:45.734Z] [worker-pool] Shutting down IDLE worker (us-central1-processTags) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Shutting down IDLE worker (us-central1-processTags)"}}
+[debug] [2025-06-04T12:40:45.734Z] [worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: FINISHING {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: FINISHING"}}
+[debug] [2025-06-04T12:40:45.743Z] [worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: exited {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: exited"}}
+[debug] [2025-06-04T12:40:45.743Z] [worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: FINISHED {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-1222c0fc-1b94-4270-ac0b-88c2b806500f]: FINISHED"}}
+[debug] [2025-06-04T12:41:28.741Z] File C:\Users\konra\CurosIdleBattle\Idlebattle\functions\index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\index.js changed, reloading triggers"}}
+[debug] [2025-06-04T12:41:29.747Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2025-06-04T12:41:30.396Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.11.0",
+    "firebase-functions": "^4.5.0",
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2025-06-04T12:41:30.396Z] Building nodejs source
+[debug] [2025-06-04T12:41:30.396Z] Failed to find version of module node: reached end of search path C:\Users\konra\CurosIdleBattle\Idlebattle\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "22". Using node@22 from host. 
+[info] i  functions: You are using a version of firebase-functions SDK (4.9.0) that does not have support for the newest Firebase Extensions features. Please update firebase-functions SDK to >=5.1.0 to use them correctly 
+[debug] [2025-06-04T12:41:30.397Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-06-04T12:41:30.401Z] Found firebase-functions binary at 'C:\Users\konra\CurosIdleBattle\Idlebattle\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8952
+
+[debug] [2025-06-04T12:41:30.795Z] Got response from /__/functions.yaml {"endpoints":{"processTags":{"availableMemoryMb":256,"timeoutSeconds":60,"minInstances":0,"maxInstances":10,"ingressSettings":null,"concurrency":80,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"processTags"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] +  functions: Loaded functions definitions from source: processTags. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processTags."}}
+[debug] [2025-06-04T12:41:36.495Z] [work-queue] {"queuedWork":["/classes-ec2da/us-central1/processTags-2025-06-04T12:41:36.495Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-06-04T12:41:36.495Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/classes-ec2da/us-central1/processTags-2025-06-04T12:41:36.495Z"],"workRunningCount":1}
+[debug] [2025-06-04T12:41:36.495Z] Accepted request GET /classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits --> us-central1-processTags
+[debug] [2025-06-04T12:41:36.498Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-06-04T12:41:36.498Z] [functions] Got req.url=/classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits, mapping to path=/?tags=Rogue,Dagger,Critical%20Hits {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/classes-ec2da/us-central1/processTags?tags=Rogue,Dagger,Critical%20Hits, mapping to path=/?tags=Rogue,Dagger,Critical%20Hits"}}
+[debug] [2025-06-04T12:41:36.499Z] [worker-pool] Cleaned up workers for us-central1-processTags: 1 --> 0 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Cleaned up workers for us-central1-processTags: 1 --> 0"}}
+[debug] [2025-06-04T12:41:36.503Z] [worker-pool] addWorker(us-central1-processTags) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-processTags)"}}
+[debug] [2025-06-04T12:41:36.503Z] [worker-pool] Adding worker with key us-central1-processTags, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-processTags, total=1"}}
+[debug] [2025-06-04T12:41:37.484Z] [runtime-status] [68792] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2025-06-04T12:41:37.485Z] [runtime-status] [68792] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}"}}
+[debug] [2025-06-04T12:41:37.485Z] [runtime-status] [68792] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2025-06-04T12:41:37.485Z] [runtime-status] [68792] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}"}}
+[debug] [2025-06-04T12:41:37.736Z] [runtime-status] [68792] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Checked functions.config() {\"config\":{}}"}}
+[debug] [2025-06-04T12:41:37.736Z] [runtime-status] [68792] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}}"}}
+[debug] [2025-06-04T12:41:37.736Z] [runtime-status] [68792] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}"}}
+[debug] [2025-06-04T12:41:37.737Z] [runtime-status] [68792] Resolved module firebase-admin {"declared":true,"installed":true,"version":"11.11.1","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2025-06-04T12:41:37.739Z] [runtime-status] [68792] Resolved module firebase-functions {"declared":true,"installed":true,"version":"4.9.0","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-functions\\lib\\v1\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"4.9.0\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v1\\\\index.js\"}"}}
+[debug] [2025-06-04T12:41:37.739Z] [runtime-status] [68792] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"11.11.1","resolution":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"11.11.1\",\"resolution\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}}"}}
+[debug] [2025-06-04T12:41:37.783Z] [runtime-status] [68792] initializeApp(DEFAULT) {"databaseURL":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app","projectId":"classes-ec2da"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] initializeApp(DEFAULT) {\"databaseURL\":\"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app\",\"projectId\":\"classes-ec2da\"}"}}
+[debug] [2025-06-04T12:41:37.788Z] [runtime-status] [68792] Functions runtime initialized. {"cwd":"C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions","node_version":"22.15.1"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Functions runtime initialized. {\"cwd\":\"C:\\\\Users\\\\konra\\\\CurosIdleBattle\\\\Idlebattle\\\\functions\",\"node_version\":\"22.15.1\"}"}}
+[debug] [2025-06-04T12:41:37.788Z] [runtime-status] [68792] Listening to port: \\?\pipe\fire_emu_53422d3f768de6a0 {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[runtime-status] [68792] Listening to port: \\\\?\\pipe\\fire_emu_53422d3f768de6a0"}}
+[debug] [2025-06-04T12:41:37.830Z] [worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: IDLE"}}
+[debug] [2025-06-04T12:41:37.830Z] [worker-pool] submitRequest(triggerId=us-central1-processTags) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processTags)"}}
+[info] i  functions: Beginning execution of "us-central1-processTags" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Beginning execution of \"us-central1-processTags\""}}
+[debug] [2025-06-04T12:41:37.830Z] [worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: BUSY"}}
+[info] >  {"query":{"tags":"Rogue,Dagger,Critical Hits"},"severity":"INFO","message":"processTags function started"} {"user":{"query":{"tags":"Rogue,Dagger,Critical Hits"},"severity":"INFO","message":"processTags function started"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"query\":{\"tags\":\"Rogue,Dagger,Critical Hits\"},\"severity\":\"INFO\",\"message\":\"processTags function started\"}"}}
+[info] >  {"tags":["Rogue","Dagger","Critical Hits"],"severity":"INFO","message":"Received tags"} {"user":{"tags":["Rogue","Dagger","Critical Hits"],"severity":"INFO","message":"Received tags"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tags\":[\"Rogue\",\"Dagger\",\"Critical Hits\"],\"severity\":\"INFO\",\"message\":\"Received tags\"}"}}
+[info] >  {"tier1":["Rogue"],"tier2":["Dagger"],"tier3":["Critical Hits"],"severity":"INFO","message":"Tag tier distribution"} {"user":{"tier1":["Rogue"],"tier2":["Dagger"],"tier3":["Critical Hits"],"severity":"INFO","message":"Tag tier distribution"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tier1\":[\"Rogue\"],\"tier2\":[\"Dagger\"],\"tier3\":[\"Critical Hits\"],\"severity\":\"INFO\",\"message\":\"Tag tier distribution\"}"}}
+[info] >  {"orderedTags":["Critical Hits","Dagger","Rogue"],"combination":"Critical Hits_Dagger_Rogue","severity":"INFO","message":"Created combination"} {"user":{"orderedTags":["Critical Hits","Dagger","Rogue"],"combination":"Critical Hits_Dagger_Rogue","severity":"INFO","message":"Created combination"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"orderedTags\":[\"Critical Hits\",\"Dagger\",\"Rogue\"],\"combination\":\"Critical Hits_Dagger_Rogue\",\"severity\":\"INFO\",\"message\":\"Created combination\"}"}}
+[info] >  {"tier":"tier3","severity":"INFO","message":"Determined tier"} {"user":{"tier":"tier3","severity":"INFO","message":"Determined tier"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"tier\":\"tier3\",\"severity\":\"INFO\",\"message\":\"Determined tier\"}"}}
+[info] >  {"ref":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes","url":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json","query":{"orderBy":"combination","equalTo":"Critical Hits_Dagger_Rogue"},"severity":"INFO","message":"Database reference details"} {"user":{"ref":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes","url":"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json","query":{"orderBy":"combination","equalTo":"Critical Hits_Dagger_Rogue"},"severity":"INFO","message":"Database reference details"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"ref\":\"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes\",\"url\":\"https://classes-ec2da-default-rtdb.europe-west1.firebasedatabase.app/tiers/tier3/classes.json\",\"query\":{\"orderBy\":\"combination\",\"equalTo\":\"Critical Hits_Dagger_Rogue\"},\"severity\":\"INFO\",\"message\":\"Database reference details\"}"}}
+[info] >  {"found":true,"severity":"INFO","message":"Database query result"} {"user":{"found":true,"severity":"INFO","message":"Database query result"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"found\":true,\"severity\":\"INFO\",\"message\":\"Database query result\"}"}}
+[info] >  {"count":83,"severity":"INFO","message":"Retrieved skill IDs"} {"user":{"count":83,"severity":"INFO","message":"Retrieved skill IDs"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"count\":83,\"severity\":\"INFO\",\"message\":\"Retrieved skill IDs\"}"}}
+[info] >  {"name":"Shadowsting Assassin","severity":"INFO","message":"Returning existing class data"} {"user":{"name":"Shadowsting Assassin","severity":"INFO","message":"Returning existing class data"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"name\":\"Shadowsting Assassin\",\"severity\":\"INFO\",\"message\":\"Returning existing class data\"}"}}
+[debug] [2025-06-04T12:41:38.279Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processTags" in 448.2974ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finished \"us-central1-processTags\" in 448.2974ms"}}
+[debug] [2025-06-04T12:41:38.279Z] [worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: IDLE"}}
+[debug] [2025-06-04T12:41:38.279Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-06-04T12:41:38.279Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-06-04T12:41:38.279Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-06-04T12:44:44.344Z] File C:\Users\konra\CurosIdleBattle\Idlebattle\functions\index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\konra\\CurosIdleBattle\\Idlebattle\\functions\\index.js changed, reloading triggers"}}
+[debug] [2025-06-04T12:44:45.352Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2025-06-04T12:44:46.036Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.11.0",
+    "firebase-functions": "^4.5.0",
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2025-06-04T12:44:46.036Z] Building nodejs source
+[debug] [2025-06-04T12:44:46.036Z] Failed to find version of module node: reached end of search path C:\Users\konra\CurosIdleBattle\Idlebattle\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "22". Using node@22 from host. 
+[info] i  functions: You are using a version of firebase-functions SDK (4.9.0) that does not have support for the newest Firebase Extensions features. Please update firebase-functions SDK to >=5.1.0 to use them correctly 
+[debug] [2025-06-04T12:44:46.037Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-06-04T12:44:46.041Z] Found firebase-functions binary at 'C:\Users\konra\CurosIdleBattle\Idlebattle\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8585
+
+[debug] [2025-06-04T12:44:46.460Z] Got response from /__/functions.yaml {"endpoints":{"processTags":{"availableMemoryMb":256,"timeoutSeconds":60,"minInstances":0,"maxInstances":10,"ingressSettings":null,"concurrency":80,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"processTags"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] +  functions: Loaded functions definitions from source: processTags. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processTags."}}
+[debug] [2025-06-04T12:44:50.481Z] [worker-pool] Shutting down IDLE worker (us-central1-processTags) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Shutting down IDLE worker (us-central1-processTags)"}}
+[debug] [2025-06-04T12:44:50.481Z] [worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: FINISHING {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: FINISHING"}}
+[debug] [2025-06-04T12:44:50.489Z] [worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: exited {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: exited"}}
+[debug] [2025-06-04T12:44:50.489Z] [worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: FINISHED {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processTags"},"extension":{},"message":"[worker-us-central1-processTags-3b2ff102-714a-4181-99d5-070c4d038491]: FINISHED"}}
