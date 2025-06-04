@@ -2,6 +2,7 @@
 import {renderLevelUp, updateMana, updateStamina} from './Render.js';
 import {selectTarget} from './Targeting.js';
 import {battleController, battleStatistics, hero as globalHero} from './initialize.js';
+import {EffectClass} from './EffectClass.js';
 
 
 class Skill {
@@ -33,6 +34,7 @@ class Skill {
         this.boundAnimationEndCallback = null;
         this.needsInitialCooldownKickoff;
         this.tags = skillData.tags;
+        this.isPassive = skillData.type === "passive";
     }
 
     setElement(element) {
@@ -87,7 +89,41 @@ class Skill {
         battleStatistics.addStaminaSpent(this.staminaCost);
     }
 
+    applyPassiveEffect(member) {
+        if (!this.isPassive) return;
+
+        console.log(`[Skill ${this.name}] Applying passive effect for ${member.name}`);
+        
+        // Handle both single effect and effects array
+        const effectsToApply = Array.isArray(this.effects) ? this.effects : [this.effects];
+        
+        effectsToApply.forEach(effect => {
+            if (!effect) return;
+
+            // Create a proper effect object for EffectClass
+            const effectObject = {
+                name: this.name,
+                type: effect.type || 'buff',
+                subType: effect.subtype || 'flatChange',
+                stat: effect.stat,
+                value: effect.value,
+                duration: -1, // Unlimited duration for passives
+                icon: this.icon,
+                stackMode: "refresh" // Passives should refresh rather than stack
+            };
+
+            // Apply the effect using EffectClass
+            new EffectClass(member, effectObject);
+        });
+    }
+
     useSkill(member) {
+        // For passive skills, just apply the effect and return
+        if (this.isPassive) {
+            this.applyPassiveEffect(member);
+            return true;
+        }
+
         console.log(`[Skill ${this.name}] useSkill called for ${member.name}`, {
             isHero: member.isHero,
             needsInitialCooldownKickoff: this.needsInitialCooldownKickoff,

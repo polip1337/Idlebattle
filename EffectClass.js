@@ -11,7 +11,16 @@ class EffectClass {
         this.startTime = null;
         this.remainingTime = null;
         this.render = true;
-        if (effect.stackMode == "duration" && this.isAlreadyApplied(effect, target)) {
+        this.isPassive = effect.duration === -1;
+
+        if (this.isPassive) {
+            // For passive effects, just apply and don't set up timers
+            this.applyEffect(effect);
+            if (this.render) {
+                this.renderBuff();
+                this.updateTooltip();
+            }
+        } else if (effect.stackMode == "duration" && this.isAlreadyApplied(effect, target)) {
             this.extendTimer(effect.duration);
         } else if (effect.stackMode == "refresh" && this.isAlreadyApplied(effect, target)) {
             this.refreshTimer();
@@ -22,7 +31,6 @@ class EffectClass {
                 this.startTimer();
                 this.startTooltipTimer();
             }
-
         }
     }
 
@@ -397,18 +405,24 @@ class EffectClass {
     }
 
     updateTooltip() {
-        const timeLeft = Math.floor(this.getTimeLeft());
-        this.tooltip.textContent = `${this.effect.name}: ${timeLeft} seconds left`; // Update tooltip content
+        if (this.isPassive) {
+            this.tooltip.textContent = `${this.effect.name}`; // No duration for passives
+        } else {
+            const timeLeft = Math.floor(this.getTimeLeft());
+            this.tooltip.textContent = `${this.effect.name}: ${timeLeft} seconds left`;
+        }
     }
 
     remove() {
-        clearTimeout(this.timer);
-        clearInterval(this.timerInterval);
+        if (!this.isPassive) {
+            clearTimeout(this.timer);
+            clearInterval(this.timerInterval);
+        }
         this.revertEffect();
         const index = this.target.effects.indexOf(this);
         if (index !== -1) {
             this.target.effects.splice(index, 1);
-        }// Revert the effect when the buff expires
+        }
         if(this.element) this.element.remove();
     }
 

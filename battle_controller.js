@@ -113,6 +113,18 @@ export class BattleController {
             await this.checkBattleOutcome();
             return;
         }
+
+        // Apply passive skills for all team members
+        [...playerTeam.members, ...enemyTeam.members].forEach(member => {
+            if (member.skills) {
+                member.skills.forEach(skill => {
+                    if (skill.type === "passive") {
+                        skill.useSkill(member);
+                    }
+                });
+            }
+        });
+
         renderTeamMembers(team2.members, 'team2', true);
         renderTeamMembers(team1.members, 'team1', true);
         // Set battle as started but paused
