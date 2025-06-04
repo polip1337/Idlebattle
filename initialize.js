@@ -50,6 +50,7 @@ export let allSkillsCache = null;
 export let allItemsCache = null;
 export let allCompanionsData = {};
 export let allHeroClasses = {};
+export let battleController = null; // Add global BattleController instance
 
 
 export const NPC_MEDIA_PATH = "Media/NPC/";
@@ -177,6 +178,9 @@ export async function loadGameData(savedGameState = null) {
 
         team1 = new Team('Team1', 'team1-battle-container');
         team2 = new Team('Team2', 'team2-battle-container');
+        
+        // Initialize BattleController after teams are created
+        battleController = new BattleController();
 
         if (savedGameState) {
             if (!savedGameState.heroData || !savedGameState.mapStateData || !savedGameState.mapStateData.currentMapId) {
@@ -490,32 +494,32 @@ function togglePause() {
 }
 
 export function nextStage() {
-    if (BattleController) {
-        BattleController.nextStage();
+    if (battleController) {
+        battleController.nextStage();
     }
 }
 
 export function repeatStage() {
-    if (BattleController) {
-        BattleController.repeatStage();
+    if (battleController) {
+        battleController.repeatStage();
     }
 }
 
 export function startBattle(poi, dialogueOptions, stageNum) {
-    if (BattleController) {
-        return BattleController.startBattle(poi, dialogueOptions, stageNum);
+    if (battleController) {
+        return battleController.startBattle(poi, dialogueOptions, stageNum);
     }
 }
 
 export function returnToMap() {
-    if (BattleController) {
-        BattleController.stopBattle(false);
+    if (battleController) {
+        battleController.stopBattle(false);
     }
 }
 
 export function attemptFlee() {
-    if (BattleController && BattleController.fleeSystem) {
-        BattleController.fleeSystem.attemptFlee();
+    if (battleController && battleController.fleeSystem) {
+        battleController.fleeSystem.attemptFlee();
     }
 }
 
