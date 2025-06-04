@@ -130,7 +130,13 @@ export class BattleController {
             if (member.skills) {
                 member.skills.forEach(skill => {
                     if (skill.type === "passive") {
-                        skill.useSkill(member);
+                        // Only apply passive effects if the skill is selected
+                        if (member.isHero && member.selectedPassiveSkills?.includes(skill)) {
+                            skill.useSkill(member);
+                        } else if (!member.isHero) {
+                            // For non-hero members, apply all passive skills
+                            skill.useSkill(member);
+                        }
                     }
                 });
             }
