@@ -1,9 +1,9 @@
 // BattleController.js - Main controller that orchestrates all battle systems
-import { BattleState } from './BattleState.js';
-import { FleeSystem } from './FleeSystem.js';
-import { BattleOutcome } from './BattleOutcome.js';
-import { TeamManager } from './TeamManager.js';
-import { BattleUI } from './BattleUI.js';
+import { BattleState } from './battle_state.js';
+import { FleeSystem } from './flee_system.js';
+import { BattleOutcome } from './battle_outcome.js';
+import { TeamManager } from './team_manager.js';
+import { BattleUI } from './battle_ui.js';
 import { isPaused, hero, team1, team2, renderTeamMembers, evolutionService } from './initialize.js';
 import { refreshMapElements, handleOutOfCombatRegeneration } from './map.js';
 import { handleActions } from './actionHandler.js';
@@ -113,7 +113,8 @@ export class BattleController {
             await this.checkBattleOutcome();
             return;
         }
-
+        renderTeamMembers(team2.members, 'team2', true);
+        renderTeamMembers(team1.members, 'team1', true);
         // Set battle as started but paused
         this.battleState.startBattle();
         this.fleeSystem.resetCooldown();
