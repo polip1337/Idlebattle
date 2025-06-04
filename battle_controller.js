@@ -56,9 +56,20 @@ export class BattleController {
     
     async gameTick() {
         if (isPaused || !this.battleState.battleStarted || this.battleState.isBattlePausedForDialogue) {
+            // Pause all effects when battle is paused
+            if (isPaused) {
+                [...team1.members, ...team2.members].forEach(member => {
+                    member.effects.forEach(effect => effect.pause());
+                });
+            }
             return;
         }
-        
+
+        // Unpause all effects when battle resumes
+        [...team1.members, ...team2.members].forEach(member => {
+            member.effects.forEach(effect => effect.unpause());
+        });
+
         this.teamManager.handleTeamRegeneration();
         await this.checkBattleOutcome();
     }

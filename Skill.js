@@ -2,7 +2,7 @@
 import {renderLevelUp, updateMana, updateStamina} from './Render.js';
 import {selectTarget} from './Targeting.js';
 import {battleController, battleStatistics, hero as globalHero} from './initialize.js';
-import {EffectClass} from './EffectClass.js';
+import EffectClass from './EffectClass.js';
 
 
 class Skill {

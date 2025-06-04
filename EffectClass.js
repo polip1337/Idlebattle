@@ -12,6 +12,8 @@ class EffectClass {
         this.remainingTime = null;
         this.render = true;
         this.isPassive = effect.duration === -1;
+        this.isPaused = false;
+        this.pauseStartTime = null;
 
         if (this.isPassive) {
             // For passive effects, just apply and don't set up timers
@@ -49,21 +51,23 @@ class EffectClass {
     }
 
     startTimer() {
-        this.startTime = Date.now(); // Record the start time
+        if (this.isPassive || this.isPaused) return;
+        
+        this.startTime = Date.now();
         this.timer = setTimeout(() => {
             this.remove();
-        }, this.effect.duration * 1000); // Convert duration to milliseconds
+        }, this.effect.duration * 1000);
 
-        this.updateTooltip(); // Update tooltip initially
+        this.updateTooltip();
     }
 
     getTimeLeft() {
-        if (this.timer === null) {
-            return 0; // No timer set, return 0
+        if (this.timer === null || this.isPassive) {
+            return 0;
         }
-        const elapsed = (Date.now() - this.startTime) / 1000; // Time elapsed in seconds
-        const timeLeft = this.effect.duration - elapsed; // Calculate remaining time
-        return timeLeft > 0 ? timeLeft : 0; // Ensure time left is non-negative
+        const elapsed = (Date.now() - this.startTime) / 1000;
+        const timeLeft = this.effect.duration - elapsed;
+        return timeLeft > 0 ? timeLeft : 0;
     }
 
     extendTimer(additionalTime) {
@@ -104,8 +108,9 @@ class EffectClass {
     }
 
     startTooltipTimer() {
+        if (this.isPassive || this.isPaused) return;
+        
         this.timerInterval = setInterval(() => {
-
             this.updateTooltip();
         }, 1000);
     }
@@ -440,6 +445,59 @@ class EffectClass {
             }
         }
         return copy;
+    }
+
+    pause() {
+        if (this.isPassive || this.isPaused) return;
+        
+        this.isPaused = true;
+        this.pauseStartTime = Date.now();
+        
+        // Clear existing timers
+        if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+    }
+
+    unpause() {
+        if (this.isPassive || !this.isPaused) return;
+        
+        this.isPaused = false;
+        const pauseDuration = (Date.now() - this.pauseStartTime) / 1000;
+        
+        // Adjust start time to account for pause duration
+        if (this.startTime) {
+            this.startTime += pauseDuration * 1000;
+        }
+        
+        // Restart timers
+        if (!this.isPassive) {
+            this.startTimer();
+            this.startTooltipTimer();
+        }
+        
+        // Restart effect intervals if they exist
+        if (this.effect.subType === 'Regen') {
+            this.createHealOverTimeInterval(this.effect.value, this.target);
+        } else if (['Bleed', 'Burn', 'Poison', 'WildfireBurn', 'DoT'].includes(this.effect.subType)) {
+            this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+        } else if (this.effect.subType === 'Corrupt') {
+            this.corruptInterval = setInterval(() => {
+                this.target.stats.strength -= 1;
+                this.target.stats.speed -= 1;
+                this.target.stats.dexterity -= 1;
+                this.target.stats.health -= 1;
+            }, 1000);
+        }
     }
 
 }
