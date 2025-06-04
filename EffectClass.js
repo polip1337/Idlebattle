@@ -411,7 +411,17 @@ class EffectClass {
 
     updateTooltip() {
         if (this.isPassive) {
-            this.tooltip.textContent = `${this.effect.name}`; // No duration for passives
+            let tooltipText = `${this.effect.name}`;
+            if (this.effect.subType) {
+                tooltipText += ` (${this.effect.subType})`;
+            }
+            if (this.effect.stat) {
+                tooltipText += `\nStat: ${this.effect.stat}`;
+            }
+            if (this.effect.value !== undefined && this.effect.value !== 0) {
+                tooltipText += `\nValue: ${this.effect.value}`;
+            }
+            this.tooltip.textContent = tooltipText;
         } else {
             const timeLeft = Math.floor(this.getTimeLeft());
             this.tooltip.textContent = `${this.effect.name}: ${timeLeft} seconds left`;
