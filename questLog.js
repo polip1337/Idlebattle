@@ -1,6 +1,8 @@
-
 import { questSystem } from './questSystem.js';
 import { reputationUI } from './reputationUI.js';
+
+// Store quest expansion state
+const questExpansionState = new Map();
 
 export function initializeQuestLog() {
     // Expose updateQuestLog globally for questSystem to call
@@ -27,15 +29,26 @@ export function updateQuestLog() {
         return;
     }
 
+    // Separate active and completed quests
+    const activeQuests = quests.filter(quest => !quest.completed);
+    const completedQuests = quests.filter(quest => quest.completed);
+
     // Group quests by mapId
     const questsByMap = {};
-    quests.forEach(quest => {
+    
+    // Process active quests first
+    activeQuests.forEach(quest => {
         const mapId = quest.mapId;
         if (!questsByMap[mapId]) {
             questsByMap[mapId] = [];
         }
         questsByMap[mapId].push(quest);
     });
+
+    // Add completed quests section at the end
+    if (completedQuests.length > 0) {
+        questsByMap['Completed'] = completedQuests;
+    }
 
     // Render each map group
     Object.entries(questsByMap).forEach(([mapId, mapQuests]) => {
@@ -48,16 +61,22 @@ export function updateQuestLog() {
         mapQuests.forEach(quest => {
             const questElement = document.createElement('div');
             questElement.classList.add('quest-item');
+            if (quest.completed) {
+                questElement.classList.add('completed');
+            }
             
             // Calculate progress percentage
             const progressPercent = (quest.currentStep / quest.totalSteps) * 100;
             
+            // Get stored expansion state or default to false
+            const isExpanded = questExpansionState.get(quest.id) || false;
+            
             questElement.innerHTML = `
                 <div class="quest-header">
                     <h3>${quest.name}${quest.completed ? ' (Completed)' : ''}</h3>
-                    <button class="toggle-details">${quest.completed ? '-' : '+'}</button>
+                    <button class="toggle-details">${isExpanded ? '-' : '+'}</button>
                 </div>
-                <div class="quest-details" style="display: ${quest.completed ? 'block' : 'none'};">
+                <div class="quest-details" style="display: ${isExpanded ? 'block' : 'none'};">
                     <p><strong>Giver:</strong> ${quest.giver}</p>
                     <p><strong>Description:</strong> ${quest.description}</p>
                     <div class="quest-progress">
@@ -79,8 +98,11 @@ export function updateQuestLog() {
             const toggleButton = questElement.querySelector('.toggle-details');
             const details = questElement.querySelector('.quest-details');
             toggleButton.addEventListener('click', () => {
-                details.style.display = details.style.display === 'none' ? 'block' : 'none';
-                toggleButton.textContent = details.style.display === 'none' ? '+' : '-';
+                const newState = details.style.display === 'none';
+                details.style.display = newState ? 'block' : 'none';
+                toggleButton.textContent = newState ? '-' : '+';
+                // Store the expansion state
+                questExpansionState.set(quest.id, newState);
             });
         });
 
@@ -110,6 +132,7 @@ export function openQuestSubTab(evt, tabName) {
         reputationUI.updateUI();
     }
 }
+
 if (!window.openQuestSubTab) { // Ensure it's globally available for HTML onclick
     window.openQuestSubTab = openQuestSubTab;
 }
