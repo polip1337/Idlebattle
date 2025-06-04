@@ -197,7 +197,10 @@ export async function initializeDialogue() {
 
                     DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
                     
-
+                    if (itemId === 'gold') {
+                        result = hero.gold >= quantity;
+                        DEBUG.log(`Gold check: ${hero.gold} >= ${quantity}: ${result}`);
+                    } else {
                         let eqResult = Object.values(hero.equipment).some(slot =>
                             slot && slot.id === itemId
                         );
@@ -206,6 +209,7 @@ export async function initializeDialogue() {
                         let invResult = hero.hasItem(itemId, quantity);
                         DEBUG.log(`Item inventory check: ${invResult}`);
                         result = eqResult || invResult;
+                    }
                     break;
                 case 'questActive':
                     result = questSystem.activeQuests.has(condition.questId);
@@ -382,7 +386,10 @@ export async function initializeDialogue() {
 
                             DEBUG.log(`Checking for item: ${itemId}, quantity: ${quantity}`);
 
-
+                            if (itemId === 'gold') {
+                                result = hero.gold >= quantity;
+                                DEBUG.log(`Gold check: ${hero.gold} >= ${quantity}: ${result}`);
+                            } else {
                                 let eqResult = Object.values(hero.equipment).some(slot =>
                                     slot && slot.id === itemId
                                 );
@@ -391,6 +398,7 @@ export async function initializeDialogue() {
                                 let invResult = hero.hasItem(itemId, quantity);
                                 DEBUG.log(`Item inventory check: ${invResult}`);
                                 conditionMet = eqResult || invResult;
+                            }
                             break;
 
                         default:
