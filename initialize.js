@@ -515,6 +515,8 @@ export function returnToMap() {
     if (battleController) {
         battleController.stopBattle(false);
     }
+    openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
+    refreshMapElements();
 }
 
 export function attemptFlee() {
