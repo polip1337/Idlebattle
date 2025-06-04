@@ -45,7 +45,7 @@ function getAllTrackedStats() {
     return trackedStats;
 }
 
-async function checkUntrackedStats() {
+export async function checkUntrackedStats() {
     try {
         // Fetch evolution data
         const response = await fetch('../Data/evolutions.json');
@@ -59,7 +59,7 @@ async function checkUntrackedStats() {
         const untrackedStats = new Set();
 
         // Process each class in each tier
-        evolutionData.tiers.forEach(tier => {
+        Object.values(evolutionData.tiers).forEach(tier => {
             tier.classes.forEach(classDef => {
                 // Check each rarity requirement
                 Object.values(classDef.requirements).forEach(requirementString => {
@@ -91,6 +91,3 @@ async function checkUntrackedStats() {
 
 // Make the function available globally
 window.checkUntrackedStats = checkUntrackedStats;
-
-// Run the check
-checkUntrackedStats(); 

@@ -329,7 +329,7 @@ class Member {
         if (this.isHero && updateHeroUI) { // Only update UI if it's the hero and flag is true
             updateExpBarText(this.classType + " Level: " + this.level);
              if (evolutionService && [2, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {
-                evolutionService.levelThresholdReached();
+                //evolutionService.levelThresholdReached();
             }
             updateHealth(this);
             updateMana(this);

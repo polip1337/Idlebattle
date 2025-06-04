@@ -29,32 +29,32 @@ class ClassStrengthEstimator {
         // Resource tier thresholds based on existing class data
         this.resourceTiers = {
             mana: {
-                tier1: 100,    // Very low mana pool (Novice baseline)
-                tier2: 150,    // Low mana pool
-                tier3: 200,    // Average mana pool
-                tier4: 250,    // High mana pool
-                tier5: 350     // Very high mana pool
+                tier1: 100,
+                tier2: 150,
+                tier3: 200,
+                tier4: 250,
+                tier5: 350
             },
             stamina: {
-                tier1: 50,     // Very low stamina (Novice baseline)
-                tier2: 70,     // Low stamina
-                tier3: 90,     // Average stamina
-                tier4: 120,    // High stamina
-                tier5: 150     // Very high stamina
+                tier1: 50,
+                tier2: 70,
+                tier3: 90,
+                tier4: 120,
+                tier5: 150
             },
             manaRegen: {
-                tier1: 3,      // Very low mana regen (Novice baseline)
-                tier2: 4,      // Low mana regen
-                tier3: 5,      // Average mana regen
-                tier4: 6,      // High mana regen
-                tier5: 8       // Very high mana regen
+                tier1: 3,
+                tier2: 4,
+                tier3: 5,
+                tier4: 6,
+                tier5: 8
             },
             vitality: {
-                tier1: 25,     // Very low health pool (Novice baseline)
-                tier2: 35,     // Low health pool
-                tier3: 45,     // Average health pool
-                tier4: 60,     // High health pool
-                tier5: 80      // Very high health pool
+                tier1: 25,
+                tier2: 35,
+                tier3: 45,
+                tier4: 60,
+                tier5: 80
             }
         };
 
