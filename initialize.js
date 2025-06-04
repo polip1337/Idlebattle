@@ -130,14 +130,30 @@ async function loadClasses() {
     try {
         const classesData = await loadJSON('Data/classes.json');
         const loadedClasses = {};
-        classTiers = classesData['tiers'] || [];
-        const heroClassDefinitions = classesData['classes'] || {};
-        for (const key in heroClassDefinitions) {
-            const heroClassDef = heroClassDefinitions[key];
-            loadedClasses[heroClassDef.id] = {...heroClassDef, skills: heroClassDef.skills || []};
+        
+        // Process each tier
+        for (const tierKey in classesData) {
+            const tierData = classesData[tierKey];
+            if (tierData && tierData.classes) {
+                // Process each class in the tier
+                tierData.classes.forEach(classDef => {
+                    if (classDef.name) {
+                        // Use the class name as the key
+                        loadedClasses[classDef.name] = {
+                            ...classDef,
+                            tier: tierKey,
+                            skills: classDef.skills || []
+                        };
+                    }
+                });
+            }
         }
+        
         return loadedClasses;
-    } catch (error) { console.error("Failed to load classes.json:", error); return { tiers: [], classes: {} }; }
+    } catch (error) { 
+        console.error("Failed to load classes.json:", error); 
+        return {}; 
+    }
 }
 
 async function loadCompanionDefinitions() {
@@ -255,25 +271,26 @@ setInitLoadFnForSaveLoad(loadGameData);
 
 
 function createAndInitHero(classes, playerTeamContext, opposingTeamContext) {
-    const baseClassId = 'novice';
-    let baseClassInfo = classes[baseClassId] || Object.values(classes)[0];
-    if (!baseClassInfo) {
-        console.error("Cannot create hero: No classes loaded or 'novice' not found.");
-        alert("Fatal: No classes available to create hero.");
+    // Find the Novice class from tier0
+    const noviceClass = Object.values(classes).find(c => c.name === 'Novice');
+    if (!noviceClass) {
+        console.error("Cannot create hero: Novice class not found.");
+        alert("Fatal: Novice class not available to create hero.");
         return false;
     }
 
-    const heroSkillsInstances = (baseClassInfo.skills || []).map(skillId => {
+    const heroSkillsInstances = (noviceClass.skills || []).map(skillId => {
         const skillData = allSkillsCache[skillId];
         return skillData ? new Skill(skillData, skillData.effects) : null;
     }).filter(Boolean);
 
-    hero = new Hero("Hero", baseClassInfo, heroSkillsInstances, 1, playerTeamContext, opposingTeamContext,true);
+    hero = new Hero("Hero", noviceClass, heroSkillsInstances, 1, playerTeamContext, opposingTeamContext, true);
     hero.placeHeroInFirstAvailableSlot();
 
-
     if (document.getElementById('heroContent')) {
-        updateStatsDisplay(hero); renderSkills(hero); renderPassiveSkills(hero);
+        updateStatsDisplay(hero); 
+        renderSkills(hero); 
+        renderPassiveSkills(hero);
     }
     renderLevelProgress(hero);
     selectInitialSkills();
