@@ -48,8 +48,15 @@
               "dodge": 1,
               "armor": 0,
               "blockChance": 0
-            }
-          }
+            },
+             "requirements": {
+                 "common": "() => true",
+                 "uncommon": "() => true",
+                 "rare": "() => true",
+                 "epic": "() => true",
+                 "legendary": "() => true"
+             }
+         }
       ]
     },
     "tier1": {

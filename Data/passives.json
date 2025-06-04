@@ -833,5 +833,254 @@
     ],
     "targetingModes": ["Self"],
     "tags": ["Passive", "Buff", "Damage", "Armor"]
+  },
+
+  "infernoLightningFocus": {
+    "id": "infernoLightningFocus",
+    "name": "Inferno-Lightning Focus",
+    "type": "passive",
+    "effects": [
+      { "type": "passive", "subtype": "buffDamagePercentage", "damageType": "Fire", "value": 10, "description": "Permanently increases Fire damage by 10%." },
+      { "type": "passive", "subtype": "buffDamagePercentage", "damageType": "Lightning", "value": 10, "description": "Permanently increases Lightning damage by 10%." }
+    ],
+    "description": "Deepened understanding of volatile energies enhances both Fire and Lightning spell potency.",
+    "icon": "Media/Skills/Passive/inferno_lightning_focus.png",
+    "tags": ["Passive", "Buff", "Fire", "Lightning", "Damage"]
+  },
+  "fireLightningSynergy": {
+    "id": "fireLightningSynergy",
+    "name": "Fire-Lightning Synergy",
+    "type": "passive",
+    "effects": [{
+      "id": "fireAndLightningSynergyPassive",
+      "description": "Fire and Lightning spells empower each other; casting one slightly reduces the cost of the other type for a short duration."
+    }],
+    "description": "The interplay of fire and lightning allows for more efficient casting when alternating between the elements.",
+    "icon": "Media/Skills/Passive/fire_lightning_synergy.png",
+    "tags": ["Passive", "Buff", "Fire", "Lightning", "Mana"]
+  },
+  "stormOfFire": {
+    "id": "stormOfFire",
+    "name": "Storm of Fire",
+    "type": "passive",
+    "effects": [{
+      "id": "aoeLingeringDamageProc",
+      "damageType": "Mixed",
+      "chance": 0.20,
+      "duration": 2,
+      "damagePerTurn": 5,
+      "description": "Your area effect Fire and Lightning spells have a chance to leave behind a lingering elemental storm."
+    }],
+    "description": "Your mastery over chaotic elements allows area of effect Fire and Lightning spells to occasionally leave behind a swirling storm of energy, damaging foes within.",
+    "icon": "Media/Skills/Passive/storm_of_fire.png",
+    "tags": ["Passive", "Fire", "Lightning", "AoE", "DoT", "Proc"]
+  },
+  "masterOfChargedFlames": {
+    "id": "masterOfChargedFlames",
+    "name": "Master of Charged Flames",
+    "type": "passive",
+    "effects": [{
+      "id": "critElementalDischarge",
+      "mainDamageTypes": ["Fire", "Lightning"],
+      "dischargeDamageType": "Mixed",
+      "dischargeDamagePercentageOfCrit": 25,
+      "dischargeRadius": 2,
+      "description": "Critical hits with Fire or Lightning spells unleash an additional discharge of energy, striking nearby foes."
+    }],
+    "description": "Ultimate control over electrified fire causes critical hits from Fire or Lightning spells to erupt with secondary elemental discharges, damaging nearby enemies.",
+    "icon": "Media/Skills/Passive/master_of_charged_flames.png",
+    "tags": ["Passive", "Critical", "Fire", "Lightning", "AoE", "Proc"]
+  },
+  "steamFocus": {
+    "id": "steamFocus",
+    "name": "Steam Focus",
+    "type": "passive",
+    "effect": { "type": "passive", "subtype": "buffDamagePercentage", "damageType": "Steam", "value": 15, "description": "Permanently increases the damage of Steam-based spells by 15%." },
+    "description": "Specialized study into hydro-thermal dynamics enhances the potency of all Steam-based spells.",
+    "icon": "Media/Skills/Passive/steam_focus.png",
+    "tags": ["Passive", "Buff", "Steam", "Damage"]
+  },
+  "fireWaterSynergy": {
+    "id": "fireWaterSynergy",
+    "name": "Fire-Water Synergy",
+    "type": "passive",
+    "effects": [{
+      "id": "fireWaterSteamSynergyPassive",
+      "description": "Alternating Fire and Water/Steam spells enhances their effects. Fire spells increase subsequent Water/Steam damage briefly; Water spells increase subsequent Fire/Steam critical chance briefly."
+    }],
+    "description": "The mingling of fire and water energies creates a potent synergy, enhancing spells that combine these elements or are cast in sequence.",
+    "icon": "Media/Skills/Passive/fire_water_synergy.png",
+    "tags": ["Passive", "Buff", "Fire", "Water", "Steam"]
+  },
+  "miasmaControl": {
+    "id": "miasmaControl",
+    "name": "Miasma Control",
+    "type": "passive",
+    "effect": {
+      "type": "passive", "subtype": "enhanceSkillCategory", "skillTags": ["Zone", "Steam"],
+      "enhancement": "increaseDurationAndAoE", "durationIncreasePercentage": 20, "aoeIncreasePercentage": 15,
+      "description": "Increases the duration and area of effect of mist and cloud-based Steam spells."
+    },
+    "description": "Greater control over gaseous concoctions allows for larger and longer-lasting steam and mist effects.",
+    "icon": "Media/Skills/Passive/miasma_control.png",
+    "tags": ["Passive", "Buff", "Steam", "AoE", "Duration"]
+  },
+  "masterOfVapors": {
+    "id": "masterOfVapors",
+    "name": "Master of Vapors",
+    "type": "passive",
+    "effects": [{
+      "id": "steamCondensationProc", "procChance": 0.25, "bonusDamage": 10, "bonusDamageType": "Water",
+      "secondaryEffect": "applySoaked", "secondaryEffectDuration": 2,
+      "description": "Steam spells have a chance to condense on targets, dealing bonus Water damage and soaking them."
+    }],
+    "description": "Unrivaled mastery over vapors allows Steam spells to occasionally condense with force, dealing additional Water damage and soaking targets.",
+    "icon": "Media/Skills/Passive/master_of_vapors.png",
+    "tags": ["Passive", "Proc", "Steam", "Water", "Debuff", "Damage"]
+  },
+  "runicPyromancyFocus": {
+    "id": "runicPyromancyFocus",
+    "name": "Runic Pyromancy Focus",
+    "type": "passive",
+    "effect": {
+      "type": "passive", "subtype": "buffSkillTagDamagePercentage", "skillTags": ["Fire", "Rune"], "value": 15,
+      "description": "Spells that are both Fire and Rune based deal 15% increased damage."
+    },
+    "description": "Deep focus on the intersection of runic magic and pyromancy enhances the damage of Fire spells that utilize runes.",
+    "icon": "Media/Skills/Passive/runic_pyromancy_focus.png",
+    "tags": ["Passive", "Buff", "Fire", "Rune", "Damage"]
+  },
+  "fireRunestoneSynergy": {
+    "id": "fireRunestoneSynergy",
+    "name": "Fire-Runestone Synergy",
+    "type": "passive",
+    "effects": [{
+      "id": "fireRuneEmpowermentCycle",
+      "description": "Casting a Fire spell charges your runic attunement, making your next Fire Rune spell cost less mana. Placing a Fire Rune temporarily increases your Fire spell critical chance."
+    }],
+    "description": "The weaving of direct flame and inscribed runes creates a powerful arcane feedback loop, enhancing both types of magic when used in concert.",
+    "icon": "Media/Skills/Passive/fire_runestone_synergy.png",
+    "tags": ["Passive", "Buff", "Fire", "Rune", "Mana", "Critical"]
+  },
+  "masterRunecarverFire": {
+    "id": "masterRunecarverFire",
+    "name": "Master Runecarver (Fire)",
+    "type": "passive",
+    "effect": {
+      "type": "passive", "subtype": "enhanceRuneTraps", "runeType": "Fire",
+      "enhancement": "quickerArmingAndLargerAoE", "armingTimeReductionPercentage": 25, "aoeIncreasePercentage": 20,
+      "description": "Fire runes arm faster and have a larger area of effect."
+    },
+    "description": "Exceptional skill in carving fire runes allows them to arm more quickly and affect a larger area.",
+    "icon": "Media/Skills/Passive/master_runecarver_fire.png",
+    "tags": ["Passive", "Buff", "Fire", "Rune", "Trap", "AoE"]
+  },
+  "ancientFlameKnowledge": {
+    "id": "ancientFlameKnowledge",
+    "name": "Ancient Flame Knowledge",
+    "type": "passive",
+    "effects": [
+      { "id": "fireSpellResistancePenetration", "damageType": "Fire", "penetrationPercentage": 15, "condition": "onFireSpellCast" },
+      { "id": "runicFireSpread", "skillTags": ["Fire", "Rune"], "procChance": 0.1, "effectToSpread": "burn" }
+    ],
+    "description": "Rediscovered secrets of primordial fire grant your Fire spells the ability to partially bypass enemy resistances, and your Fire Runes' burning effects may spread to new victims.",
+    "icon": "Media/Skills/Passive/ancient_flame_knowledge.png",
+    "tags": ["Passive", "Buff", "Fire", "Rune", "ResistancePenetration", "Proc", "DoT"]
+  },
+  "bloodFireFocus": {
+    "id": "bloodFireFocus",
+    "name": "Bloodfire Focus",
+    "type": "passive",
+    "effects": [
+      { "type": "passive", "subtype": "buffDamagePercentage", "damageType": "Fire", "value": 10 },
+      { "type": "passive", "subtype": "buffDamagePercentageConditional", "damageType": "Fire", "condition": "healthBelow50Percent", "value": 15 }
+    ],
+    "description": "Your affinity for blood-fueled pyromancy increases Fire damage, especially when your own life force wanes.",
+    "icon": "Media/Skills/Passive/blood_fire_focus.png",
+    "tags": ["Passive", "Buff", "Fire", "BloodMagic", "Damage"]
+  },
+  "sanguinePyromancy": {
+    "id": "sanguinePyromancy",
+    "name": "Sanguine Pyromancy",
+    "type": "passive",
+    "effects": [
+      { "id": "fireSpellsApplyBleedProc", "chance": 0.15, "bleedDuration": 3, "bleedDamagePerTurn": 3, "bleedDamageType": "Physical" },
+      { "id": "bloodMagicEmpowersFire", "empowermentDuration": 5, "fireDamageBonus": 10 }
+    ],
+    "description": "Your fire magic is tainted with blood, giving it a chance to cause bleeding wounds. Using blood magic stokes your inner fire, empowering subsequent pyromancy.",
+    "icon": "Media/Skills/Passive/sanguine_pyromancy.png",
+    "tags": ["Passive", "Proc", "Fire", "BloodMagic", "Bleed", "Buff"]
+  },
+  "masterOfCrimsonFlames": {
+    "id": "masterOfCrimsonFlames",
+    "name": "Master of Crimson Flames",
+    "type": "passive",
+    "effect": { "type": "passive", "subtype": "healOnCrit", "damageTypeCondition": "Fire", "healPercentageOfDamage": 15 },
+    "description": "Your critical fire spells sear flesh and draw forth vitality, healing you for a portion of the critical damage inflicted.",
+    "icon": "Media/Skills/Passive/master_of_crimson_flames.png",
+    "tags": ["Passive", "Heal", "Lifesteal", "Critical", "Fire", "BloodMagic"]
+  },
+  "forbiddenPower": {
+    "id": "forbiddenPower",
+    "name": "Forbidden Power",
+    "type": "passive",
+    "effects": [
+      { "type": "passive", "subtype": "buffMagicPowerFlat", "value": 25 },
+      { "type": "passive", "subtype": "reduceMaxHealthPercentage", "value": -10 }
+    ],
+    "description": "Embracing forbidden magics grants immense spell power at the cost of a portion of your vitality.",
+    "icon": "Media/Skills/Passive/forbidden_power.png",
+    "tags": ["Passive", "Buff", "Debuff", "MagicPower", "Health", "BloodMagic"]
+  },
+  "soulfireNecromancyFocus": {
+    "id": "soulfireNecromancyFocus",
+    "name": "Soulfire Necromancy Focus",
+    "type": "passive",
+    "effects": [
+      { "type": "passive", "subtype": "buffDamagePercentage", "damageType": "Fire", "value": 8 },
+      { "type": "passive", "subtype": "buffDamagePercentage", "damageType": "Necrotic", "value": 8 }
+    ],
+    "description": "Increases the damage of both Fire and Necrotic spells, reflecting a mastery over soul-burning energies.",
+    "icon": "Media/Skills/Passive/soulfire_necromancy_focus.png",
+    "tags": ["Passive", "Buff", "Fire", "Necrotic", "Damage"]
+  },
+  "fireNecromancySynergy": {
+    "id": "fireNecromancySynergy",
+    "name": "Fire-Necromancy Synergy",
+    "type": "passive",
+    "effects": [{
+      "id": "fireNecroInteractionPassive",
+      "description": "Fire spells cast on Undead allies have a chance to slightly heal them. Necrotic spells cast on Burning enemies deal bonus damage or prolong the burn."
+    }],
+    "description": "The unholy fusion of fire and undeath creates unique interactions, allowing flames to mend the dead and necrotic energies to feast on burning flesh.",
+    "icon": "Media/Skills/Passive/fire_necromancy_synergy.png",
+    "tags": ["Passive", "Buff", "Fire", "Necrotic", "Minion", "Interaction"]
+  },
+  "masterOfUndeadFlames": {
+    "id": "masterOfUndeadFlames",
+    "name": "Master of Undead Flames",
+    "type": "passive",
+    "effect": {
+      "type": "passive", "subtype": "minionDeathExplosion", "minionTag": "Undead",
+      "explosionChance": 0.25, "explosionDamage": 15, "explosionDamageType": "Fire", "explosionRadius": 2,
+      "description": "Your summoned undead have a 25% chance to explode in a fiery burst upon death."
+    },
+    "description": "Your command over fiery undead is such that they detonate in a burst of flame upon their final demise.",
+    "icon": "Media/Skills/Passive/master_of_undead_flames.png",
+    "tags": ["Passive", "Minion", "Fire", "Necrotic", "AoE", "Proc"]
+  },
+  "lichFormPassive": {
+    "id": "lichFormPassive",
+    "name": "Lich Form (Passive)",
+    "type": "passive",
+    "effects": [
+      { "type": "passive", "subtype": "buffResistanceFlat", "damageType": "Fire", "value": 15 },
+      { "type": "passive", "subtype": "buffResistanceFlat", "damageType": "Necrotic", "value": 20 },
+      { "type": "passive", "subtype": "buffResistanceFlat", "damageType": "Poison", "value": 50 },
+      { "type": "passive", "subtype": "manaShield", "conversionRate": 0.5, "description": "A portion of damage taken is absorbed by mana before health."}
+    ],
+    "description": "Embracing the path of the lich grants inherent resistances to unholy energies and poisons, and the ability to shield vitality with arcane reserves.",
+    "icon": "Media/Skills/Passive/lich_form_passive.png",
+    "tags": ["Passive", "Buff", "Resistance", "Fire", "Necrotic", "Poison", "ManaShield"]
   }
 }

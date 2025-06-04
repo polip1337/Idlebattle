@@ -48,7 +48,7 @@ function getAllTrackedStats() {
 export async function checkUntrackedStats() {
     try {
         // Fetch evolution data
-        const response = await fetch('../Data/evolutions.json');
+        const response = await fetch('../Data/classes.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -57,10 +57,11 @@ export async function checkUntrackedStats() {
         // Get all tracked stats
         const trackedStats = getAllTrackedStats();
         const untrackedStats = new Set();
-
+        let classCount = 0;
         // Process each class in each tier
-        Object.values(evolutionData.tiers).forEach(tier => {
+        Object.values(evolutionData).forEach(tier => {
             tier.classes.forEach(classDef => {
+                classCount++;
                 // Check each rarity requirement
                 Object.values(classDef.requirements).forEach(requirementString => {
                     const statsInRequirement = extractStatsFromRequirement(requirementString);
@@ -76,6 +77,7 @@ export async function checkUntrackedStats() {
         });
 
         // Print results
+        console.log("Class count", classCount)
         console.log('Untracked stats found in evolution requirements:');
         console.log('----------------------------------------');
         Array.from(untrackedStats).sort().forEach(stat => {

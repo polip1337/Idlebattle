@@ -1572,8 +1572,798 @@
     "targetingModes": ["Self"],
     "icon": "Media/Skills/Undead/necromantic_regeneration.png",
     "tags": ["Self", "Heal", "Magical", "Active", "Mana"]
+  },
+  "electrifiedFlames": {
+    "id": "electrifiedFlames",
+    "name": "Electrified Flames",
+    "type": "active",
+    "damage": 22,
+    "manaCost": 22,
+    "staminaCost": 0,
+    "cooldown": 16,
+    "damageType": "Fire",
+    "effects": [
+      {
+        "id": "lightningDoT",
+        "name": "Electrocuted Flames",
+        "description": "Target burns with electrical energy.",
+        "duration": 3,
+        "damagePerTurn": 7,
+        "tickDamageType": "Lightning"
+      },
+      {
+        "id": "increaseDamageTakenType",
+        "damageType": "Fire",
+        "value": 15,
+        "duration": 3,
+        "description": "Target becomes more vulnerable to Fire."
+      }
+    ],
+    "description": "Engulfs a target in flames charged with crackling electricity, dealing Fire damage, continuous Lightning damage, and making them vulnerable to Fire.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Hybrid/electrified_flames.png",
+    "tags": ["Single Target", "Fire", "Lightning", "Magical", "DoT", "Debuff", "Active", "Mana"]
+  },
+  "thunderousCombustion": {
+    "id": "thunderousCombustion",
+    "name": "Thunderous Combustion",
+    "type": "active",
+    "damage": 35,
+    "manaCost": 30,
+    "staminaCost": 0,
+    "cooldown": 22,
+    "damageType": "Fire",
+    "effects": [
+      {
+        "id": "areaStun",
+        "chance": 0.25,
+        "duration": 1,
+        "description": "The explosion has a chance to briefly stun affected enemies."
+      },
+      {
+        "id": "applyShockedAccuracyDebuff",
+        "duration": 2,
+        "value": -10,
+        "description": "Enemies caught in the blast are shocked, reducing their accuracy."
+      }
+    ],
+    "description": "Ignites the air with a thunderous explosion of fire and lightning, damaging all enemies in an area and potentially stunning or disorienting them.",
+    "targetingModes": ["All Enemies"],
+    "icon": "Media/Skills/Hybrid/thunderous_combustion.png",
+    "tags": ["All Enemies", "AoE", "Fire", "Lightning", "Magical", "Debuff", "Active", "Mana"]
+  },
+  "ballLightningFire": {
+    "id": "ballLightningFire",
+    "name": "Ball Lightning Fire",
+    "type": "active",
+    "damage": 28,
+    "manaCost": 26,
+    "staminaCost": 0,
+    "cooldown": 18,
+    "damageType": "Lightning",
+    "effects": [
+      {
+        "id": "burn",
+        "duration": 2,
+        "damagePerTurn": 5,
+        "tickDamageType": "Fire",
+        "chance": 0.5,
+        "description": "Has a chance to ignite enemies it hits."
+      }
+    ],
+    "description": "Conjures a volatile sphere of crackling lightning and fire that moves towards enemies, exploding to deal AoE Lightning damage and potentially igniting them.",
+    "targetingModes": ["Random Area"],
+    "icon": "Media/Skills/Hybrid/ball_lightning_fire.png",
+    "tags": ["AoE", "Projectile", "Fire", "Lightning", "Magical", "DoT", "Active", "Mana"]
+  },
+  "voltaicOverload": {
+    "id": "voltaicOverload",
+    "name": "Voltaic Overload",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 15,
+    "staminaCost": 0,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "empowerNextSpellCritDamage",
+        "description": "Overcharges magical circuits, causing the next Fire or Lightning spell to be a guaranteed critical hit with increased damage, but also increases its mana cost slightly.",
+        "spellTypes": ["Fire", "Lightning"],
+        "critChanceBonus": 1.0,
+        "damageBonusPercentage": 25,
+        "manaCostIncreasePercentage": 10,
+        "duration": 1
+      }
+    ],
+    "description": "Temporarily overcharges arcane energies. The next Fire or Lightning spell cast will be a guaranteed critical hit with amplified power, at a slightly increased mana cost.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Buff/voltaic_overload.png",
+    "tags": ["Self", "Buff", "Fire", "Lightning", "Magical", "Critical", "Active", "Mana"]
+  },
+  "conduitOfPower": {
+    "id": "conduitOfPower",
+    "name": "Conduit of Power",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 45,
+    "staminaCost": 0,
+    "cooldown": 75,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "increaseDamagePercentage",
+        "damageType": "Fire",
+        "value": 30,
+        "duration": 12
+      },
+      {
+        "id": "increaseDamagePercentage",
+        "damageType": "Lightning",
+        "value": 30,
+        "duration": 12
+      },
+      {
+        "id": "increaseManaRegenFlat",
+        "value": 10,
+        "duration": 12
+      },
+      {
+        "id": "increaseDamageTakenPercentage",
+        "value": 15,
+        "duration": 12
+      }
+    ],
+    "description": "Transforms the caster into a living conduit of elemental fury for a short duration, greatly increasing Fire and Lightning damage dealt and mana regeneration, but also making them more susceptible to incoming damage.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Buff/conduit_of_power.png",
+    "tags": ["Self", "Buff", "Fire", "Lightning", "Magical", "Ultimate", "Active", "Mana"]
+  },
+  "steamBlast": {
+    "id": "steamBlast",
+    "name": "Steam Blast",
+    "type": "active",
+    "damage": 28,
+    "manaCost": 20,
+    "staminaCost": 0,
+    "cooldown": 12,
+    "damageType": "Steam",
+    "effects": [
+      {
+        "id": "scaldAccuracyDebuff",
+        "name": "Scalded",
+        "description": "Target is scalded, suffering minor continuous damage and reduced accuracy.",
+        "duration": 3,
+        "damagePerTurn": 4,
+        "tickDamageType": "Fire",
+        "statToDebuff": "accuracy",
+        "debuffValue": -10
+      }
+    ],
+    "description": "Unleashes a focused blast of superheated steam, dealing Steam damage and scalding the target, reducing their accuracy.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Steam/steam_blast.png",
+    "tags": ["Single Target", "Steam", "Fire", "Water", "Magical", "DoT", "Debuff", "Active", "Mana"]
+  },
+  "scaldingMist": {
+    "id": "scaldingMist",
+    "name": "Scalding Mist",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 28,
+    "staminaCost": 0,
+    "cooldown": 20,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "createAreaEffect",
+        "zoneId": "scaldingMistZone",
+        "duration": 5,
+        "effectsInZone": [
+          { "id": "damageOverTimeArea", "damagePerTurn": 7, "damageType": "Steam" },
+          { "id": "reduceAccuracyFlatArea", "value": -15, "description": "Mist obscures vision." }
+        ]
+      }
+    ],
+    "description": "Conjures a cloud of scalding mist that damages enemies over time and reduces their accuracy while they remain within it.",
+    "targetingModes": ["Ground Area"],
+    "icon": "Media/Skills/Steam/scalding_mist.png",
+    "tags": ["AoE", "Zone", "Steam", "Fire", "Water", "Magical", "DoT", "Debuff", "Active", "Mana"]
+  },
+  "boilingGeyser": {
+    "id": "boilingGeyser",
+    "name": "Boiling Geyser",
+    "type": "active",
+    "damage": 38,
+    "manaCost": 30,
+    "staminaCost": 0,
+    "cooldown": 18,
+    "damageType": "Steam",
+    "effects": [
+      { "id": "knockUp", "chance": 0.3, "duration": 1 },
+      { "id": "applyStrongScaldDoT", "duration": 2, "damagePerTurn": 6, "tickDamageType": "Fire" }
+    ],
+    "description": "Summons a geyser of boiling water and steam to erupt beneath a target, dealing massive Steam damage with a chance to knock them up and apply a severe scald.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Steam/boiling_geyser.png",
+    "tags": ["Single Target", "Steam", "Fire", "Water", "Magical", "Debuff", "Control", "Active", "Mana"]
+  },
+  "superheatedCloud": {
+    "id": "superheatedCloud",
+    "name": "Superheated Cloud",
+    "type": "active",
+    "damage": 10,
+    "damageType": "Fire",
+    "manaCost": 32,
+    "staminaCost": 0,
+    "cooldown": 24,
+    "effects": [
+      {
+        "id": "createAreaEffect",
+        "zoneId": "superheatedCloudZone",
+        "duration": 4,
+        "effectsInZone": [
+          { "id": "damageOverTimeArea", "damagePerTurn": 8, "damageType": "Steam" },
+          { "id": "reduceArmorPercentageArea", "value": 10 }
+        ]
+      }
+    ],
+    "description": "Creates a large cloud of superheated steam, dealing initial Fire damage, continuous Steam damage, and reducing the armor of enemies within.",
+    "targetingModes": ["Ground Area"],
+    "icon": "Media/Skills/Steam/superheated_cloud.png",
+    "tags": ["AoE", "Zone", "Steam", "Fire", "Water", "Magical", "DoT", "Debuff", "Active", "Mana"]
+  },
+  "flashBoil": {
+    "id": "flashBoil",
+    "name": "Flash Boil",
+    "type": "active",
+    "damage": 22,
+    "manaCost": 18,
+    "staminaCost": 0,
+    "cooldown": 10,
+    "damageType": "Steam",
+    "effects": [ { "id": "disorientAccuracyDebuff", "duration": 2, "value": -10 } ],
+    "description": "Instantly vaporizes nearby moisture into a burst of scalding steam around a target, dealing Steam damage and disorienting foes. More effective on wet targets.",
+    "targetingModes": ["Random Area"],
+    "icon": "Media/Skills/Steam/flash_boil.png",
+    "tags": ["AoE", "Steam", "Fire", "Water", "Magical", "Debuff", "Active", "Mana"]
+  },
+  "pressureCook": {
+    "id": "pressureCook",
+    "name": "Pressure Cook",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 24,
+    "staminaCost": 0,
+    "cooldown": 20,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "delayedBlastOnFireHit",
+        "name": "Pressurized",
+        "description": "Target is internally pressurized. Will explode after a short duration or if hit by a Fire spell.",
+        "delay": 3,
+        "blastDamage": 45,
+        "blastDamageType": "Steam",
+        "triggerCondition": "onFireDamageReceived"
+      }
+    ],
+    "description": "Applies intense internal pressure to a target. After a short delay, or if the target is struck by a Fire spell, they erupt for massive Steam damage.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Steam/pressure_cook.png",
+    "tags": ["Single Target", "Steam", "Fire", "Magical", "Delayed Damage", "Debuff", "Active", "Mana"]
+  },
+  "vaporize": {
+    "id": "vaporize",
+    "name": "Vaporize",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 20,
+    "staminaCost": 0,
+    "cooldown": 28,
+    "damageType": "None",
+    "effects": [
+      { "id": "increaseDodgePercentage", "value": 50, "duration": 3 },
+      { "id": "increaseResistance", "damageType": "Fire", "value": 30, "duration": 3 },
+      { "id": "increaseResistance", "damageType": "Water", "value": 30, "duration": 3 }
+    ],
+    "description": "Briefly transforms the caster into a cloud of vapor, significantly increasing dodge chance and resistance to Fire and Water based attacks.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Buff/vaporize.png",
+    "tags": ["Self", "Buff", "Dodge", "Resistance", "Steam", "Active", "Mana"]
+  },
+  "thermalCurrent": {
+    "id": "thermalCurrent",
+    "name": "Thermal Current",
+    "type": "active",
+    "damage": 35,
+    "manaCost": 40,
+    "staminaCost": 0,
+    "cooldown": 70,
+    "damageType": "Steam",
+    "effects": [
+      { "id": "areaPull", "strength": 2 },
+      {
+        "id": "createAreaEffect",
+        "zoneId": "thermalCurrentZone",
+        "duration": 4,
+        "effectsInZone": [
+          { "id": "damageOverTimeArea", "damagePerTurn": 10, "damageType": "Steam" },
+          { "id": "reduceSpeedPercentageArea", "value": 25 }
+        ]
+      }
+    ],
+    "description": "Summons a powerful thermal current that pulls enemies together, dealing initial Steam damage and creating a lingering vortex of superheated air that continuously damages and slows foes.",
+    "targetingModes": ["Ground Area"],
+    "icon": "Media/Skills/Steam/thermal_current.png",
+    "tags": ["AoE", "Zone", "Steam", "Ultimate", "Active", "Mana"]
+  },
+  "runeOfBurning": {
+    "id": "runeOfBurning",
+    "name": "Rune of Burning",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 20,
+    "staminaCost": 0,
+    "cooldown": 15,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "placeTrapRune",
+        "trapId": "burningRuneTrapInstance",
+        "duration": 10,
+        "trigger": "proximityOrTimeout",
+        "explosionDamage": 30,
+        "explosionDamageType": "Fire",
+        "explosionEffects": [{ "id": "burn", "duration": 3, "damagePerTurn": 5 }]
+      }
+    ],
+    "description": "Inscribes a powerful rune on the ground that erupts in flames when an enemy approaches or after a short time, dealing Fire damage and burning foes in an area.",
+    "targetingModes": ["Ground Target"],
+    "icon": "Media/Skills/Runes/rune_of_burning.png",
+    "tags": ["Trap", "Rune", "AoE", "Fire", "Magical", "DoT", "Active", "Mana"]
+  },
+  "explosiveGlyph": {
+    "id": "explosiveGlyph",
+    "name": "Explosive Glyph",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 23,
+    "staminaCost": 0,
+    "cooldown": 18,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "applyDelayedDamageDebuff",
+        "name": "Explosive Glyph",
+        "description": "An explosive glyph is attached, detonating after a short delay.",
+        "delay": 2,
+        "blastDamage": 42,
+        "blastDamageType": "Fire"
+      }
+    ],
+    "description": "Attaches a volatile glyph to a target that detonates after a short delay, dealing significant Fire damage.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Runes/explosive_glyph.png",
+    "tags": ["Single Target", "Rune", "Fire", "Magical", "Delayed Damage", "Debuff", "Active", "Mana"]
+  },
+  "fireRuneTrap": {
+    "id": "fireRuneTrap",
+    "name": "Fire Rune Trap",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 28,
+    "staminaCost": 0,
+    "cooldown": 22,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "placeTrapRuneField",
+        "trapId": "fireRuneFieldTrapInstance",
+        "duration": 15,
+        "trigger": "proximity",
+        "zoneId": "fireRuneZoneInstance",
+        "zoneDuration": 5,
+        "zoneEffects": [
+          { "id": "damageOverTimeArea", "damagePerTurn": 8, "damageType": "Fire" },
+          { "id": "reduceSpeedPercentageArea", "value": 15 }
+        ]
+      }
+    ],
+    "description": "Sets a cunning rune trap. When triggered by an enemy, it erupts into a field of searing flames that continuously damages and slows foes within.",
+    "targetingModes": ["Ground Target"],
+    "icon": "Media/Skills/Runes/fire_rune_trap.png",
+    "tags": ["Trap", "Rune", "AoE", "Zone", "Fire", "Magical", "DoT", "Debuff", "Active", "Mana"]
+  },
+  "empowerWithRunesFire": {
+    "id": "empowerWithRunesFire",
+    "name": "Empower with Runes (Fire)",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 18,
+    "staminaCost": 0,
+    "cooldown": 30,
+    "damageType": "None",
+    "effects": [
+      { "id": "increaseDamagePercentage", "damageType": "Fire", "value": 25, "duration": 10 },
+      { "id": "increaseEffectChance", "effectIdToBoost": "burn", "value": 0.20, "duration": 10 }
+    ],
+    "description": "Inscribes temporary runes of power, enhancing the damage and secondary effects of Fire spells for a short duration.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Buff/empower_runes_fire.png",
+    "tags": ["Self", "Buff", "Rune", "Fire", "Magical", "Active", "Mana"]
+  },
+  "wallOfRunicFire": {
+    "id": "wallOfRunicFire",
+    "name": "Wall of Runic Fire",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 30,
+    "staminaCost": 0,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "createWallEffect",
+        "wallId": "runicFireWallInstance",
+        "duration": 6,
+        "damageOnPass": 20,
+        "damageType": "Fire",
+        "effectsOnPass": [{ "id": "burn", "duration": 3, "damagePerTurn": 4 }]
+      }
+    ],
+    "description": "Summons a searing wall of fire, etched with debilitating runes. Enemies passing through suffer Fire damage and are burned.",
+    "targetingModes": ["Line Area"],
+    "icon": "Media/Skills/Fire/wall_runic_fire.png",
+    "tags": ["Wall", "Zone", "Rune", "Fire", "Magical", "DoT", "Active", "Mana"]
+  },
+  "chainRuneBlast": {
+    "id": "chainRuneBlast",
+    "name": "Chain Rune Blast",
+    "type": "active",
+    "damage": 25,
+    "manaCost": 26,
+    "staminaCost": 0,
+    "cooldown": 20,
+    "damageType": "Fire",
+    "effects": [
+      { "id": "chainEffect", "maxChains": 3, "chainCondition": "targetIsBurningOrHasRune", "bonusDamageOnChainConditionMet": 10 }
+    ],
+    "description": "Launches a volatile rune that explodes on impact and chains to nearby enemies, dealing Fire damage. Chains are more potent against targets already burning or marked by other runes.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Fire/chain_rune_blast.png",
+    "tags": ["Chain", "Rune", "Fire", "Magical", "Active", "Mana"]
+  },
+  "runeOfImmolation": {
+    "id": "runeOfImmolation",
+    "name": "Rune of Immolation",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 32,
+    "staminaCost": 0,
+    "cooldown": 28,
+    "damageType": "None",
+    "effects": [
+      {
+        "id": "pulsingAoeSelf",
+        "numPulses": 4, "interval": 1, "pulseDamage": 18, "pulseDamageType": "Fire",
+        "pulseEffects": [{ "id": "burn", "duration": 2, "damagePerTurn": 3, "chance": 0.5}]
+      }
+    ],
+    "description": "The caster inscribes a powerful rune upon themselves that pulses waves of intense fire, damaging and burning all nearby enemies for a short duration.",
+    "targetingModes": ["Self AoE"],
+    "icon": "Media/Skills/Fire/rune_of_immolation.png",
+    "tags": ["AoE", "Rune", "Fire", "Magical", "DoT", "Active", "Mana"]
+  },
+  "decipherFlameRune": {
+    "id": "decipherFlameRune",
+    "name": "Decipher Flame Rune",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 40,
+    "staminaCost": 0,
+    "cooldown": 70,
+    "damageType": "None",
+    "effects": [
+      { "id": "increaseMagicPowerPercentage", "statSubType": "Fire", "value": 40, "duration": 15 },
+      { "id": "reduceManaCostPercentage", "spellType": "Fire", "value": 25, "duration": 15 },
+      { "id": "empowerPlacedRunes", "runeDamageBonus": 20, "runeDurationBonus": 50, "duration": 15 }
+    ],
+    "description": "Channels profound runic knowledge, dramatically increasing Fire spell power and efficiency, while also empowering any active Fire Runes on the field for a period.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Buff/decipher_flame_rune.png",
+    "tags": ["Self", "Buff", "Rune", "Fire", "Magical", "Ultimate", "Active", "Mana"]
+  },
+  "bloodfireBolt": {
+    "id": "bloodfireBolt",
+    "name": "Bloodfire Bolt",
+    "type": "active",
+    "damage": 30,
+    "healthCostPercentage": 5,
+    "manaCost": 15,
+    "cooldown": 8,
+    "damageType": "Fire",
+    "effects": [{ "id": "bloodCurseDoT", "duration": 3, "damagePerTurn": 4, "tickDamageType": "Shadow" }],
+    "description": "Launches a bolt of fire fueled by life force, dealing Fire damage and cursing the target.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Blood/bloodfire_bolt.png",
+    "tags": ["Single Target", "Fire", "BloodMagic", "DoT", "Active", "Mana", "HealthCost"]
+  },
+  "sacrificialPyre": {
+    "id": "sacrificialPyre",
+    "name": "Sacrificial Pyre",
+    "type": "active",
+    "damage": 0,
+    "healthCostPercentage": 15,
+    "manaCost": 25,
+    "cooldown": 20,
+    "damageType": "Fire",
+    "effects": [{ "id": "aoeDamageHealthScaled", "baseDamagePerHealthSacrificed": 2.5 }],
+    "description": "Consumes a significant portion of health to unleash a devastating pyre around the caster, immolating nearby foes.",
+    "targetingModes": ["Self AoE"],
+    "icon": "Media/Skills/Fire/sacrificial_pyre.png",
+    "tags": ["AoE", "Fire", "BloodMagic", "Active", "Mana", "HealthCost"]
+  },
+  "crimsonInferno": {
+    "id": "crimsonInferno",
+    "name": "Crimson Inferno",
+    "type": "active",
+    "damage": 35,
+    "manaCost": 30,
+    "cooldown": 25,
+    "damageType": "Fire",
+    "effects": [{
+      "id": "createAreaEffect", "zoneId": "crimsonZoneInstance", "duration": 4,
+      "effectsInZone": [
+        { "id": "damageOverTimeArea", "damagePerTurn": 7, "damageType": "Fire" },
+        { "id": "healCasterOnEnemyDeathInZone", "healPercentage": 5 }
+      ]
+    }],
+    "description": "Summons a raging inferno that burns enemies over time. Deaths within the inferno restore a portion of the caster's life force.",
+    "targetingModes": ["Ground Area"],
+    "icon": "Media/Skills/Fire/crimson_inferno.png",
+    "tags": ["AoE", "Zone", "Fire", "BloodMagic", "DoT", "Heal", "Active", "Mana"]
+  },
+  "lifebloodIgnition": {
+    "id": "lifebloodIgnition",
+    "name": "Lifeblood Ignition",
+    "type": "active",
+    "damage": 0,
+    "healthCostPercentage": 3,
+    "manaCost": 18,
+    "cooldown": 18,
+    "damageType": "None",
+    "effects": [{ "id": "empowerNextFireSpellLifesteal", "duration": 1, "damageBonusPercentage": 20, "lifestealPercentage": 30 }],
+    "description": "Ignites your lifeblood, empowering your next Fire spell to deal increased damage and siphon health from its victims.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Buff/lifeblood_ignition.png",
+    "tags": ["Self", "Buff", "Fire", "BloodMagic", "Lifesteal", "Active", "Mana", "HealthCost"]
+  },
+  "sanguineCombustion": {
+    "id": "sanguineCombustion",
+    "name": "Sanguine Combustion",
+    "type": "active",
+    "damage": 20,
+    "manaCost": 22,
+    "cooldown": 16,
+    "damageType": "Fire",
+    "effects": [{
+      "id": "explodeOnDeathHealCaster", "name": "Sanguine Immolation", "duration": 5,
+      "explosionDamage": 30, "explosionDamageType": "Fire", "explosionRadius": 3,
+      "healPerEnemyHitPercentage": 3
+    }],
+    "description": "Inflicts a fiery, blood-fueled curse on a target. If the target dies while afflicted, they explode, dealing Fire damage to nearby enemies and healing the caster for each enemy caught in the blast.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Fire/sanguine_combustion.png",
+    "tags": ["Single Target", "AoE", "Fire", "BloodMagic", "DelayedEffect", "Heal", "Active", "Mana"]
+  },
+  "drainVitalityFire": {
+    "id": "drainVitalityFire",
+    "name": "Drain Vitality (Fire)",
+    "type": "active",
+    "damagePerTick": 10,
+    "manaCostPerTick": 8,
+    "healthGainPerTick": 5,
+    "channelDuration": 3,
+    "cooldown": 22,
+    "damageType": "Fire",
+    "effects": [],
+    "description": "Channels a beam of fire that drains life from the target, dealing continuous Fire damage and healing the caster.",
+    "targetingModes": ["Single Enemy"],
+    "icon": "Media/Skills/Fire/drain_vitality_fire.png",
+    "tags": ["Channeled", "Single Target", "Fire", "BloodMagic", "Lifesteal", "Active", "Mana"]
+  },
+  "bloodBoil": {
+    "id": "bloodBoil",
+    "name": "Blood Boil",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 28,
+    "cooldown": 24,
+    "damageType": "None",
+    "effects": [{
+      "id": "rampingFireDoTExplodeOnDeath", "name": "Boiling Blood", "duration": 5,
+      "initialDamagePerTurn": 3, "damageIncreasePerTurn": 2, "tickDamageType": "Fire",
+      "explosionOnDeathDamage": 50, "explosionOnDeathDamageType": "Fire"
+    }],
+    "description": "Inflicts a horrific curse that causes the target's blood to boil, dealing escalating Fire damage over time. If the target perishes from this effect, they detonate violently.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Blood/blood_boil.png",
+    "tags": ["Single Target", "Fire", "BloodMagic", "DoT", "DelayedEffect", "Debuff", "Active", "Mana"]
+  },
+  "forbiddenFlame": {
+    "id": "forbiddenFlame",
+    "name": "Forbidden Flame",
+    "type": "active",
+    "damage": 50,
+    "healthCostPercentage": 25,
+    "manaCost": 50,
+    "cooldown": 90,
+    "damageType": "Fire",
+    "effects": [
+      { "id": "temporaryInvulnerability", "duration": 3 },
+      { "id": "lifestealAura", "duration": 5, "lifestealPercentage": 50 }
+    ],
+    "description": "Unleashes a cataclysmic blast of forbidden fire, consuming a large portion of your life force to devastate enemies in a wide area and grant temporary invulnerability and immense lifesteal.",
+    "targetingModes": ["All Enemies"],
+    "icon": "Media/Skills/Fire/forbidden_flame.png",
+    "tags": ["AoE", "Ultimate", "Fire", "BloodMagic", "Buff", "Lifesteal", "Active", "Mana", "HealthCost"]
+  },
+  "soulfireBolt": {
+    "id": "soulfireBolt",
+    "name": "Soulfire Bolt",
+    "type": "active",
+    "damage": 28,
+    "manaCost": 20,
+    "cooldown": 10,
+    "damageType": "Fire",
+    "effects": [
+      { "id": "secondaryDamage", "damage": 10, "damageType": "Necrotic"},
+      { "id": "manaSteal", "value": 5, "chance": 0.25, "description": "Chance to steal mana."}
+    ],
+    "description": "Hurls a bolt of accursed flame that sears both body and soul, dealing Fire and Necrotic damage with a chance to siphon mana.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Hybrid/soulfire_bolt.png",
+    "tags": ["Single Target", "Fire", "Necrotic", "Magical", "ManaSteal", "Active", "Mana"]
+  },
+  "raiseFlamingSkeleton": {
+    "id": "raiseFlamingSkeleton",
+    "name": "Raise Flaming Skeleton",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 25,
+    "cooldown": 18,
+    "damageType": "None",
+    "effects": [{
+      "id": "summonMinion",
+      "minionId": "flamingSkeletonWarrior",
+      "count": 2,
+      "duration": 30
+    }],
+    "description": "Summons skeletal warriors wreathed in perpetual fire to fight for the caster.",
+    "targetingModes": ["Self"],
+    "icon": "Media/Skills/Summon/raise_flaming_skeleton.png",
+    "tags": ["Summon", "Fire", "Necrotic", "Minion", "Active", "Mana"]
+  },
+  "balefireStream": {
+    "id": "balefireStream",
+    "name": "Balefire Stream",
+    "type": "active",
+    "damagePerTick": 12,
+    "manaCostPerTick": 10,
+    "channelDuration": 3,
+    "cooldown": 20,
+    "damageType": "Necrotic",
+    "effects": [
+      { "id": "secondaryDamagePerTick", "damage": 6, "damageType": "Fire"},
+      { "id": "reduceHealingReceived", "value": 50, "duration": 5, "description": "Reduces healing received by 50%."}
+    ],
+    "description": "Channels a destructive stream of baleful energy mixed with fire, damaging the target and reducing healing they receive.",
+    "targetingModes": ["Single Enemy"],
+    "icon": "Media/Skills/Hybrid/balefire_stream.png",
+    "tags": ["Channeled", "Single Target", "Fire", "Necrotic", "Magical", "Debuff", "Active", "Mana"]
+  },
+  "necroticImmolation": {
+    "id": "necroticImmolation",
+    "name": "Necrotic Immolation",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 30,
+    "cooldown": 25,
+    "damageType": "None",
+    "effects": [{
+      "id": "createAreaEffect", "zoneId": "necroticImmolationZone", "duration": 5,
+      "effectsInZone": [
+        { "id": "damageOverTimeArea", "damagePerTurn": 8, "damageType": "Fire" },
+        { "id": "raiseOnKillInZone", "minionId": "weakZombie", "chance": 0.75, "description": "Enemies dying in the zone may rise as zombies."}
+      ]
+    }],
+    "description": "Engulfs an area in dark flames. Enemies within take continuous Fire damage, and those slain by the flames may rise as temporary undead servants.",
+    "targetingModes": ["Ground Area"],
+    "icon": "Media/Skills/Hybrid/necrotic_immolation.png",
+    "tags": ["AoE", "Zone", "Fire", "Necrotic", "DoT", "Summon", "Active", "Mana"]
+  },
+  "consumingFlames": {
+    "id": "consumingFlames",
+    "name": "Consuming Flames",
+    "type": "active",
+    "damage": 40,
+    "manaCost": 28,
+    "cooldown": 18,
+    "damageType": "Fire",
+    "effects": [{
+      "id": "buffOnKill",
+      "buffId": "empowerNecromancy",
+      "stat": "magicPower",
+      "subType": "Necrotic",
+      "value": 20,
+      "duration": 10,
+      "description": "If target dies, gain bonus Necromancy spell power."
+    }],
+    "description": "Engulfs a single target in intense fire. If the target perishes, their essence fuels your necromantic power temporarily.",
+    "targetingModes": ["Random"],
+    "icon": "Media/Skills/Fire/consuming_flames.png",
+    "tags": ["Single Target", "Fire", "Necrotic", "Magical", "Buff", "Active", "Mana"]
+  },
+  "animateDeadFire": {
+    "id": "animateDeadFire",
+    "name": "Animate Dead (Fire)",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 35,
+    "cooldown": 30,
+    "damageType": "None",
+    "effects": [{
+      "id": "summonMinionFromCorpse",
+      "minionId": "fieryRevenant",
+      "requiresCorpse": true,
+      "duration": 45
+    }],
+    "description": "Reanimates a fallen corpse, imbuing it with unholy fire to create a potent fiery revenant.",
+    "targetingModes": ["Corpse"],
+    "icon": "Media/Skills/Summon/animate_dead_fire.png",
+    "tags": ["Summon", "Fire", "Necrotic", "Minion", "Active", "Mana"]
+  },
+  "soulBlaze": {
+    "id": "soulBlaze",
+    "name": "Soul Blaze",
+    "type": "active",
+    "damage": 30,
+    "manaCost": 32,
+    "cooldown": 22,
+    "damageType": "Fire",
+    "effects": [
+      { "id": "secondaryDamage", "damage": 15, "damageType": "Necrotic"},
+      { "id": "reduceResistanceType", "damageType": "Fire", "value": -15, "duration": 4 },
+      { "id": "reduceResistanceType", "damageType": "Necrotic", "value": -15, "duration": 4 }
+    ],
+    "description": "Unleashes an explosion of soul-searing fire, dealing Fire and Necrotic damage to all enemies in an area and reducing their resistances to both elements.",
+    "targetingModes": ["All Enemies"],
+    "icon": "Media/Skills/Hybrid/soul_blaze.png",
+    "tags": ["AoE", "Fire", "Necrotic", "Magical", "Debuff", "Active", "Mana"]
+  },
+  "lichfireAura": {
+    "id": "lichfireAura",
+    "name": "Lichfire Aura",
+    "type": "active",
+    "damage": 0,
+    "manaCost": 45,
+    "cooldown": 80,
+    "damageType": "None",
+    "effects": [
+      { "id": "pulsingAoeSelf", "numPulses": 6, "interval": 1, "pulseDamage": 10, "pulseDamageType": "Fire" },
+      { "id": "secondaryPulsingAoeSelf", "numPulses": 6, "interval": 1, "pulseDamage": 10, "pulseDamageType": "Necrotic" },
+      { "id": "healOverTimeSelf", "healPerTick": 5, "duration": 6},
+      { "id": "buffMinionsInAura", "buffId": "lichfireEmpowerment", "value": 20, "stat": "damage", "duration": 6}
+    ],
+    "description": "Wreathes the caster in an aura of chilling lichfire. Continuously damages nearby enemies with Fire and Necrotic energy, slowly heals the caster, and empowers their undead minions.",
+    "targetingModes": ["Self AoE"],
+    "icon": "Media/Skills/Buff/lichfire_aura.png",
+    "tags": ["AoE", "Buff", "Fire", "Necrotic", "DoT", "Heal", "MinionBuff", "Ultimate", "Active", "Mana"]
   }
-
 }
+
+
+
 
 
