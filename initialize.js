@@ -1,4 +1,4 @@
-import {nextStage as battleNextStageCmd, repeatStage as battleRepeatStageCmd, startBattle, returnToMap, attemptFlee} from './Battle.js';
+import { BattleController } from './battle_controller.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
 import Companion from './companion.js';
@@ -408,8 +408,8 @@ function initiateEventListeners() {
     }
     document.getElementById('loadNavButton').addEventListener('click', openLoadModal);
 
-    document.getElementById('repeat-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); battleRepeatStageCmd(); });
-    document.getElementById('nextStage-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); battleNextStageCmd(); });
+    document.getElementById('repeat-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); repeatStage(); });
+    document.getElementById('nextStage-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); nextStage(); });
     document.getElementById('return-to-map-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); returnToMap(); });
 
     const fleeButton = document.getElementById('flee-battle');
@@ -487,5 +487,35 @@ function togglePause() {
             else member.startSkills();
         }
     });
+}
+
+export function nextStage() {
+    if (BattleController) {
+        BattleController.nextStage();
+    }
+}
+
+export function repeatStage() {
+    if (BattleController) {
+        BattleController.repeatStage();
+    }
+}
+
+export function startBattle(poi, dialogueOptions, stageNum) {
+    if (BattleController) {
+        return BattleController.startBattle(poi, dialogueOptions, stageNum);
+    }
+}
+
+export function returnToMap() {
+    if (BattleController) {
+        BattleController.stopBattle(false);
+    }
+}
+
+export function attemptFlee() {
+    if (BattleController && BattleController.fleeSystem) {
+        BattleController.fleeSystem.attemptFlee();
+    }
 }
 

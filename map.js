@@ -1,7 +1,7 @@
 // In map.js
 
 import { openTab } from './navigation.js';
-import { startBattle } from './Battle.js'; // Battle.js manages its own Area loading
+import { BattleController } from './battle_controller.js';
 import { team1, team2, battleLog, hero } from './initialize.js'; // No more stage/area specific imports from initialize for map UI
 import { questSystem } from './questSystem.js';
 import { renderHero, updateHealth, updateMana, updateStamina, updateHeroMapStats } from './Render.js';
@@ -171,7 +171,7 @@ async function handleCombat(poi) {
 
     openTab(null, 'battlefield');
     try {
-        await startBattle(poi, battleDialogueOptions, 1);
+        await BattleController.startBattle(poi, battleDialogueOptions, 1);
     } catch (battleError) {
         console.error(`Error during battle setup or execution for ${poi.name}:`, battleError);
         // Log or show user-friendly message if necessary

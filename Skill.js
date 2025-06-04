@@ -1,7 +1,7 @@
 // Skill.js
 import {renderLevelUp, updateMana, updateStamina} from './Render.js';
 import {selectTarget} from './Targeting.js';
-import {battleStarted} from './Battle.js';
+import { BattleState } from './battle_state.js';
 import {battleStatistics, hero as globalHero} from './initialize.js';
 
 class Skill {
@@ -93,7 +93,7 @@ class Skill {
             needsInitialCooldownKickoff: this.needsInitialCooldownKickoff,
             hasDiv: !!this.div,
             hasElement: !!member.element,
-            battleStarted: battleStarted
+            battleStarted: BattleState.battleStarted
         });
 
         if (this.type === "active" && !member.isHero && this.needsInitialCooldownKickoff) {
@@ -118,7 +118,7 @@ class Skill {
             }
         }
 
-        if (this.type == "active" && battleStarted) {
+        if (this.type == "active" && BattleState.battleStarted) {
             console.log(`[Skill ${this.name}] Checking resources for ${member.name}`, {
                 currentMana: member.currentMana,
                 manaCost: this.manaCost,
@@ -152,7 +152,7 @@ class Skill {
                 console.log(`[Skill ${this.name}] Insufficient resources for ${member.name}`);
                 if (this.repeat && member.isHero) {
                     setTimeout(() => {
-                        if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
+                        if (BattleState.battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
                             const isSelected = globalHero && globalHero.selectedSkills.some(s => s && s.id === this.id);
                             if (isSelected) {
                                 this.useSkill(member);
@@ -293,7 +293,7 @@ class Skill {
         console.log(`[Skill ${this.name}] finishCooldown called for ${member.name}`, {
             wasOnCooldown: this.onCooldown,
             shouldAttemptRepeat,
-            battleStarted,
+            battleStarted: BattleState.battleStarted,
             memberHealth: member.currentHealth
         });
 
@@ -321,7 +321,7 @@ class Skill {
         }
 
         if (shouldAttemptRepeat && wasTrulyOnCooldown &&
-            battleStarted && member && member.currentHealth > 0) {
+            BattleState.battleStarted && member && member.currentHealth > 0) {
 
             let canUse = false;
             if (member.isHero) {
@@ -349,7 +349,7 @@ class Skill {
             } else if (this.repeat) {
                 // Add retry mechanism for both hero and non-hero skills when resources are insufficient
                 const retrySkill = (retryCount = 0) => {
-                    if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
+                    if (BattleState.battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
                         let canUse = false;
                         if (member.isHero) {
                             const heroInstance = globalHero;
