@@ -181,8 +181,10 @@
         "type": "combat",
         "isStartingLocation": true,
         "dialogueNpcId": "renn_quickfingers",
-        "combatStartDialogueId": "renn_firstcorridor_pre_battle",
         "combatEndWinDialogueId": "renn_firstcorridor_post_battle",
+        "stageDialogues": {
+          "1": "renn_firstcorridor_pre_battle"
+        },
         "showDialogueOnce": true
       },
       {
@@ -209,8 +211,10 @@
         "type": "combat",
         "initiallyLocked": true,
         "dialogueNpcId": "renn_quickfingers",
-        "combatStartDialogueId": "renn_secondcorridor_pre_battle",
         "combatEndWinDialogueId": "renn_secondcorridor_post_battle",
+        "stageDialogues": {
+          "1": "renn_secondcorridor_pre_battle"
+        },
         "showDialogueOnce": true
       },
       {

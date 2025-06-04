@@ -146,6 +146,16 @@ async function handleCombat(poi) {
                 shownDialogues.add(dialogueKey);
             }
         }
+        // Add stage-specific dialogue IDs
+        if (poi.stageDialogues) {
+            Object.entries(poi.stageDialogues).forEach(([stage, dialogueId]) => {
+                const dialogueKey = `${poi.id}_stage${stage}`;
+                if (!poi.showDialogueOnce || !shownDialogues.has(dialogueKey)) {
+                    battleDialogueOptions[`stage${stage}DialogueId`] = dialogueId;
+                    shownDialogues.add(dialogueKey);
+                }
+            });
+        }
         if (poi.combatEndWinDialogueId) {
             const dialogueKey = `${poi.id}_win`;
             if (!poi.showDialogueOnce || !shownDialogues.has(dialogueKey)) {

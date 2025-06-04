@@ -96,11 +96,30 @@ export class BattleOutcome {
             stage: this.battleState.currentBattleStageNumber 
         });
 
-        // Handle dialogue if exists and is final stage
+        // Handle dialogue if exists
         const dialogueOptions = this.battleState.currentBattleDialogueOptions;
-        const isFinalStage = this.battleState.currentBattleStageNumber === 
-                            this.battleState.currentBattleArea.stages.length;
-                            
+        const currentStage = this.battleState.currentBattleStageNumber;
+        const isFinalStage = currentStage === this.battleState.currentBattleArea.stages.length;
+        
+        // Check for stage-specific dialogue first
+        const stageDialogueId = dialogueOptions?.[`stage${currentStage}DialogueId`];
+        if (dialogueOptions?.npcId && stageDialogueId) {
+            this.battleState.pauseForDialogue();
+            battleLog.log(`Starting post-battle dialogue for stage ${currentStage}: ${stageDialogueId}`);
+            
+            try {
+                await window.startDialogue(dialogueOptions.npcId, stageDialogueId);
+                battleLog.log(`Post-battle dialogue for stage ${currentStage} finished.`);
+            } catch (error) {
+                console.error("Error during stage dialogue:", error);
+            } finally {
+                this.battleState.resumeFromDialogue();
+            }
+            
+            return; // Skip popup if dialogue was shown
+        }
+        
+        // If no stage-specific dialogue, check for final stage dialogue
         if (dialogueOptions?.npcId && dialogueOptions?.endWinDialogueId && isFinalStage) {
             this.battleState.pauseForDialogue();
             battleLog.log(`Starting post-battle (win) dialogue: ${dialogueOptions.endWinDialogueId}`);
