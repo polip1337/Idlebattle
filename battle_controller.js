@@ -8,6 +8,7 @@ import { isPaused, hero, team1, team2, renderTeamMembers, evolutionService } fro
 import { refreshMapElements, handleOutOfCombatRegeneration } from './map.js';
 import { handleActions } from './actionHandler.js';
 import Area from './Area.js';
+import { openTab } from './navigation.js';
 
 export class BattleController {
     constructor() {
@@ -124,7 +125,8 @@ export class BattleController {
             await this.checkBattleOutcome();
             return;
         }
-
+        renderTeamMembers(team2.members, 'team2', true);
+        renderTeamMembers(team1.members, 'team1', true);
         // Apply passive skills for all team members
         [...playerTeam.members, ...enemyTeam.members].forEach(member => {
             if (member.skills) {
@@ -142,8 +144,7 @@ export class BattleController {
             }
         });
 
-        renderTeamMembers(team2.members, 'team2', true);
-        renderTeamMembers(team1.members, 'team1', true);
+
         // Set battle as started but paused
         this.battleState.startBattle();
         this.fleeSystem.resetCooldown();

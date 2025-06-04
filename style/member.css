@@ -110,6 +110,10 @@
     text-align: center;
     line-height: 20px;
 }
+.buff img, .debuff img {
+    width: 20px;
+    height: 20px;
+}
 .effectTooltip {
     background-color: #333;
     color: #fff;

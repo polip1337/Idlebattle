@@ -3,7 +3,7 @@
     "id": "resilience",
     "name": "Resilience",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "buff",
       "stat": "defense",
       "value": 1,
@@ -17,7 +17,7 @@
     "id": "loneWolf",
     "name": "Lone Wolf",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "buff",
       "stat": "accuracy",
       "value": 1,
@@ -31,7 +31,7 @@
     "id": "toughenedSkin",
     "name": "Toughened Skin",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "buff",
       "stat": "vitality",
       "value": 2,
@@ -45,7 +45,7 @@
     "id": "combatAwareness",
     "name": "Combat Awareness",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "buff",
       "stat": "evasion",
       "value": 1,
