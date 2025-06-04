@@ -177,80 +177,84 @@ class EvolutionService {
      * Returns array of available classes.
      */
     checkClassAvailability() {
-//        if (!this.isInitialized || !this.evolutionData) {
-//            console.warn("EvolutionService not initialized or data not loaded. Cannot check class availability.");
-//            return [];
-//        }
-//
-//        const newAvailableClasses = [];
-//        let classesCheckedCount = 0;
-//
-//        // Get current stats snapshot
-//        const statsSnapshot = this._getStatsSnapshot();
-//
-//        this.evolutionData.tiers.forEach(tier => {
-//            tier.classes.forEach(classDef => {
-//                classesCheckedCount++;
-//
-//                // Skip special classes (Adept, Master) if they don't have valid requirements
-//                if (["Adept", "Master"].includes(classDef.name)) {
-//                    const reqStrForRarity = classDef.requirements[this._currentRarity];
-//                    const reqStrCommon = classDef.requirements.common;
-//                    if ((reqStrForRarity && reqStrForRarity.trim() === "() => true") ||
-//                        (!reqStrForRarity && reqStrCommon && reqStrCommon.trim() === "() => true")) {
-//                        return;
-//                    }
-//                }
-//
-//                // Check if this class is a valid evolution path
-//                let isCandidatePath = false;
-//                if (this._currentClass === "Novice") {
-//                    if (!classDef.from) {
-//                        isCandidatePath = true;
-//                    }
-//                } else {
-//                    if (classDef.from === this._currentClass) {
-//                        isCandidatePath = true;
-//                    }
-//                }
-//
-//                if (!isCandidatePath) {
-//                    return;
-//                }
-//
-//                // Get the appropriate requirement string based on rarity
-//                const requirementString = classDef.requirements[this._currentRarity] || classDef.requirements['common'];
-//                if (!requirementString) {
-//                    return;
-//                }
-//
-//                // Create evaluation context with previous class info
-//                const evaluationContext = {
-//                    ...statsSnapshot,
-//                    previousClass: this._currentClass
-//                };
-//
-//                // Check if requirements are met
-//                if (this.meetsRequirements(requirementString, evaluationContext)) {
-//                    if (!newAvailableClasses.some(ac => ac.name === classDef.name)) {
-//                        newAvailableClasses.push({
-//                            ...classDef,
-//                            tierName: tier.name,
-//                            requirements: requirementString
-//                        });
-//                    }
-//                }
-//            });
-//        });
-//
-//        this._allAvailableClasses = newAvailableClasses;
-//
-//        if (this._debugMode) {
-//            console.log(`Evolution check: ${classesCheckedCount} class definitions processed. ${newAvailableClasses.length} evolutions available for ${this._currentClass}.`);
-//            console.log('Available classes:', newAvailableClasses);
-//        }
+        if (!this.isInitialized || !this.evolutionData) {
+            console.warn("EvolutionService not initialized or data not loaded. Cannot check class availability.");
+            return [];
+        }
 
-        return null;
+        const newAvailableClasses = [];
+        let classesCheckedCount = 0;
+
+        // Get current stats snapshot
+        const statsSnapshot = this._getStatsSnapshot();
+
+        // Process each tier in the evolution data
+        for (const tierKey in this.evolutionData) {
+            const tierData = this.evolutionData[tierKey];
+            if (tierData && tierData.classes) {
+                tierData.classes.forEach(classDef => {
+                    classesCheckedCount++;
+
+                    // Skip special classes (Adept, Master) if they don't have valid requirements
+                    if (["Adept", "Master"].includes(classDef.name)) {
+                        const reqStrForRarity = classDef.requirements[this._currentRarity];
+                        const reqStrCommon = classDef.requirements.common;
+                        if ((reqStrForRarity && reqStrForRarity.trim() === "() => true") ||
+                            (!reqStrForRarity && reqStrCommon && reqStrCommon.trim() === "() => true")) {
+                            return;
+                        }
+                    }
+
+                    // Check if this class is a valid evolution path
+                    let isCandidatePath = false;
+                    if (this._currentClass === "Novice") {
+                        if (!classDef.from) {
+                            isCandidatePath = true;
+                        }
+                    } else {
+                        if (classDef.from === this._currentClass) {
+                            isCandidatePath = true;
+                        }
+                    }
+
+                    if (!isCandidatePath) {
+                        return;
+                    }
+
+                    // Get the appropriate requirement string based on rarity
+                    const requirementString = classDef.requirements[this._currentRarity] || classDef.requirements.common;
+                    if (!requirementString) {
+                        return;
+                    }
+
+                    // Create evaluation context with previous class info
+                    const evaluationContext = {
+                        ...statsSnapshot,
+                        previousClass: this._currentClass
+                    };
+
+                    // Check if requirements are met
+                    if (this.meetsRequirements(requirementString, evaluationContext)) {
+                        if (!newAvailableClasses.some(ac => ac.name === classDef.name)) {
+                            newAvailableClasses.push({
+                                ...classDef,
+                                tierName: tierKey,
+                                requirements: requirementString
+                            });
+                        }
+                    }
+                });
+            }
+        }
+
+        this._allAvailableClasses = newAvailableClasses;
+
+        if (this._debugMode) {
+            console.log(`Evolution check: ${classesCheckedCount} class definitions processed. ${newAvailableClasses.length} evolutions available for ${this._currentClass}.`);
+            console.log('Available classes:', newAvailableClasses);
+        }
+
+        return newAvailableClasses;
     }
 
     /**

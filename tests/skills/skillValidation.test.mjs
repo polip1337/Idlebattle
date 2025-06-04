@@ -52,7 +52,7 @@ describe('Skill Validation Tests', () => {
         });
 
         // Check each class's skills
-        Object.values(classes.classes).forEach(classData => {
+        Object.values(classes).flatMap(tier => tier.classes).forEach(classData => {
             if (!classData.skills) return;
 
             classData.skills.forEach((skillId, index) => {
@@ -123,7 +123,7 @@ describe('Skill Validation Tests', () => {
         });
 
         // Check class skills
-        Object.values(classes.classes).forEach(classData => {
+        Object.values(classes).flatMap(tier => tier.classes).forEach(classData => {
             if (!classData.skills) return;
 
             classData.skills.forEach((skillId, index) => {
