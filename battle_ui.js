@@ -17,16 +17,8 @@ export class BattleUI {
     
     updateStageDisplay() {
         const stageDisplay = document.getElementById('battle-stage-display');
-        const increaseStageButton = document.getElementById('increase-stage');
-
         if (stageDisplay && this.battleState.currentBattleArea) {
             stageDisplay.textContent = `Stage ${this.battleState.currentBattleStageNumber} of ${this.battleState.currentBattleArea.stages.length}`;
-        }
-
-        if (increaseStageButton) {
-            const canAdvance = this.battleState.canAdvanceToNextStage();
-            increaseStageButton.disabled = !canAdvance;
-            increaseStageButton.style.opacity = canAdvance ? '1' : '0.5';
         }
     }
     
