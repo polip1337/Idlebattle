@@ -1,5 +1,5 @@
 // FleeSystem.js - Handles all flee-related logic
-import { battleLog, battleStatistics } from './initialize.js';
+import { battleLog, battleStatistics, battleController } from './initialize.js';
 import { questSystem } from './questSystem.js';
 import { handleActions } from './actionHandler.js';
 
@@ -45,6 +45,10 @@ export class FleeSystem {
         }
 
         this.battleState.isFleeOnCooldown = true;
+        // Start the UI cooldown timer
+        if (battleController?.ui) {
+            battleController.ui.startFleeCooldownVisuals();
+        }
         
         const fleeChance = this.calculateFleeChance();
         const randomRoll = Math.random() * 100;
