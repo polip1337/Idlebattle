@@ -1,9 +1,9 @@
 // BattleController.js - Main controller that orchestrates all battle systems
-import { BattleState } from './battle_state.js';
-import { FleeSystem } from './flee_system.js';
-import { BattleOutcome } from './battle_outcome.js';
-import { TeamManager } from './team_manager.js';
-import { BattleUI } from './battle_ui.js';
+import { BattleState } from './BattleState.js';
+import { FleeSystem } from './FleeSystem.js';
+import { BattleOutcome } from './BattleOutcome.js';
+import { TeamManager } from './TeamManager.js';
+import { BattleUI } from './BattleUI.js';
 import { isPaused, hero, team1, team2, renderTeamMembers, evolutionService } from './initialize.js';
 import { refreshMapElements, handleOutOfCombatRegeneration } from './map.js';
 import { handleActions } from './actionHandler.js';

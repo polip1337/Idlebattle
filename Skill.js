@@ -96,6 +96,7 @@ class Skill {
             battleStarted: BattleState.battleStarted
         });
 
+        // Handle initial cooldown setup for non-hero skills
         if (this.type === "active" && !member.isHero && this.needsInitialCooldownKickoff) {
             // Initialize skill element if not already set
             if (!this.div && member.element) {
@@ -106,15 +107,13 @@ class Skill {
                 }
             }
 
-            // Start cooldown and mark as initialized
+            // Start initial cooldown for non-hero skills
             if (this.div) {
-                console.log(`[Skill ${this.name}] Starting cooldown for ${member.name}`);
+                console.log(`[Skill ${this.name}] Starting initial cooldown for ${member.name}`);
                 this.startCooldown(member);
                 this.updateCooldownAnimation(member);
                 this.needsInitialCooldownKickoff = false;
                 return true;
-            } else {
-                console.log(`[Skill ${this.name}] No div available for ${member.name}, cannot start cooldown`);
             }
         }
 
@@ -326,8 +325,8 @@ class Skill {
             let canUse = false;
             if (member.isHero) {
                 const heroInstance = globalHero;
-                if (heroInstance && heroInstance.selectedSkills.some(s => s && s.id === this.id)) {
-                    canUse = true;
+                if (heroInstance && heroInstance.selectedSkills) {
+                    canUse = heroInstance.selectedSkills.some(s => s && s.id === this.id);
                 }
             } else {
                 canUse = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
@@ -340,12 +339,13 @@ class Skill {
             });
 
             if (canUse) {
-                // For companions, we need to check if this is a repeat attempt
+                // For non-hero skills, we need to check if this is the first use after initial cooldown
                 if (!member.isHero && this.needsInitialCooldownKickoff) {
                     this.needsInitialCooldownKickoff = false;
-                    return; // Skip the actual skill use for initial cooldown
+                    this.useSkill(member); // This will trigger the initial cooldown
+                } else {
+                    this.useSkill(member);
                 }
-                this.useSkill(member);
             } else if (this.repeat) {
                 // Add retry mechanism for both hero and non-hero skills when resources are insufficient
                 const retrySkill = (retryCount = 0) => {
@@ -353,8 +353,8 @@ class Skill {
                         let canUse = false;
                         if (member.isHero) {
                             const heroInstance = globalHero;
-                            if (heroInstance && heroInstance.selectedSkills.some(s => s && s.id === this.id)) {
-                                canUse = true;
+                            if (heroInstance && heroInstance.selectedSkills) {
+                                canUse = heroInstance.selectedSkills.some(s => s && s.id === this.id);
                             }
                         } else {
                             canUse = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
@@ -362,7 +362,7 @@ class Skill {
 
                         if (canUse) {
                             this.useSkill(member);
-                        } else {
+                        } else if (retryCount < 5) { // Limit retries to prevent infinite loops
                             // If still can't use, retry with increasing delay
                             const delay = Math.min(1000 * (retryCount + 1), 5000); // Cap at 5 seconds
                             setTimeout(() => retrySkill(retryCount + 1), delay);
