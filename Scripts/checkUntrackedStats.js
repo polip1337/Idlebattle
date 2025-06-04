@@ -59,7 +59,7 @@ export async function checkUntrackedStats() {
         const untrackedStats = new Set();
 
         // Process each class in each tier
-        Object.values(evolutionData.tiers).forEach(tier => {
+        Object.values(evolutionData).forEach(tier => {
             tier.classes.forEach(classDef => {
                 // Check each rarity requirement
                 Object.values(classDef.requirements).forEach(requirementString => {
