@@ -144,6 +144,80 @@ body {
 #evolution-modal { z-index: 1000; } /* Ensure modal.css handles its display */
 .opaque { opacity: 0.2; }
 
+/* Debug Modal Styles */
+.debug-section {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #2a221b;
+    border: 1px solid #4a3c2b;
+    border-radius: 6px;
+}
+
+.debug-section h3 {
+    color: #c89b3c;
+    margin: 0 0 15px 0;
+    font-size: 1.2em;
+}
+
+.debug-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.debug-input-group label {
+    min-width: 120px;
+    color: #f0e6d2;
+}
+
+.debug-input-group input {
+    width: 100px;
+    padding: 5px;
+    background-color: #1a1410;
+    border: 1px solid #4a3c2b;
+    color: #f0e6d2;
+    border-radius: 4px;
+}
+
+.debug-input-group button {
+    background-color: #4a3c2b;
+    color: #f0e6d2;
+    border: 1px solid #c89b3c;
+    border-radius: 4px;
+    padding: 5px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.debug-input-group button:hover {
+    background-color: #6b5a3e;
+}
+
+#debug-class-select {
+    width: 200px;
+    padding: 5px;
+    background-color: #1a1410;
+    border: 1px solid #4a3c2b;
+    color: #f0e6d2;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+#debug-change-class {
+    background-color: #4a3c2b;
+    color: #f0e6d2;
+    border: 1px solid #c89b3c;
+    border-radius: 4px;
+    padding: 5px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#debug-change-class:hover {
+    background-color: #6b5a3e;
+}
+
 /* Themed Scrollbar for Webkit Browsers */
 .themed-scrollbar::-webkit-scrollbar { width: 10px; }
 .themed-scrollbar::-webkit-scrollbar-track { background: #1a1410; border-radius: 5px; }

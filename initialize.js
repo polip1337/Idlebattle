@@ -34,6 +34,7 @@ import { openSaveModal,openLoadModal, setInitializeAndLoadGame as setInitLoadFnF
 import { initializeCompanionUI } from './companionUIManager.js';
 import { handleEarlyGameInit } from './slideshow.js';
 import { openClassChangeModal, initializeClassChange } from './classChange.js';
+import { initializeDebug } from './debug.js';
 
 
 export let battleStatistics;
@@ -258,6 +259,9 @@ export async function loadGameData(savedGameState = null) {
         if (!savedGameState) {
             handleEarlyGameInit();
         }
+
+        // Initialize debug functionality
+        initializeDebug();
 
         return true;
 

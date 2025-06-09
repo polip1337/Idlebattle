@@ -155,6 +155,44 @@
         <button id="return-to-map-popup">Return to Map</button>
     </div>
 </div>
+
+<div class="modal hidden" id="debug-modal">
+    <div class="modal-content">
+        <h2>Debug Menu</h2>
+        <div class="debug-section">
+            <h3>Hero Class</h3>
+            <select id="debug-class-select">
+                <option value="">Select a class...</option>
+            </select>
+            <button id="debug-change-class">Change Class</button>
+        </div>
+        <div class="debug-section">
+            <h3>Experience & Gold</h3>
+            <div class="debug-input-group">
+                <label>Add Experience:</label>
+                <input type="number" id="debug-exp-input" min="0" value="1000">
+                <button id="debug-add-exp">Add</button>
+            </div>
+            <div class="debug-input-group">
+                <label>Add Gold:</label>
+                <input type="number" id="debug-gold-input" min="0" value="1000">
+                <button id="debug-add-gold">Add</button>
+            </div>
+        </div>
+        <div class="debug-section">
+            <h3>Quest Progress</h3>
+            <div class="debug-input-group">
+                <label>Quest Step:</label>
+                <input type="number" id="debug-quest-step" min="0" value="1">
+                <button id="debug-set-quest-step">Set</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="debug-close">Close</button>
+        </div>
+    </div>
+</div>
+
 <div class="trade-modal hidden" id="trade-modal">
     <div class="trade-modal-content">
         <div class="trade-modal-header" id="trade-modal-npc-name">Trade with NPC</div>
@@ -806,5 +844,6 @@
 <script type="module" src="tutorialOverlay.js"></script>
 <script type="module" src="Scripts/checkUntrackedStats.js"></script>
 <script type="module" src="Scripts/checkUntrackedTargeting.js"></script>
+<script type="module" src="debug.js"></script>
 </body>
 </html>
