@@ -256,7 +256,9 @@
     "type": "buff",
     "subType": "stealth",
     "value": 25,
-    "duration": -1,
+    "duration": 5,
+    "stackMode": "refresh",
+    "toHit": 50,
     "icon": "Media/UI/stealth.svg",
     "description": "Next attack deals 25% more damage and has 10% increased crit chance"
   }

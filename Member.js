@@ -151,6 +151,21 @@ class Member {
             return true;
         }
         var hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1) + this.stats.accuracy - defender.stats.dodge;
+        
+        // Add source's toHit modifiers from effects
+        this.effects.forEach(effect => {
+            if (effect.effect.toHit != undefined) {
+                hitChance += effect.effect.value;
+            }
+        });
+
+        // Subtract defender's toHit modifiers from effects
+        defender.effects.forEach(effect => {
+            if (effect.effect.toHit != undefined) {
+                hitChance += effect.effect.value;
+            }
+        });
+
         if (skillModifier != undefined) {
             hitChance += skillModifier;
         }
