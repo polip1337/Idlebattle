@@ -138,9 +138,9 @@ async function loadClasses() {
             if (tierData && tierData.classes) {
                 // Process each class in the tier
                 tierData.classes.forEach(classDef => {
-                    if (classDef.name) {
-                        // Use the class name as the key
-                        loadedClasses[classDef.name] = {
+                    if (classDef.id) {
+                        // Use the class ID as the key
+                        loadedClasses[classDef.id] = {
                             ...classDef,
                             tier: tierKey,
                             skills: classDef.skills || []
