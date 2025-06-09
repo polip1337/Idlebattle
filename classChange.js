@@ -64,7 +64,10 @@ export function openClassChangeModal() {
 export function changeHeroClass(newClassInfo) {
     if (!hero || !newClassInfo) return;
 
-
+    // Clear active skills
+    hero.activeSelectedSkills = [];
+    hero.selectedSkills = [];
+    hero.selectedPassiveSkills = [];
 
     // Update current class info
     hero.classType = newClassInfo.name;
