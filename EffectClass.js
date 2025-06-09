@@ -15,6 +15,9 @@ class EffectClass {
         this.isPaused = false;
         this.pauseStartTime = null;
 
+        // Add this effect to the target's effects array
+        this.target.effects.push(this);
+
         if (this.isPassive) {
             // For passive effects, just apply and don't set up timers
             this.applyEffect(effect);
@@ -437,6 +440,7 @@ class EffectClass {
             clearInterval(this.timerInterval);
         }
         this.revertEffect();
+        // Remove this effect from the target's effects array
         const index = this.target.effects.indexOf(this);
         if (index !== -1) {
             this.target.effects.splice(index, 1);
