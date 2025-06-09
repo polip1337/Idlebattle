@@ -478,7 +478,16 @@ class Member {
     checkCriticalHit() {
         // Base crit chance is 5% + 0.1% per point of dexterity
         const critChance = this.stats.critChance;
-        return Math.random() * 100 < critChance;
+        
+        // Check for effects that modify crit chance
+        let finalCritChance = critChance;
+        this.effects.forEach(effect => {
+            if (effect.effect.critResistance != "undefined" && effect.effect.critResistance != null) {
+                finalCritChance += effect.effect.critResistance;
+            }
+        });
+        
+        return Math.random() * 100 < finalCritChance;
     }
 }
 

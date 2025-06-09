@@ -261,6 +261,15 @@
     "toHit": 50,
     "icon": "Media/UI/stealth.svg",
     "description": "Next attack deals 25% more damage and has 10% increased crit chance"
+  },
+  "distracted": {
+    "name": "Distracted",
+    "description": "Accuracy -10, Crit Vulnerability +10%.",
+    "type": "debuff",
+    "subType": "distracted",
+    "toHit": -10,
+    "critResistance": -10,
+    "duration": 10
   }
 }
 
