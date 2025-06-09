@@ -64,21 +64,7 @@ export function openClassChangeModal() {
 export function changeHeroClass(newClassInfo) {
     if (!hero || !newClassInfo) return;
 
-    // Store current class data in history
-    hero.classHistory[hero.classId] = {
-        level: hero.level,
-        experience: hero.experience,
-        experienceToLevel: hero.experienceToLevel
-    };
 
-    // If this is a new class, initialize its history
-    if (!hero.classHistory[newClassInfo.id]) {
-        hero.classHistory[newClassInfo.id] = {
-            level: 1,
-            experience: 0,
-            experienceToLevel: 100
-        };
-    }
 
     // Update current class info
     hero.classType = newClassInfo.name;
