@@ -2577,19 +2577,7 @@
     "icon": "Media/Skills/Rogue/distract.png",
     "effects": [
       {
-        "id": "distract",
-        "name": "Distracted",
-        "duration": 10,
-        "modifiers": [
-          {
-            "stat": "accuracy",
-            "flat": -10
-          },
-          {
-            "stat": "critChanceTaken",
-            "flat": 10
-          }
-        ]
+        "id": "distract"
       }
     ],
     "targetingModes": ["Random Front"],

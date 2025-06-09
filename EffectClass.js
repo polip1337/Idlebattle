@@ -147,6 +147,14 @@ class EffectClass {
                 this.target.stats.damage *= 1.25; // 25% damage increase
                 this.target.stats.critChance += 10; // 10% crit chance increase
                 break;
+            case 'distracted':
+                // Store original stats for later reversion
+                this.originalStats = {
+                    accuracy: this.target.stats.accuracy,
+                    critResistance: this.target.stats.critResistance
+                };
+
+                break;
             case 'Charm':
                 // Logic for Charm effect
                 break;
@@ -406,6 +414,13 @@ class EffectClass {
                 if (this.originalStats) {
                     this.target.stats.damage = this.originalStats.damage;
                     this.target.stats.critChance = this.originalStats.critChance;
+                }
+                break;
+            case 'distracted':
+                // Revert distracted penalties
+                if (this.originalStats) {
+                    this.target.stats.accuracy = this.originalStats.accuracy;
+                    this.target.stats.critResistance = this.originalStats.critResistance;
                 }
                 break;
             // Revert logic for other effects as necessary
