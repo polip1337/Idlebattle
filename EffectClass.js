@@ -1356,12 +1356,6 @@ class EffectClass {
                 this.target.unstoppable = true;
                 break;
 
-            case 'deathTriggeredDebuff':
-                // The actual effect will be triggered in handleDeath()
-                // Here we just need to store the effect data
-                this.onDeathEffects = this.effect.onDeathEffects;
-                break;
-
             default:
                 console.log(`${this.effect.type},${this.effect.subType} effect not implemented yet.`);
         }

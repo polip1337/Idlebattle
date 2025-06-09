@@ -1,18 +1,4 @@
 {
-  "allyTeamUpAttack": {
-    "id": "allyTeamUpAttack",
-    "name": "Team-Up Attack",
-    "type": "utility",
-    "subType": "TeamUpAttack",
-    "description": "Triggers an attack from a nearby ally on the same target."
-  },
-  "aoeDamageHealthScaled": {
-    "id": "aoeDamageHealthScaled",
-    "name": "Health-Scaled AoE",
-    "type": "utility",
-    "subType": "AreaDamage",
-    "description": "Deals area-of-effect damage that scales with the caster's health."
-  },
   "arcaneIntellectBuff": {
     "id": "arcaneIntellectBuff",
     "name": "Arcane Intellect",
@@ -27,36 +13,12 @@
       }
     ]
   },
-  "areaDamage": {
-    "id": "areaDamage",
-    "name": "Area Damage",
-    "type": "utility",
-    "subType": "AreaDamage",
-    "description": "Deals damage to all targets within a specified area."
-  },
-  "areaDamageOnHit": {
-    "id": "areaDamageOnHit",
-    "name": "Splash Damage",
-    "type": "utility",
-    "subType": "AreaDamage",
-    "description": "The primary attack splashes, dealing damage to nearby targets."
-  },
   "areaEffect": {
     "id": "areaEffect",
     "name": "Area Effect",
     "type": "utility",
     "subType": "AreaEffect",
     "description": "Creates a zone with various effects on the battlefield."
-  },
-  "armorPenetration": {
-    "id": "armorPenetration",
-    "name": "Armor Penetration",
-    "type": "buff",
-    "subType": "flatChange",
-    "stat": "armorPenetration",
-    "value": 30,
-    "duration": 1,
-    "description": "Your attacks ignore a portion of the target's armor."
   },
   "armorRendDebuff": {
     "id": "armorRendDebuff",
@@ -72,51 +34,16 @@
       }
     ]
   },
-  "armorShatteredDebuff": {
-    "id": "armorShatteredDebuff",
-    "name": "Armor Shattered",
+  "bleed": {
+    "id": "bleed",
+    "name": "Bleed",
     "type": "debuff",
-    "subType": "Modifiers",
-    "duration": 4,
-    "description": "Armor is significantly reduced.",
-    "modifiers": [
-      {
-        "stat": "armor",
-        "percentage": -30
-      }
-    ]
-  },
-  "auraEffect": {
-    "id": "auraEffect",
-    "name": "Aura",
-    "type": "buff",
-    "subType": "Aura",
-    "description": "Emanates an aura with a persistent effect on nearby entities."
-  },
-  "auraEffectDuringChannel": {
-    "id": "auraEffectDuringChannel",
-    "name": "Channeled Aura",
-    "type": "buff",
-    "subType": "Aura",
-    "description": "Emanates an aura with a persistent effect while the ability is being channeled."
-  },
-  "battleRushBuff": {
-    "id": "battleRushBuff",
-    "name": "Battle Rush",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 5,
-    "description": "Increases movement speed and attack speed.",
-    "modifiers": [
-      {
-        "stat": "speed",
-        "percentage": 20
-      },
-      {
-        "stat": "attackSpeed",
-        "percentage": 20
-      }
-    ]
+    "subType": "DoT",
+    "damageType": "Physical",
+    "value": 2,
+    "duration": 10,
+    "icon": "Media/UI/bleed.svg",
+    "description": "Deals damage over time."
   },
   "blessed": {
     "id": "blessed",
@@ -135,17 +62,6 @@
         "percentage": 10
       }
     ]
-  },
-  "bleed": {
-    "id": "bleed",
-    "name": "Bleed",
-    "type": "debuff",
-    "subType": "DoT",
-    "damageType": "Physical",
-    "value": 2,
-    "duration": 10,
-    "icon": "Media/UI/bleed.svg",
-    "description": "Deals damage over time."
   },
   "blind": {
     "id": "blind",
@@ -167,13 +83,6 @@
     "duration": 5,
     "description": "Blinds all enemies."
   },
-  "buffOnKill": {
-    "id": "buffOnKill",
-    "name": "Buff on Kill",
-    "type": "utility",
-    "subType": "ConditionalBuff",
-    "description": "Grants a buff to the caster if the target is killed by this ability."
-  },
   "burn": {
     "id": "burn",
     "name": "Burn",
@@ -184,13 +93,6 @@
     "duration": 10,
     "icon": "Media/UI/burn.svg",
     "description": "Deals Fire damage over time."
-  },
-  "chain": {
-    "id": "chain",
-    "name": "Chain Effect",
-    "type": "utility",
-    "subType": "Chain",
-    "description": "An effect that chains from one target to another."
   },
   "chillDebuff": {
     "id": "chillDebuff",
@@ -205,13 +107,6 @@
         "percentage": -15
       }
     ]
-  },
-  "cleaveOnKill": {
-    "id": "cleaveOnKill",
-    "name": "Cleave on Kill",
-    "type": "utility",
-    "subType": "CleaveOnKill",
-    "description": "If the primary target is defeated, remaining hits strike a nearby enemy."
   },
   "conduitOfPowerBuff": {
     "id": "conduitOfPowerBuff",
@@ -239,84 +134,6 @@
       }
     ]
   },
-  "consumeDebuffForBonus": {
-    "id": "consumeDebuffForBonus",
-    "name": "Consume Debuff",
-    "type": "utility",
-    "subType": "DebuffInteraction",
-    "description": "Consumes a debuff on the target to generate a bonus effect, such as extra damage."
-  },
-  "counterAttack": {
-    "id": "counterAttack",
-    "name": "Counter-Attack",
-    "type": "utility",
-    "subType": "CounterAttack",
-    "description": "Allows the user to immediately attack after a specific trigger, like a parry or block."
-  },
-  "createAreaEffect": {
-    "id": "createAreaEffect",
-    "name": "Create Area Effect",
-    "type": "utility",
-    "subType": "AreaEffect",
-    "description": "Creates a persistent zone on the battlefield with various effects."
-  },
-  "createGroundEffect": {
-    "id": "createGroundEffect",
-    "name": "Create Ground Effect",
-    "type": "utility",
-    "subType": "AreaEffect",
-    "description": "Creates a patch of hazardous or beneficial terrain."
-  },
-  "crippledDebuff": {
-    "id": "crippledDebuff",
-    "name": "Crippled",
-    "type": "debuff",
-    "subType": "Modifiers",
-    "duration": 4,
-    "description": "Reduces movement speed and dodge chance.",
-    "modifiers": [
-      {
-        "stat": "speed",
-        "percentage": -25
-      },
-      {
-        "stat": "dodge",
-        "flat": -15
-      }
-    ]
-  },
-  "danceOfBladesBuff": {
-    "id": "danceOfBladesBuff",
-    "name": "Dance of Blades",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 6,
-    "description": "Increases attack speed and dodge, with a chance for attacks to cleave.",
-    "modifiers": [
-      {
-        "stat": "attackSpeed",
-        "percentage": 20
-      },
-      {
-        "stat": "dodge",
-        "flat": 15
-      }
-    ]
-  },
-  "dazedDebuff": {
-    "id": "dazedDebuff",
-    "name": "Dazed",
-    "type": "debuff",
-    "subType": "Modifiers",
-    "duration": 3,
-    "description": "Reduces damage output.",
-    "modifiers": [
-      {
-        "stat": "damage",
-        "percentage": -15
-      }
-    ]
-  },
   "deadlyFog": {
     "id": "deadlyFog",
     "name": "Deadly Fog",
@@ -327,34 +144,6 @@
     "duration": 15,
     "icon": "Media/UI/poison-bottle.svg",
     "description": "The toxic fog will kill you in 15 seconds if you don't escape!"
-  },
-  "deathMarkDebuff": {
-    "id": "deathMarkDebuff",
-    "name": "Death Mark",
-    "type": "debuff",
-    "subType": "Vulnerability",
-    "damageType": "Critical",
-    "value": 20,
-    "duration": 8,
-    "description": "Target takes increased damage from critical hits. Caster regains resources if the target dies while marked."
-  },
-  "decipherFlameRuneBuff": {
-    "id": "decipherFlameRuneBuff",
-    "name": "Deciphered Flame",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 15,
-    "description": "Dramatically increases Fire spell power and efficiency, and empowers active Fire Runes.",
-    "modifiers": [
-      {
-        "stat": "fireDamage",
-        "percentage": 50
-      },
-      {
-        "stat": "manaCostReduction",
-        "percentage": 25
-      }
-    ]
   },
   "decreaseCooldown": {
     "id": "decreaseCooldown",
@@ -393,27 +182,6 @@
     "subType": "DelayedDamage",
     "description": "A debuff that will deal damage after a delay."
   },
-  "disarmedDebuff": {
-    "id": "disarmedDebuff",
-    "name": "Disarmed",
-    "type": "debuff",
-    "subType": "Modifiers",
-    "duration": 2,
-    "description": "Damage output is significantly reduced.",
-    "modifiers": [
-      {
-        "stat": "damage",
-        "percentage": -50
-      }
-    ]
-  },
-  "dispelDebuff": {
-    "id": "dispelDebuff",
-    "name": "Dispel Debuff",
-    "type": "utility",
-    "subType": "Dispel",
-    "description": "Removes one or more negative effects from the target."
-  },
   "distracted": {
     "id": "distracted",
     "name": "Distracted",
@@ -446,59 +214,6 @@
       }
     ]
   },
-  "dualDeflectionBuff": {
-    "id": "dualDeflectionBuff",
-    "name": "Dual Deflection",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 2,
-    "description": "Greatly increases block/parry chance. Successful deflections grant a speed boost.",
-    "modifiers": [
-      {
-        "stat": "blockChance",
-        "flat": 50
-      }
-    ]
-  },
-  "duelChallengeDebuff": {
-    "id": "duelChallengeDebuff",
-    "name": "Challenged",
-    "type": "debuff",
-    "subType": "Taunt",
-    "duration": 5,
-    "description": "Forced to attack the duelist and deals reduced damage to other targets.",
-    "forceTarget": "Caster"
-  },
-  "duelistAdvantage": {
-    "id": "duelistAdvantage",
-    "name": "Duelist's Advantage",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 5,
-    "description": "You deal increased damage to your duel target.",
-    "modifiers": [
-      {
-        "stat": "damageVsDuelTarget",
-        "percentage": 20
-      }
-    ]
-  },
-  "empowerNextFireSpellLifesteal": {
-    "id": "empowerNextFireSpellLifesteal",
-    "name": "Lifeblood Ignition",
-    "type": "buff",
-    "subType": "EmpowerNextSpell",
-    "duration": 1,
-    "description": "Your next Fire spell deals increased damage and siphons health from its victims."
-  },
-  "explodeOnDeathHealCaster": {
-    "id": "explodeOnDeathHealCaster",
-    "name": "Sanguine Combustion",
-    "type": "debuff",
-    "subType": "OnDeathTrigger",
-    "duration": 5,
-    "description": "If the target dies while afflicted, they explode, dealing Fire damage to nearby enemies and healing the caster."
-  },
   "fearDebuff": {
     "id": "fearDebuff",
     "name": "Feared",
@@ -507,20 +222,6 @@
     "description": "Chance to flee or skip turn.",
     "duration": 2,
     "chance": 0.5
-  },
-  "fireShieldActiveBuff": {
-    "id": "fireShieldActiveBuff",
-    "name": "Fire Shield",
-    "type": "buff",
-    "subType": "Retaliation",
-    "duration": 10,
-    "description": "Grants Fire resistance and damages melee attackers.",
-    "modifiers": [
-      {
-        "stat": "fireResistance",
-        "flat": 25
-      }
-    ]
   },
   "fortitudeBuff": {
     "id": "fortitudeBuff",
@@ -536,14 +237,6 @@
       }
     ]
   },
-  "guardedAllyBuff": {
-    "id": "guardedAllyBuff",
-    "name": "Guarded",
-    "type": "buff",
-    "subType": "Guard",
-    "duration": 4,
-    "description": "This ally is being guarded, redirecting a portion of damage taken to the guardian and increasing armor."
-  },
   "highMorale": {
     "id": "highMorale",
     "name": "High Morale",
@@ -554,53 +247,6 @@
     "duration": 10,
     "icon": "Media/Skills/Novice/hum.svg",
     "description": "Increases the chance to hit."
-  },
-  "holdTheLineBuff": {
-    "id": "holdTheLineBuff",
-    "name": "Holding the Line",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 6,
-    "description": "Highly resistant to knockback and gain increased stun resistance.",
-    "modifiers": [
-      {
-        "stat": "knockbackResistance",
-        "flat": 100
-      },
-      {
-        "stat": "stunResistance",
-        "flat": 50
-      }
-    ]
-  },
-  "honedEdgeBuff": {
-    "id": "honedEdgeBuff",
-    "name": "Honed Edge",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 3,
-    "charges": 2,
-    "description": "Your next 2 attacks have increased damage and armor penetration.",
-    "modifiers": [
-      {
-        "stat": "damageNextAttack",
-        "percentage": 15
-      },
-      {
-        "stat": "armorPenetrationNextAttack",
-        "flat": 20
-      }
-    ]
-  },
-  "huntersMarkDebuff": {
-    "id": "huntersMarkDebuff",
-    "name": "Hunter's Mark",
-    "type": "debuff",
-    "subType": "Vulnerability",
-    "damageType": "All",
-    "value": 10,
-    "duration": 10,
-    "description": "Target takes increased damage from all sources and cannot use Stealth."
   },
   "increaseArmorFlat": {
     "id": "increaseArmorFlat",
@@ -630,16 +276,6 @@
     "stat": "critChance",
     "value": 15,
     "duration": 0
-  },
-  "increaseDamageFlat": {
-    "id": "increaseDamageFlat",
-    "name": "Increase Damage",
-    "type": "buff",
-    "subType": "flatChange",
-    "stat": "damage",
-    "value": 10,
-    "duration": 10,
-    "description": "Increases flat damage dealt."
   },
   "increaseDamagePercentage": {
     "id": "increaseDamagePercentage",
@@ -683,14 +319,6 @@
     "stackMode": "refresh",
     "description": "Increases Strength."
   },
-  "increaseThreat": {
-    "id": "increaseThreat",
-    "name": "Increased Threat",
-    "type": "utility",
-    "subType": "Threat",
-    "value": 100,
-    "description": "Generates a high amount of threat, drawing enemy attention."
-  },
   "invisibility": {
     "id": "invisibility",
     "name": "Invisibility",
@@ -698,47 +326,6 @@
     "subType": "Invisibility",
     "duration": 10,
     "description": "Becomes invisible."
-  },
-  "knockUp": {
-    "id": "knockUp",
-    "name": "Knock Up",
-    "type": "debuff",
-    "subType": "Stun",
-    "duration": 1,
-    "description": "Knocked into the air and cannot perform any actions."
-  },
-  "knockback": {
-    "id": "knockback",
-    "name": "Knockback",
-    "type": "utility",
-    "subType": "Positioning",
-    "description": "Pushes the target back."
-  },
-  "lichfireAuraBuff": {
-    "id": "lichfireAuraBuff",
-    "name": "Lichfire Aura",
-    "type": "buff",
-    "subType": "Aura",
-    "duration": 10,
-    "description": "Wreathes the caster in an aura of chilling lichfire, damaging enemies, healing the caster, and empowering undead minions."
-  },
-  "lifesteal": {
-    "id": "lifesteal",
-    "name": "Lifesteal",
-    "type": "buff",
-    "subType": "Lifesteal",
-    "value": 10,
-    "duration": 5,
-    "description": "Heals the attacker for a percentage of damage dealt."
-  },
-  "lifestealAura": {
-    "id": "lifestealAura",
-    "name": "Lifesteal Aura",
-    "type": "buff",
-    "subType": "Aura",
-    "duration": 5,
-    "value": 50,
-    "description": "Grants immense lifesteal to the caster and nearby allies."
   },
   "lightningDoT": {
     "id": "lightningDoT",
@@ -759,61 +346,6 @@
     "duration": 3,
     "absorbPercentage": 0.5
   },
-  "manaSteal": {
-    "id": "manaSteal",
-    "name": "Mana Steal",
-    "type": "utility",
-    "subType": "ResourceSteal",
-    "value": 5,
-    "resourceType": "mana",
-    "description": "Steals mana from the target."
-  },
-  "moltenShieldBuff": {
-    "id": "moltenShieldBuff",
-    "name": "Molten Shield",
-    "type": "buff",
-    "subType": "Retaliation",
-    "duration": 10,
-    "description": "Grants significant armor and Fire resistance, and damages melee attackers.",
-    "modifiers": [
-      {
-        "stat": "armor",
-        "flat": 20
-      },
-      {
-        "stat": "fireResistance",
-        "flat": 30
-      }
-    ]
-  },
-  "phalanxBuff": {
-    "id": "phalanxBuff",
-    "name": "Phalanx Formation",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 8,
-    "description": "Increases armor and block chance for you and adjacent allies. Movement is restricted.",
-    "modifiers": [
-      {
-        "stat": "armor",
-        "flat": 15
-      },
-      {
-        "stat": "blockChance",
-        "flat": 15
-      }
-    ]
-  },
-  "plasmaBurnDebuff": {
-    "id": "plasmaBurnDebuff",
-    "name": "Plasma Burn",
-    "type": "debuff",
-    "subType": "Vulnerability",
-    "damageType": "Lightning",
-    "value": 20,
-    "duration": 4,
-    "description": "Target is seared with plasma, making them more vulnerable to Lightning damage."
-  },
   "poison": {
     "id": "poison",
     "name": "Poison",
@@ -824,37 +356,6 @@
     "duration": 10,
     "icon": "Media/UI/poison-bottle.svg",
     "description": "Deals Poison damage over time."
-  },
-  "protectorsVowBuff": {
-    "id": "protectorsVowBuff",
-    "name": "Protector's Vow",
-    "type": "buff",
-    "subType": "Guard",
-    "duration": 10,
-    "description": "Damage taken by the ally is significantly reduced when they are at low health."
-  },
-  "pulsingAoeSelf": {
-    "id": "pulsingAoeSelf",
-    "name": "Pulsing AoE",
-    "type": "utility",
-    "subType": "AreaEffect",
-    "description": "Periodically emits a damaging or healing pulse from the caster."
-  },
-  "rampingFireDoTExplodeOnDeath": {
-    "id": "rampingFireDoTExplodeOnDeath",
-    "name": "Blood Boil",
-    "type": "debuff",
-    "subType": "DoT",
-    "duration": 6,
-    "description": "Inflicts a curse that deals escalating Fire damage over time. If the target perishes, they detonate."
-  },
-  "recoilDamage": {
-    "id": "recoilDamage",
-    "name": "Recoil Damage",
-    "type": "utility",
-    "subType": "SelfDamage",
-    "value": 5,
-    "description": "The caster takes a small amount of damage upon using the ability."
   },
   "reduceAccuracyFlat": {
     "id": "reduceAccuracyFlat",
@@ -886,16 +387,6 @@
     "duration": 10,
     "description": "Reduces Armor by a percentage."
   },
-  "reduceBlockChance": {
-    "id": "reduceBlockChance",
-    "name": "Guard Lowered",
-    "type": "debuff",
-    "subType": "flatChange",
-    "stat": "blockChance",
-    "value": -15,
-    "duration": 3,
-    "description": "Target's block chance is reduced."
-  },
   "reduceDamagePercentage": {
     "id": "reduceDamagePercentage",
     "name": "Reduce Damage",
@@ -915,23 +406,6 @@
     "value": -10,
     "duration": 10,
     "description": "Reduces Dodge chance."
-  },
-  "reduceHealingReceived": {
-    "id": "reduceHealingReceived",
-    "name": "Healing Reduced",
-    "type": "debuff",
-    "subType": "flatChange",
-    "stat": "healingReceived",
-    "value": -50,
-    "duration": 5,
-    "description": "Reduces the effectiveness of healing on this target."
-  },
-  "reduceResistanceType": {
-    "id": "reduceResistanceType",
-    "name": "Resistance Reduced",
-    "type": "debuff",
-    "subType": "Vulnerability",
-    "description": "Reduces a specific damage resistance on the target."
   },
   "reduceStrengthPercentage": {
     "id": "reduceStrengthPercentage",
@@ -955,28 +429,6 @@
     "icon": "Media/UI/regen.svg",
     "description": "Heals over time."
   },
-  "resolveBuff": {
-    "id": "resolveBuff",
-    "name": "Warrior's Resolve",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 8,
-    "description": "Become highly resistant to stuns and fear effects and gain a temporary boost to vitality.",
-    "modifiers": [
-      {
-        "stat": "stunResistance",
-        "flat": 75
-      },
-      {
-        "stat": "fearResistance",
-        "flat": 75
-      },
-      {
-        "stat": "vitality",
-        "flat": 5
-      }
-    ]
-  },
   "restoreResource": {
     "id": "restoreResource",
     "name": "Restore Resource",
@@ -984,38 +436,6 @@
     "subType": "RestoreResource",
     "resourceType": "mana",
     "value": 25
-  },
-  "restoreResourcesOnMarkedTargetDeath": {
-    "id": "restoreResourcesOnMarkedTargetDeath",
-    "name": "Essence Capture",
-    "type": "utility",
-    "subType": "OnDeathTrigger",
-    "description": "If the marked target dies, the caster regains a portion of stamina and mana."
-  },
-  "revealStealth": {
-    "id": "revealStealth",
-    "name": "Reveal Stealth",
-    "type": "utility",
-    "subType": "Reveal",
-    "description": "Forces a stealthed target out of hiding."
-  },
-  "righteousFuryBuff": {
-    "id": "righteousFuryBuff",
-    "name": "Righteous Fury",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 6,
-    "description": "Increases Holy damage and critical strike chance.",
-    "modifiers": [
-      {
-        "stat": "holyDamage",
-        "percentage": 20
-      },
-      {
-        "stat": "critChance",
-        "flat": 10
-      }
-    ]
   },
   "scaldedDebuff": {
     "id": "scaldedDebuff",
@@ -1032,20 +452,6 @@
         "flat": -10
       }
     ]
-  },
-  "secondaryDamage": {
-    "id": "secondaryDamage",
-    "name": "Secondary Damage",
-    "type": "utility",
-    "subType": "Damage",
-    "description": "Deals an additional instance of damage."
-  },
-  "secondaryDamagePerTick": {
-    "id": "secondaryDamagePerTick",
-    "name": "Secondary Damage Per Tick",
-    "type": "utility",
-    "subType": "Damage",
-    "description": "Deals additional damage each second of a channeled ability."
   },
   "shadowVantage": {
     "id": "shadowVantage",
@@ -1080,40 +486,6 @@
       }
     ]
   },
-  "shieldWallBuff": {
-    "id": "shieldWallBuff",
-    "name": "Shield Wall",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 5,
-    "description": "Massively increases block chance and damage reduction from the front, but reduces movement and attack speed.",
-    "modifiers": [
-      {
-        "stat": "blockChance",
-        "flat": 75
-      },
-      {
-        "stat": "damageReduction",
-        "percentage": 50
-      },
-      {
-        "stat": "speed",
-        "percentage": -50
-      },
-      {
-        "stat": "attackSpeed",
-        "percentage": -50
-      }
-    ]
-  },
-  "staticInfernoAura": {
-    "id": "staticInfernoAura",
-    "name": "Static Inferno",
-    "type": "buff",
-    "subType": "Aura",
-    "duration": 8,
-    "description": "Periodically zaps nearby enemies and grants your Fire spells a chance to arc lightning to another foe."
-  },
   "stealGold": {
     "id": "stealGold",
     "name": "Steal Gold",
@@ -1126,18 +498,18 @@
     "id": "stealth",
     "name": "Stealth",
     "type": "buff",
-    "subType": "stealth",
+    "subType": "Stealth",
     "duration": 5,
     "stackMode": "refresh",
     "icon": "Media/UI/stealth.svg",
     "description": "Invisible. Next attack deals +25% damage and has +10% crit chance.",
     "modifiers": [
       {
-        "stat": "damageNextAttack",
-        "percentage": 25
+        "stat": "damage",
+        "percentage": 1.25
       },
       {
-        "stat": "critChanceNextAttack",
+        "stat": "critChance",
         "flat": 10
       }
     ]
@@ -1151,20 +523,6 @@
     "stackMode": "duration",
     "icon": "Media/UI/stun.svg",
     "description": "Cannot perform any actions."
-  },
-  "summonMinion": {
-    "id": "summonMinion",
-    "name": "Summon Minion",
-    "type": "summon",
-    "subType": "Summon",
-    "description": "Summons a creature to fight for the caster."
-  },
-  "summonMinionFromCorpse": {
-    "id": "summonMinionFromCorpse",
-    "name": "Animate Corpse",
-    "type": "summon",
-    "subType": "Summon",
-    "description": "Reanimates a fallen enemy to fight for the caster."
   },
   "summonWolf": {
     "id": "summonWolf",
@@ -1203,54 +561,12 @@
       }
     ]
   },
-  "temporaryInvulnerability": {
-    "id": "temporaryInvulnerability",
-    "name": "Invulnerable",
-    "type": "buff",
-    "subType": "Invulnerability",
-    "duration": 3,
-    "description": "Cannot be damaged."
-  },
   "trap": {
     "id": "trap",
     "name": "Trap",
     "type": "utility",
     "subType": "Trap",
     "description": "Places a trap on the battlefield."
-  },
-  "unblockable": {
-    "id": "unblockable",
-    "name": "Unblockable",
-    "type": "utility",
-    "subType": "AttackProperty",
-    "description": "This attack cannot be blocked or parried."
-  },
-  "vanishBuff": {
-    "id": "vanishBuff",
-    "name": "Vanished",
-    "type": "buff",
-    "subType": "Stealth",
-    "duration": 5,
-    "description": "Instantly enter an improved Stealth. Your next attack from this state deals massively increased critical damage and has bonus accuracy."
-  },
-  "vitalsTargetingBuff": {
-    "id": "vitalsTargetingBuff",
-    "name": "Vitals Targeted",
-    "type": "buff",
-    "subType": "Modifiers",
-    "duration": 4,
-    "charges": 3,
-    "description": "Your next 3 dagger attacks have a vastly increased critical hit chance and ignore a portion of enemy armor.",
-    "modifiers": [
-      {
-        "stat": "critChanceNextAttack",
-        "flat": 50
-      },
-      {
-        "stat": "armorPenetrationNextAttack",
-        "flat": 40
-      }
-    ]
   },
   "voltaicOverloadBuff": {
     "id": "voltaicOverloadBuff",
