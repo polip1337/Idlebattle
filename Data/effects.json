@@ -1,64 +1,78 @@
 {
   "bleed": {
+    "id": "bleed",
     "name": "Bleed",
     "type": "debuff",
-    "subType": "Bleed",
-    "damageType": "Bleed",
-    "stat": "",
+    "subType": "DoT",
+    "damageType": "Physical",
     "value": 2,
     "duration": 10,
     "icon": "Media/UI/bleed.svg",
-    "description": "Deals 2 damage per second."
+    "description": "Deals damage over time."
   },
-
   "stun": {
+    "id": "stun",
     "name": "Stun",
     "type": "debuff",
     "subType": "Stun",
-    "duration": 5,
-    "stackMode": "duration"
+    "duration": 2,
+    "stackMode": "duration",
+    "icon": "Media/UI/stun.svg",
+    "description": "Cannot perform any actions."
   },
   "regen": {
+    "id": "regen",
     "name": "Regen",
     "type": "buff",
     "subType": "Regen",
     "value": 4,
     "duration": 10,
-    "stackMode": "duration"
+    "icon": "Media/UI/regen.svg",
+    "description": "Heals over time."
   },
   "poison": {
+    "id": "poison",
     "name": "Poison",
     "type": "debuff",
-    "subType": "Poison",
+    "subType": "DoT",
     "damageType": "Poison",
     "value": 5,
     "duration": 10,
-    "icon": "Media/UI/poison-bottle.svg"
+    "icon": "Media/UI/poison-bottle.svg",
+    "description": "Deals Poison damage over time."
   },
   "burn": {
+    "id": "burn",
     "name": "Burn",
     "type": "debuff",
-    "subType": "Burn",
+    "subType": "DoT",
+    "damageType": "Fire",
     "value": 5,
-    "duration": 10
+    "duration": 10,
+    "icon": "Media/UI/burn.svg",
+    "description": "Deals Fire damage over time."
   },
   "wildfireBurn": {
+    "id": "wildfireBurn",
     "name": "Wildfire Burn",
     "type": "debuff",
-    "subType": "WildfireBurn",
+    "subType": "DoT",
+    "damageType": "Fire",
     "value": 10,
-    "duration": 15
+    "duration": 15,
+    "icon": "Media/UI/burn.svg",
+    "description": "Deals heavy Fire damage over time and can spread."
   },
   "summonWolf": {
+    "id": "summonWolf",
     "name": "Summon wolf",
     "type": "summon",
-    "subType": "summon",
+    "subType": "Summon",
     "who": "wolf",
     "limit": 1
-
   },
-
   "blind": {
+    "id": "blind",
     "name": "Blind",
     "type": "debuff",
     "subType": "flatChange",
@@ -68,7 +82,8 @@
     "icon": "Media/UI/blind.svg",
     "description": "Decreases the chance to hit."
   },
-  "hum": {
+  "highMorale": {
+    "id": "highMorale",
     "name": "High Morale",
     "type": "buff",
     "subType": "flatChange",
@@ -78,83 +93,118 @@
     "icon": "Media/Skills/Novice/hum.svg",
     "description": "Increases the chance to hit."
   },
-
   "decreaseCooldown": {
+    "id": "decreaseCooldown",
     "name": "Decrease Cooldown",
     "type": "buff",
-    "subType": "decreaseCooldown",
-    "value": 5
+    "subType": "CooldownReduction",
+    "value": 5,
+    "description": "Reduces active cooldowns."
   },
-  
   "increaseDamagePercentage": {
+    "id": "increaseDamagePercentage",
     "name": "Increase Damage",
     "type": "buff",
     "subType": "percentChange",
     "stat": "damage",
     "value": 10,
     "duration": 10,
-    "stackMode": "refresh"
+    "stackMode": "refresh",
+    "description": "Increases damage dealt."
   },
   "reduceDamagePercentage": {
+    "id": "reduceDamagePercentage",
     "name": "Reduce Damage",
     "type": "debuff",
     "subType": "percentChange",
     "stat": "damage",
-    "value": -5,
-    "duration": 10
+    "value": -10,
+    "duration": 10,
+    "description": "Reduces damage dealt."
   },
-
   "increaseArmorFlat": {
+    "id": "increaseArmorFlat",
     "name": "Increase Armor",
     "type": "buff",
     "subType": "flatChange",
     "stat": "armor",
     "value": 2,
-    "duration": 5
-  },
-  "increaseDodgeFlat": {
-    "name": "Increase Dodge",
-    "type": "buff",
-    "subType": "flatChange",
-    "stat": "armor",
-    "value": 2,
-    "duration": 5
-  },
-  "increaseArmorPercentage": {
-    "name": "Increase Armor %",
-    "type": "buff",
-    "subType": "percentChange",
-    "stat": "armor",
-    "value": 10,
-    "duration": 20
-  },
-  "reduceArmorPercentage": {
-    "name": "Reduce Armor %",
-    "type": "debuff",
-    "subType": "percentChange",
-    "stat": "armor",
-    "value": -5,
-    "duration": 10
+    "duration": 5,
+    "description": "Increases Armor."
   },
   "reduceArmorFlat": {
+    "id": "reduceArmorFlat",
     "name": "Reduce Armor",
     "type": "debuff",
     "subType": "flatChange",
     "stat": "armor",
     "value": -3,
-    "duration": 5
+    "duration": 5,
+    "description": "Reduces Armor."
   },
-
+  "increaseDodgeFlat": {
+    "id": "increaseDodgeFlat",
+    "name": "Increase Dodge",
+    "type": "buff",
+    "subType": "flatChange",
+    "stat": "dodge",
+    "value": 2,
+    "duration": 5,
+    "description": "Increases Dodge chance."
+  },
+  "reduceDodgeFlat": {
+    "id": "reduceDodgeFlat",
+    "name": "Reduce Dodge",
+    "type": "debuff",
+    "subType": "flatChange",
+    "stat": "dodge",
+    "value": -10,
+    "duration": 10,
+    "description": "Reduces Dodge chance."
+  },
+  "reduceAccuracyFlat": {
+    "id": "reduceAccuracyFlat",
+    "name": "Reduce Accuracy",
+    "type": "debuff",
+    "subType": "flatChange",
+    "stat": "accuracy",
+    "value": -15,
+    "duration": 2,
+    "description": "Reduces Accuracy."
+  },
+  "increaseArmorPercentage": {
+    "id": "increaseArmorPercentage",
+    "name": "Increase Armor %",
+    "type": "buff",
+    "subType": "percentChange",
+    "stat": "armor",
+    "value": 10,
+    "duration": 20,
+    "description": "Increases Armor by a percentage."
+  },
+  "reduceArmorPercentage": {
+    "id": "reduceArmorPercentage",
+    "name": "Reduce Armor %",
+    "type": "debuff",
+    "subType": "percentChange",
+    "stat": "armor",
+    "value": -5,
+    "duration": 10,
+    "description": "Reduces Armor by a percentage."
+  },
   "increaseStrengthFlat": {
-    "name": "Increase Strength ",
+    "id": "increaseStrengthFlat",
+    "name": "Increase Strength",
     "type": "buff",
     "subType": "flatChange",
     "stat": "strength",
     "value": 10,
     "duration": 20,
-    "stackMode": "refresh"
+    "stackMode": "refresh",
+    "description": "Increases Strength."
   },
   "reduceStrengthPercentage": {
+    "id": "reduceStrengthPercentage",
     "name": "Reduce Strength %",
     "type": "debuff",
     "subType": "percentChange",
@@ -162,89 +212,45 @@
     "value": -10,
     "duration": 20,
     "stackMode": "refresh",
-    "icon": "TODO"
-  },
-  "reduceDodgeFlat": {
-    "name": "Reduce Dodge",
-    "type": "debuff",
-    "subType": "flatChange",
-    "stat": "dodge",
-    "value": -10,
-    "duration": 10
+    "icon": "TODO",
+    "description": "Reduces Strength by a percentage."
   },
   "invisibility": {
+    "id": "invisibility",
     "name": "Invisibility",
     "type": "buff",
-    "subType": "stealth",
-    "duration": 10
+    "subType": "Invisibility",
+    "duration": 10,
+    "description": "Becomes invisible."
   },
   "stealGold": {
+    "id": "stealGold",
     "name": "Steal Gold",
     "type": "utility",
-    "subType": "steal",
-    "value": 50
-  },
-  "increaseDodge": {
-    "name": "Increase Dodge",
-    "type": "buff",
-    "subType": "dodge",
-    "value": 15,
-    "duration": 10
+    "subType": "Steal",
+    "value": 50,
+    "description": "Steals gold from the target."
   },
   "blindEnemies": {
+    "id": "blindEnemies",
     "name": "Blind Enemies",
     "type": "debuff",
-    "subType": "blind",
-    "duration": 5
+    "subType": "AreaDebuff",
+    "effectToApply": "blind",
+    "duration": 5,
+    "description": "Blinds all enemies."
   },
-
   "teleportBehindEnemy": {
+    "id": "teleportBehindEnemy",
     "name": "Teleport Behind Enemy",
     "type": "utility",
-    "subType": "teleport"
-  },
-  "increaseSpeed": {
-    "name": "Increase Speed",
-    "type": "passive",
-    "subType": "speed",
-    "value": 5
-  },
-  "openLocks": {
-    "name": "Open Locks",
-    "type": "passive",
-    "subType": "utility"
-  },
-  "improveStealth": {
-    "name": "Improve Stealth",
-    "type": "passive",
-    "subType": "stealth"
-  },
-  "increaseCriticalChance": {
-    "name": "Increase Critical Chance",
-    "type": "passive",
-    "subType": "criticalChance",
-    "value": 5
-  },
-  "reduceDetection": {
-    "name": "Reduce Detection",
-    "type": "passive",
-    "subType": "stealth"
-  },
-  "detectTraps": {
-    "name": "Detect Traps",
-    "type": "passive",
-    "subType": "utility"
-  },
-  "increaseLightArmor": {
-    "name": "Increase Light Armor",
-    "type": "passive",
-    "subType": "armor",
-    "value": 5
+    "subType": "Teleport"
   },
   "deadlyFog": {
+    "id": "deadlyFog",
     "name": "Deadly Fog",
     "type": "debuff",
-    "subType": "delayedDamage",
+    "subType": "DelayedDamage",
     "damageType": "Poison",
     "value": 1000,
     "duration": 15,
@@ -252,30 +258,48 @@
     "description": "The toxic fog will kill you in 15 seconds if you don't escape!"
   },
   "stealth": {
+    "id": "stealth",
     "name": "Stealth",
     "type": "buff",
-    "subType": "stealth",
-    "value": 25,
+    "subType": "Stealth",
     "duration": 5,
     "stackMode": "refresh",
-    "toHit": 50,
     "icon": "Media/UI/stealth.svg",
-    "description": "Next attack deals 25% more damage and has 10% increased crit chance"
+    "description": "Invisible. Next attack deals +25% damage and has +10% crit chance.",
+    "modifiers": [
+      {
+        "stat": "damageNextAttack",
+        "percentage": 25
+      },
+      {
+        "stat": "critChanceNextAttack",
+        "flat": 10
+      }
+    ]
   },
-  "distract": {
+  "distracted": {
+    "id": "distracted",
     "name": "Distracted",
     "description": "Accuracy -10, Crit Vulnerability +10%.",
     "type": "debuff",
-    "subType": "distracted",
-    "toHit": -10,
-    "critResistance": -10,
-    "duration": 10
+    "subType": "Modifiers",
+    "duration": 10,
+    "modifiers": [
+      {
+        "stat": "accuracy",
+        "flat": -10
+      },
+      {
+        "stat": "critResistance",
+        "flat": -10
+      }
+    ]
   },
-
   "blessed": {
+    "id": "blessed",
     "name": "Blessed",
     "type": "buff",
-    "subType": "modifiers",
+    "subType": "Modifiers",
     "description": "Accuracy and Damage increased.",
     "duration": 4,
     "modifiers": [
@@ -288,6 +312,286 @@
         "percentage": 10
       }
     ]
+  },
+  "shadowVantage": {
+    "id": "shadowVantage",
+    "name": "Shadow Vantaged",
+    "type": "buff",
+    "subType": "Modifiers",
+    "description": "Your next melee attack against this target has +15% crit chance.",
+    "duration": 1,
+    "targetSpecific": true,
+    "modifiers": [
+      {
+        "stat": "critChanceBonusNextAttackVsTarget",
+        "flat": 15
+      }
+    ]
+  },
+  "shieldBlockBuff": {
+    "id": "shieldBlockBuff",
+    "name": "Blocking",
+    "type": "buff",
+    "subType": "Modifiers",
+    "description": "Increased Block Chance and Armor.",
+    "duration": 1,
+    "modifiers": [
+      {
+        "stat": "blockChance",
+        "flat": 30
+      },
+      {
+        "stat": "armor",
+        "flat": 15
+      }
+    ]
+  },
+  "defensiveStanceBuff": {
+    "id": "defensiveStanceBuff",
+    "name": "Defensive Stance",
+    "type": "buff",
+    "subType": "Modifiers",
+    "description": "Armor +10, Block Chance +10%, Damage Dealt -10%.",
+    "duration": 3,
+    "modifiers": [
+      {
+        "stat": "armor",
+        "flat": 10
+      },
+      {
+        "stat": "blockChance",
+        "flat": 10
+      },
+      {
+        "stat": "damageDealt",
+        "percentage": -10
+      }
+    ]
+  },
+  "armorRendDebuff": {
+    "id": "armorRendDebuff",
+    "name": "Armor Rended",
+    "type": "debuff",
+    "subType": "Modifiers",
+    "description": "Armor reduced by 15%.",
+    "duration": 3,
+    "modifiers": [
+      {
+        "stat": "armor",
+        "percentage": -15
+      }
+    ]
+  },
+  "manaShieldBuff": {
+    "id": "manaShieldBuff",
+    "name": "Mana Shield",
+    "type": "buff",
+    "subType": "ManaShield",
+    "description": "Absorbs 50% of damage taken as Mana loss.",
+    "duration": 3,
+    "absorbPercentage": 0.5
+  },
+  "chillDebuff": {
+    "id": "chillDebuff",
+    "name": "Chilled",
+    "type": "debuff",
+    "subType": "Modifiers",
+    "description": "Movement speed reduced.",
+    "duration": 2,
+    "modifiers": [
+      {
+        "stat": "speed",
+        "percentage": -15
+      }
+    ]
+  },
+  "teleportDodgeBuff": {
+    "id": "teleportDodgeBuff",
+    "name": "Phased",
+    "type": "buff",
+    "subType": "Modifiers",
+    "description": "+50 Dodge for next incoming attack this turn.",
+    "duration": 0,
+    "modifiers": [
+      {
+        "stat": "dodgeNextAttack",
+        "flat": 50
+      }
+    ]
+  },
+  "arcaneIntellectBuff": {
+    "id": "arcaneIntellectBuff",
+    "name": "Arcane Intellect",
+    "type": "buff",
+    "subType": "Modifiers",
+    "description": "Magic Power increased.",
+    "duration": 5,
+    "modifiers": [
+      {
+        "stat": "magicPower",
+        "flat": 15
+      }
+    ]
+  },
+  "restoreResource": {
+    "id": "restoreResource",
+    "name": "Restore Resource",
+    "type": "utility",
+    "subType": "RestoreResource",
+    "resourceType": "mana",
+    "value": 25
+  },
+  "fearDebuff": {
+    "id": "fearDebuff",
+    "name": "Feared",
+    "type": "debuff",
+    "subType": "Fear",
+    "description": "Chance to flee or skip turn.",
+    "duration": 2,
+    "chance": 0.5
+  },
+  "fortitudeBuff": {
+    "id": "fortitudeBuff",
+    "name": "Fortitude",
+    "type": "buff",
+    "subType": "Modifiers",
+    "description": "Maximum Health increased.",
+    "duration": 10,
+    "modifiers": [
+      {
+        "stat": "vitality",
+        "flat": 5
+      }
+    ]
+  },
+  "divineProtectionBuff": {
+    "id": "divineProtectionBuff",
+    "name": "Divine Protection",
+    "type": "buff",
+    "subType": "Modifiers",
+    "description": "Reduces damage taken.",
+    "duration": 2,
+    "modifiers": [
+      {
+        "stat": "damageReduction",
+        "percentage": 20
+      }
+    ]
+  },
+  "lightningDoT": {
+    "id": "lightningDoT",
+    "name": "Electrocuted",
+    "type": "debuff",
+    "subType": "DoT",
+    "damageType": "Lightning",
+    "value": 7,
+    "duration": 3,
+    "description": "Target burns with electrical energy."
+  },
+  "increaseDamageTakenType": {
+    "id": "increaseDamageTakenType",
+    "name": "Vulnerability",
+    "type": "debuff",
+    "subType": "Vulnerability",
+    "damageType": "Fire",
+    "value": 15,
+    "duration": 3,
+    "description": "Target becomes more vulnerable to a damage type."
+  },
+  "voltaicOverloadBuff": {
+    "id": "voltaicOverloadBuff",
+    "name": "Voltaic Overload",
+    "type": "buff",
+    "subType": "EmpowerNextSpell",
+    "description": "Next Fire or Lightning spell is a guaranteed critical hit with increased damage, but costs more mana.",
+    "spellTypes": [
+      "Fire",
+      "Lightning"
+    ],
+    "critChanceBonus": 1,
+    "damageBonusPercentage": 25,
+    "manaCostIncreasePercentage": 10,
+    "duration": 1
+  },
+  "conduitOfPowerBuff": {
+    "id": "conduitOfPowerBuff",
+    "name": "Conduit of Power",
+    "type": "buff",
+    "subType": "Modifiers",
+    "duration": 12,
+    "description": "Greatly increased Fire and Lightning damage and mana regeneration, but more susceptible to incoming damage.",
+    "modifiers": [
+      {
+        "stat": "fireDamage",
+        "percentage": 30
+      },
+      {
+        "stat": "lightningDamage",
+        "percentage": 30
+      },
+      {
+        "stat": "manaRegen",
+        "flat": 10
+      },
+      {
+        "stat": "damageTaken",
+        "percentage": 15
+      }
+    ]
+  },
+  "scaldedDebuff": {
+    "id": "scaldedDebuff",
+    "name": "Scalded",
+    "type": "debuff",
+    "subType": "DoT",
+    "description": "Target is scalded, suffering minor continuous damage and reduced accuracy.",
+    "duration": 3,
+    "value": 4,
+    "damageType": "Fire",
+    "modifiers": [
+      {
+        "stat": "accuracy",
+        "flat": -10
+      }
+    ]
+  },
+  "areaEffect": {
+    "id": "areaEffect",
+    "name": "Area Effect",
+    "type": "utility",
+    "subType": "AreaEffect",
+    "description": "Creates a zone with various effects on the battlefield."
+  },
+  "trap": {
+    "id": "trap",
+    "name": "Trap",
+    "type": "utility",
+    "subType": "Trap",
+    "description": "Places a trap on the battlefield."
+  },
+  "delayedDamageDebuff": {
+    "id": "delayedDamageDebuff",
+    "name": "Delayed Damage",
+    "type": "debuff",
+    "subType": "DelayedDamage",
+    "description": "A debuff that will deal damage after a delay."
+  },
+  "tauntedDebuff": {
+    "id": "tauntedDebuff",
+    "name": "Taunted",
+    "type": "debuff",
+    "subType": "Taunt",
+    "description": "Must attack the taunter.",
+    "duration": 2,
+    "forceTarget": "Caster"
+  },
+  "increaseCritChanceSelf": {
+    "id": "increaseCritChanceSelf",
+    "name": "Crit Boost",
+    "type": "buff",
+    "subType": "flatChange",
+    "stat": "critChance",
+    "value": 15,
+    "duration": 0
   }
 }
-
