@@ -207,9 +207,24 @@ export async function loadGameData(savedGameState = null) {
             }
 
             const classIdForHero = savedGameState.heroData.classId || 'novice';
-            let heroClassInfo = heroClasses[classIdForHero] || heroClasses['novice'] || Object.values(heroClasses)[0];
+            // Find the class across all tiers
+            let heroClassInfo = null;
+            for (const tier in heroClasses) {
+                const tierClasses = heroClasses[tier].classes;
+                const foundClass = tierClasses.find(c => c.id === classIdForHero);
+                if (foundClass) {
+                    heroClassInfo = foundClass;
+                    break;
+                }
+            }
+            // If class not found, fall back to novice
             if (!heroClassInfo) {
-                alert("Critical error: No hero classes available to load hero."); return false;
+                const noviceClass = heroClasses.tier0.classes.find(c => c.id === 'novice');
+                if (!noviceClass) {
+                    alert("Critical error: No hero classes available to load hero."); 
+                    return false;
+                }
+                heroClassInfo = noviceClass;
             }
             hero = new Hero("Placeholder", heroClassInfo, [], 1, null, null);
             hero.restoreFromData(savedGameState.heroData, heroClasses, allSkillsCache, allItemsCache);
