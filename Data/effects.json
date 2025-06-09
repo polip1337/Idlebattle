@@ -270,6 +270,24 @@
     "toHit": -10,
     "critResistance": -10,
     "duration": 10
+  },
+
+  "blessed": {
+    "name": "Blessed",
+    "type": "buff",
+    "subType": "modifiers",
+    "description": "Accuracy and Damage increased.",
+    "duration": 4,
+    "modifiers": [
+      {
+        "stat": "accuracy",
+        "flat": 10
+      },
+      {
+        "stat": "damage",
+        "percentage": 10
+      }
+    ]
   }
 }
 

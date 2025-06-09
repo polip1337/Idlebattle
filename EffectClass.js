@@ -120,6 +120,22 @@ class EffectClass {
 
     applyEffect(effect) {
         switch (this.effect.subType) {
+            case 'modifiers':
+                // Store original stats for later reversion
+                this.originalStats = {};
+                this.effect.modifiers.forEach(modifier => {
+                    // Store original value
+                    this.originalStats[modifier.stat] = this.target.stats[modifier.stat];
+                    
+                    // Apply modifier
+                    if (modifier.flat) {
+                        this.target.stats[modifier.stat] += modifier.flat;
+                    }
+                    if (modifier.percentage) {
+                        this.target.stats[modifier.stat] *= (1 + modifier.percentage / 100);
+                    }
+                });
+                break;
             case 'Barrier':
                 this.target.barrier = this.value; // Custom property to handle barrier status
                 break;
@@ -357,6 +373,14 @@ class EffectClass {
 
     revertEffect() {
         switch (this.effect.subType) {
+            case 'modifiers':
+                // Revert all modifiers
+                if (this.originalStats) {
+                    this.effect.modifiers.forEach(modifier => {
+                        this.target.stats[modifier.stat] = this.originalStats[modifier.stat];
+                    });
+                }
+                break;
             case 'Barrier':
                 this.target.barrier = 0;
                 break;
