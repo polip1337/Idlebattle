@@ -138,9 +138,9 @@ async function loadClasses() {
             if (tierData && tierData.classes) {
                 // Process each class in the tier
                 tierData.classes.forEach(classDef => {
-                    if (classDef.id) {
+                    if (classDef.combination) {
                         // Use the class ID as the key
-                        loadedClasses[classDef.id] = {
+                        loadedClasses[classDef.combination] = {
                             ...classDef,
                             tier: tierKey,
                             skills: classDef.skills || []
@@ -206,12 +206,12 @@ export async function loadGameData(savedGameState = null) {
                 return false;
             }
 
-            const classIdForHero = savedGameState.heroData.classId || 'novice';
+            const classIdForHero = savedGameState.heroData.combination || 'Novice';
             // Find the class directly from heroClasses using combination
             let heroClassInfo = Object.values(heroClasses).find(c => c.combination === classIdForHero);
             // If class not found, fall back to novice
             if (!heroClassInfo) {
-                heroClassInfo = Object.values(heroClasses).find(c => c.combination === 'novice');
+                heroClassInfo = Object.values(heroClasses).find(c => c.combination === 'Novice');
                 if (!heroClassInfo) {
                     alert("Critical error: No hero classes available to load hero."); 
                     return false;

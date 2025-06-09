@@ -81,7 +81,7 @@ function getGameState() {
     }
 
     const heroData = hero.getSerializableData();
-    if (!heroData || !heroData.classId) {
+    if (!heroData || !heroData.combination) {
         console.error("getGameState: hero.getSerializableData() returned invalid data.", heroData);
         // alert("Error: Failed to gather complete hero data for saving."); // Avoid alert for autosave
         return null;

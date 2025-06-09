@@ -2,7 +2,7 @@
     "tier0": {
       "classes": [
          {
-            "combinaiton": "novice",
+            "combination": "Novice",
             "name": "Novice",
             "portrait": "Media/portrait.jpg",
             "skills": [

@@ -1,12 +1,20 @@
+
 {
   "goblinWarrior": {
     "id": "goblinWarrior",
+    "type": "Goblin",
     "name": "Goblin Warrior",
     "portrait": "Media/Mobs/Goblin/warrior.jpeg",
-    "positions": ["Front"],
+    "positions": [
+      "Front"
+    ],
     "experience": 15,
     "goldDrop": 8,
-    "skills": [],
+    "skills": [
+      "slash",
+      "shieldBash",
+      "battleCry"
+    ],
     "stats": {
       "strength": 20,
       "dexterity": 12,
@@ -41,12 +49,19 @@
   },
   "GoblinShaman": {
     "id": "goblinShaman",
+    "type": "Goblin",
     "name": "Goblin Shaman",
     "portrait": "Media/Mobs/Goblin/shaman.jpeg",
-    "positions": ["Back"],
+    "positions": [
+      "Back"
+    ],
     "experience": 18,
     "goldDrop": 10,
-    "skills": ["healingWave", "totemOfStrength", "mysticShield"],
+    "skills": [
+      "healingWave",
+      "totemOfStrength",
+      "mysticShield"
+    ],
     "stats": {
       "strength": 8,
       "dexterity": 12,
@@ -80,12 +95,19 @@
   },
   "GoblinHealer": {
     "id": "goblinHealer",
+    "type": "Goblin",
     "name": "Goblin Healer",
     "portrait": "Media/Mobs/Goblin/Healer.jpeg",
-    "positions": ["Back"],
+    "positions": [
+      "Back"
+    ],
     "experience": 15,
     "goldDrop": 8,
-    "skills": ["healingTouch", "revitalize", "groupHeal"],
+    "skills": [
+      "healingTouch",
+      "revitalize",
+      "groupHeal"
+    ],
     "stats": {
       "strength": 8,
       "dexterity": 12,
@@ -118,12 +140,19 @@
   },
   "goblinScout": {
     "id": "goblinScout",
+    "type": "Goblin",
     "name": "Goblin Scout",
     "portrait": "Media/Mobs/Goblin/scout.jpeg",
-    "positions": ["Back"],
+    "positions": [
+      "Back"
+    ],
     "experience": 12,
     "goldDrop": 6,
-    "skills": [],
+    "skills": [
+      "quickStrike",
+      "poisonDart",
+      "sneakAttack"
+    ],
     "stats": {
       "strength": 12,
       "speed": 18,
@@ -156,12 +185,19 @@
   },
   "GoblinFirestarter": {
     "id": "goblinFirestarter",
+    "type": "Goblin",
     "name": "Goblin Firestarter",
     "portrait": "Media/Mobs/Goblin/firestarter.jpeg",
-    "positions": ["Back"],
+    "positions": [
+      "Back"
+    ],
     "experience": 15,
     "goldDrop": 8,
-    "skills": ["fireBlast", "wildfire", "flameWave"],
+    "skills": [
+      "fireBlast",
+      "wildfire",
+      "flameWave"
+    ],
     "stats": {
       "strength": 12,
       "speed": 12,
@@ -195,12 +231,19 @@
   },
   "GoblinArcher": {
     "id": "goblinArcher",
+    "type": "Goblin",
     "name": "Goblin Archer",
     "portrait": "Media/Mobs/Goblin/Archer.jpeg",
-    "positions": ["Back"],
+    "positions": [
+      "Back"
+    ],
     "experience": 15,
     "goldDrop": 8,
-    "skills": ["piercingShot", "poisonArrow", "multiShot"],
+    "skills": [
+      "piercingShot",
+      "poisonArrow",
+      "multiShot"
+    ],
     "stats": {
       "strength": 10,
       "speed": 15,
@@ -233,12 +276,20 @@
   },
   "GoblinChieftain": {
     "id": "goblinChieftain",
+    "type": "Goblin",
     "name": "Goblin Chieftain",
     "portrait": "Media/Mobs/Goblin/Chieftain.jpeg",
-    "positions": ["Front", "Any"],
+    "positions": [
+      "Front",
+      "Any"
+    ],
     "experience": 25,
     "goldDrop": 15,
-    "skills": ["chieftainsStrike", "goblinsRally", "commandingPresence"],
+    "skills": [
+      "chieftainsStrike",
+      "goblinsRally",
+      "commandingPresence"
+    ],
     "stats": {
       "strength": 25,
       "speed": 12,
@@ -274,12 +325,19 @@
   },
   "GoblinAlchemist": {
     "id": "goblinAlchemist",
+    "type": "Goblin",
     "name": "Goblin Alchemist",
     "portrait": "Media/Mobs/Goblin/alchemist.jpeg",
-    "positions": ["Back"],
+    "positions": [
+      "Back"
+    ],
     "experience": 15,
     "goldDrop": 8,
-    "skills": ["acidFlask", "poisonCloud", "paralyzingPotion"],
+    "skills": [
+      "acidFlask",
+      "poisonCloud",
+      "paralyzingPotion"
+    ],
     "stats": {
       "strength": 10,
       "speed": 12,
@@ -313,12 +371,19 @@
   },
   "GoblinBeastmaster": {
     "id": "goblinBeastmaster",
+    "type": "Goblin",
     "name": "Goblin Beastmaster",
     "portrait": "Media/Mobs/Goblin/beastmaster.jpeg",
-    "positions": ["Back"],
+    "positions": [
+      "Back"
+    ],
     "experience": 15,
     "goldDrop": 8,
-    "skills": ["callOfTheWild", "savageStrike", "packLeader"],
+    "skills": [
+      "callOfTheWild",
+      "savageStrike",
+      "packLeader"
+    ],
     "stats": {
       "strength": 15,
       "speed": 12,
@@ -352,12 +417,19 @@
   },
   "GoblinBerserker": {
     "id": "goblinBerserker",
+    "type": "Goblin",
     "name": "Goblin Berserker",
     "portrait": "Media/Mobs/Goblin/berserker.jpeg",
-    "positions": ["Front"],
+    "positions": [
+      "Front"
+    ],
     "experience": 18,
     "goldDrop": 10,
-    "skills": ["berserkSlash", "rageStrike", "frenzy"],
+    "skills": [
+      "berserkSlash",
+      "rageStrike",
+      "frenzy"
+    ],
     "stats": {
       "strength": 22,
       "speed": 12,
@@ -391,12 +463,19 @@
   },
   "wolf": {
     "id": "wolf",
+    "type": "Beast",
     "name": "Wolf",
     "portrait": "Media/Mobs/Beast/wolf.jpeg",
-    "positions": ["Front"],
+    "positions": [
+      "Front"
+    ],
     "experience": 15,
     "goldDrop": 8,
-    "skills": ["howl", "packHunt", "savageBite"],
+    "skills": [
+      "howl",
+      "packHunt",
+      "savageBite"
+    ],
     "stats": {
       "strength": 18,
       "speed": 18,
@@ -430,12 +509,19 @@
   },
   "giantRat": {
     "id": "giantRat",
+    "type": "Beast",
     "name": "Giant Rat",
     "portrait": "Media/Mobs/Beast/rat.jpeg",
-    "positions": ["Front", "Any"],
+    "positions": [
+      "Front",
+      "Any"
+    ],
     "experience": 8,
     "goldDrop": 4,
-    "skills": ["viciousBite", "scurry"],
+    "skills": [
+      "viciousBite",
+      "scurry"
+    ],
     "stats": {
       "strength": 10,
       "dexterity": 15,
@@ -464,12 +550,20 @@
   },
   "fogTouchedScavenger": {
     "id": "fogTouchedScavenger",
+    "type": "Humanoid",
     "name": "Fog-Touched Scavenger",
     "portrait": "Media/Mobs/Humanoid/fog_scavenger.png",
-    "positions": ["Front", "Back"],
+    "positions": [
+      "Front",
+      "Back"
+    ],
     "experience": 12,
     "goldDrop": 6,
-    "skills": ["erraticMovement", "desperateLunge", "plantSpit"],
+    "skills": [
+      "erraticMovement",
+      "desperateLunge",
+      "plantSpit"
+    ],
     "stats": {
       "strength": 15,
       "dexterity": 14,
@@ -498,12 +592,19 @@
   },
   "runeEtchedSentry": {
     "id": "runeEtchedSentry",
+    "type": "Construct",
     "name": "Rune-Etched Sentry",
     "portrait": "Media/Mobs/Golem/rune_etched_sentry.png",
-    "positions": ["Front"],
+    "positions": [
+      "Front"
+    ],
     "experience": 20,
     "goldDrop": 12,
-    "skills": ["stoneSlam", "fortifiedPlating", "guardianProtocol"],
+    "skills": [
+      "stoneSlam",
+      "fortifiedPlating",
+      "guardianProtocol"
+    ],
     "stats": {
       "strength": 22,
       "dexterity": 5,
@@ -537,12 +638,20 @@
   },
   "fogSpecter": {
     "id": "fogSpecter",
+    "type": "Specter",
     "name": "Fog Specter",
     "portrait": "Media/Mobs/fog/fog_specter.jpg",
-    "positions": ["Front", "Back"],
+    "positions": [
+      "Front",
+      "Back"
+    ],
     "experience": 18,
     "goldDrop": 10,
-    "skills": ["energyBolt", "mistBolt", "etherealShift"],
+    "skills": [
+      "energyBolt",
+      "mistBolt",
+      "etherealShift"
+    ],
     "stats": {
       "strength": 15,
       "dexterity": 18,
@@ -577,12 +686,19 @@
   },
   "skeletonWarrior": {
     "id": "skeletonWarrior",
+    "type": "Undead",
     "name": "Skeleton Warrior",
     "portrait": "Media/Mobs/Undead/skeleton_warrior.png",
-    "positions": ["Front"],
+    "positions": [
+      "Front"
+    ],
     "experience": 15,
     "goldDrop": 8,
-    "skills": ["slash", "shieldBash", "boneRattle"],
+    "skills": [
+      "slash",
+      "shieldBash",
+      "boneRattle"
+    ],
     "stats": {
       "strength": 18,
       "dexterity": 12,
@@ -613,12 +729,19 @@
   },
   "skeletonArcher": {
     "id": "skeletonArcher",
+    "type": "Undead",
     "name": "Skeleton Archer",
     "portrait": "Media/Mobs/Undead/skeleton_archer.png",
-    "positions": ["Back"],
+    "positions": [
+      "Back"
+    ],
     "experience": 12,
     "goldDrop": 6,
-    "skills": ["piercingShot", "poisonArrow", "boneArrow"],
+    "skills": [
+      "piercingShot",
+      "poisonArrow",
+      "boneArrow"
+    ],
     "stats": {
       "strength": 10,
       "speed": 15,
@@ -655,12 +778,20 @@
   },
   "necromanticConstruct": {
     "id": "necromanticConstruct",
+    "type": "Construct",
     "name": "Necromantic Construct",
     "portrait": "Media/Mobs/Undead/necromantic_construct.png",
-    "positions": ["Front", "Any"],
+    "positions": [
+      "Front",
+      "Any"
+    ],
     "experience": 25,
     "goldDrop": 15,
-    "skills": ["boneSpear", "deathPulse", "fortifiedPlating"],
+    "skills": [
+      "boneSpear",
+      "deathPulse",
+      "fortifiedPlating"
+    ],
     "stats": {
       "strength": 22,
       "dexterity": 10,
@@ -696,4 +827,3 @@
     }
   }
 }
-
