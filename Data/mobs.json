@@ -149,9 +149,6 @@
     "experience": 12,
     "goldDrop": 6,
     "skills": [
-      "quickStrike",
-      "poisonDart",
-      "sneakAttack"
     ],
     "stats": {
       "strength": 12,

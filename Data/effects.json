@@ -498,7 +498,7 @@
     "id": "stealth",
     "name": "Stealth",
     "type": "buff",
-    "subType": "Stealth",
+    "subType": "Modifiers",
     "duration": 5,
     "stackMode": "refresh",
     "icon": "Media/UI/stealth.svg",
@@ -506,11 +506,15 @@
     "modifiers": [
       {
         "stat": "damage",
-        "percentage": 1.25
+        "percentage": 25
       },
       {
         "stat": "critChance",
         "flat": 10
+      },
+      {
+        "stat": "toHit",
+        "flat": 50
       }
     ]
   },

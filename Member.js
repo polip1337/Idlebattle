@@ -8,7 +8,7 @@ class Member {
 
         this.name = name;
         this.classType = classInfo.name;
-        this.classId = classInfo.id;
+        this.classId = classInfo.combina;
         this.class = classInfo; // This should be the raw class definition object
         this.team = team;
         this.opposingTeam = opposingTeam;
@@ -26,7 +26,8 @@ class Member {
         // Initialize critical hit stats if not present
         if (!this.stats.critChance) this.stats.critChance = 5; // Base 5% crit chance
         if (!this.stats.critDamageMultiplier) this.stats.critDamageMultiplier = 2.0; // 200% damage on crit
-
+        this.stats.toHit = 0;
+        this.stats.toDodge = 0;
         this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
         this.currentMana = this.stats.mana;
@@ -153,18 +154,15 @@ class Member {
         var hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1) + this.stats.accuracy - defender.stats.dodge;
         
         // Add source's toHit modifiers from effects
-        this.effects.forEach(effect => {
-            if (effect.effect.toHit != undefined) {
-                hitChance += effect.effect.toHit;
+        if (this.stats.toHit != undefined) {
+                hitChance += this.stats.toHit;
             }
-        });
 
         // Subtract defender's toHit modifiers from effects
-        defender.effects.forEach(effect => {
-            if (effect.effect.toHit != undefined) {
-                hitChance += effect.effect.toHit;
-            }
-        });
+        if (defender.stats.toDodge != undefined) {
+            hitChance += defender.stats.toDodge;
+        }
+
 
         if (skillModifier != undefined) {
             hitChance += skillModifier;
@@ -201,7 +199,7 @@ class Member {
                     battleStatistics.addDamageBySummons(finalDamage);
                 }
                 this.effects
-                            .filter(effect => effect.effect.subType === 'stealth')
+                            .filter(effect => effect.effect.id === 'stealth')
                             .forEach(effect => effect.handleStealthAttack());
 
                 target.takeDamage(finalDamage);
@@ -409,7 +407,7 @@ class Member {
             return {
                 name: this.name,
                 classType: this.classType, // Used to find base definition on load
-                classId: this.classId,
+                combination: this.combination,
                 level: this.level,
                 currentHealth: this.currentHealth,
                 currentMana: this.currentMana,
@@ -449,7 +447,7 @@ class Member {
 
             // If non-heroes have skill progression (uncommon for standard mobs)
             if (data.skillProgression && data.skillProgression.length > 0 && allSkillsLookup) {
-                const baseSkillsFromClass = allMobClasses[this.classId].skills.map(skillId => deepCopy(allSkillsLookup[skillId]));
+                const baseSkillsFromClass = allMobClasses[this.combination].skills.map(skillId => deepCopy(allSkillsLookup[skillId]));
                 this.skills = baseSkillsFromClass.map(baseSkillData => {
                      const skillInstance = new Skill(baseSkillData, baseSkillData.effects);
                      const savedProg = data.skillProgression.find(sp => sp.name === skillInstance.name);
@@ -478,16 +476,8 @@ class Member {
     checkCriticalHit() {
         // Base crit chance is 5% + 0.1% per point of dexterity
         const critChance = this.stats.critChance;
-        
-        // Check for effects that modify crit chance
-        let finalCritChance = critChance;
-        this.effects.forEach(effect => {
-            if (effect.effect.critResistance != "undefined" && effect.effect.critResistance != null) {
-                finalCritChance += effect.effect.critResistance;
-            }
-        });
-        
-        return Math.random() * 100 < finalCritChance;
+
+        return Math.random() * 100 < critChance;
     }
 }
 

@@ -14,6 +14,7 @@ class Hero extends Member {
         this.skills2 = null;
         this.class3 = null;
         this.skills3 = null;
+        this.combination = classInfo.combination;
 
         this.selectedSkills = [];
         this.selectedPassiveSkills = [];

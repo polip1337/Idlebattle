@@ -95,7 +95,7 @@ export function changeHeroClass(newClassInfo) {
     hero.skills = hero.createSkillsFromIDs(newClassInfo.skills || []);
     
     // Update stats
-    hero.stats = { ...newClassInfo.stats };
+    hero.stats = { ...hero.stats, ...newClassInfo.stats };
     hero.statsPerLevel = newClassInfo.statsPerLevel;
     
     // Recalculate stats with current level
