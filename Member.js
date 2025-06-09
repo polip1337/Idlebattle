@@ -155,14 +155,14 @@ class Member {
         // Add source's toHit modifiers from effects
         this.effects.forEach(effect => {
             if (effect.effect.toHit != undefined) {
-                hitChance += effect.effect.value;
+                hitChance += effect.effect.toHit;
             }
         });
 
         // Subtract defender's toHit modifiers from effects
         defender.effects.forEach(effect => {
             if (effect.effect.toHit != undefined) {
-                hitChance += effect.effect.value;
+                hitChance += effect.effect.toHit;
             }
         });
 
@@ -180,9 +180,6 @@ class Member {
     }
 
     performAttack(member, target, skill, isHero = false) {
-        this.effects
-            .filter(effect => effect.effect.subType === 'stealth')
-            .forEach(effect => effect.handleStealthAttack());
 
         if (this.calculateHitChance(target, skill.toHit)) {
             if (skill.effects) {
@@ -203,6 +200,9 @@ class Member {
                 if (this.isSummon) {
                     battleStatistics.addDamageBySummons(finalDamage);
                 }
+                this.effects
+                            .filter(effect => effect.effect.subType === 'stealth')
+                            .forEach(effect => effect.handleStealthAttack());
 
                 target.takeDamage(finalDamage);
                 if (this.isHero) { // Check if the attacker is the hero

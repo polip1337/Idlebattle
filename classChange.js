@@ -76,7 +76,7 @@ export function changeHeroClass(newClassInfo) {
 
     // Update current class info
     hero.classType = newClassInfo.name;
-    hero.classId = newClassInfo.id;
+    hero.classId = newClassInfo.combination;
     hero.class = newClassInfo;
     
     // Get or initialize class history data
