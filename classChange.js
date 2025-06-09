@@ -64,7 +64,6 @@ export function openClassChangeModal() {
 export function changeHeroClass(newClassInfo) {
     if (!hero || !newClassInfo) return;
 
-    // Clear active skills
     hero.activeSelectedSkills = [];
     hero.selectedSkills = [];
     hero.selectedPassiveSkills = [];
@@ -75,10 +74,9 @@ export function changeHeroClass(newClassInfo) {
     hero.class = newClassInfo;
     
     // Restore class-specific data
-    const classData = hero.classHistory[newClassInfo.id];
-    hero.level = classData.level;
-    hero.experience = classData.experience;
-    hero.experienceToLevel = classData.experienceToLevel;
+    hero.level = 1;
+    hero.experience = 0;
+    hero.experienceToLevel = 100;
 
     // Update skills
     hero.skills = hero.createSkillsFromIDs(newClassInfo.skills || []);

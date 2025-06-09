@@ -6,7 +6,7 @@
     "positions": ["Front"],
     "experience": 15,
     "goldDrop": 8,
-    "skills": ["slash", "shieldBash", "battleCry"],
+    "skills": [],
     "stats": {
       "strength": 20,
       "dexterity": 12,
@@ -123,7 +123,7 @@
     "positions": ["Back"],
     "experience": 12,
     "goldDrop": 6,
-    "skills": ["quickStrike", "poisonDart", "sneakAttack"],
+    "skills": [],
     "stats": {
       "strength": 12,
       "speed": 18,
