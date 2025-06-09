@@ -303,6 +303,17 @@ class Member {
         }
         this.dead = true;
         this.stopSkills();
+        
+        // Trigger death effects
+        this.effects.forEach(effect => {
+            if (effect.effect.onDeathEffects) {
+                effect.effect.onDeathEffects.forEach(deathEffect => {
+                    // Create a new effect instance for each death effect
+                    new EffectClass(this, deathEffect);
+                });
+            }
+        });
+        
         if (!this.isHero) { // Only hero gains exp from mob deaths
             hero.gainExperience(this.class.experience || 0); // Ensure experience exists
             battleStatistics.addEnemyDefeated(this.classType);
