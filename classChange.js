@@ -61,7 +61,7 @@ export function openClassChangeModal() {
     classChangeModal.style.display = 'block';
 }
 
-function changeHeroClass(newClassInfo) {
+export function changeHeroClass(newClassInfo) {
     if (!hero || !newClassInfo) return;
 
     // Store current class data in history
