@@ -207,11 +207,11 @@ export async function loadGameData(savedGameState = null) {
             }
 
             const classIdForHero = savedGameState.heroData.classId || 'novice';
-            // Find the class directly from heroClasses since it's already processed
-            let heroClassInfo = heroClasses[classIdForHero];
+            // Find the class directly from heroClasses using combination
+            let heroClassInfo = Object.values(heroClasses).find(c => c.combination === classIdForHero);
             // If class not found, fall back to novice
             if (!heroClassInfo) {
-                heroClassInfo = heroClasses['novice'];
+                heroClassInfo = Object.values(heroClasses).find(c => c.combination === 'novice');
                 if (!heroClassInfo) {
                     alert("Critical error: No hero classes available to load hero."); 
                     return false;
