@@ -22,7 +22,7 @@ class EvolutionService {
      * Must be called and awaited before using other methods.
      */
     async init() {
-        if (this.isInitialized) {
+     /*   if (this.isInitialized) {
             return;
         }
         try {
@@ -38,7 +38,7 @@ class EvolutionService {
             console.error("Failed to initialize EvolutionService:", error);
             this.evolutionData = null;
             this.isInitialized = false;
-        }
+        }*/
     }
 
     /**
