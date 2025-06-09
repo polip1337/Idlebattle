@@ -126,16 +126,23 @@ class EffectClass {
             case 'Blight':
                 this.createBlightInterval(this.value);
                 break;
-            case 'Bleed':
-                // Track max bleed stacks
-                const currentBleedStacks = this.target.effects.filter(e => e.effect.subType === 'Bleed').length;
-                battleStatistics.updateMaxBleedStacks(currentBleedStacks);
+            case 'DoT':
+                // Track max bleed stacks if applicable
+                if (this.effect.subType === 'Bleed') {
+                    const currentBleedStacks = this.target.effects.filter(e => e.effect.subType === 'Bleed').length;
+                    battleStatistics.updateMaxBleedStacks(currentBleedStacks);
+                }
                 this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
                 break;
-            case 'Burn':
-            case 'Poison':
-            case 'WildfireBurn':
-                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+            case 'stealth':
+                // Store original stats for later reversion
+                this.originalStats = {
+                    damage: this.target.stats.damage,
+                    critChance: this.target.stats.critChance
+                };
+                // Apply stealth bonuses
+                this.target.stats.damage *= 1.25; // 25% damage increase
+                this.target.stats.critChance += 10; // 10% crit chance increase
                 break;
             case 'Charm':
                 // Logic for Charm effect
@@ -257,13 +264,6 @@ class EffectClass {
             case 'Taunt':
                 // Logic for Taunt effect
                 break;
-            case 'DoT':
-            case 'Bleed':
-            case 'Burn':
-            case 'Poison':
-            case 'WildfireBurn':
-                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
-                break;
             case 'delayedDamage':
                 // Store the damage value for later use in revertEffect
                 this.originalValue = this.effect.value;
@@ -358,11 +358,8 @@ class EffectClass {
             case 'Poison':
             case 'Regen':
             case 'WildfireBurn':
-
                 clearInterval(this.interval);
-                //  console.log("Clearing:" + this.interval + this.effect.damageType);
                 break;
-
             case 'Disarm':
                 this.target.disarmed = false;
                 break;
@@ -381,7 +378,6 @@ class EffectClass {
             case 'Stun':
                 this.target.startSkills();
                 break;
-
             case 'Invisibility':
                 this.target.invisible = false;
                 break;
@@ -401,6 +397,13 @@ class EffectClass {
                     this.target.takeDamage(finalDamage);
                 }
 
+                break;
+            case 'stealth':
+                // Revert stealth bonuses
+                if (this.originalStats) {
+                    this.target.stats.damage = this.originalStats.damage;
+                    this.target.stats.critChance = this.originalStats.critChance;
+                }
                 break;
             // Revert logic for other effects as necessary
             default:
@@ -507,6 +510,14 @@ class EffectClass {
                 this.target.stats.dexterity -= 1;
                 this.target.stats.health -= 1;
             }, 1000);
+        }
+    }
+
+    // Add this new method to handle stealth on attack
+    handleStealthAttack() {
+        if (this.effect.subType === 'stealth') {
+            // Remove the stealth effect after the attack
+            this.remove();
         }
     }
 

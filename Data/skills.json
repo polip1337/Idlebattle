@@ -949,21 +949,10 @@
     "icon": "Media/Skills/Rogue/stealth.png",
     "effects": [
       {
-        "id": "applyBuff",
-        "buffId": "stealthBuff",
+        "id": "stealth",
         "name": "Stealthed",
         "description": "Invisible. Next attack deals +25% damage and has +10% crit chance.",
-        "duration": 2,
-        "modifiers": [
-          {
-            "stat": "damageBonusNextAttack",
-            "percentage": 25
-          },
-          {
-            "stat": "critChanceBonusNextAttack",
-            "flat": 10
-          }
-        ]
+        "duration": 5
       }
     ],
     "targetingModes": ["Self"],
@@ -1720,7 +1709,7 @@
         "duration": 5,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 7,
             "damageType": "Steam"
           },
@@ -1780,7 +1769,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 8,
             "damageType": "Steam"
           },
@@ -1895,7 +1884,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Steam"
           },
@@ -1985,7 +1974,7 @@
         "zoneDuration": 5,
         "zoneEffects": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 8,
             "damageType": "Fire"
           },
@@ -2203,7 +2192,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 7,
             "damageType": "Fire"
           },
@@ -2420,7 +2409,7 @@
         "duration": 5,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 8,
             "damageType": "Fire"
           },
@@ -3374,7 +3363,7 @@
         "damageType": "Fire",
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Fire"
           }
@@ -3617,7 +3606,7 @@
         "duration": 2,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 8,
             "damageType": "Fire"
           }
@@ -3690,7 +3679,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 12,
             "damageType": "Fire"
           },
@@ -3777,7 +3766,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 8,
             "damageType": "Fire"
           },
@@ -5707,7 +5696,7 @@
         "duration": 3,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 6,
             "damageType": "Air"
           },
@@ -7512,7 +7501,7 @@
         "radius": 2,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 9,
             "damageType": "Poison"
           },
@@ -8568,7 +8557,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 6,
             "damageType": "Physical"
           },
@@ -8648,7 +8637,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 8,
             "damageType": "Poison"
           },
@@ -9856,7 +9845,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Poison"
           },
@@ -13734,7 +13723,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Physical"
           },
@@ -14211,7 +14200,7 @@
         "duration": 3,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Fire"
           }
@@ -14347,7 +14336,7 @@
         "duration": 3,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 12,
             "damageType": "Fire"
           }
@@ -14682,7 +14671,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 20,
             "damageType": "Fire"
           }
@@ -14828,7 +14817,7 @@
         "spreadChance": 0.3,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 25,
             "damageType": "Fire"
           }
@@ -15470,7 +15459,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Steam"
           }
@@ -15712,7 +15701,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 18,
             "damageType": "Necrotic"
           },
@@ -15749,7 +15738,7 @@
         "duration": 3,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Shadow"
           },
@@ -16631,7 +16620,7 @@
     "radius": 1,
     "effects": [
       {
-        "id": "damageOverTimeArea",
+        "id": "DoT",
         "damagePerTurn": 15,
         "damageType": "Ice",
         "duration": 3
@@ -16760,7 +16749,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 12,
             "damageType": "Steam"
           },
@@ -16955,7 +16944,7 @@
             "duration": 3
           },
           {
-            "id": "damageOverTime",
+            "id": "DoT",
             "damagePerTurn": 8,
             "duration": 3,
             "tickDamageType": "Earth"
@@ -17201,7 +17190,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Shadow"
           },
@@ -17863,7 +17852,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 12,
         "duration": 4,
         "tickDamageType": "Earth",
@@ -17909,7 +17898,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 15,
         "duration": 4,
         "tickDamageType": "Earth",
@@ -18006,7 +17995,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Fire"
           }
@@ -18321,7 +18310,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 10,
         "duration": 2,
         "tickDamageType": "Earth"
@@ -18375,7 +18364,7 @@
         "duration": 5,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 18,
             "damageType": "Ice"
           },
@@ -18504,7 +18493,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 10,
         "duration": 4,
         "tickDamageType": "Ice"
@@ -18627,12 +18616,12 @@
             "strength": 1
           },
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 12,
             "damageType": "Water"
           },
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 12,
             "damageType": "Lightning"
           }
@@ -18987,7 +18976,7 @@
         "radius": 0,
         "explosionEffects": [
           {
-            "id": "damageOverTime",
+            "id": "DoT",
             "damagePerTurn": 20,
             "duration": 3,
             "tickDamageType": "Water"
@@ -19234,7 +19223,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 20,
             "damageType": "Shadow"
           },
@@ -19314,7 +19303,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 12,
             "damageType": "Necrotic"
           },
@@ -19483,7 +19472,7 @@
         "duration": 5,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Physical"
           },
@@ -19793,7 +19782,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 14,
         "duration": 4,
         "tickDamageType": "Water",
@@ -19894,7 +19883,7 @@
         "speed": 2,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 20,
             "damageType": "Fire"
           },
@@ -19974,7 +19963,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 10,
         "duration": 3,
         "tickDamageType": "Fire"
@@ -20105,7 +20094,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 8,
             "damageType": "Fire"
           },
@@ -20139,7 +20128,7 @@
         "duration": 5,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Physical"
           },
@@ -20328,7 +20317,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 18,
             "damageType": "Ice"
           },
@@ -20773,7 +20762,7 @@
             "strength": 1.5
           },
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Steam"
           },
@@ -21455,7 +21444,7 @@
     "targetingModes": ["All Enemies"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 15,
         "duration": 6,
         "tickDamageType": "Shadow",
@@ -21577,12 +21566,12 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Nature"
           },
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Physical"
           }
@@ -21729,7 +21718,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeAreaEnemy",
+            "id": "DoTEnemy",
             "damagePerTurn": 15,
             "damageType": "Air"
           },
@@ -21805,7 +21794,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 15,
         "duration": 4,
         "tickDamageType": "Air",
@@ -21831,7 +21820,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 10,
         "duration": 3,
         "tickDamageType": "Air"
@@ -22476,7 +22465,7 @@
         "duration": 3
       },
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "damagePerTurn": 15,
         "duration": 3,
         "tickDamageType": "Shadow"
@@ -22624,7 +22613,7 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Fire"
           },
@@ -23003,7 +22992,7 @@
             "strength": 1
           },
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Ice"
           },
@@ -23029,7 +23018,7 @@
     "targetingModes": ["Single Enemy"],
     "effects": [
       {
-        "id": "damageOverTime",
+        "id": "DoT",
         "name": "Frostburn",
         "duration": 3,
         "damagePerTurn": 12,
@@ -23635,7 +23624,7 @@
             "duration": 2
           },
           {
-            "id": "damageOverTime",
+            "id": "DoT",
             "damagePerTurn": 15,
             "duration": 3,
             "tickDamageType": "Arcane"
@@ -24055,12 +24044,12 @@
         "duration": 4,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Physical"
           },
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 10,
             "damageType": "Arcane"
           }
@@ -24556,7 +24545,7 @@
         "duration": 3,
         "effectsInZone": [
           {
-            "id": "damageOverTimeArea",
+            "id": "DoT",
             "damagePerTurn": 15,
             "damageType": "Holy"
           }

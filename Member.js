@@ -165,6 +165,9 @@ class Member {
     }
 
     performAttack(member, target, skill, isHero = false) {
+        if (this.effects.some(effect => effect.effect.subType === 'stealth')) {
+            this.handleStealthAttack();
+        }
         if (this.calculateHitChance(target, skill.toHit)) {
             if (skill.effects) {
                 new EffectClass(target, skill.effects);
