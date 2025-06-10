@@ -344,7 +344,7 @@
     "subType": "ManaShield",
     "description": "Absorbs 50% of damage taken as Mana loss.",
     "duration": 3,
-    "absorbPercentage": 0.5
+    "absorbPercentage": 1
   },
   "poison": {
     "id": "poison",

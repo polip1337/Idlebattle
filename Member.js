@@ -243,6 +243,32 @@ class Member {
             }
         }
 
+        // Handle mana shield damage first if active
+        if (this.manaShieldActive) {
+            const manaDamage = damage; // Full damage to mana
+            const manaCost = Math.ceil(manaDamage * (this.manaShieldRatio / 100)); // Convert damage to mana cost
+            
+            if (this.currentMana >= manaCost) {
+                this.currentMana -= manaCost;
+                if (this.isHero) {
+                    battleStatistics.addManaUsed(manaCost);
+                }
+                updateMana(this);
+                battleLog.log(`${this.name}'s mana shield absorbed ${manaDamage} damage, costing ${manaCost} mana.`);
+                return 0; // No health damage taken
+            } else {
+                // Not enough mana to fully absorb
+                const remainingDamage = Math.ceil(damage * (1 - (this.currentMana / manaCost)));
+                this.currentMana = 0;
+                if (this.isHero) {
+                    battleStatistics.addManaUsed(this.currentMana);
+                }
+                updateMana(this);
+                battleLog.log(`${this.name}'s mana shield was depleted, taking ${remainingDamage} damage.`);
+                damage = remainingDamage;
+            }
+        }
+
         if (damageType != 'Bleed') {
             damage = this.applyBlock(damage);
             damage = this.applyArmor(damage);
