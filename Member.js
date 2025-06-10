@@ -187,7 +187,7 @@ class Member {
     }
 
     performAttack(member, target, skill, isHero = false) {
-        // If there's a forced target, use it instead of the provided target
+        // Handle forced target if set
         const actualTarget = this.forcedTarget || target;
 
        
@@ -211,12 +211,12 @@ class Member {
             if (this.calculateHitChance(actualTarget, skill.toHit)) {
                  // Handle effects that apply to both allies and enemies
                 if (skill.effects) {
-                    new EffectClass(actualTarget, skill.effects);
+                    new EffectClass(actualTarget, skill.effects, this);
                     skill.gainExperience(10); // Award experience for effect application
                 }
                 if (skill.damageType && skill.damage != 0) {
                     const damage = skill.calculateDamage(this);
-                    const finalDamage = actualTarget.calculateFinalDamage(damage, skill.damageType);
+                    const finalDamage = actualTarget.calculateFinalDamage(damage, skill.damageType, this);
 
                     // Track simultaneous hits for multi-target skills
                     if (skill.targetCount && skill.targetCount > 1) {
@@ -246,9 +246,9 @@ class Member {
         }
     }
 
-    calculateFinalDamage(damage, damageType) {
+    calculateFinalDamage(damage, damageType, target = null) {
         // Check for critical hit first
-        const isCrit = this.checkCriticalHit();
+        const isCrit = this.checkCriticalHit(target);
         if (isCrit) {
             damage *= this.stats.critDamageMultiplier;
             battleLog.log(`${this.name} landed a critical hit!`);
@@ -530,9 +530,26 @@ class Member {
             // This `restoreFromData` would primarily be for stats and health if saved mid-combat.
         }
 
-    checkCriticalHit() {
+    checkCriticalHit(target = null) {
         // Base crit chance is 5% + 0.1% per point of dexterity
-        const critChance = this.stats.critChance;
+        let critChance = this.stats.critChance;
+
+        // Check for target-specific crit bonus
+        if (target && target.critChanceBonusNextAttackVsTarget) {
+            const bonus = target.critChanceBonusNextAttackVsTarget;
+            // Only apply the bonus if this is the original caster
+            if (bonus.caster === this) {
+                critChance += bonus.bonus;
+                // Remove the effect after use
+                const effect = target.effects.find(e => 
+                    e.effect.modifiers && 
+                    e.effect.modifiers.some(m => m.stat === 'critChanceBonusNextAttackVsTarget')
+                );
+                if (effect) {
+                    effect.remove();
+                }
+            }
+        }
 
         return Math.random() * 100 < critChance;
     }

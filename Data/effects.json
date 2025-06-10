@@ -456,10 +456,10 @@
   "shadowVantage": {
     "id": "shadowVantage",
     "name": "Shadow Vantaged",
-    "type": "buff",
+    "type": "debuff",
     "subType": "Modifiers",
     "description": "Your next melee attack against this target has +15% crit chance.",
-    "duration": 1,
+    "duration": 10,
     "targetSpecific": true,
     "modifiers": [
       {

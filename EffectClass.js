@@ -337,6 +337,14 @@ class EffectClass {
                 }
                 break;
 
+            case 'critChanceBonusNextAttackVsTarget':
+                // Store the caster for later verification
+                this.target.critChanceBonusNextAttackVsTarget = {
+                    bonus: this.effect.modifiers.find(m => m.stat === 'critChanceBonusNextAttackVsTarget').flat,
+                    caster: this.caster
+                };
+                break;
+
             default:
                 console.warn(`Effect subType '${this.effect.subType}' from '${this.effect.name}' is not implemented.`);
         }
@@ -457,6 +465,11 @@ class EffectClass {
 
             case 'Dispel':
                 // No state to revert for dispel effects
+                break;
+
+            case 'TargetSpecificCritBonus':
+                // Clear the target-specific crit bonus
+                this.target.critChanceBonusNextAttackVsTarget = null;
                 break;
 
             default:
