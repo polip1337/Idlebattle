@@ -1,7 +1,6 @@
 import { BattleController } from './battle_controller.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
-import Companion from './companion.js';
 
 import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
@@ -35,6 +34,7 @@ import { initializeCompanionUI } from './companionUIManager.js';
 import { handleEarlyGameInit } from './slideshow.js';
 import { openClassChangeModal, initializeClassChange } from './classChange.js';
 import { initializeDebug } from './debug.js';
+import { getFormation } from './Formation.js';
 
 
 export let battleStatistics;
@@ -384,14 +384,30 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         }
     });
 
+    // Get the formation instance
+    const formation = getFormation();
+    if (!formation) {
+        console.warn("Formation not initialized, using default positioning");
+        return;
+    }
+
     membersToRender.forEach(member => {
-        const targetRowIndex = (member.position === "Back") ? 1 : 0;
+        // Get member's position from formation grid
+        const pos = formation.getCharacterPosition(member);
+        if (!pos) {
+            console.warn(`No position found for ${member.name} in formation grid`);
+            return;
+        }
+
+        // Convert formation grid position to UI row
+        // Formation grid: row 0 is back, row 1 is front
+        const targetRowIndex = pos.row;
         let rowElement = teamRows[targetRowIndex];
 
-        // Find the first empty slot in the target row
-        const emptySlot = rowElement.querySelector('.empty-slot');
+        // Find the empty slot at the correct position
+        const emptySlot = rowElement.querySelector(`.empty-slot:nth-child(${pos.col + 1})`);
         if (!emptySlot) {
-            console.warn(`Cannot place ${member.name} in ${containerId}, no empty slots available.`);
+            console.warn(`Cannot place ${member.name} in ${containerId}, no empty slot at position [${pos.row},${pos.col}]`);
             return;
         }
 
