@@ -356,6 +356,20 @@ class EffectClass {
                 });
                 break;
 
+            case 'buffResistanceFlat':
+                // Initialize resistances array if it doesn't exist
+                if (!this.target.stats.resistances) {
+                    this.target.stats.resistances = {};
+                }
+                // Store original value
+                const resType = `${this.effect.damageType.toLowerCase()}`;
+
+                this.originalStats.resistances = this.originalStats.resistances || {};
+                this.originalStats.resistances[resType] = this.target.stats.resistances[resType] || 0;
+                // Apply the flat resistance bonus
+                this.target.stats.resistances[resType] = (this.target.stats.resistances[resType] || 0) + this.effect.value;
+                break;
+
             default:
                 console.warn(`Effect subType '${this.effect.subType}' from '${this.effect.name}' is not implemented.`);
         }
@@ -417,9 +431,8 @@ class EffectClass {
                 break;
 
             case 'Vulnerability':
-                const resStat = `${this.effect.damageType.toLowerCase()}Resistance`;
-                if (typeof this.originalStats[resStat] !== 'undefined') {
-                    this.target.stats[resStat] = this.originalStats[resStat];
+                if (this.originalStats.resistances && this.originalStats.resistances[this.effect.damageType] !== undefined) {
+                    this.target.stats.resistances[this.effect.damageType] = this.originalStats.resistances[this.effect.damageType];
                 }
                 break;
 
@@ -486,6 +499,14 @@ class EffectClass {
             case 'damageBonusVsDebuffed':
                 if (this.target.damageBonuses) {
                     this.target.damageBonuses = this.target.damageBonuses.filter(bonus => bonus.id !== this.effect.id);
+                }
+                break;
+
+            case 'buffResistanceFlat':
+                const resType = `${this.effect.damageType.toLowerCase()}`;
+
+                if (this.originalStats.resistances && this.originalStats.resistances[resType] !== undefined) {
+                    this.target.stats.resistances[resType] = this.originalStats.resistances[resType];
                 }
                 break;
 
