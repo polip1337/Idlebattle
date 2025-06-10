@@ -557,7 +557,7 @@
     "type": "buff",
     "subType": "GuaranteedDodge",
     "description": "Dodges the next incoming attack.",
-    "duration": 0,
+    "duration": 10,
     "icon": "Media/UI/effects/phased.png"
   },
   "trap": {
