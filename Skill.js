@@ -42,7 +42,7 @@ class Skill {
         this.div = element;
     }
 
-    calculateDamage(member) {
+    calculateDamage(member, target) {
         let damage = this.damage * this.baseDamage * member.stats.damage;
         
         // Scale damage based on tags
@@ -50,6 +50,27 @@ class Skill {
             damage *= (1 + member.stats.strength / 100); // Scale with strength
         } else if (this.tags.includes('Magical')) {
             damage *= (1 + member.stats.magicPower / 100); // Scale with magic power
+        }
+
+        // Check for damage bonuses
+        if (member.damageBonuses && member.damageBonuses.length > 0) {
+            member.damageBonuses.forEach(bonus => {
+                // Handle unconditional bonuses
+                if (!bonus.condition) {
+                    damage *= (1 + bonus.value / 100);
+                    return;
+                }
+
+                // Handle conditional bonuses
+                switch (bonus.condition) {
+                    case 'targetHasDebuffs':
+                        if (target.hasDebuff()) {
+                            damage *= (1 + bonus.value / 100);
+                        }
+                        break;
+                    // Add more conditions here as needed
+                }
+            });
         }
         
         return damage;

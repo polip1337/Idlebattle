@@ -600,5 +600,9 @@
     "subType": "Dispel",
     "description": "Removes specified debuffs from the target.",
     "duration": 0
+  },
+  "damageBonusVsDebuffed": {
+    "id": "damageBonusVsDebuffed",
+    "duration": -1
   }
 }

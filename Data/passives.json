@@ -1177,9 +1177,9 @@
     "effects": [
       {
         "id": "damageBonusVsDebuffed",
-        "type": "passive",
-        "subtype": "buffDamagePercentageConditional",
-        "condition": "targetHasNegativeStatuseffects",
+        "name": "Opportunist",
+        "condition": "targetHasDebuffs",
+        "subtype": "damageBonusConditional",
         "value": 10,
         "description": "Deal 10% increased damage to enemies suffering from negative status effects (e.g., stun, bleed, poison)."
       }

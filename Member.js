@@ -23,7 +23,7 @@ class Member {
         this.goldDrop = classInfo.goldDrop || 0;
         this.isSummon = false; // New field to track if this member is a summon
         this.forcedTarget = null; // Add forced target property
-
+        this.damageBonuses = [];
         // Initialize critical hit stats if not present
         if (!this.stats.critChance) this.stats.critChance = 5; // Base 5% crit chance
         if (!this.stats.critDamageMultiplier) this.stats.critDamageMultiplier = 2.0; // 200% damage on crit
@@ -223,7 +223,7 @@ class Member {
                     skill.gainExperience(10); // Award experience for effect application
                 }
                 if (skill.damageType && skill.damage != 0) {
-                    const damage = skill.calculateDamage(this);
+                    const damage = skill.calculateDamage(this,actualTarget);
                     const finalDamage = actualTarget.calculateFinalDamage(damage, skill.damageType,this);
 
                     // Track simultaneous hits for multi-target skills
@@ -570,6 +570,10 @@ class Member {
             effect.effect.type === 'debuff' &&
             debuffNames.includes(effect.effect.name)
         );
+    }
+
+    hasDebuff() {
+        return this.effects.some(effect => effect.effect.type === 'debuff');
     }
 }
 

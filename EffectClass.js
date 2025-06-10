@@ -345,6 +345,17 @@ class EffectClass {
                 };
                 break;
 
+            case 'damageBonusVsDebuffed':
+                if (!this.target.damageBonuses) {
+                    this.target.damageBonuses = [];
+                }
+                this.target.damageBonuses.push({
+                    value: this.effect.value,
+                    condition: 'targetHasDebuffs',
+                    id: this.effect.id
+                });
+                break;
+
             default:
                 console.warn(`Effect subType '${this.effect.subType}' from '${this.effect.name}' is not implemented.`);
         }
@@ -470,6 +481,12 @@ class EffectClass {
             case 'TargetSpecificCritBonus':
                 // Clear the target-specific crit bonus
                 this.target.critChanceBonusNextAttackVsTarget = null;
+                break;
+
+            case 'damageBonusVsDebuffed':
+                if (this.target.damageBonuses) {
+                    this.target.damageBonuses = this.target.damageBonuses.filter(bonus => bonus.id !== this.effect.id);
+                }
                 break;
 
             default:
