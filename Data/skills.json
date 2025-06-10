@@ -1040,12 +1040,10 @@
     "id": "shadowStep",
     "name": "Shadow Step",
     "type": "active",
-    "damage": 5,
-    "damageType": "Shadow",
     "staminaCost": 8,
     "manaCost": 8,
     "cooldown": 12,
-    "description": "Step through shadows to appear behind an enemy, dealing minor Shadow damage and preparing for a follow-up.",
+    "description": "Step through shadows to appear behind an enemy, preparing for a follow-up.",
     "icon": "Media/Skills/Rogue/shadow_step.png",
     "effects": [
       {

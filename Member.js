@@ -216,7 +216,7 @@ class Member {
                 }
                 if (skill.damageType && skill.damage != 0) {
                     const damage = skill.calculateDamage(this);
-                    const finalDamage = actualTarget.calculateFinalDamage(damage, skill.damageType, this);
+                    const finalDamage = actualTarget.calculateFinalDamage(damage, skill.damageType,this);
 
                     // Track simultaneous hits for multi-target skills
                     if (skill.targetCount && skill.targetCount > 1) {
@@ -246,9 +246,9 @@ class Member {
         }
     }
 
-    calculateFinalDamage(damage, damageType, target = null) {
+    calculateFinalDamage(damage, damageType,attacker = null) {
         // Check for critical hit first
-        const isCrit = this.checkCriticalHit(target);
+        const isCrit = this.checkCriticalHit(attacker);
         if (isCrit) {
             damage *= this.stats.critDamageMultiplier;
             battleLog.log(`${this.name} landed a critical hit!`);
@@ -530,18 +530,18 @@ class Member {
             // This `restoreFromData` would primarily be for stats and health if saved mid-combat.
         }
 
-    checkCriticalHit(target = null) {
+    checkCriticalHit(attacker) {
         // Base crit chance is 5% + 0.1% per point of dexterity
         let critChance = this.stats.critChance;
 
         // Check for target-specific crit bonus
-        if (target && target.critChanceBonusNextAttackVsTarget) {
-            const bonus = target.critChanceBonusNextAttackVsTarget;
+        if (this.critChanceBonusNextAttackVsTarget) {
+            const bonus = this.critChanceBonusNextAttackVsTarget;
             // Only apply the bonus if this is the original caster
-            if (bonus.caster === this) {
+            if (bonus.caster == attacker) {
                 critChance += bonus.bonus;
                 // Remove the effect after use
-                const effect = target.effects.find(e => 
+                const effect = this.effects.find(e =>
                     e.effect.modifiers && 
                     e.effect.modifiers.some(m => m.stat === 'critChanceBonusNextAttackVsTarget')
                 );
