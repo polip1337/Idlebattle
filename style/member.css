@@ -245,3 +245,64 @@
     border-width: 5px;
     border-style: solid;
 }
+
+.team-slot {
+    width: 120px;
+    height: 120px;
+    margin: 5px;
+    position: relative;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.team-slot.empty {
+    background: rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.team-row {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.team {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.team-divider {
+    width: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 20px;
+}
+
+#teamContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.member {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Add hover effect for empty slots */
+.team-slot.empty:hover {
+    background: rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+}
