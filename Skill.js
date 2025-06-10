@@ -44,11 +44,14 @@ class Skill {
 
     calculateDamage(member) {
         let damage = this.damage * this.baseDamage * member.stats.damage;
-        if (this.damageType === 'physical') {
-            damage += member.stats.strength;
-        } else if (this.damageType === 'magical') {
-            damage += member.stats.magicPower;
+        
+        // Scale damage based on tags
+        if (this.tags.includes('Physical')) {
+            damage *= (1 + member.stats.strength / 100); // Scale with strength
+        } else if (this.tags.includes('Magical')) {
+            damage *= (1 + member.stats.magicPower / 100); // Scale with magic power
         }
+        
         return damage;
     }
 
