@@ -1,7 +1,10 @@
 // BattleState.js - Manages core battle state and configuration
 export class BattleState {
     constructor() {
-        this.battleStarted = false;
+        this.battleStarted= false;
+        this.battleEnded= false;
+        this.battleTime= 0;
+        this.lastExpTick= 0;
         this.battleInterval = null;
         this.isFleeOnCooldown = false;
         this.isBattlePausedForDialogue = false;

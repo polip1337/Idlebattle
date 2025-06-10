@@ -58,6 +58,12 @@ class Skill {
     gainExperience(amount) {
         // Only allow hero team skills to gain experience
         if (this.div && (this.div.closest('#team1')||this.div.closest('#bottomContainer'))) {
+            // For passive skills, only gain exp if they are selected
+            if (this.isPassive) {
+                const isSelected = globalHero && globalHero.selectedSkills.some(s => s && s.id === this.id);
+                if (!isSelected) return;
+            }
+            
             this.experience += amount;
             while (this.experience >= this.experienceToNextLevel) {
                 this.levelUp();

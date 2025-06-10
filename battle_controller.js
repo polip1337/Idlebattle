@@ -83,6 +83,17 @@ export class BattleController {
 
         this.teamManager.handleTeamRegeneration();
         await this.checkBattleOutcome();
+
+        if (this.battleState.battleStarted && !this.battleState.battleEnded) {
+            // Update battle time
+            this.battleState.battleTime += 1;
+
+            // Check for passive skill exp every 20 seconds
+            if (this.battleState.battleTime - this.battleState.lastExpTick >= 20) {
+                this.awardPassiveSkillExperience();
+                this.battleState.lastExpTick = this.battleState.battleTime;
+            }
+        }
     }
     
     async checkBattleOutcome() {
@@ -260,6 +271,29 @@ export class BattleController {
         if (wasPlayerVictorious) {
             this.battleState.markStageCompleted(this.battleState.currentBattleStageNumber);
             this.ui.updateStageDisplay();
+        }
+
+        // Award final passive skill experience for remaining time
+        if (hero && hero.selectedSkills) {
+            const remainingTime = this.battleState.battleTime - this.battleState.lastExpTick;
+            if (remainingTime > 0) {
+                hero.selectedSkills.forEach(skill => {
+                    if (skill && skill.isPassive) {
+                        skill.gainExperience(remainingTime);
+                    }
+                });
+            }
+        }
+    }
+
+    awardPassiveSkillExperience() {
+        // Award experience to selected passive skills
+        if (hero && hero.selectedSkills) {
+            hero.selectedSkills.forEach(skill => {
+                if (skill && skill.isPassive) {
+                    skill.gainExperience(20); // Award 20 exp (1 per second for 20 seconds)
+                }
+            });
         }
     }
 }
