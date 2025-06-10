@@ -555,15 +555,10 @@
     "id": "teleportDodgeBuff",
     "name": "Phased",
     "type": "buff",
-    "subType": "Modifiers",
-    "description": "+50 Dodge for next incoming attack this turn.",
+    "subType": "GuaranteedDodge",
+    "description": "Dodges the next incoming attack.",
     "duration": 0,
-    "modifiers": [
-      {
-        "stat": "dodgeNextAttack",
-        "flat": 50
-      }
-    ]
+    "icon": "Media/UI/effects/phased.png"
   },
   "trap": {
     "id": "trap",

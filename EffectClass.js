@@ -235,6 +235,10 @@ class EffectClass {
                 this.target.manaShieldRatio = this.effect.absorbPercentage;
                 break;
 
+            case 'GuaranteedDodge':
+                this.target.hasGuaranteedDodge = true;
+                break;
+
             case 'Regen':
                 this.createHealOverTimeInterval(this.effect.value, this.target);
                 break;
@@ -370,6 +374,10 @@ class EffectClass {
             case 'ManaShield':
                 this.target.manaShieldActive = false;
                 this.target.manaShieldRatio = 0;
+                break;
+
+            case 'GuaranteedDodge':
+                this.target.hasGuaranteedDodge = false;
                 break;
 
             case 'Regen':

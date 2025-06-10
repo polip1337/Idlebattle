@@ -152,6 +152,15 @@ class Member {
             console.log("Self targeted");
             return true;
         }
+
+        // Check for guaranteed dodge
+        if (defender.hasGuaranteedDodge) {
+            battleLog.log(`${defender.name} dodged the attack with Phased!`);
+            battleStatistics.addSuccessfulDodge();
+            defender.hasGuaranteedDodge = false; // Remove the dodge after use
+            return false;
+        }
+
         var hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1) + this.stats.accuracy - defender.stats.dodge;
         
         // Add source's toHit modifiers from effects
@@ -163,7 +172,6 @@ class Member {
         if (defender.stats.toDodge != undefined) {
             hitChance += defender.stats.toDodge;
         }
-
 
         if (skillModifier != undefined) {
             hitChance += skillModifier;
