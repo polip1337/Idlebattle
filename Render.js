@@ -3,28 +3,18 @@ import Item from './item.js'; // Assuming Item.js is in the same directory
 import { hero,battleLog } from './initialize.js'; // To access hero instance for drag/drop
 
 export function updateSkillBar(skills) {
-    // Cache DOM elements and create a document fragment
-    const fragment = document.createDocumentFragment();
-    const skillElements = new Array(12);
-    
-    // Pre-fetch all skill elements
     for (let i = 0; i < 12; i++) {
-        skillElements[i] = document.querySelector("#skill" + (i + 1));
-    }
-
-    // Process each skill slot
-    for (let i = 0; i < 12; i++) {
-        const skillElement = skillElements[i];
+        const skillElement = document.querySelector("#skill" + (i + 1));
         if (!skillElement) continue;
 
         const elementImg = skillElement.querySelector("img");
         const tooltip = skillElement.parentElement.querySelector(".tooltip");
+
         if (!elementImg || !tooltip) continue;
 
-        // Remove old event listeners more efficiently
-        const newSkillElement = skillElement.cloneNode(true);
-        skillElement.parentNode.replaceChild(newSkillElement, skillElement);
-        skillElement = newSkillElement;
+        // Clear any previous listeners
+        skillElement.onclick = null;
+        skillElement.ondblclick = null;
 
         if (skills[i]) {
             const currentSkill = skills[i];
@@ -48,29 +38,58 @@ export function updateSkillBar(skills) {
             } else if (currentSkill.type === "active") {
                 updateSkillTooltip(tooltip, currentSkill);
 
-                // Optimize double-click handler
-                skillElement.addEventListener('dblclick', () => {
+                // Double-click to toggle repeat
+                skillElement.ondblclick = () => {
                     currentSkill.repeat = !currentSkill.repeat;
-                    skillElement.classList.toggle('rainbow', currentSkill.repeat);
-                });
+                    if (currentSkill.repeat) {
+                        skillElement.classList.add('rainbow');
+                    } else {
+                        skillElement.classList.remove('rainbow');
+                    }
+                    // Optional: console.log(`Skill '${currentSkill.name}' repeat toggled to: ${currentSkill.repeat}`);
+                };
 
-                // Optimize click handler
-                skillElement.addEventListener('click', () => {
+                // Single-click to use skill (if not on cooldown and not on repeat)
+                skillElement.onclick = () => {
                     if (!hero) return;
 
                     if (!currentSkill.onCooldown && !currentSkill.repeat) {
+                        // Check resources before attempting to use skill
                         if (currentSkill.manaCost <= hero.currentMana && currentSkill.staminaCost <= hero.currentStamina) {
-                            currentSkill.useSkill(hero);
-                        } else if (battleLog?.log) {
-                            battleLog.log(`Not enough resources to use ${currentSkill.name}.`);
-                        }
-                    } else if (currentSkill.onCooldown && battleLog?.log) {
-                        battleLog.log(`${currentSkill.name} is on cooldown.`);
-                    }
-                });
+                            currentSkill.useSkill(hero); // 'hero' is the member instance
+                        } else {
+                            // Use battleLog for feedback if available
+                            if (battleLog && typeof battleLog.log === 'function') {
+                                battleLog.log(`Not enough resources to use ${currentSkill.name}.`);
+                            } else {
+                                console.log(`Not enough resources to use ${currentSkill.name}.`);
+                            }
 
-                // Set initial rainbow state
-                skillElement.classList.toggle('rainbow', currentSkill.repeat);
+                        }
+                    } else if (currentSkill.onCooldown) {
+                         if (battleLog && typeof battleLog.log === 'function') {
+                            battleLog.log(`${currentSkill.name} is on cooldown.`);
+                        } else {
+                            console.log(`${currentSkill.name} is on cooldown.`);
+                        }
+                    } else if (currentSkill.repeat) {
+                        // Skill is on auto-repeat. Single click does nothing in this configuration.
+                        // Optionally, add a message:
+                        // if (battleLog && typeof battleLog.log === 'function') {
+                        //     battleLog.log(`${currentSkill.name} is on auto-repeat. Double-click to toggle auto-cast.`);
+                        // }
+                    }
+                };
+
+                // Set initial rainbow state for active skills based on their repeat property
+                if (currentSkill.repeat) {
+                    skillElement.classList.add('rainbow');
+                } else {
+                    skillElement.classList.remove('rainbow');
+                }
+            } else {
+                updateSkillTooltip(tooltip, currentSkill);
+                skillElement.classList.remove('rainbow');
             }
         } else {
             elementImg.src = "Media/UI/defaultSkill.jpeg";
@@ -295,7 +314,58 @@ export function updateStatsDisplay(heroInstance) { // Renamed parameter
     renderBattleConsumableBar(heroInstance);
 
 }
+export function renderBattleConsumableBar(heroInstance) {
+    const barContainer = document.getElementById('battleConsumableBar');
+    if (!barContainer) {
+        return;
+    }
+    barContainer.innerHTML = ''; // Clear previous items
 
+    for (let i = 0; i < heroInstance.consumableToolbar.length; i++) {
+        const item = heroInstance.consumableToolbar[i];
+        const slotDiv = document.createElement('div');
+        slotDiv.classList.add('battle-consumable-slot');
+        slotDiv.dataset.slotType = "battleConsumableSlot"; // For drop handler identification
+        slotDiv.dataset.slotIndex = i;
+
+        slotDiv.removeEventListener('dragstart', handleDragStart);
+        slotDiv.removeEventListener('dragover', handleDragOver);
+        slotDiv.removeEventListener('drop', handleDrop);
+        slotDiv.removeEventListener('dblclick', handleBattleConsumableDoubleClick);
+        slotDiv.onmouseenter = null;
+        slotDiv.onmouseleave = null;
+
+        if (item) {
+            slotDiv.dataset.itemId = item.id;
+            slotDiv.dataset.itemSource = "battleConsumableBar"; // Source when dragging FROM this slot
+            slotDiv.draggable = true;
+
+            const img = document.createElement('img');
+            img.src = item.icon;
+            img.alt = item.name;
+            img.draggable = false; // Image itself is not draggable, the slotDiv is
+
+            const tooltip = createItemTooltipElement(item);
+            slotDiv.appendChild(img);
+            slotDiv.appendChild(tooltip);
+
+            slotDiv.addEventListener('dragstart', handleDragStart);
+            slotDiv.addEventListener('dblclick', handleBattleConsumableDoubleClick);
+
+            slotDiv.onmouseenter = (event) => showGeneralTooltip(event, tooltip);
+            slotDiv.onmouseleave = () => hideGeneralTooltip(tooltip);
+        } else {
+            slotDiv.draggable = false;
+            delete slotDiv.dataset.itemId;
+            delete slotDiv.dataset.itemSource;
+        }
+        // Always allow dropping onto battle consumable bar slots
+        slotDiv.addEventListener('dragover', handleDragOver);
+        slotDiv.addEventListener('drop', handleDrop);
+
+        barContainer.appendChild(slotDiv);
+    }
+}
 export function renderSkills(heroInstance) {
     const container = document.querySelector(`#activeSkills`);
     if (!container) return;
@@ -785,24 +855,8 @@ export function renderWeaponSkills(heroInstance) {
 let draggedItem = null;
 let draggedItemElement = null;
 
-// Cache for frequently accessed elements
-const dragDropCache = {
-    hero: null,
-    equipment: null,
-    inventory: null,
-    consumableToolbar: null
-};
-
-function updateDragDropCache(heroInstance) {
-    if (!heroInstance) return;
-    dragDropCache.hero = heroInstance;
-    dragDropCache.equipment = heroInstance.equipment;
-    dragDropCache.inventory = heroInstance.inventory;
-    dragDropCache.consumableToolbar = heroInstance.consumableToolbar;
-}
-
 function handleDragStart(event) {
-    if (!dragDropCache.hero) {
+    if (!hero) {
         console.warn("DragStart: Hero instance not available.");
         event.preventDefault();
         return;
@@ -813,32 +867,28 @@ function handleDragStart(event) {
     const itemSource = draggedItemElement.dataset.itemSource;
 
     if (!itemId) {
-        console.warn("DragStart: No itemId found on dragged element.");
+        console.warn("DragStart: No itemId found on dragged element.", draggedItemElement);
         event.preventDefault();
         return;
     }
 
-    // Find the dragged item using the cache
     draggedItem = null;
-    switch (itemSource) {
-        case "inventory":
-            draggedItem = dragDropCache.inventory.find(item => item.id === itemId);
-            break;
-        case "equipped":
-            for (const slotKey in dragDropCache.equipment) {
-                if (dragDropCache.equipment[slotKey]?.id === itemId) {
-                    draggedItem = dragDropCache.equipment[slotKey];
-                    break;
-                }
+
+    if (itemSource === "inventory") {
+        draggedItem = hero.inventory.find(item => item.id === itemId);
+    } else if (itemSource === "equipped") {
+        for (const slotKey in hero.equipment) {
+            if (hero.equipment[slotKey] && hero.equipment[slotKey].id === itemId) {
+                draggedItem = hero.equipment[slotKey];
+                break;
             }
-            break;
-        case "battleConsumableBar":
-            const slotIndex = parseInt(draggedItemElement.dataset.slotIndex);
-            if (!isNaN(slotIndex) && dragDropCache.consumableToolbar[slotIndex]?.id === itemId) {
-                draggedItem = dragDropCache.consumableToolbar[slotIndex];
-            }
-            break;
-    }
+        }
+     } else if (itemSource === "battleConsumableBar") {
+          const slotIndex = parseInt(draggedItemElement.dataset.slotIndex);
+         if (!isNaN(slotIndex) && hero.consumableToolbar[slotIndex] && hero.consumableToolbar[slotIndex].id === itemId) {
+             draggedItem = hero.consumableToolbar[slotIndex];
+         }
+     }
 
     if (draggedItem) {
         event.dataTransfer.setData('text/plain', itemId);
@@ -847,9 +897,11 @@ function handleDragStart(event) {
         const imgElement = draggedItemElement.querySelector('img');
         if (imgElement) {
             event.dataTransfer.setDragImage(imgElement, imgElement.offsetWidth / 2, imgElement.offsetHeight / 2);
+        } else {
+            console.warn("DragStart: No img element found in dragged item slot to use for setDragImage.", draggedItemElement);
         }
     } else {
-        console.warn(`DragStart: Item with ID ${itemId} from ${itemSource} not found.`);
+        console.warn(`DragStart: Item with ID ${itemId} from ${itemSource} not found in hero's data or draggedItemElement issue.`);
         event.preventDefault();
     }
 }
@@ -861,201 +913,135 @@ function handleDragOver(event) {
 
 function handleDrop(event) {
     event.preventDefault();
-    if (!draggedItem || !dragDropCache.hero) return;
+    if (!draggedItem || !hero) return;
 
     const targetElement = event.currentTarget;
-    const targetSlotType = getTargetSlotType(targetElement);
+    const targetSlotType = targetElement.dataset.slotType ||
+                               (targetElement.classList.contains('inventorySlot') && !targetElement.classList.contains('battle-consumable-slot') ? 'inventory' : null) ||
+                               (targetElement.id && hero.equipment.hasOwnProperty(targetElement.id) ? 'equipment' : null);
+
     const targetSlotId = targetElement.dataset.slotId || targetElement.id;
     const targetSlotIndex = parseInt(targetElement.dataset.slotIndex);
+
     const sourceItemSource = draggedItemElement.dataset.itemSource;
+    const sourceSlotIdIfEquipped = sourceItemSource === "equipped" ? draggedItemElement.id : null;
+    const sourceSlotIndexIfConsumableToolbar = (sourceItemSource === "battleConsumableBar")
+                                             ? parseInt(draggedItemElement.dataset.slotIndex) : -1;
 
-    // Handle battle consumable bar restrictions
-    if (sourceItemSource === "battleConsumableBar" && 
-        !["inventory", "battleConsumableSlot"].includes(targetSlotType)) {
-        console.log("Items from battle bar can only be dropped into inventory or other battle bar slots.");
-        cleanupDragState();
-        return;
+
+    if (sourceItemSource === "battleConsumableBar" && targetSlotType !== "inventory" && targetSlotType !== "battleConsumableSlot") {
+        console.log("Items from battle bar can only be dropped into inventory or other battle bar slots (or used on members).");
+        draggedItem = null; draggedItemElement = null; return;
     }
 
-    // Process the drop based on target type
-    switch (targetSlotType) {
-        case "equipment":
-            handleEquipmentDrop(targetSlotId, sourceItemSource);
-            break;
-        case "inventory":
-            handleInventoryDrop(sourceItemSource);
-            break;
-        case "battleConsumableSlot":
-            handleConsumableBarDrop(targetSlotIndex, sourceItemSource);
-            break;
-        default:
-            if (targetElement.classList.contains('member') && sourceItemSource === "battleConsumableBar") {
-                handleMemberDrop(targetElement);
-            } else {
-                console.warn("Item dropped on an unrecognized or invalid target area.");
+
+    // Case 1: Dropping onto an equipment slot (Paper Doll)
+    if (targetSlotType === "equipment" && hero.equipment.hasOwnProperty(targetSlotId)) {
+        if (draggedItem.type === "consumable") {
+            console.warn("Cannot equip a consumable item to an equipment slot.");
+        } else if (draggedItem.slot === targetSlotId) {
+            if (sourceItemSource === "equipped" && sourceSlotIdIfEquipped !== targetSlotId) {
+                hero.unequipItem(sourceSlotIdIfEquipped, true);
+            } else if (sourceItemSource === "battleConsumableBar") {
+                console.warn("Consumables from bar cannot be equipped to equipment slots.");
+                draggedItem = null; draggedItemElement = null; return;
             }
-    }
-
-    cleanupDragState();
-}
-
-function getTargetSlotType(element) {
-    return element.dataset.slotType ||
-           (element.classList.contains('inventorySlot') && !element.classList.contains('battle-consumable-slot') ? 'inventory' : null) ||
-           (element.id && dragDropCache.hero.equipment.hasOwnProperty(element.id) ? 'equipment' : null);
-}
-
-function handleEquipmentDrop(targetSlotId, sourceItemSource) {
-    if (draggedItem.type === "consumable") {
-        console.warn("Cannot equip a consumable item to an equipment slot.");
-        return;
-    }
-
-    if (draggedItem.slot === targetSlotId) {
-        if (sourceItemSource === "equipped" && draggedItemElement.id !== targetSlotId) {
-            dragDropCache.hero.unequipItem(draggedItemElement.id, true);
-        } else if (sourceItemSource === "battleConsumableBar") {
-            console.warn("Consumables from bar cannot be equipped to equipment slots.");
-            return;
-        }
-        dragDropCache.hero.equipItem(draggedItem, targetSlotId);
-    } else {
-        console.warn(`Item ${draggedItem.name} (slot: ${draggedItem.slot}) cannot be placed in equipment slot ${targetSlotId}.`);
-    }
-}
-
-function handleInventoryDrop(sourceItemSource) {
-    if (sourceItemSource === "equipped") {
-        dragDropCache.hero.unequipItem(draggedItemElement.id, true);
-    } else if (sourceItemSource === "battleConsumableBar") {
-        const slotIndex = parseInt(draggedItemElement.dataset.slotIndex);
-        if (!isNaN(slotIndex)) {
-            dragDropCache.hero.unequipConsumable(slotIndex, true);
+            hero.equipItem(draggedItem, targetSlotId);
+        } else {
+            console.warn(`Item ${draggedItem.name} (slot: ${draggedItem.slot}) cannot be placed in equipment slot ${targetSlotId}.`);
         }
     }
-}
-
-function handleConsumableBarDrop(targetSlotIndex, sourceItemSource) {
-    if (draggedItem.type !== "consumable") {
-        console.warn(`Cannot place non-consumable item ${draggedItem.name} in consumable toolbar.`);
-        return;
-    }
-
-    if (sourceItemSource === "inventory") {
-        dragDropCache.hero.equipConsumable(draggedItem, targetSlotIndex);
-    } else if (sourceItemSource === "battleConsumableBar") {
-        const sourceSlotIndex = parseInt(draggedItemElement.dataset.slotIndex);
-        if (!isNaN(sourceSlotIndex) && sourceSlotIndex !== targetSlotIndex) {
-            swapConsumableSlots(sourceSlotIndex, targetSlotIndex);
+    // Case 2: Dropping onto an inventory slot (main inventory grid)
+    else if (targetSlotType === "inventory") {
+        if (sourceItemSource === "equipped") {
+            hero.unequipItem(sourceSlotIdIfEquipped, true);
+        } else if (sourceItemSource === "battleConsumableBar" && !isNaN(sourceSlotIndexIfConsumableToolbar)) {
+             hero.unequipConsumable(sourceSlotIndexIfConsumableToolbar, true);
         }
     }
-}
+    // Case 3: Dropping onto a Battle Consumable Bar slot
+    else if (targetElement.dataset.slotType === "battleConsumableSlot") {
+        if (draggedItem.type === "consumable") {
+            if (sourceItemSource === "inventory") {
+                hero.equipConsumable(draggedItem, targetSlotIndex);
+            } else if (sourceItemSource === "battleConsumableBar" && !isNaN(sourceSlotIndexIfConsumableToolbar)) {
+                if (sourceSlotIndexIfConsumableToolbar !== targetSlotIndex) {
+                    const itemBeingDragged = hero.consumableToolbar[sourceSlotIndexIfConsumableToolbar];
+                    hero.consumableToolbar[sourceSlotIndexIfConsumableToolbar] = null;
 
-function swapConsumableSlots(sourceIndex, targetIndex) {
-    const itemBeingDragged = dragDropCache.consumableToolbar[sourceIndex];
-    dragDropCache.consumableToolbar[sourceIndex] = null;
-    const itemInTargetSlot = dragDropCache.consumableToolbar[targetIndex];
-    dragDropCache.consumableToolbar[targetIndex] = itemBeingDragged;
-    if (itemInTargetSlot) {
-        dragDropCache.consumableToolbar[sourceIndex] = itemInTargetSlot;
+                    const itemInTargetSlot = hero.consumableToolbar[targetSlotIndex];
+                    hero.consumableToolbar[targetSlotIndex] = itemBeingDragged;
+
+                    if (itemInTargetSlot) {
+                        hero.consumableToolbar[sourceSlotIndexIfConsumableToolbar] = itemInTargetSlot;
+                    }
+                    renderBattleConsumableBar(hero);
+                }
+            } else {
+                 console.warn("Cannot move this item to consumable bar. Source: " + sourceItemSource + ", Item type: " + draggedItem.type);
+            }
+        } else {
+            console.warn(`Cannot place non-consumable item ${draggedItem.name} in consumable toolbar.`);
+        }
     }
-    renderBattleConsumableBar(dragDropCache.hero);
-}
-
-function handleMemberDrop(memberElement) {
-    const sourceSlotIndex = parseInt(draggedItemElement.dataset.slotIndex);
-    if (!isNaN(sourceSlotIndex)) {
-        dragDropCache.hero.useConsumableFromToolbar(sourceSlotIndex, memberElement);
+    // Case 4: Dropping onto a battle member (handled by renderMember's event listener)
+    else if (targetElement.classList.contains('member') && sourceItemSource === "battleConsumableBar") {
+        console.log("Drop on member element detected in general handler, should be handled by member's own listener.");
     }
-}
+     else {
+        console.warn("Item dropped on an unrecognized or invalid target area.", targetElement);
+    }
 
-function cleanupDragState() {
     draggedItem = null;
     draggedItemElement = null;
 }
 
-// --- GENERAL TOOLTIP FUNCTIONS ---
-const tooltipCache = {
-    lastTooltip: null,
-    lastEvent: null,
-    debounceTimer: null
-};
 
+// Named handler for double click on battle bar consumables
+function handleBattleConsumableDoubleClick(event) {
+    const slotIndex = parseInt(event.currentTarget.dataset.slotIndex);
+    if (!isNaN(slotIndex) && hero) {
+        hero.useConsumableFromToolbar(slotIndex, hero); // Use on self
+    }
+}
+// --- GENERAL TOOLTIP FUNCTIONS (for items, skills in hero sheet, etc.) ---
 export function showGeneralTooltip(event, tooltipElement) {
     if (!tooltipElement || !tooltipElement.innerHTML.trim()) return;
 
-    // Cache the current tooltip and event
-    tooltipCache.lastTooltip = tooltipElement;
-    tooltipCache.lastEvent = event;
+    tooltipElement.style.display = 'block';
+    tooltipElement.style.visibility = 'hidden'; // Calculate size first
 
-    // Debounce tooltip updates
-    if (tooltipCache.debounceTimer) {
-        clearTimeout(tooltipCache.debounceTimer);
-    }
-
-    tooltipCache.debounceTimer = setTimeout(() => {
-        const tooltip = tooltipCache.lastTooltip;
-        const evt = tooltipCache.lastEvent;
-        
-        if (!tooltip || !evt) return;
-
-        tooltip.style.display = 'block';
-        tooltip.style.visibility = 'hidden';
-
-        // Calculate position
-        const { x, y } = calculateTooltipPosition(evt, tooltip);
-        
-        // Apply position
-        tooltip.style.left = `${x}px`;
-        tooltip.style.top = `${y}px`;
-        tooltip.style.position = 'fixed';
-        tooltip.style.zIndex = '10001';
-        tooltip.style.visibility = 'visible';
-        tooltip.style.opacity = '1';
-    }, 50); // 50ms debounce
-}
-
-function calculateTooltipPosition(event, tooltip) {
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    const tooltipRect = tooltip.getBoundingClientRect();
-    
+    // Position tooltip near mouse
     let x = event.clientX + 15;
     let y = event.clientY + 15;
 
-    // Adjust if tooltip would go off screen
-    if (x + tooltipRect.width > screenWidth - 5) {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const tooltipRect = tooltipElement.getBoundingClientRect();
+
+    if (x + tooltipRect.width > screenWidth - 5) { // 5px buffer
         x = event.clientX - tooltipRect.width - 15;
     }
-    if (y + tooltipRect.height > screenHeight - 5) {
+    if (y + tooltipRect.height > screenHeight - 5) { // 5px buffer
         y = event.clientY - tooltipRect.height - 15;
     }
-    
-    // Ensure tooltip stays within screen bounds
-    x = Math.max(5, Math.min(x, screenWidth - tooltipRect.width - 5));
-    y = Math.max(5, Math.min(y, screenHeight - tooltipRect.height - 5));
+    if (x < 5) x = 5; // 5px buffer
+    if (y < 5) y = 5; // 5px buffer
 
-    return { x, y };
+    tooltipElement.style.left = `${x}px`;
+    tooltipElement.style.top = `${y}px`;
+    tooltipElement.style.position = 'fixed';
+    tooltipElement.style.zIndex = '10001'; // Ensure above other UI
+    tooltipElement.style.visibility = 'visible';
+    tooltipElement.style.opacity = '1';
 }
 
 export function hideGeneralTooltip(tooltipElement) {
-    if (!tooltipElement) return;
-    
-    // Clear any pending tooltip updates
-    if (tooltipCache.debounceTimer) {
-        clearTimeout(tooltipCache.debounceTimer);
-        tooltipCache.debounceTimer = null;
+    if (tooltipElement) {
+        tooltipElement.style.display = 'none';
+        tooltipElement.style.visibility = 'hidden';
+        tooltipElement.style.opacity = '0';
     }
-
-    // Clear cache if this is the last shown tooltip
-    if (tooltipCache.lastTooltip === tooltipElement) {
-        tooltipCache.lastTooltip = null;
-        tooltipCache.lastEvent = null;
-    }
-
-    tooltipElement.style.display = 'none';
-    tooltipElement.style.visibility = 'hidden';
-    tooltipElement.style.opacity = '0';
 }
 
 // Original showTooltip - for battle skill bar, member portraits in battle
@@ -1068,43 +1054,47 @@ export function showTooltip(event, contentElement) {
     contentElement.style.display = 'block';
     contentElement.style.visibility = 'hidden';
 
-    const { x, y } = calculateBattleTooltipPosition(event, target, contentElement);
-    
-    contentElement.style.top = `${y}px`;
-    contentElement.style.left = `${x}px`;
+    const targetRect = target.getBoundingClientRect();
+    const tooltipRect = contentElement.getBoundingClientRect(); // Measure after display block
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    let top = 0;
+    let left = 0;
+
+    // Default above and centered
+    top = targetRect.top - tooltipRect.height - 10;
+    left = targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2);
+
+    if (target.classList.contains('battleSkillIcon')) { // Skills in bottom bar
+        // Already default: above
+    } else if (target.classList.contains('iconDiv')) { // Skills on battle members
+        // Default: above
+    } else if (target.classList.contains('buff') || target.classList.contains('debuff')) {
+        top = targetRect.bottom + 5; // Below the effect icon
+    } else if (target.classList.contains('memberPortrait')) {
+        // Default: above
+    }
+
+
+    // Adjust if off-screen
+    if (left + tooltipRect.width > viewportWidth - 5) left = viewportWidth - tooltipRect.width - 5;
+    if (left < 5) left = 5;
+    if (top < 5) { // If not enough space above, try below
+        top = targetRect.bottom + 10;
+        if (top + tooltipRect.height > viewportHeight - 5) { // If still no space, adjust
+            top = viewportHeight - tooltipRect.height - 5;
+        }
+    } else if (top + tooltipRect.height > viewportHeight -5 ){
+         top = viewportHeight - tooltipRect.height - 5;
+    }
+
+
+    contentElement.style.top = `${top}px`;
+    contentElement.style.left = `${left}px`;
     contentElement.style.visibility = 'visible';
     contentElement.style.position = 'fixed';
     contentElement.style.zIndex = '10001';
-}
-
-function calculateBattleTooltipPosition(event, target, tooltip) {
-    const targetRect = target.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    // Default position above and centered
-    let x = targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2);
-    let y = targetRect.top - tooltipRect.height - 10;
-
-    // Adjust position based on target type
-    if (target.classList.contains('buff') || target.classList.contains('debuff')) {
-        y = targetRect.bottom + 5;
-    }
-
-    // Ensure tooltip stays within viewport
-    x = Math.max(5, Math.min(x, viewportWidth - tooltipRect.width - 5));
-    
-    if (y < 5) {
-        y = targetRect.bottom + 10;
-        if (y + tooltipRect.height > viewportHeight - 5) {
-            y = viewportHeight - tooltipRect.height - 5;
-        }
-    } else if (y + tooltipRect.height > viewportHeight - 5) {
-        y = viewportHeight - tooltipRect.height - 5;
-    }
-
-    return { x, y };
+    // contentElement.style.overflow = 'visible'; // Not needed for tooltip div
 }
 
 export function updateHeroMapStats(heroInstance) { // For the hero display on the map
