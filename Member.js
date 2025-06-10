@@ -190,44 +190,58 @@ class Member {
         // If there's a forced target, use it instead of the provided target
         const actualTarget = this.forcedTarget || target;
 
-        if (this.calculateHitChance(actualTarget, skill.toHit)) {
+       
+
+        // Check if target is on the same team
+        if (actualTarget.team === this.team) {
+            // Always apply healing to allies
+             // Handle effects that apply to both allies and enemies
             if (skill.effects) {
                 new EffectClass(actualTarget, skill.effects);
                 skill.gainExperience(10); // Award experience for effect application
             }
-
-            if (skill.damageType && skill.damage != 0) {
-                const damage = skill.calculateDamage(this);
-                const finalDamage = actualTarget.calculateFinalDamage(damage, skill.damageType);
-
-                // Track simultaneous hits for multi-target skills
-                if (skill.targetCount && skill.targetCount > 1) {
-                    battleStatistics.addEnemiesHitSimultaneously(skill.targetCount);
-                }
-
-                // Track minion damage
-                if (this.isSummon) {
-                    battleStatistics.addDamageBySummons(finalDamage);
-                }
-                this.effects
-                            .filter(effect => effect.effect.id === 'stealth')
-                            .forEach(effect => effect.handleStealthAttack());
-
-                actualTarget.takeDamage(finalDamage);
-                if (this.isHero) { // Check if the attacker is the hero
-                    skill.gainExperience(finalDamage);
-                    battleStatistics.addDamageDealt(skill.damageType, finalDamage, skill.tags || []);
-                }
-                if (actualTarget.isHero) { // Check if the target is the hero
-                    battleStatistics.addDamageReceived(skill.damageType, finalDamage);
-                }
-
-                battleLog.log(this.name + ` used ${skill.name} on ${actualTarget.name} dealing ` + finalDamage + ' damage.');
-            }
             if (skill.heal) {
-                skill.gainExperience(skill.heal);
-                actualTarget.healDamage(skill.heal);
-                battleLog.log(actualTarget.name + ' Healed for ' + skill.heal);
+                const healAmount = skill.heal;
+                actualTarget.healDamage(healAmount);
+                skill.gainExperience(healAmount);
+                battleLog.log(`${this.name} used ${skill.name} to heal ${actualTarget.name} for ${healAmount} health.`);
+            }
+        } else {
+            // For enemies, check hit chance before applying damage
+            if (this.calculateHitChance(actualTarget, skill.toHit)) {
+                 // Handle effects that apply to both allies and enemies
+                if (skill.effects) {
+                    new EffectClass(actualTarget, skill.effects);
+                    skill.gainExperience(10); // Award experience for effect application
+                }
+                if (skill.damageType && skill.damage != 0) {
+                    const damage = skill.calculateDamage(this);
+                    const finalDamage = actualTarget.calculateFinalDamage(damage, skill.damageType);
+
+                    // Track simultaneous hits for multi-target skills
+                    if (skill.targetCount && skill.targetCount > 1) {
+                        battleStatistics.addEnemiesHitSimultaneously(skill.targetCount);
+                    }
+
+                    // Track minion damage
+                    if (this.isSummon) {
+                        battleStatistics.addDamageBySummons(finalDamage);
+                    }
+                    this.effects
+                        .filter(effect => effect.effect.id === 'stealth')
+                        .forEach(effect => effect.handleStealthAttack());
+
+                    actualTarget.takeDamage(finalDamage);
+                    if (this.isHero) { // Check if the attacker is the hero
+                        skill.gainExperience(finalDamage);
+                        battleStatistics.addDamageDealt(skill.damageType, finalDamage, skill.tags || []);
+                    }
+                    if (actualTarget.isHero) { // Check if the target is the hero
+                        battleStatistics.addDamageReceived(skill.damageType, finalDamage);
+                    }
+
+                    battleLog.log(this.name + ` used ${skill.name} on ${actualTarget.name} dealing ` + finalDamage + ' damage.');
+                }
             }
         }
     }
