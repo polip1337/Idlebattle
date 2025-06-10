@@ -27,6 +27,7 @@ class Member {
         // Initialize critical hit stats if not present
         if (!this.stats.critChance) this.stats.critChance = 5; // Base 5% crit chance
         if (!this.stats.critDamageMultiplier) this.stats.critDamageMultiplier = 2.0; // 200% damage on crit
+        if (!this.stats.blockChance) this.stats.blockChance = 5; // Base 5% block chance
         this.stats.toHit = 0;
         this.stats.toDodge = 0;
         this.currentHealth = this.stats.vitality * 10;
@@ -158,6 +159,13 @@ class Member {
             battleLog.log(`${defender.name} dodged the attack with Phased!`);
             battleStatistics.addSuccessfulDodge();
             defender.hasGuaranteedDodge = false; // Remove the dodge after use
+            
+            // Remove the GuaranteedDodge effect
+            const dodgeEffect = defender.effects.find(effect => effect.effect.subType === 'GuaranteedDodge');
+            if (dodgeEffect) {
+                dodgeEffect.remove();
+            }
+            
             return false;
         }
 
