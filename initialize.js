@@ -366,6 +366,16 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         teamRows[0].innerHTML = ''; teamRows[1].innerHTML = '';
     }
 
+    // Create empty slots for each row (4 slots per row)
+    for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 4; j++) {
+            const emptySlot = document.createElement('div');
+            emptySlot.className = 'member empty-slot';
+            emptySlot.id = `${containerId}-empty-slot-${i}-${j}`;
+            teamRows[i].appendChild(emptySlot);
+        }
+    }
+
     membersToRender.forEach((member, index) => {
         if (!member.isHero) {
             member.memberId = `${containerId}-member-${member.companionId || member.classId || 'unknown'}-${index}`;
@@ -378,18 +388,16 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         const targetRowIndex = (member.position === "Back") ? 1 : 0;
         let rowElement = teamRows[targetRowIndex];
 
-        if (rowElement.children.length >= 4) {
-            const otherRowIndex = (targetRowIndex === 0) ? 1 : 0;
-            if (teamRows[otherRowIndex].children.length < 4) {
-                rowElement = teamRows[otherRowIndex];
-            } else {
-                console.warn(`Cannot place ${member.name} in ${containerId}, both rows are full.`);
-                return;
-            }
+        // Find the first empty slot in the target row
+        const emptySlot = rowElement.querySelector('.empty-slot');
+        if (!emptySlot) {
+            console.warn(`Cannot place ${member.name} in ${containerId}, no empty slots available.`);
+            return;
         }
 
         const memberElement = member.isHero ? renderHero(member) : renderMember(member);
-        rowElement.appendChild(memberElement);
+        // Replace the empty slot with the member element
+        emptySlot.parentNode.replaceChild(memberElement, emptySlot);
 
         if (typeof member.initializeDOMElements === 'function') {
             member.initializeDOMElements();
