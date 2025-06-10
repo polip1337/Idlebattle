@@ -180,6 +180,41 @@ export function selectTarget(attacker, targetMode, condition = null) {
                 console.warn('No condition function provided for Random Ally With Condition targeting');
             }
             break;
+        case 'Front Row Spread':
+            if (formation) {
+                // Try front row first (row 2 for team2, row 1 for team1)
+                const frontRow = attacker.opposingTeam === formation.team1 ? 1 : 2;
+                const frontRowMembers = formation.getRowMembers(frontRow);
+                
+                if (frontRowMembers.length > 0) {
+                    // Find the leftmost character in the front row
+                    let startCol = 0;
+                    while (startCol < 4 && !formation.grid[frontRow][startCol]) {
+                        startCol++;
+                    }
+                    
+                    // Get adjacent characters in the front row
+                    target = formation.getAdjacentCharactersInRow(frontRow, startCol, condition || 3);
+                } else {
+                    // If front row is empty, try back row
+                    const backRow = attacker.opposingTeam === formation.team1 ? 0 : 3;
+                    const backRowMembers = formation.getRowMembers(backRow);
+                    
+                    if (backRowMembers.length > 0) {
+                        // Find the leftmost character in the back row
+                        let startCol = 0;
+                        while (startCol < 4 && !formation.grid[backRow][startCol]) {
+                            startCol++;
+                        }
+                        
+                        // Get adjacent characters in the back row
+                        target = formation.getAdjacentCharactersInRow(backRow, startCol, condition || 3);
+                    }
+                }
+            } else {
+                console.warn('Formation not available for Front Row Spread targeting');
+            }
+            break;
         default:
             console.error(`Invalid target mode: ${targetMode}`);
             break;

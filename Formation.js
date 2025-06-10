@@ -169,4 +169,30 @@ export class Formation {
 
         return diagonalCharacters;
     }
+
+    getAdjacentCharactersInRow(row, startCol, maxTargets) {
+        const characters = [];
+        let currentCol = startCol;
+        
+        // First try to get characters to the right
+        while (currentCol < 4 && characters.length < maxTargets) {
+            const target = this.grid[row][currentCol];
+            if (target) {
+                characters.push(target);
+            }
+            currentCol++;
+        }
+        
+        // If we need more targets, try to the left
+        currentCol = startCol - 1;
+        while (currentCol >= 0 && characters.length < maxTargets) {
+            const target = this.grid[row][currentCol];
+            if (target) {
+                characters.unshift(target);
+            }
+            currentCol--;
+        }
+        
+        return characters;
+    }
 } 
