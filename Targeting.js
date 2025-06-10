@@ -170,6 +170,16 @@ export function selectTarget(attacker, targetMode, condition = null) {
                 console.warn('No condition function provided for Allies With Condition targeting');
             }
             break;
+        case 'Ally With Condition':
+            if (typeof condition === 'function') {
+                const eligibleAllies = attacker.team.getAllAliveMembers().filter(condition);
+                if (eligibleAllies.length > 0) {
+                    target.push(eligibleAllies[Math.floor(Math.random() * eligibleAllies.length)]);
+                }
+            } else {
+                console.warn('No condition function provided for Random Ally With Condition targeting');
+            }
+            break;
         default:
             console.error(`Invalid target mode: ${targetMode}`);
             break;

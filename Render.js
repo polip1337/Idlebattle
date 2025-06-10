@@ -418,7 +418,7 @@ export function createPortrait(member) {
     portraitDiv.className = 'memberPortrait'; // This is the main container for portrait and bars
 
     const img = document.createElement('img');
-    img.src = member.class.portrait || 'Media/UI/defaultPortrait.png'; // Fallback portrait
+    img.src = 'Media/default_portrait.png';
     img.alt = member.name;
     img.className = 'memberPortraitImage';
 

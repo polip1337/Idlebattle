@@ -1,7 +1,7 @@
 import { mobsClasses, renderTeamMembers, hero, battleStatistics } from './initialize.js';
 import Member from './Member.js'
 import { deepCopy } from './Render.js';
-
+import {updateHealth,updateMana,updateStamina} from './Render.js';
 class EffectClass {
     constructor(target, effect, caster = null) { // Caster can be passed for effects like Taunt
         this.effect = deepCopy(effect);
@@ -16,6 +16,13 @@ class EffectClass {
         this.isPassive = effect.duration === -1;
         this.isPaused = false;
         this.pauseStartTime = null;
+        if(!this.effect.icon)
+            if(this.effect.type =="buff"){
+                this.effect.icon = "Media/UI/buff.svg"
+            }
+            else{
+                this.effect.icon = "Media/UI/debuff.svg"
+            }
 
         // One-shot effects that don't need timers or rendering
         if (['CooldownReduction', 'RestoreResource', 'Steal', 'Teleport', 'Summon'].includes(this.effect.subType)) {
@@ -35,7 +42,8 @@ class EffectClass {
             this.refreshTimer();
         } else {
             this.applyEffect(effect);
-            if (this.render && this.effect.icon) {
+            if (this.render ) {
+
                 this.renderBuff();
             }
             if (this.effect.duration > 0) { // Only start timers for effects with a positive duration
@@ -147,10 +155,11 @@ class EffectClass {
                         this.target.stats[stat] += modifier.flat;
                     }
                     if (modifier.percentage) {
-                        // Apply percentage modifier based on the original value to prevent compounding on itself
                         const baseValue = this.originalStats[stat];
                         this.target.stats[stat] += baseValue * (modifier.percentage / 100);
                     }
+                    console.log("STAT CHANGE" + stat + ": OLD: " +this.originalStats[stat] + ". NEW: " + this.target.stats[stat]);
+
                 } else {
                     console.warn(`Stat '${stat}' not found on target '${this.target.name}' for effect '${this.effect.name}'.`);
                 }
@@ -296,7 +305,7 @@ class EffectClass {
                     this.target.forcedTarget = this.caster;
                 } else {
                     // Fallback for when caster isn't passed, though it should be.
-                    this.target.forcedTarget = this.effect.forceTarget; // "Caster"
+                    this.target.forcedTarget = this.caster; // "Caster"
                     console.warn(`Taunt applied to ${this.target.name} without a specific caster reference.`);
                 }
                 break;
@@ -322,7 +331,7 @@ class EffectClass {
                 if (this.effect.debuffType) {
                     // Find and remove all specified debuffs
                     const debuffsToRemove = this.target.effects.filter(effect => 
-                        this.effect.debuffType.includes(effect.effect.id) && effect.effect.type === 'debuff'
+                        this.effect.debuffType.includes(effect.effect.name) && effect.effect.type === 'debuff'
                     );
                     debuffsToRemove.forEach(debuff => debuff.remove());
                 }
@@ -371,7 +380,6 @@ class EffectClass {
             case 'DelayedDamage':
                 const finalDamage = this.target.calculateFinalDamage(this.effect.value, this.effect.damageType);
                 this.target.takeDamage(finalDamage);
-                battleLog.log(`${this.target.name} takes ${finalDamage} delayed damage from ${this.effect.name}.`);
                 break;
 
             case 'CooldownReduction':
@@ -461,14 +469,14 @@ class EffectClass {
         this.interval = setInterval(() => {
             const finalDamage = target.calculateFinalDamage(damage, damageType);
             target.takeDamage(finalDamage);
-            battleLog.log(`${target.name} takes ${finalDamage} ${damageType} damage from ${this.effect.name}.`);
+
         }, 1000);
     }
 
     createHealOverTimeInterval(heal, target) {
         this.interval = setInterval(() => {
             target.healDamage(heal);
-            battleLog.log(`${target.name} regenerates ${heal} health from ${this.effect.name}.`);
+
         }, 1000);
     }
 

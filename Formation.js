@@ -10,12 +10,11 @@ export class Formation {
     initializeTeams(team1, team2) {
         this.team1 = team1;
         this.team2 = team2;
-        this.placeTeam(team1, true);  // true for team1 (left side)
-        this.placeTeam(team2, false); // false for team2 (right side)
+        this.placeTeam(team1);  // true for team1 (left side)
+        this.placeTeam(team2); // false for team2 (right side)
     }
 
-    placeTeam(team, isTeam1) {
-        const startCol = isTeam1 ? 0 : 2;
+    placeTeam(team) {
         const members = team.members;
         const hero = members.find(member => member.constructor.name === 'Hero');
         
@@ -28,25 +27,22 @@ export class Formation {
                 for (let col = 0; col < partyFormation[row].length; col++) {
                     const member = partyFormation[row][col];
                     if (member) {
-                        // Map party formation position to battle grid
-                        // partyFormation is 2x4, battle grid is 4x4
-                        // We need to map row 0,1 to rows 0,1 and keep columns 0-3
-                        this.grid[row][startCol + col] = member;
+                        this.grid[row][col] = member;
                     }
                 }
             }
         } else {
-            this.placeTeamDefault(members, startCol);
+            this.placeTeamDefault(members,3,2);
         }
         
     }
 
-    placeTeamDefault(members, startCol) {
+    placeTeamDefault(members, backRow, frontRow) {
         // Place front row (row 1)
         for (let i = 0; i < Math.min(4, members.length); i++) {
             const member = members[i];
             if (member.position === "Front") {
-                this.grid[1][startCol + i] = member;
+                this.grid[frontRow][i] = member;
             }
         }
 
@@ -54,7 +50,7 @@ export class Formation {
         for (let i = 0; i < Math.min(4, members.length); i++) {
             const member = members[i];
             if (member.position === "Back") {
-                this.grid[0][startCol + i] = member;
+                this.grid[backRow][i] = member;
             }
         }
     }

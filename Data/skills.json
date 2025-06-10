@@ -2151,7 +2151,7 @@
       }
     ],
     "description": "Channels a beam of fire that drains life from the target, dealing continuous Fire damage and healing the caster.",
-    "targetingModes": ["Single Enemy"],
+    "targetingModes": ["Random Front"],
     "icon": "Media/Skills/Fire/drain_vitality_fire.png",
     "tags": ["Active", "BloodMagic", "Channeled", "Fire", "Lifesteal", "Mana", "Single Target"]
   },
@@ -2266,7 +2266,7 @@
       }
     ],
     "description": "Channels a destructive stream of baleful energy mixed with fire, damaging the target and reducing healing they receive.",
-    "targetingModes": ["Single Enemy"],
+    "targetingModes": ["Random Front"],
     "icon": "Media/Skills/Hybrid/balefire_stream.png",
     "tags": ["Active", "Channeled", "Debuff", "Fire", "Magical", "Mana", "Necrotic", "Single Target"]
   },
@@ -2577,7 +2577,7 @@
         "value": 100
       }
     ],
-    "targetingModes": ["Single Enemy"],
+    "targetingModes": ["Random Front"],
     "tags": ["Active", "Control", "Debuff", "Defense", "Single Target", "Stamina", "Utility"]
   },
   "defensiveStance": {
@@ -2658,15 +2658,15 @@
     "staminaCost": 0,
     "manaCost": 12,
     "cooldown": 5,
-    "projectiles": 3,
+    "targetCount": 3,
     "description": "Launch three missiles of magical energy that unerringly strike their target(s).",
     "icon": "Media/Skills/Mage/magic_missile.png",
-    "targetingModes": ["Random Multiple"],
+    "targetingModes": ["Random"],
     "tags": ["Active", "Arcane", "Magical", "Mana", "Multi Target"]
   },
   "elementalBoltFire": {
     "id": "elementalBoltFire",
-    "name": "Elemental Bolt (Fire)",
+    "name": "Fire Bolt",
     "type": "active",
     "damage": 14,
     "damageType": "Fire",
@@ -2688,7 +2688,7 @@
   },
   "elementalBoltIce": {
     "id": "elementalBoltIce",
-    "name": "Elemental Bolt (Ice)",
+    "name": "Ice Bolt",
     "type": "active",
     "damage": 12,
     "damageType": "Ice",
@@ -2708,7 +2708,7 @@
   },
   "teleportShort": {
     "id": "teleportShort",
-    "name": "Teleport (Short)",
+    "name": "Short Teleport",
     "type": "active",
     "damage": 0,
     "staminaCost": 0,
@@ -2773,7 +2773,7 @@
     "cooldown": 4,
     "description": "A quick prayer to mend minor wounds.",
     "icon": "Media/Skills/Priest/minor_heal.png",
-    "targetingModes": ["Lowest HP Ally"],
+    "targetingModes": ["Lowest HP Team Any"],
     "tags": ["Active", "Heal", "Holy", "Mana", "Single Ally"]
   },
   "smiteEvil": {
@@ -2823,7 +2823,7 @@
     "name": "Cure Wounds",
     "type": "active",
     "damage": 0,
-    "heal": 30,
+    "heal": 5,
     "staminaCost": 0,
     "manaCost": 15,
     "cooldown": 7,
@@ -2839,7 +2839,7 @@
         "chance": 0.75
       }
     ],
-    "targetingModes": ["Lowest HP Ally"],
+    "targetingModes": ["Ally With Condition"],
     "tags": ["Active", "Heal", "Holy", "Mana", "Single Ally", "Utility"]
   },
   "holyLight": {
@@ -2949,7 +2949,7 @@
     "staminaCost": 14,
     "manaCost": 0,
     "cooldown": 6,
-    "projectiles": 2,
+    "targetCount": 2,
     "description": "Quickly strike twice with daggers. Each hit has a chance to apply bleed.",
     "icon": "Media/Skills/DaggerSavant/twin_strike_dagger.png",
     "effects": [
@@ -3247,7 +3247,7 @@
         "manaAmount": 15
       }
     ],
-    "targetingModes": ["Single Enemy"],
+    "targetingModes": ["Random Front"],
     "tags": ["Active", "CritFocus", "Debuff", "Mana", "Shadow", "Single Target", "Stamina", "Utility"]
   },
   "lavaBurst": {
@@ -3458,7 +3458,7 @@
       }
     ],
     "description": "A powerful wave of healing energy that also bestows a minor blessing of fortitude.",
-    "targetingModes": ["Lowest HP Ally"],
+    "targetingModes": ["Lowest HP Team Any"],
     "icon": "Media/Skills/BenevolentHealer/blessed_healing_wave.png",
     "tags": ["Active", "Buff", "Heal", "Holy", "Mana", "Single Ally"]
   },
@@ -3656,7 +3656,7 @@
         "id": "revealStealth"
       }
     ],
-    "targetingModes": ["Single Enemy"],
+    "targetingModes": ["Random Front"],
     "tags": ["Active", "Bow", "Debuff", "Mana", "Ranged", "Single Target", "Stamina", "Utility"]
   },
   "silentShot": {
@@ -3723,7 +3723,7 @@
     "staminaCost": 16,
     "manaCost": 0,
     "cooldown": 5,
-    "projectiles": 2,
+    "targetCount": 2,
     "description": "Rapidly slash twice with your dual-wielded weapons. Each hit has a chance to reduce enemy's accuracy.",
     "icon": "Media/Skills/TwinBladeFencer/twin_slash.png",
     "effects": [
@@ -3746,7 +3746,7 @@
     "staminaCost": 22,
     "manaCost": 0,
     "cooldown": 10,
-    "projectiles": 4,
+    "targetCount": 4,
     "description": "Unleash a flurry of quick strikes, hitting the primary target multiple times or spreading to nearby enemies if the primary target dies.",
     "icon": "Media/Skills/TwinBladeFencer/blade_flurry.png",
     "effects": [
@@ -3814,7 +3814,7 @@
         "id": "allyTeamUpAttack"
       }
     ],
-    "targetingModes": ["Single Enemy"],
+    "targetingModes": ["Random Front"],
     "tags": ["Active", "DualWielding", "Mana", "Melee", "Physical", "Single Target", "Slash", "Stamina", "Teamwork"]
   },
   "riposteDual": {
@@ -3928,7 +3928,7 @@
     "staminaCost": 18,
     "manaCost": 5,
     "cooldown": 12,
-    "projectiles": 3,
+    "targetCount": 3,
     "description": "Execute a series of rapid slashes against a single target, or an adjacent one if the primary is defeated. Each hit slightly increases your dodge.",
     "icon": "Media/Skills/BladeMaster/blade_dance_onehand.png",
     "effects": [
@@ -4001,7 +4001,7 @@
         "id": "duelChallengeDebuff"
       }
     ],
-    "targetingModes": ["Single Enemy"],
+    "targetingModes": ["Random Front"],
     "tags": ["Active", "Buff", "Control", "Debuff", "Mana", "OneHanded", "Single Target", "Stamina"]
   },
   "honedEdge": {
@@ -4371,7 +4371,7 @@
         "id": "fireResistShred"
       }
     ],
-    "targetingModes": ["Single Enemy"],
+    "targetingModes": ["Random Front"],
     "tags": ["Active", "Channeled", "Debuff", "DoT", "Fire", "Magical", "Mana", "Single Target"]
   },
   "heatWave": {
@@ -4418,7 +4418,7 @@
         "bonusDamagePerStack": 5
       }
     ],
-    "targetingModes": ["Single EnemyIfBurning"],
+    "targetingModes": ["Random FrontIfBurning"],
     "tags": ["Active", "AoE", "DebuffInteraction", "Fire", "Magical", "Mana", "Single Target"]
   },
   "fireShieldSelf": {

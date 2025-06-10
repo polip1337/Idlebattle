@@ -26,7 +26,7 @@ class Skill {
         this.targetCount = skillData.targetCount || 1;
         this.effects = effects;
         this.div = element;
-        this.repeat = false;
+        this.repeat = true;
         this.level = 1;
         this.experience = 0;
         this.experienceToNextLevel = 100;
@@ -181,7 +181,7 @@ class Skill {
                         : (this.effects.id === 'dispelDebuff' ? this.effects : null);
                     
                     if (dispelEffect && dispelEffect.debuffType) {
-                        targetingCondition = (ally) => ally.hasDebuffType(dispelEffect.debuffType);
+                        targetingCondition = (ally) => ally.hasDebuffName(dispelEffect.debuffType);
                     }
                 }
 

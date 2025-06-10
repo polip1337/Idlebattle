@@ -197,7 +197,7 @@ class Member {
             // Always apply healing to allies
              // Handle effects that apply to both allies and enemies
             if (skill.effects) {
-                new EffectClass(actualTarget, skill.effects);
+                new EffectClass(actualTarget, skill.effects, this);
                 skill.gainExperience(10); // Award experience for effect application
             }
             if (skill.heal) {
@@ -260,7 +260,7 @@ class Member {
         // Handle mana shield damage first if active
         if (this.manaShieldActive) {
             const manaDamage = damage; // Full damage to mana
-            const manaCost = Math.ceil(manaDamage * (this.manaShieldRatio / 100)); // Convert damage to mana cost
+            const manaCost = Math.ceil(manaDamage * (this.manaShieldRatio)); // Convert damage to mana cost
             
             if (this.currentMana >= manaCost) {
                 this.currentMana -= manaCost;
@@ -495,7 +495,9 @@ class Member {
 
             this.experience = data.experience || 0;
             this.experienceToLevel = data.experienceToLevel || 100;
-
+             if (this.constructor.name === 'Companion') {
+                            return;
+            }
             // Skip skill progression for companions
             if (this.constructor.name === 'Companion') {
                 return;
@@ -535,13 +537,13 @@ class Member {
         return Math.random() * 100 < critChance;
     }
 
-    hasDebuffType(debuffTypes) {
-        if (!Array.isArray(debuffTypes)) {
-            debuffTypes = [debuffTypes];
+    hasDebuffName(debuffNames) {
+        if (!Array.isArray(debuffNames)) {
+            debuffNames = [debuffNames];
         }
         return this.effects.some(effect => 
-            effect.effect.type === 'debuff' && 
-            debuffTypes.includes(effect.effect.subType)
+            effect.effect.type === 'debuff' &&
+            debuffNames.includes(effect.effect.name)
         );
     }
 }

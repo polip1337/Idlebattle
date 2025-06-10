@@ -803,6 +803,7 @@ class Hero extends Member {
             let added = false;
             for (let i = 0; i < maxSkills; i++) {
                 if (!selectedSkillsArray[i]) {
+                    skill.repeat = false;
                     selectedSkillsArray[i] = skill;
                     if (!isPassive && skillBox) { // Active skill, set targeting mode from its select box
                         const targetingSelect = skillBox.querySelector('.targeting-modes');

@@ -34,7 +34,7 @@ import { initializeCompanionUI } from './companionUIManager.js';
 import { handleEarlyGameInit } from './slideshow.js';
 import { openClassChangeModal, initializeClassChange } from './classChange.js';
 import { initializeDebug } from './debug.js';
-import { getFormation } from './Formation.js';
+import { getFormation } from './battle_controller.js';
 
 
 export let battleStatistics;
@@ -229,7 +229,6 @@ export async function loadGameData(savedGameState = null) {
 
             renderLevelProgress(hero);
 
-            hero.reselectSkillsAfterLoad();
             if (document.getElementById('heroContent')) {
                 updateStatsDisplay(hero); renderSkills(hero); renderPassiveSkills(hero);
                 initializeCompanionUI();
@@ -351,23 +350,24 @@ function initiateBattleLog() {
     }
 }
 
-export function renderTeamMembers(membersToRender, containerId, clearExisting = true) {
-    const teamContainerElement = document.getElementById(containerId);
+export function renderTeamMembers(team1Members, team2Members, containerId, clearExisting = true) {
+    const teamContainerElement = document.getElementById("teamContainer");
     if (!teamContainerElement) {
         return;
     }
     const teamRows = teamContainerElement.querySelectorAll('.team-row');
-    if (teamRows.length < 2) {
+    if (teamRows.length < 4) {
         console.error(`Team rows not found in ${containerId}. HTML structure issue.`);
         return;
     }
 
     if (clearExisting) {
         teamRows[0].innerHTML = ''; teamRows[1].innerHTML = '';
+        teamRows[2].innerHTML = ''; teamRows[3].innerHTML = '';
     }
 
     // Create empty slots for each row (4 slots per row)
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
             const emptySlot = document.createElement('div');
             emptySlot.className = 'member empty-slot';
@@ -376,43 +376,26 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         }
     }
 
-    membersToRender.forEach((member, index) => {
-        if (!member.isHero) {
-            member.memberId = `${containerId}-member-${member.companionId || member.classId || 'unknown'}-${index}`;
-        } else {
-            member.memberId = `hero-${containerId}`;
-        }
-    });
-
     // Get the formation instance
     const formation = getFormation();
     if (!formation) {
-        console.warn("Formation not initialized, using default positioning");
+        console.warn("Formation not initialized");
         return;
     }
 
-    membersToRender.forEach(member => {
-        // Get member's position from formation grid
+    // Get all characters from both teams
+    const allCharacters = [...team1Members, ...team2Members];
+
+    // Render each character in their formation position
+    allCharacters.forEach(member => {
         const pos = formation.getCharacterPosition(member);
-        if (!pos) {
-            console.warn(`No position found for ${member.name} in formation grid`);
-            return;
-        }
+        if (!pos) return;
 
-        // Convert formation grid position to UI row
-        // Formation grid: row 0 is back, row 1 is front
-        const targetRowIndex = pos.row;
-        let rowElement = teamRows[targetRowIndex];
-
-        // Find the empty slot at the correct position
+        const rowElement = teamRows[pos.row];
         const emptySlot = rowElement.querySelector(`.empty-slot:nth-child(${pos.col + 1})`);
-        if (!emptySlot) {
-            console.warn(`Cannot place ${member.name} in ${containerId}, no empty slot at position [${pos.row},${pos.col}]`);
-            return;
-        }
+        if (!emptySlot) return;
 
         const memberElement = member.isHero ? renderHero(member) : renderMember(member);
-        // Replace the empty slot with the member element
         emptySlot.parentNode.replaceChild(memberElement, emptySlot);
 
         if (typeof member.initializeDOMElements === 'function') {
@@ -427,7 +410,6 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
                     const skillElement = memberElement.querySelector("#" + skillDivId);
                     if (skillElement) {
                         skill.setElement(skillElement);
-                        // Reset overlay reference to ensure we get a fresh one
                         skill.overlay = null;
                     }
                 }
@@ -437,8 +419,6 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         updateHealth(member); updateMana(member); updateStamina(member);
     });
 }
-
-
 function initiateEventListeners() {
     const navButtonMappings = {
         'heroContentNavButton': 'heroContent', 'mapNavButton': 'map',

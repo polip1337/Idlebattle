@@ -343,7 +343,7 @@
     "type": "buff",
     "subType": "ManaShield",
     "description": "Absorbs 50% of damage taken as Mana loss.",
-    "duration": 3,
+    "duration": 6,
     "absorbPercentage": 1
   },
   "poison": {
@@ -542,7 +542,7 @@
     "type": "debuff",
     "subType": "Taunt",
     "description": "Must attack the taunter.",
-    "duration": 2,
+    "duration": 6,
     "forceTarget": "Caster"
   },
   "teleportBehindEnemy": {

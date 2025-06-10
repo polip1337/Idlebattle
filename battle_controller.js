@@ -139,8 +139,8 @@ export class BattleController {
         // Initialize formation with teams
         this.formation.initializeTeams(playerTeam, enemyTeam);
 
-        renderTeamMembers(team2.members, 'team2', true);
-        renderTeamMembers(team1.members, 'team1', true);
+        renderTeamMembers(playerTeam.members, enemyTeam.members, 'team1', true);
+
 
         // Apply passive skills for all team members
         [...playerTeam.members, ...enemyTeam.members].forEach(member => {
