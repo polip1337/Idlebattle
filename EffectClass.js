@@ -244,9 +244,30 @@ class EffectClass {
                 break;
 
             case 'RestoreResource':
-                if (this.target.stats.hasOwnProperty(this.effect.resourceType)) {
-                    this.target.stats[this.effect.resourceType] += this.effect.value;
-                    // Cap at max if there's a max value
+                if (this.effect.resourceType === 'mana') {
+                    const oldMana = this.target.currentMana;
+                    this.target.currentMana = Math.min(this.target.stats.mana, this.target.currentMana + this.effect.value);
+                    const actualManaRestored = this.target.currentMana - oldMana;
+                    if (this.target.isHero && actualManaRestored > 0) {
+                        battleStatistics.addManaRegenerated(actualManaRestored);
+                    }
+                    updateMana(this.target);
+                } else if (this.effect.resourceType === 'stamina') {
+                    const oldStamina = this.target.currentStamina;
+                    this.target.currentStamina = Math.min(this.target.stats.stamina, this.target.currentStamina + this.effect.value);
+                    const actualStaminaRestored = this.target.currentStamina - oldStamina;
+                    if (this.target.isHero && actualStaminaRestored > 0) {
+                        battleStatistics.addStaminaRegenerated(actualStaminaRestored);
+                    }
+                    updateStamina(this.target);
+                } else if (this.effect.resourceType === 'health') {
+                    const oldHealth = this.target.currentHealth;
+                    this.target.currentHealth = Math.min(this.target.maxHealth, this.target.currentHealth + this.effect.value);
+                    const actualHealthRestored = this.target.currentHealth - oldHealth;
+                    if (this.target.isHero && actualHealthRestored > 0) {
+                        battleStatistics.addTotalHealingReceived(actualHealthRestored);
+                    }
+                    updateHealth(this.target);
                 }
                 break;
 
