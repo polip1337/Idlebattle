@@ -1,5 +1,8 @@
+import { getFormation } from './battle_controller.js';
+
 export function selectTarget(attacker, targetMode) {
     let target = [];
+    const formation = getFormation();
 
     switch (targetMode) {
         case 'Random':
@@ -11,7 +14,6 @@ export function selectTarget(attacker, targetMode) {
             } else if (attacker.opposingTeam.getRandomBackMember() != undefined && target.length == 0) {
                 target.push(attacker.opposingTeam.getRandomBackMember());
             }
-
             break;
         case 'Random Back':
             if (attacker.opposingTeam.getRandomBackMember() != undefined) {
@@ -66,13 +68,18 @@ export function selectTarget(attacker, targetMode) {
             target = attacker.team.getAllAliveMembers();
             break;
         case 'Row Front':
-            target = attacker.battlefield.getRowFrontMembers(attacker);
+            target = attacker.opposingTeam.getRowFrontMembers(attacker);
             break;
         case 'Row Back':
-            target = attacker.battlefield.getRowBackMembers(attacker);
+            target = attacker.opposingTeam.getRowBackMembers(attacker);
             break;
         case 'All Characters':
-            target = attacker.battlefield.getAllCharacters();
+            if (formation) {
+                target = formation.getAllCharacters();
+            } else {
+                // Fallback to combining team members if formation not available
+                target = [...attacker.team.getAllAliveMembers(), ...attacker.opposingTeam.getAllAliveMembers()];
+            }
             break;
         case 'Lowest HP Front':
             target.push(attacker.opposingTeam.getLowestHPFrontMember());
@@ -111,27 +118,50 @@ export function selectTarget(attacker, targetMode) {
             target.push(attacker.team.getHighestHPMember());
             break;
         case 'Column 1':
-            target = attacker.battlefield.getColumnMembers(1);
+            if (formation) {
+                target = formation.getColumnMembers(0);
+            }
             break;
         case 'Column 2':
-            target = attacker.battlefield.getColumnMembers(2);
+            if (formation) {
+                target = formation.getColumnMembers(1);
+            }
             break;
         case 'Column 3':
-            target = attacker.battlefield.getColumnMembers(3);
+            if (formation) {
+                target = formation.getColumnMembers(2);
+            }
             break;
         case 'Column 4':
-            target = attacker.battlefield.getColumnMembers(4);
+            if (formation) {
+                target = formation.getColumnMembers(3);
+            }
             break;
         case 'Adjacent Enemies':
-            target = attacker.opposingTeam.getAdjacentMembers(attacker);
+            if (formation) {
+                const adjacent = formation.getAdjacentCharacters(attacker);
+                target = adjacent.filter(char => char.team === attacker.opposingTeam);
+            }
             break;
         case 'Adjacent Allies':
-            target = attacker.team.getAdjacentMembers(attacker);
+            if (formation) {
+                const adjacent = formation.getAdjacentCharacters(attacker);
+                target = adjacent.filter(char => char.team === attacker.team);
+            }
             break;
         case 'Diagonal from Caster':
-            target = attacker.battlefield.getDiagonalMembers(attacker);
+            if (formation) {
+                target = formation.getDiagonalCharacters(attacker);
+            }
             break;
         case 'Diagonal from Target':
+            break;
+        case 'Self AoE':
+            if (formation) {
+                target = formation.getAdjacentCharacters(attacker);
+            } else {
+                console.warn('Formation not available for Self AoE targeting');
+            }
             break;
         default:
             console.error(`Invalid target mode: ${targetMode}`);

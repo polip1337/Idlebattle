@@ -9,6 +9,14 @@ import { refreshMapElements, handleOutOfCombatRegeneration } from './map.js';
 import { handleActions } from './actionHandler.js';
 import Area from './Area.js';
 import { openTab } from './navigation.js';
+import { Formation } from './Formation.js';
+
+// Expose formation globally for targeting system
+let globalFormation = null;
+
+export function getFormation() {
+    return globalFormation;
+}
 
 export class BattleController {
     constructor() {
@@ -17,6 +25,8 @@ export class BattleController {
         this.battleOutcome = new BattleOutcome(this.battleState, team1, team2);
         this.teamManager = new TeamManager(this.battleState);
         this.ui = new BattleUI(this.battleState);
+        this.formation = new Formation();
+        globalFormation = this.formation;
         
         this.setupCallbacks();
         this.setupKeyboardControls();
@@ -125,8 +135,13 @@ export class BattleController {
             await this.checkBattleOutcome();
             return;
         }
+
+        // Initialize formation with teams
+        this.formation.initializeTeams(playerTeam, enemyTeam);
+
         renderTeamMembers(team2.members, 'team2', true);
         renderTeamMembers(team1.members, 'team1', true);
+
         // Apply passive skills for all team members
         [...playerTeam.members, ...enemyTeam.members].forEach(member => {
             if (member.skills) {
@@ -143,7 +158,6 @@ export class BattleController {
                 });
             }
         });
-
 
         // Set battle as started but paused
         this.battleState.startBattle();
