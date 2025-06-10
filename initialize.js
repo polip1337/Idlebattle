@@ -482,6 +482,27 @@ function handleGlobalKeyDown(event) {
             togglePause();
         }
     }
+
+    // Handle skill keybindings (1-0 and -)
+    if (hero && hero.selectedSkills) {
+        const keyToSkillIndex = {
+            'Digit1': 0, 'Digit2': 1, 'Digit3': 2, 'Digit4': 3,
+            'Digit5': 4, 'Digit6': 5, 'Digit7': 6, 'Digit8': 7,
+            'Digit9': 8, 'Digit0': 9, 'Minus': 10
+        };
+
+        const skillIndex = keyToSkillIndex[event.code];
+        if (skillIndex !== undefined && skillIndex < hero.selectedSkills.length) {
+            const skill = hero.selectedSkills[skillIndex];
+            if (skill && skill.type === "active") {
+                // Simulate click on the skill element
+                const skillElement = document.querySelector(`#skill${skillIndex + 1}`);
+                if (skillElement) {
+                    skillElement.click();
+                }
+            }
+        }
+    }
 }
 
 
