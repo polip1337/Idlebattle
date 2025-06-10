@@ -17,7 +17,31 @@ export class Formation {
     placeTeam(team, isTeam1) {
         const startCol = isTeam1 ? 0 : 2;
         const members = team.members;
+        const hero = members.find(member => member.constructor.name === 'Hero');
+        
+        if (hero) {
+            // Use hero's partyFormation for team1
+            const partyFormation = hero.partyFormation;
+            
+            // Place members according to partyFormation
+            for (let row = 0; row < partyFormation.length; row++) {
+                for (let col = 0; col < partyFormation[row].length; col++) {
+                    const member = partyFormation[row][col];
+                    if (member) {
+                        // Map party formation position to battle grid
+                        // partyFormation is 2x4, battle grid is 4x4
+                        // We need to map row 0,1 to rows 0,1 and keep columns 0-3
+                        this.grid[row][startCol + col] = member;
+                    }
+                }
+            }
+        } else {
+            this.placeTeamDefault(members, startCol);
+        }
+        
+    }
 
+    placeTeamDefault(members, startCol) {
         // Place front row (row 1)
         for (let i = 0; i < Math.min(4, members.length); i++) {
             const member = members[i];
