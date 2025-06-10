@@ -370,6 +370,20 @@ class EffectClass {
                 this.target.stats.resistances[resType] = (this.target.stats.resistances[resType] || 0) + this.effect.value;
                 break;
 
+            case 'onCritTrigger':
+                // Initialize the onCritTriggers array if it doesn't exist
+                if (!this.target.onCritTriggers) {
+                    this.target.onCritTriggers = [];
+                }
+                // Store the trigger effect
+                this.target.onCritTriggers.push({
+                    effectId: this.effect.effectId,
+                    buffData: this.effect.buffData,
+                    caster: this.caster
+                });
+                break;
+
+
             default:
                 console.warn(`Effect subType '${this.effect.subType}' from '${this.effect.name}' is not implemented.`);
         }
@@ -507,6 +521,15 @@ class EffectClass {
 
                 if (this.originalStats.resistances && this.originalStats.resistances[resType] !== undefined) {
                     this.target.stats.resistances[resType] = this.originalStats.resistances[resType];
+                }
+                break;
+
+            case 'onCritTrigger':
+                // Remove this effect's critical hit trigger
+                if (this.target.onCritTriggers) {
+                    this.target.onCritTriggers = this.target.onCritTriggers.filter(
+                        trigger => trigger.caster !== this.caster
+                    );
                 }
                 break;
 

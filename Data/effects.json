@@ -604,5 +604,9 @@
   "damageBonusVsDebuffed": {
     "id": "damageBonusVsDebuffed",
     "duration": -1
+  },
+  "damageBonusVsDebuffed": {
+    "id": "damageBonusVsDebuffed",
+    "duration": -1
   }
 }

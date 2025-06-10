@@ -263,6 +263,33 @@ class Member {
             if (this.isHero) {
                 battleStatistics.addCriticalHit(damage);
             }
+
+            // Handle onCritTrigger effects
+            if (this.onCritTriggers && this.onCritTriggers.length > 0) {
+                this.onCritTriggers.forEach(trigger => {
+                    // Create the effect based on the trigger data
+                    const effectData = {
+                        id: trigger.effectId,
+                        ...trigger.buffData,
+                        caster: trigger.caster
+                    };
+                    new EffectClass(this, effectData, trigger.caster);
+                });
+            }
+
+            // Trigger OnCriticalHit effects
+            if (this.onCriticalHitEffects && this.onCriticalHitEffects.length > 0) {
+                this.onCriticalHitEffects.forEach(trigger => {
+                    // Apply each effect in the trigger's effects array
+                    if (Array.isArray(trigger.effects)) {
+                        trigger.effects.forEach(effect => {
+                            new EffectClass(this, effect, trigger.caster);
+                        });
+                    } else {
+                        new EffectClass(this, trigger.effects, trigger.caster);
+                    }
+                });
+            }
         }
 
         // Handle mana shield damage first if active

@@ -3120,39 +3120,22 @@
     "icon": "Media/Skills/DaggerSavant/Passive/fleet_footed.png",
     "effects": [
       {
-        "type": "passive",
-        "subtype": "buffMovementSpeedPercentage",
-        "value": 8,
-        "description": "Permanently increases movement speed by 8%."
-      },
-      {
+        "id": "buffDodgeFlat",
         "type": "passive",
         "subtype": "buffDodgeFlat",
         "value": 3,
         "description": "Permanently increases dodge by 3."
       },
       {
-        "id": "procOnDaggerCritCelerity",
+        "id": "onCritTrigger",
         "type": "passive",
         "subtype": "onCritTrigger",
-        "weaponTypeCondition": "Dagger",
-        "chance": 0.25,
+        "description": "Deacrease cooldowns for 1s each time you land a critical hit.",
+
         "effectId": "applyBuffSelf",
         "buffData": {
-          "buffId": "celerityBurstDagger",
-          "name": "Celerity",
-          "description": "Movement and Attack Speed increased.",
-          "duration": 2,
-          "modifiers": [
-            {
-              "stat": "speed",
-              "percentage": 15
-            },
-            {
-              "stat": "attackSpeed",
-              "percentage": 10
-            }
-          ]
+          "id": "cooldownReduction",
+          "value": 1
         }
       }
     ],
