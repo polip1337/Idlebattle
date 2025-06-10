@@ -138,4 +138,29 @@ export class BattleUI {
     showLossPopup() {
         this.showPopup("Defeat!", "Your team has been defeated.");
     }
+
+    renderTeamMembers(members, teamId, isEnemy = false) {
+        const teamContainer = document.getElementById(teamId);
+        if (!teamContainer) return;
+
+        // Reset all slots to empty state
+        const slots = teamContainer.querySelectorAll('.team-slot');
+        slots.forEach(slot => {
+            slot.innerHTML = '';
+        });
+
+        // Place members in their respective slots
+        members.forEach(member => {
+            const position = member.position.toLowerCase();
+            const slotIndex = member.slotIndex || 0;
+            const slot = teamContainer.querySelector(`.team-slot[data-position="${position}-${slotIndex + 1}"]`);
+            
+            if (slot) {
+                const memberElement = document.createElement('div');
+                memberElement.className = 'member';
+                memberElement.id = member.id;
+                slot.appendChild(memberElement);
+            }
+        });
+    }
 }

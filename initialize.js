@@ -356,37 +356,6 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
     if (!teamContainerElement) {
         return;
     }
-
-    // Create team structure if it doesn't exist
-    if (!teamContainerElement.querySelector('.team')) {
-        const teamDiv = document.createElement('div');
-        teamDiv.className = 'team';
-        
-        // Create front row
-        const frontRow = document.createElement('div');
-        frontRow.className = 'team-row';
-        for (let i = 0; i < 4; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'team-slot';
-            slot.setAttribute('data-position', `front-${i + 1}`);
-            frontRow.appendChild(slot);
-        }
-        
-        // Create back row
-        const backRow = document.createElement('div');
-        backRow.className = 'team-row';
-        for (let i = 0; i < 4; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'team-slot';
-            slot.setAttribute('data-position', `back-${i + 1}`);
-            backRow.appendChild(slot);
-        }
-        
-        teamDiv.appendChild(frontRow);
-        teamDiv.appendChild(backRow);
-        teamContainerElement.appendChild(teamDiv);
-    }
-
     const teamRows = teamContainerElement.querySelectorAll('.team-row');
     if (teamRows.length < 2) {
         console.error(`Team rows not found in ${containerId}. HTML structure issue.`);
@@ -394,11 +363,7 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
     }
 
     if (clearExisting) {
-        // Clear all slots but maintain the structure
-        const slots = teamContainerElement.querySelectorAll('.team-slot');
-        slots.forEach(slot => {
-            slot.innerHTML = '';
-        });
+        teamRows[0].innerHTML = ''; teamRows[1].innerHTML = '';
     }
 
     membersToRender.forEach((member, index) => {
@@ -410,37 +375,42 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
     });
 
     membersToRender.forEach(member => {
-        const position = member.position.toLowerCase();
-        const slotIndex = member.slotIndex || 0;
-        const slot = teamContainerElement.querySelector(`.team-slot[data-position="${position}-${slotIndex + 1}"]`);
-        
-        if (slot) {
-            const memberElement = member.isHero ? renderHero(member) : renderMember(member);
-            slot.appendChild(memberElement);
+        const targetRowIndex = (member.position === "Back") ? 1 : 0;
+        let rowElement = teamRows[targetRowIndex];
 
-            if (typeof member.initializeDOMElements === 'function') {
-                member.initializeDOMElements();
+        if (rowElement.children.length >= 4) {
+            const otherRowIndex = (targetRowIndex === 0) ? 1 : 0;
+            if (teamRows[otherRowIndex].children.length < 4) {
+                rowElement = teamRows[otherRowIndex];
+            } else {
+                console.warn(`Cannot place ${member.name} in ${containerId}, both rows are full.`);
+                return;
             }
-
-            // Update skill element references after rendering
-            if (member.skills) {
-                member.skills.forEach(skill => {
-                    if (skill.type === "active") {
-                        const skillDivId = member.memberId + "Skill" + skill.name.replace(/\s/g, '');
-                        const skillElement = memberElement.querySelector("#" + skillDivId);
-                        if (skillElement) {
-                            skill.setElement(skillElement);
-                            // Reset overlay reference to ensure we get a fresh one
-                            skill.overlay = null;
-                        }
-                    }
-                });
-            }
-
-            updateHealth(member);
-            updateMana(member);
-            updateStamina(member);
         }
+
+        const memberElement = member.isHero ? renderHero(member) : renderMember(member);
+        rowElement.appendChild(memberElement);
+
+        if (typeof member.initializeDOMElements === 'function') {
+            member.initializeDOMElements();
+        }
+
+        // Update skill element references after rendering
+        if (member.skills) {
+            member.skills.forEach(skill => {
+                if (skill.type === "active") {
+                    const skillDivId = member.memberId + "Skill" + skill.name.replace(/\s/g, '');
+                    const skillElement = memberElement.querySelector("#" + skillDivId);
+                    if (skillElement) {
+                        skill.setElement(skillElement);
+                        // Reset overlay reference to ensure we get a fresh one
+                        skill.overlay = null;
+                    }
+                }
+            });
+        }
+
+        updateHealth(member); updateMana(member); updateStamina(member);
     });
 }
 
