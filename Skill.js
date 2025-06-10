@@ -24,7 +24,7 @@ class Skill {
         this.targetingModes = skillData.targetingModes;
         this.extraTargets = skillData.extraTargets;
         this.targetCount = skillData.targetCount || 1;
-        this.effects = effects;
+        this.effects = effects || skillData.effects || skillData.effect; // Handle both effects array and single effect
         this.div = element;
         this.repeat = true;
         this.level = 1;
@@ -113,13 +113,16 @@ class Skill {
             // Create a proper effect object for EffectClass
             const effectObject = {
                 name: this.name,
-                type: effect.type || 'buff',
-                subType: effect.subtype || 'flatChange',
+                type: effect.type || 'passive',
+                subType: effect.subtype || effect.subType,
                 stat: effect.stat,
                 value: effect.value,
                 duration: -1, // Unlimited duration for passives
                 icon: this.icon,
-                stackMode: "refresh" // Passives should refresh rather than stack
+                stackMode: "refresh", // Passives should refresh rather than stack
+                id: effect.id, // Include effect ID if present
+                condition: effect.condition, // Include condition if present
+                description: effect.description // Include description if present
             };
 
             // Apply the effect using EffectClass

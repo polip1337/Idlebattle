@@ -63,7 +63,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffHealth",
       "value": 20
@@ -81,7 +81,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffStaminaRegen",
       "value": 5
@@ -99,7 +99,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffArmor",
       "value": 10
@@ -117,7 +117,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffManaRegen",
       "value": 10
@@ -135,7 +135,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffMagicPower",
       "value": 15
@@ -153,7 +153,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffHealth",
       "value": 10
@@ -171,7 +171,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "auraHeal",
       "value": 5
@@ -189,7 +189,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffManaRegen",
       "value": 5
@@ -207,7 +207,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffArmor",
       "value": 10
@@ -225,7 +225,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffSpeed",
       "value": 5
@@ -261,7 +261,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffCritChance",
       "value": 5
@@ -279,7 +279,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffDebuffDuration",
       "value": 5
@@ -297,7 +297,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffFireDamage",
       "value": 10
@@ -315,7 +315,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "increaseAllyHitChance",
       "value": 5
@@ -333,7 +333,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffCritChance",
       "value": 10
@@ -351,7 +351,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffDodge",
       "value": 5
@@ -369,7 +369,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "increaseBeastHealth",
       "value": 15
@@ -387,7 +387,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "increaseCritChance",
       "value": 5
@@ -405,7 +405,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "increaseDamage",
       "value": 10
@@ -423,7 +423,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "healOnKill",
       "value": 5
@@ -441,7 +441,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "increaseHealth",
       "value": 20
@@ -459,7 +459,7 @@
     "manaCost": 0,
     "cooldown": 0,
     "damageType": "None",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "increaseSpeed",
       "value": 5
@@ -843,7 +843,7 @@
     "id": "steamFocus",
     "name": "Steam Focus",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffDamagePercentage",
       "damageType": "Steam",
@@ -872,7 +872,7 @@
     "id": "miasmaControl",
     "name": "Miasma Control",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "enhanceSkillCategory",
       "skillTags": [
@@ -898,7 +898,7 @@
         "procChance": 0.25,
         "bonusDamage": 10,
         "bonusDamageType": "Water",
-        "secondaryEffect": "applySoaked",
+        "secondaryeffects": "applySoaked",
         "secondaryEffectDuration": 2,
         "description": "Steam spells have a chance to condense on targets, dealing bonus Water damage and soaking them."
       }
@@ -911,7 +911,7 @@
     "id": "runicPyromancyFocus",
     "name": "Runic Pyromancy Focus",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "buffSkillTagDamagePercentage",
       "skillTags": [
@@ -943,7 +943,7 @@
     "id": "masterRunecarverFire",
     "name": "Master Runecarver (Fire)",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "enhanceRuneTraps",
       "runeType": "Fire",
@@ -1030,7 +1030,7 @@
     "id": "masterOfCrimsonFlames",
     "name": "Master of Crimson Flames",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "healOnCrit",
       "damageTypeCondition": "Fire",
@@ -1100,7 +1100,7 @@
     "id": "masterOfUndeadFlames",
     "name": "Master of Undead Flames",
     "type": "passive",
-    "effect": {
+    "effects": {
       "type": "passive",
       "subtype": "minionDeathExplosion",
       "minionTag": "Undead",
@@ -1179,7 +1179,7 @@
         "id": "damageBonusVsDebuffed",
         "type": "passive",
         "subtype": "buffDamagePercentageConditional",
-        "condition": "targetHasNegativeStatusEffect",
+        "condition": "targetHasNegativeStatuseffects",
         "value": 10,
         "description": "Deal 10% increased damage to enemies suffering from negative status effects (e.g., stun, bleed, poison)."
       }
@@ -2102,7 +2102,7 @@
       {
         "id": "applyMinorSlowAura",
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 3,
         "effectOnEnemies": {
           "id": "reduceSpeedPercentage",
@@ -2614,7 +2614,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 5,
         "effectOnAllies": {
           "id": "increaseArmorFlat",
@@ -3215,7 +3215,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 10,
         "targetType": "Ally",
         "effectsInAura": [
@@ -3992,7 +3992,7 @@
       {
         "type": "passive",
         "subtype": "buffDamagePercentageConditional",
-        "condition": "casterHasRageEffect",
+        "condition": "casterHasRageeffects",
         "value": 15,
         "description": "Deal 15% more damage while enraged."
       }
@@ -4406,7 +4406,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 5,
         "effectOnAllies": {
           "id": "increaseVitalityFlat",
@@ -4577,7 +4577,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 1,
         "effectOnEnemies": {
           "id": "reduceDefensiveStats",
@@ -4652,7 +4652,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 1,
         "effectOnEnemies": {
           "id": "reduceSpeedPercentage",
@@ -4831,7 +4831,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "increaseArmorFlat",
@@ -4851,7 +4851,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "increaseDamagePercentage",
@@ -4871,7 +4871,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 3,
         "effectOnEnemies": {
           "id": "reduceArmorPercentage",
@@ -4892,7 +4892,7 @@
       {
         "type": "passive",
         "subtype": "buffDamagePercentageConditional",
-        "condition": "casterHasRageEffect",
+        "condition": "casterHasRageeffects",
         "value": 20
       },
       {
@@ -4930,7 +4930,7 @@
       {
         "type": "passive",
         "subtype": "armorPenetration",
-        "condition": "casterHasRageEffect",
+        "condition": "casterHasRageeffects",
         "percentage": 30
       }
     ],
@@ -4946,7 +4946,7 @@
       {
         "type": "passive",
         "subtype": "onKillTrigger",
-        "condition": "casterHasRageEffect",
+        "condition": "casterHasRageeffects",
         "effectId": "extendBuffDuration",
         "buffTag": "Rage",
         "amount": 2
@@ -5164,7 +5164,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 2,
         "effectOnEnemies": {
           "id": "reduceDamageDealtPercentage",
@@ -5231,7 +5231,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 2,
         "effectOnEnemies": {
           "id": "reduceSpeedPercentage",
@@ -5266,7 +5266,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "increaseDamagePercentage",
@@ -5286,7 +5286,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "increaseVitalityFlat",
@@ -5306,7 +5306,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 3,
         "effectOnAllies": {
           "id": "grantArmorPenetration",
@@ -5516,7 +5516,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "onHitEffect",
+        "subtype": "onHiteffects",
         "trigger": "onMeleeHitReceived",
         "effectId": "damageAttacker",
         "damage": 20,
@@ -5831,7 +5831,7 @@
           "charges": 1,
           "onDamageTakenTrigger": {
             "damageType": "Lightning",
-            "effect": {
+            "effects": {
               "id": "dealBonusDamage",
               "damage": 25,
               "damageType": "Lightning"
@@ -6004,7 +6004,7 @@
         "type": "passive",
         "subtype": "grantOnHitEffectToMinions",
         "minionTag": "Undead",
-        "onHitEffect": {
+        "onHiteffects": {
           "id": "applySlow",
           "duration": 1,
           "percentage": -15
@@ -6268,7 +6268,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "onHitEffect",
+        "subtype": "onHiteffects",
         "trigger": "onMeleeHitReceived",
         "effectId": "applyChillToAttacker",
         "chance": 1.0,
@@ -6878,7 +6878,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "onHitEffect",
+        "subtype": "onHiteffects",
         "trigger": "onMeleeHitReceived",
         "effectId": "applyChillToAttacker",
         "chance": 1.0,
@@ -6951,13 +6951,13 @@
       {
         "type": "passive",
         "subtype": "buffDamageReductionPercentage",
-        "condition": "casterHasStormEffect",
+        "condition": "casterHasStormeffects",
         "value": 20
       },
       {
         "type": "passive",
         "subtype": "buffManaRegenFlat",
-        "condition": "casterHasStormEffect",
+        "condition": "casterHasStormeffects",
         "value": 15
       }
     ],
@@ -7295,7 +7295,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 2,
         "effectOnEnemies": {
           "id": "damageOverTimeAndHealCaster",
@@ -7500,7 +7500,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "onHitEffect",
+        "subtype": "onHiteffects",
         "trigger": "onMeleeHitReceived",
         "effectId": "applyChillToAttacker",
         "chance": 1.0,
@@ -7998,7 +7998,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 5,
         "minionTag": "Undead",
         "effectsInAura": [
@@ -8116,7 +8116,7 @@
         "type": "passive",
         "subtype": "grantOnHitEffectToMinions",
         "minionTag": "Blood",
-        "onHitEffect": {
+        "onHiteffects": {
           "id": "applyFear",
           "chance": 0.1,
           "duration": 1
@@ -8697,7 +8697,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "healOverTime",
@@ -8898,7 +8898,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 3,
         "effectOnEnemies": {
           "id": "applyDebuff",
@@ -8969,7 +8969,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "increaseResistanceFlat",
@@ -9096,7 +9096,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 5,
         "effectOnAllies": {
           "id": "increaseMagicResistanceAll",
@@ -9224,7 +9224,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "restoreResource",
@@ -9405,7 +9405,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "increaseResistanceFlat",
@@ -9527,7 +9527,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "healOverTime",
@@ -9716,7 +9716,7 @@
     "effects": [
       {
         "type": "passive",
-        "subtype": "auraEffect",
+        "subtype": "auraeffects",
         "radius": 4,
         "effectOnAllies": {
           "id": "increaseResistanceFlat",
