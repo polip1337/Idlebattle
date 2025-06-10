@@ -143,19 +143,24 @@ export class BattleUI {
         const teamContainer = document.getElementById(teamId);
         if (!teamContainer) return;
 
-        // Reset all slots to empty state
-        const slots = teamContainer.querySelectorAll('.team-slot');
-        slots.forEach(slot => {
-            slot.innerHTML = '';
+        const rows = teamContainer.querySelectorAll('.team-row');
+        rows.forEach(row => {
+            const slots = row.querySelectorAll('.team-slot');
+            slots.forEach(slot => {
+                // Clear existing content
+                slot.innerHTML = '';
+                slot.className = 'team-slot empty';
+            });
         });
 
         // Place members in their respective slots
         members.forEach(member => {
-            const position = member.position.toLowerCase();
-            const slotIndex = member.slotIndex || 0;
-            const slot = teamContainer.querySelector(`.team-slot[data-position="${position}-${slotIndex + 1}"]`);
-            
+            const rowIndex = member.position === "Back" ? 0 : 1;
+            const row = rows[rowIndex];
+            const slot = row.querySelector('.team-slot:empty');
             if (slot) {
+                slot.className = 'team-slot';
+                // Add member content here
                 const memberElement = document.createElement('div');
                 memberElement.className = 'member';
                 memberElement.id = member.id;
