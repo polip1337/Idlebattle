@@ -684,6 +684,7 @@ class Hero extends Member {
 
 
         this.recalculateHeroStats(false); 
+        this.reselectSkillsAfterLoad();
     }
 
     addGold(amount) {

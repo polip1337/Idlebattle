@@ -76,7 +76,8 @@ class Companion extends Member {
         this.experience = data.experience || 0;
         this.experienceToLevel = data.experienceToLevel || Math.floor(100 * (this.experienceToLevelMultiplier || 1.1));
 
-        if (data.skillProgression && allSkillsLookup) {
+        // Move skill progression restoration after parent class initialization
+        if (data.skillProgression && allSkillsLookup && this.skills) {
             this.skills.forEach(skillInstance => {
                 const savedSkillData = data.skillProgression.find(sp => sp.id === skillInstance.id);
                 if (savedSkillData) {

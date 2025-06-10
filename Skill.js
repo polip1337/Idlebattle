@@ -23,9 +23,10 @@ class Skill {
         this.damageType = skillData.damageType;
         this.targetingModes = skillData.targetingModes;
         this.extraTargets = skillData.extraTargets;
+        this.targetCount = skillData.targetCount || 1;
         this.effects = effects;
         this.div = element;
-        this.repeat = true;
+        this.repeat = false;
         this.level = 1;
         this.experience = 0;
         this.experienceToNextLevel = 100;
@@ -170,6 +171,17 @@ class Skill {
                 }
 
                 var targets = selectTarget(member, this.targetingModes[0]);
+                
+                // Handle multiple targets for the same effect
+                if (this.targetCount > 1) {
+                    // If we have fewer targets than targetCount, we'll hit the same targets multiple times
+                    const originalTargets = [...targets];
+                    for (let i = 1; i < this.targetCount; i++) {
+                        targets = targets.concat(originalTargets);
+                    }
+                }
+
+                // Handle extra targets with different effects (existing functionality)
                 if (this.extraTargets != undefined) {
                     this.extraTargets.forEach(mode => {
                         targets = targets.concat(selectTarget(member, mode));
