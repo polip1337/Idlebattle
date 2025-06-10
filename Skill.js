@@ -173,7 +173,19 @@ class Skill {
                     this.handleExpGain(member);
                 }
 
-                var targets = selectTarget(member, this.targetingModes[0]);
+                // Handle effect-based targeting
+                let targetingCondition = null;
+                if (this.effects) {
+                    const dispelEffect = Array.isArray(this.effects) 
+                        ? this.effects.find(e => e.id === 'dispelDebuff')
+                        : (this.effects.id === 'dispelDebuff' ? this.effects : null);
+                    
+                    if (dispelEffect && dispelEffect.debuffType) {
+                        targetingCondition = (ally) => ally.hasDebuffType(dispelEffect.debuffType);
+                    }
+                }
+
+                var targets = selectTarget(member, this.targetingModes[0], targetingCondition);
                 
                 // Handle multiple targets for the same effect
                 if (this.targetCount > 1) {

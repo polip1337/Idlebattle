@@ -496,6 +496,11 @@ class Member {
             this.experience = data.experience || 0;
             this.experienceToLevel = data.experienceToLevel || 100;
 
+            // Skip skill progression for companions
+            if (this.constructor.name === 'Companion') {
+                return;
+            }
+
             // If non-heroes have skill progression (uncommon for standard mobs)
             if (data.skillProgression && data.skillProgression.length > 0 && allSkillsLookup) {
                 const baseSkillsFromClass = allMobClasses[this.combination].skills.map(skillId => deepCopy(allSkillsLookup[skillId]));
@@ -518,7 +523,6 @@ class Member {
                 }
             }
 
-
             // Note: For most enemy members, their `memberId`, `team`, `opposingTeam`, `element`
             // would be re-initialized when they are added to a battle/stage.
             // This `restoreFromData` would primarily be for stats and health if saved mid-combat.
@@ -529,6 +533,16 @@ class Member {
         const critChance = this.stats.critChance;
 
         return Math.random() * 100 < critChance;
+    }
+
+    hasDebuffType(debuffTypes) {
+        if (!Array.isArray(debuffTypes)) {
+            debuffTypes = [debuffTypes];
+        }
+        return this.effects.some(effect => 
+            effect.effect.type === 'debuff' && 
+            debuffTypes.includes(effect.effect.subType)
+        );
     }
 }
 

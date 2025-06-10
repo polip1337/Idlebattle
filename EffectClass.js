@@ -291,8 +291,6 @@ class EffectClass {
                 this.summon(this.target, this.effect.who, this.effect.limit);
                 break;
 
-
-
             case 'Taunt':
                 if (this.caster) {
                     this.target.forcedTarget = this.caster;
@@ -318,6 +316,16 @@ class EffectClass {
                     damageBonusPercentage: this.effect.damageBonusPercentage,
                     manaCostIncreasePercentage: this.effect.manaCostIncreasePercentage,
                 };
+                break;
+
+            case 'Dispel':
+                if (this.effect.debuffType) {
+                    // Find and remove all specified debuffs
+                    const debuffsToRemove = this.target.effects.filter(effect => 
+                        this.effect.debuffType.includes(effect.effect.id) && effect.effect.type === 'debuff'
+                    );
+                    debuffsToRemove.forEach(debuff => debuff.remove());
+                }
                 break;
 
             default:
@@ -437,6 +445,10 @@ class EffectClass {
                 if (this.target.empoweredSpell) {
                     this.target.empoweredSpell = null;
                 }
+                break;
+
+            case 'Dispel':
+                // No state to revert for dispel effects
                 break;
 
             default:

@@ -592,5 +592,13 @@
     "duration": 15,
     "icon": "Media/UI/burn.svg",
     "description": "Deals heavy Fire damage over time and can spread."
+  },
+  "dispelDebuff": {
+    "id": "dispelDebuff",
+    "name": "Dispel Debuff",
+    "type": "utility",
+    "subType": "Dispel",
+    "description": "Removes specified debuffs from the target.",
+    "duration": 0
   }
 }

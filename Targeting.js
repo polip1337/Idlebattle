@@ -1,6 +1,6 @@
 import { getFormation } from './battle_controller.js';
 
-export function selectTarget(attacker, targetMode) {
+export function selectTarget(attacker, targetMode, condition = null) {
     let target = [];
     const formation = getFormation();
 
@@ -161,6 +161,13 @@ export function selectTarget(attacker, targetMode) {
                 target = formation.getAdjacentCharacters(attacker);
             } else {
                 console.warn('Formation not available for Self AoE targeting');
+            }
+            break;
+        case 'Allies With Condition':
+            if (typeof condition === 'function') {
+                target = attacker.team.getAllAliveMembers().filter(condition);
+            } else {
+                console.warn('No condition function provided for Allies With Condition targeting');
             }
             break;
         default:
