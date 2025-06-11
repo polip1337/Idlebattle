@@ -526,7 +526,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
-function togglePause() {
+export function togglePause() {
     isPaused = !isPaused;
     const overlayTarget = document.getElementById('teamAndBattleContainer-overlay') || document.getElementById('battlefield');
     if (!overlayTarget) return;
@@ -575,5 +575,9 @@ export function attemptFlee() {
     if (battleController && battleController.fleeSystem) {
         battleController.fleeSystem.attemptFlee();
     }
+}
+
+export function setPaused(value) {
+    isPaused = value;
 }
 

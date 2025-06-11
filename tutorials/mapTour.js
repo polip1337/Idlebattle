@@ -1,4 +1,4 @@
-import { openTab } from './navigation.js';
+import { openTab } from '../navigation.js';
 // driver is now available globally from the CDN script
 
 class MapTour {
@@ -30,6 +30,7 @@ class MapTour {
             },
             {
                 element: '#heroContentNavButton',
+                
                 popover: {
                     title: 'Party manager',
                     description: 'Lets you display your exact stats and equipment. Used to manage companions and the formation of your party. You will learn more when you click on it.',

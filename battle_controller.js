@@ -10,6 +10,7 @@ import { handleActions } from './actionHandler.js';
 import Area from './Area.js';
 import { openTab } from './navigation.js';
 import { Formation } from './Formation.js';
+import tutorialOverlay from './tutorials/tutorialOverlay.js';
 
 // Expose formation globally for targeting system
 let globalFormation = null;

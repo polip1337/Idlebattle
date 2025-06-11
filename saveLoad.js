@@ -2,7 +2,7 @@ import { hero, battleStatistics } from './initialize.js'; // Removed currentStag
 import { questSystem } from './questSystem.js';
 import { getMapStateForSave, setMapStateFromLoad } from './map.js';
 import { reputationSystem } from './reputation.js';
-import tutorialOverlay from './tutorialOverlay.js';
+import tutorialOverlay from './tutorials/tutorialOverlay.js';
 
 let initializeAndLoadGame;
 

@@ -5,7 +5,7 @@ import { battleController } from './initialize.js';
 import { team1, team2, battleLog, hero } from './initialize.js'; // No more stage/area specific imports from initialize for map UI
 import { questSystem } from './questSystem.js';
 import { renderHero, updateHealth, updateMana, updateStamina, updateHeroMapStats } from './Render.js';
-import mapTour from './mapTour.js';
+import mapTour from './tutorials/mapTour.js';
 
 
 export let mapsData = null;

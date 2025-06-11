@@ -1,4 +1,6 @@
 import mapTour from './mapTour.js';
+import combatTour from './combatTour.js';
+import partyTour from './partyTour.js';
 // Tutorial overlay configuration
 const TUTORIAL_SCREENS = {
     'map': {
@@ -24,14 +26,19 @@ class TutorialOverlay {
         this.visitedScreens = {};
     }
 
-
-
     showOverlay(screenId) {
         if (!TUTORIAL_SCREENS[screenId]) return;
         
         if (this.visitedScreens[screenId]) return;
-        mapTour.startTour();
 
+        // Start appropriate tour based on screen
+        if (screenId === 'battle') {
+            combatTour.startTour();
+        } else if (screenId === 'party') {
+            partyTour.startTour();
+        } else {
+            mapTour.startTour();
+        }
 
         this.visitedScreens[screenId] = true;
     }

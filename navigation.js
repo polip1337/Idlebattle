@@ -3,7 +3,7 @@ import { battleStatistics, hero } from './initialize.js';
 import { updateProgressBar, renderBattleConsumableBar, renderSkills, renderPassiveSkills, updateStatsDisplay, updateHealth, updateMana, updateStamina } from './Render.js'; // Added missing Render functions
 import { updateQuestLog } from './questLog.js';
 import { refreshMapElements } from './map.js'; // Removed updateHeroMapStats as it's handled in map.js
-import tutorialOverlay from './tutorialOverlay.js';
+import tutorialOverlay from './tutorials/tutorialOverlay.js';
 
 export function openTab(evt, tabName) {
     const tabContents = document.getElementsByClassName('tabcontent');
