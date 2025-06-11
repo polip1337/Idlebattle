@@ -363,7 +363,7 @@ function loadMap(mapIdToLoad, fromTravel = false, previousPoiName = null) {
     refreshMapElements();
 }
 
-export function initializeMap() {
+    export function initializeMap() {
     mapContainer = document.getElementById('map-container');
     poiListUI = document.getElementById('poi-list');
     heroPortraitContainer = document.getElementById('hero-portrait-container');

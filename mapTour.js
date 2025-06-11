@@ -1,6 +1,5 @@
 import { openTab } from './navigation.js';
-import { driver } from "driver.js";
-import "driver.js/dist/driver.css";
+// driver is now available globally from the CDN script
 
 class MapTour {
     constructor() {
@@ -8,48 +7,48 @@ class MapTour {
             {
                 element: '#hero-portrait-container',
                 popover: {
-                    title: 'Hero Portrait',
-                    description: 'This shows your character\'s current status and appearance.',
-                    position: 'right'
-                }
-            },
-            {
-                element: '#hero-map-gold-display',
-                popover: {
-                    title: 'Gold Display',
-                    description: 'Your current gold amount is shown here.',
-                    position: 'right'
-                }
-            },
-            {
-                element: '#hero-map-exp-bars-container',
-                popover: {
-                    title: 'Experience Bars',
-                    description: 'Track your progress in each class here. Each bar shows your current level and experience.',
-                    position: 'right'
-                }
-            },
-            {
-                element: '#gridContainer',
-                popover: {
-                    title: 'Navigation Menu',
-                    description: 'Quick access to different game sections like Party, Map, Library, and more.',
+                    title: 'Your status',
+                    description: 'This shows your current status: health, mana, and stamina.',
                     position: 'right'
                 }
             },
             {
                 element: '#map-container',
                 popover: {
-                    title: 'Map View',
-                    description: 'The main map area where you can explore different locations and points of interest.',
-                    position: 'left'
+                    title: 'Map',
+                    description: 'Move around the map by clicking on the different locations. Yellow nodes are dialogue, red nodes are combat, and blue nodes are travel.',
+                    position: 'right'
                 }
             },
             {
                 element: '#poi-list-container',
                 popover: {
-                    title: 'Points of Interest',
-                    description: 'A list of all available locations on the current map.',
+                    title: 'Node list',
+                    description: 'You can also see a list of all the nodes on the map here.',
+                    position: 'right'
+                }
+            },
+            {
+                element: '#heroContentNavButton',
+                popover: {
+                    title: 'Party manager',
+                    description: 'Lets you display your exact stats and equipment. Used to manage companions and the formation of your party. You will learn more when you click on it.',
+                    position: 'right'
+                }
+            },
+            {
+                element: '#libraryNavButton',
+                popover: {
+                    title: 'Library',
+                    description: 'The sum total of your knowledge. Very WIP.',
+                    position: 'right'
+                }
+            },
+            {
+                element: '#gridContainer',
+                popover: {
+                    title: 'Map View',
+                    description: 'Quick access to different game sections. Basically what it says on the label.',
                     position: 'left'
                 }
             }
@@ -58,10 +57,10 @@ class MapTour {
 
     startTour() {
         // Ensure we're on the map tab
-        openTab(null, 'map');
+const driver = window.driver.js.driver;
 
         // Create driver instance with custom styling
-        const driverObj = driver.driver({
+        const driverObj = driver({
             animate: true,
             showProgress: true,
             showButtons: ['next', 'previous', 'close'],
@@ -79,7 +78,7 @@ class MapTour {
 
         // Start the tour
         driverObj.setSteps(this.steps);
-        driverObj.start();
+        driverObj.drive();
     }
 }
 
