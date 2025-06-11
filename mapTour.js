@@ -4,7 +4,6 @@ import "driver.js/dist/driver.css";
 
 class MapTour {
     constructor() {
-        this.driver = null;
         this.steps = [
             {
                 element: '#hero-portrait-container',
@@ -57,18 +56,12 @@ class MapTour {
         ];
     }
 
-
     startTour() {
-        if (!this.driver) {
-            console.error('Driver.js not initialized');
-            return;
-        }
-
         // Ensure we're on the map tab
         openTab(null, 'map');
 
         // Create driver instance with custom styling
-        const driverObj = this.driver.driver({
+        const driverObj = driver.driver({
             animate: true,
             showProgress: true,
             showButtons: ['next', 'previous', 'close'],

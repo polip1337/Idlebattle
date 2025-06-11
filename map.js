@@ -374,14 +374,12 @@ export function initializeMap() {
     expBarClass3El = document.getElementById('exp-bar-class3');
 
     // Initialize the map tour
-    mapTour.initialize().then(() => {
-        const tourButton = document.getElementById('start-map-tour');
-        if (tourButton) {
-            tourButton.addEventListener('click', () => {
-                mapTour.startTour();
-            });
-        }
-    });
+    const tourButton = document.getElementById('start-map-tour');
+    if (tourButton) {
+        tourButton.addEventListener('click', () => {
+            mapTour.startTour();
+        });
+    }
 
     // Start regeneration interval (every 2 seconds)
     if (window.regenerationInterval) {
