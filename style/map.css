@@ -189,7 +189,7 @@
 .poi:hover .poi-icon { transform: scale(2.5) translate(-20%, -20%); }
 .poi-name { display: block; color: #d4b68a; font-family: 'Cinzel', serif; font-size: clamp(10px, 1vw, 13px); text-shadow: 1px 1px 2px #000; margin-top: 5px; background-color: rgba(0,0,0,0.5); padding: 2px 4px; border-radius: 3px; }
 .poi.travel .poi-icon { filter: brightness(1.2) hue-rotate(180deg); }
-.poi.combat .poi-icon { filter: brightness(1.2) hue-rotate(0deg); }
+.poi.combat .poi-icon { filter: brightness(1.2) hue-rotate(0deg); border: 2px solid #ff0000; }
 .poi.highlight .poi-icon { animation: highlight-poi 1.5s infinite alternate; }
 @keyframes highlight-poi { from { box-shadow: 0 0 10px #ffd700; transform: scale(1); } to { box-shadow: 0 0 20px #fff, 0 0 30px #ffd700; transform: scale(1.2); } }
 

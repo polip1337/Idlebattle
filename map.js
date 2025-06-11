@@ -1,11 +1,11 @@
 // In map.js
 
 import { openTab } from './navigation.js';
-import { startBattle } from './Battle.js'; // Battle.js manages its own Area loading
+import { battleController } from './initialize.js';
 import { team1, team2, battleLog, hero } from './initialize.js'; // No more stage/area specific imports from initialize for map UI
 import { questSystem } from './questSystem.js';
-// Removed updateHeroMapStats from Render.js import as we'll handle its presumed functionality locally for sidebar.
-import { renderHero, updateHealth, updateMana, updateStamina } from './Render.js';
+import { renderHero, updateHealth, updateMana, updateStamina, updateHeroMapStats } from './Render.js';
+import mapTour from './mapTour.js';
 
 
 export let mapsData = null;
@@ -27,6 +27,9 @@ let heroMapGoldValueEl = null;
 let expBarClass1El = null;
 let expBarClass2El = null;
 let expBarClass3El = null;
+
+// Add regeneration interval variable
+window.regenerationInterval = null; // Expose to window for battle system
 
 // Expose isProcessingPoiClick to window for action handler
 window.isProcessingPoiClick = isProcessingPoiClick;
@@ -144,6 +147,16 @@ async function handleCombat(poi) {
                 shownDialogues.add(dialogueKey);
             }
         }
+        // Add stage-specific dialogue IDs
+        if (poi.stageDialogues) {
+            Object.entries(poi.stageDialogues).forEach(([stage, dialogueId]) => {
+                const dialogueKey = `${poi.id}_stage${stage}`;
+                if (!poi.showDialogueOnce || !shownDialogues.has(dialogueKey)) {
+                    battleDialogueOptions[`stage${stage}DialogueId`] = dialogueId;
+                    shownDialogues.add(dialogueKey);
+                }
+            });
+        }
         if (poi.combatEndWinDialogueId) {
             const dialogueKey = `${poi.id}_win`;
             if (!poi.showDialogueOnce || !shownDialogues.has(dialogueKey)) {
@@ -169,7 +182,7 @@ async function handleCombat(poi) {
 
     openTab(null, 'battlefield');
     try {
-        await startBattle(poi, battleDialogueOptions, 1);
+        await battleController.startBattle(poi, battleDialogueOptions, 1);
     } catch (battleError) {
         console.error(`Error during battle setup or execution for ${poi.name}:`, battleError);
         // Log or show user-friendly message if necessary
@@ -304,6 +317,7 @@ function renderPOIs() {
             });
             poiListUI.appendChild(listItem);
         }
+        updateHeroMapStats(hero);
     });
 }
 
@@ -349,7 +363,7 @@ function loadMap(mapIdToLoad, fromTravel = false, previousPoiName = null) {
     refreshMapElements();
 }
 
-export function initializeMap() {
+    export function initializeMap() {
     mapContainer = document.getElementById('map-container');
     poiListUI = document.getElementById('poi-list');
     heroPortraitContainer = document.getElementById('hero-portrait-container');
@@ -359,6 +373,19 @@ export function initializeMap() {
     expBarClass2El = document.getElementById('exp-bar-class2');
     expBarClass3El = document.getElementById('exp-bar-class3');
 
+    // Initialize the map tour
+    const tourButton = document.getElementById('start-map-tour');
+    if (tourButton) {
+        tourButton.addEventListener('click', () => {
+            mapTour.startTour();
+        });
+    }
+
+    // Start regeneration interval (every 2 seconds)
+    if (window.regenerationInterval) {
+        clearInterval(window.regenerationInterval);
+    }
+    window.regenerationInterval = setInterval(handleOutOfCombatRegeneration, 2000);
 
     async function loadMapDataAndRenderInitial() {
         try {
@@ -509,3 +536,48 @@ export function resetPOIDialogues(poiId) {
 
 // Expose resetPOIDialogues to window for dialogue system
 window.resetPOIDialogues = resetPOIDialogues;
+
+export function handleOutOfCombatRegeneration() {
+    if (!hero) return;
+    // Regenerate companions if they exist
+    if (hero.getActivePartyMembers() && hero.getActivePartyMembers().length > 0) {
+        hero.getActivePartyMembers().forEach(companion => {
+            if (companion.currentHealth > 0) {
+                // Health regeneration (1% of max health per tick)
+                const healthRegenAmount = parseFloat((0.01 * companion.maxHealth).toFixed(2));
+                if (companion.currentHealth < companion.maxHealth) {
+                    companion.currentHealth = Math.min(companion.maxHealth, companion.currentHealth + healthRegenAmount);
+                    companion.currentHealth = parseFloat(companion.currentHealth.toFixed(2));
+                    updateHealth(companion);
+                }
+
+                // Mana regeneration (based on manaRegen stat)
+                const manaRegenAmount = companion.stats.manaRegen || 1;
+                if (companion.currentMana < companion.stats.mana) {
+                    companion.currentMana = Math.min(companion.stats.mana, companion.currentMana + manaRegenAmount);
+                    updateMana(companion);
+                }
+
+                // Stamina regeneration (10% of vitality per tick)
+                const staminaRegenAmount = Math.floor(0.1 * companion.stats.vitality) || 1;
+                if (companion.currentStamina < companion.stats.stamina) {
+                    companion.currentStamina = Math.min(companion.stats.stamina, companion.currentStamina + staminaRegenAmount);
+                    updateStamina(companion);
+                }
+            }
+        });
+    }
+
+    // Always update the hero portrait and sidebar
+    renderHeroPortrait();
+    _updateHeroMapSidebar(hero);
+    updateHeroMapStats(hero);
+}
+
+// Add cleanup function
+export function cleanupMap() {
+    if (window.regenerationInterval) {
+        clearInterval(window.regenerationInterval);
+        window.regenerationInterval = null;
+    }
+}

@@ -24,6 +24,34 @@ class BattleStatistics {
         this.totalDebuffsApplied = 0; // Debuffs applied by the player
         this.successfulFlees = 0; // New: Track successful flees
         this.goldCollected = 0; // New: Track gold collected
+        this.meleeAttacks = 0;
+        this.rangedAttacks = 0;
+        this.buffsApplied = 0;
+        this.skillTagsUsed = {};
+
+        // Add new tracking for damage by skill type
+        this.meleeDamageDealt = 0;
+        this.rangedDamageDealt = 0;
+        this.magicalDamageDealt = 0; // Add magical damage tracking
+        this.buffsCast = 0;
+
+        // New tracking properties
+        this.enemiesDefeatedWithCrits = 0;
+        this.consecutiveCriticalHits = 0;
+        this.maxConsecutiveCriticalHits = 0;
+        this.enemiesDefeatedByBleed = 0;
+        this.maxBleedStacksApplied = 0;
+        this.enemiesDefeatedByPoison = 0;
+        this.damageDealtWhileLowHealth = 0;
+        this.totalDamageBlockedByArmor = 0;
+        this.overkillDamageDealt = 0;
+        this.enemiesHitSimultaneouslyCount = 0;
+        this.healthStolen = 0;
+        this.undeadMinionsSummoned = 0;
+        this.elementalMinionsSummoned = 0;
+        this.natureSpiritsSummoned = 0;
+        this.minionsSummoned = 0;
+        this.totalDamageBySummons = 0;
     }
     reset() {
         this.damageDealt = {};
@@ -50,14 +78,53 @@ class BattleStatistics {
         this.totalDebuffsApplied = 0; // Debuffs applied by the player
         this.successfulFlees = 0; // New: Track successful flees
         this.goldCollected = 0; // New: Track gold collected
+        this.meleeAttacks = 0;
+        this.rangedAttacks = 0;
+        this.buffsApplied = 0;
+        this.skillTagsUsed = {};
+
+        // Reset new tracking properties
+        this.meleeDamageDealt = 0;
+        this.rangedDamageDealt = 0;
+        this.magicalDamageDealt = 0; // Reset magical damage
+        this.buffsCast = 0;
+
+        // Reset new tracking properties
+        this.enemiesDefeatedWithCrits = 0;
+        this.consecutiveCriticalHits = 0;
+        this.maxConsecutiveCriticalHits = 0;
+        this.enemiesDefeatedByBleed = 0;
+        this.maxBleedStacksApplied = 0;
+        this.enemiesDefeatedByPoison = 0;
+        this.damageDealtWhileLowHealth = 0;
+        this.totalDamageBlockedByArmor = 0;
+        this.overkillDamageDealt = 0;
+        this.enemiesHitSimultaneouslyCount = 0;
+        this.healthStolen = 0;
+        this.undeadMinionsSummoned = 0;
+        this.elementalMinionsSummoned = 0;
+        this.natureSpiritsSummoned = 0;
+        this.minionsSummoned = 0;
+        this.totalDamageBySummons = 0;
     }
-    addDamageDealt(type, amount) {
+    addDamageDealt(type, amount, skillTags = []) {
         if (this.damageDealt[type] !== undefined) {
             this.damageDealt[type] += amount;
         } else {
             this.damageDealt[type] = amount;
         }
         this.damageDealt['Total'] = (this.damageDealt['Total'] || 0) + amount;
+
+        // Track damage by skill type based on tags
+        if (skillTags && Array.isArray(skillTags)) {
+            if (skillTags.includes('Melee')) {
+                this.meleeDamageDealt += amount;
+            } else if (skillTags.includes('Ranged')) {
+                this.rangedDamageDealt += amount;
+            } else if (skillTags.includes('Magical')) {
+                this.magicalDamageDealt += amount;
+            }
+        }
     }
 
     addDamageReceived(type, amount) {
@@ -98,11 +165,36 @@ class BattleStatistics {
         this.criticalDamage += damageAmount; // Assuming damageAmount is the full critical hit damage
     }
 
-    addSkillUsage(skillName) {
+    addSkillUsage(skillName, skillTags = []) {
         if (this.skillUsage[skillName]) {
             this.skillUsage[skillName]++;
         } else {
             this.skillUsage[skillName] = 1;
+        }
+
+        // Track skill usage by tags
+        if (skillTags && Array.isArray(skillTags)) {
+            skillTags.forEach(tag => {
+                if (this.skillTagsUsed[tag]) {
+                    this.skillTagsUsed[tag]++;
+                } else {
+                    this.skillTagsUsed[tag] = 1;
+                }
+
+                // Track specific tag types
+                if (tag === 'Melee') {
+                    this.meleeAttacks++;
+                } else if (tag === 'Ranged') {
+                    this.rangedAttacks++;
+                } else if (tag === 'Buff') {
+                    this.buffsApplied++;
+                }
+            });
+        }
+
+        // Track buff casting
+        if (skillTags && Array.isArray(skillTags) && skillTags.includes('Buff')) {
+            this.buffsCast++;
         }
     }
 
@@ -112,6 +204,7 @@ class BattleStatistics {
 
     addTotalBuffsApplied() {
         this.totalBuffsApplied++;
+        this.buffsApplied++;
     }
 
     addTotalDebuffsApplied() {
@@ -153,7 +246,8 @@ class BattleStatistics {
     addGoldCollected(amount) {
         this.goldCollected += amount;
     }
- getSerializableData() {
+
+    getSerializableData() {
         // Return a plain object copy of all properties
         return {
             damageDealt: { ...this.damageDealt },
@@ -180,6 +274,30 @@ class BattleStatistics {
             totalDebuffsApplied: this.totalDebuffsApplied,
             successfulFlees: this.successfulFlees,
             goldCollected: this.goldCollected,
+            meleeAttacks: this.meleeAttacks,
+            rangedAttacks: this.rangedAttacks,
+            buffsApplied: this.buffsApplied,
+            skillTagsUsed: { ...this.skillTagsUsed },
+            meleeDamageDealt: this.meleeDamageDealt,
+            rangedDamageDealt: this.rangedDamageDealt,
+            magicalDamageDealt: this.magicalDamageDealt,
+            buffsCast: this.buffsCast,
+            enemiesDefeatedWithCrits: this.enemiesDefeatedWithCrits,
+            consecutiveCriticalHits: this.consecutiveCriticalHits,
+            maxConsecutiveCriticalHits: this.maxConsecutiveCriticalHits,
+            enemiesDefeatedByBleed: this.enemiesDefeatedByBleed,
+            maxBleedStacksApplied: this.maxBleedStacksApplied,
+            enemiesDefeatedByPoison: this.enemiesDefeatedByPoison,
+            damageDealtWhileLowHealth: this.damageDealtWhileLowHealth,
+            totalDamageBlockedByArmor: this.totalDamageBlockedByArmor,
+            overkillDamageDealt: this.overkillDamageDealt,
+            enemiesHitSimultaneouslyCount: this.enemiesHitSimultaneouslyCount,
+            healthStolen: this.healthStolen,
+            undeadMinionsSummoned: this.undeadMinionsSummoned,
+            elementalMinionsSummoned: this.elementalMinionsSummoned,
+            natureSpiritsSummoned: this.natureSpiritsSummoned,
+            minionsSummoned: this.minionsSummoned,
+            totalDamageBySummons: this.totalDamageBySummons
         };
     }
 
@@ -248,7 +366,27 @@ class BattleStatistics {
             'successful-blocks': this.successfulBlocks || 0,
             'enemies-defeated': enemiesDefeatedString,
             'successful-flees': this.successfulFlees || 0,
-            'gold-collected': this.goldCollected || 0
+            'gold-collected': this.goldCollected || 0,
+            'melee-damage-dealt': Math.round(this.meleeDamageDealt || 0),
+            'ranged-damage-dealt': Math.round(this.rangedDamageDealt || 0),
+            'magical-damage-dealt': Math.round(this.magicalDamageDealt || 0),
+            'buffs-cast': this.buffsCast || 0,
+            'enemies-defeated-with-crits': this.enemiesDefeatedWithCrits || 0,
+            'consecutive-critical-hits': this.consecutiveCriticalHits || 0,
+            'max-consecutive-critical-hits': this.maxConsecutiveCriticalHits || 0,
+            'enemies-defeated-by-bleed': this.enemiesDefeatedByBleed || 0,
+            'max-bleed-stacks-applied': this.maxBleedStacksApplied || 0,
+            'enemies-defeated-by-poison': this.enemiesDefeatedByPoison || 0,
+            'damage-dealt-while-low-health': Math.round(this.damageDealtWhileLowHealth || 0),
+            'total-damage-blocked-by-armor': Math.round(this.totalDamageBlockedByArmor || 0),
+            'overkill-damage-dealt': Math.round(this.overkillDamageDealt || 0),
+            'enemies-hit-simultaneously-count': this.enemiesHitSimultaneouslyCount || 0,
+            'health-stolen': Math.round(this.healthStolen || 0),
+            'undead-minions-summoned': this.undeadMinionsSummoned || 0,
+            'elemental-minions-summoned': this.elementalMinionsSummoned || 0,
+            'nature-spirits-summoned': this.natureSpiritsSummoned || 0,
+            'minions-summoned': this.minionsSummoned || 0,
+            'total-damage-by-summons': Math.round(this.totalDamageBySummons || 0)
         };
 
         // Update each stat in the UI
@@ -264,6 +402,69 @@ class BattleStatistics {
         });
     }
 
+    addEnemyDefeatedWithCrit() {
+        this.enemiesDefeatedWithCrits++;
+    }
+
+    addConsecutiveCriticalHit() {
+        this.consecutiveCriticalHits++;
+        this.maxConsecutiveCriticalHits = Math.max(this.maxConsecutiveCriticalHits, this.consecutiveCriticalHits);
+    }
+
+    resetConsecutiveCriticalHits() {
+        this.consecutiveCriticalHits = 0;
+    }
+
+    addEnemyDefeatedByBleed() {
+        this.enemiesDefeatedByBleed++;
+    }
+
+    updateMaxBleedStacks(stacks) {
+        this.maxBleedStacksApplied = Math.max(this.maxBleedStacksApplied, stacks);
+    }
+
+    addEnemyDefeatedByPoison() {
+        this.enemiesDefeatedByPoison++;
+    }
+
+    addDamageDealtWhileLowHealth(amount) {
+        this.damageDealtWhileLowHealth += amount;
+    }
+
+    addDamageBlockedByArmor(amount) {
+        this.totalDamageBlockedByArmor += amount;
+    }
+
+    addOverkillDamage(amount) {
+        this.overkillDamageDealt += amount;
+    }
+
+    addEnemiesHitSimultaneously(count) {
+        this.enemiesHitSimultaneouslyCount += count;
+    }
+
+    addHealthStolen(amount) {
+        this.healthStolen += amount;
+    }
+
+    addMinionSummoned(type) {
+        this.minionsSummoned++;
+        switch(type.toLowerCase()) {
+            case 'undead':
+                this.undeadMinionsSummoned++;
+                break;
+            case 'elemental':
+                this.elementalMinionsSummoned++;
+                break;
+            case 'nature':
+                this.natureSpiritsSummoned++;
+                break;
+        }
+    }
+
+    addDamageBySummons(amount) {
+        this.totalDamageBySummons += amount;
+    }
 }
 
 export default BattleStatistics;

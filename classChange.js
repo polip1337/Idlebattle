@@ -61,32 +61,32 @@ export function openClassChangeModal() {
     classChangeModal.style.display = 'block';
 }
 
-function changeHeroClass(newClassInfo) {
+export function changeHeroClass(newClassInfo) {
     if (!hero || !newClassInfo) return;
 
-    // Store current class data in history
-    hero.classHistory[hero.classId] = {
-        level: hero.level,
-        experience: hero.experience,
-        experienceToLevel: hero.experienceToLevel
-    };
+    // Clear active skills
+    hero.activeSelectedSkills = [];
+    hero.selectedSkills = [];
+    hero.selectedPassiveSkills = [];
 
-    // If this is a new class, initialize its history
-    if (!hero.classHistory[newClassInfo.id]) {
-        hero.classHistory[newClassInfo.id] = {
-            level: 1,
-            experience: 0,
-            experienceToLevel: 100
-        };
+    // Initialize classHistory if it doesn't exist
+    if (!hero.classHistory) {
+        hero.classHistory = {};
     }
 
     // Update current class info
     hero.classType = newClassInfo.name;
-    hero.classId = newClassInfo.id;
+    hero.combination = newClassInfo.combination;
     hero.class = newClassInfo;
     
-    // Restore class-specific data
-    const classData = hero.classHistory[newClassInfo.id];
+    // Get or initialize class history data
+    const classData = hero.classHistory[newClassInfo.id] || {
+        level: 1,
+        experience: 0,
+        experienceToLevel: 100
+    };
+    
+    // Update hero stats
     hero.level = classData.level;
     hero.experience = classData.experience;
     hero.experienceToLevel = classData.experienceToLevel;
@@ -95,7 +95,7 @@ function changeHeroClass(newClassInfo) {
     hero.skills = hero.createSkillsFromIDs(newClassInfo.skills || []);
     
     // Update stats
-    hero.stats = { ...newClassInfo.stats };
+    hero.stats = { ...hero.stats, ...newClassInfo.stats };
     hero.statsPerLevel = newClassInfo.statsPerLevel;
     
     // Recalculate stats with current level

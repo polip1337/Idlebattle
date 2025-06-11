@@ -4,17 +4,17 @@
     height: 98vh;
     background: url('../Media/parchment.jpg') no-repeat center/cover;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
-    padding: 0; /* Let #quest-list handle padding */
-    position: relative; /* For ::before pseudo-element and back button */
-    overflow: hidden; /* Ensure #quest-list is contained */
+    padding: 0;
+    position: relative;
+    overflow: hidden;
 }
 
-#quests.active { /* Display properties only when active */
-    display: flex; /* Use flex to make #quest-list fill height */
-    flex-direction: column; /* Children stack vertically */
+#quests.active {
+    display: flex;
+    flex-direction: column;
 }
 
-#quests::before { /* Optional: gradient overlay for the tab background */
+#quests::before {
     content: '';
     position: absolute;
     top: 0;
@@ -26,26 +26,25 @@
     z-index: 0;
 }
 
-#quest-list { /* The scrollable content area within #quests */
+#quest-list {
     width: 100%;
-    height: 100%; /* Fill parent #quests */
+    height: 100%;
     padding: 20px;
     background: rgba(26, 20, 16, 0.8);
     border: 2px solid #4a3c2b;
     box-sizing: border-box;
-    overflow-y: auto; /* This is a .themed-scrollbar */
+    overflow-y: auto;
     color: #d4b68a;
     font-family: 'IM Fell English', serif;
     font-size: 16px;
     line-height: 1.8;
     position: relative;
-    z-index: 1; /* Above #quests::before */
+    z-index: 1;
 }
 
 .map-group {
     margin-bottom: 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid #4a3c2b;
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -63,24 +62,23 @@
 }
 
 .quest-container {
-    padding-left: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    padding: 10px;
 }
 
 .quest-item {
+    background: rgba(30, 30, 30, 0.8);
+    border: 1px solid #444;
+    border-radius: 6px;
     padding: 15px;
-    border: 1px solid #4a3c2b;
-    margin-bottom: 10px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .quest-item:hover {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-color: #ffd700;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .quest-header {
@@ -169,7 +167,6 @@
     margin: 20px;
 }
 
-/* Quest progress indicator */
 .quest-progress {
     display: flex;
     align-items: center;
@@ -179,15 +176,15 @@
 
 .progress-bar {
     flex-grow: 1;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
     overflow: hidden;
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #4a3c2b, #ffd700);
+    background: linear-gradient(90deg, #4a4a4a, #666);
     transition: width 0.3s ease;
 }
 
@@ -197,8 +194,6 @@
     min-width: 60px;
     text-align: right;
 }
-
-/* Scrollbar styling moved to styles.css (.themed-scrollbar) */
 
 #quest-sub-tabs {
     display: flex;
@@ -235,4 +230,27 @@
 
 .quest-sub-tab-content.active {
     display: block;
+}
+
+/* Completed quest styling */
+.quest-item.completed {
+    opacity: 0.8;
+    border-color: #4a3c2b;
+}
+
+.quest-item.completed h3 {
+    color: #d4b68a;
+}
+
+.quest-item.completed .progress-fill {
+    background: linear-gradient(90deg, #4a3c2b, #8b7355);
+}
+
+/* Quest state persistence */
+.quest-item[data-expanded="true"] .quest-details {
+    display: block;
+}
+
+.quest-item[data-expanded="false"] .quest-details {
+    display: none;
 }

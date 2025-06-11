@@ -26,6 +26,9 @@
     <link href="style/announcements.css" rel="stylesheet" type="text/css">
     <link href="style/reputation.css" rel="stylesheet" type="text/css">
     <link href="style/tutorialOverlay.css" rel="stylesheet" type="text/css">
+    <link href="style/mapTour.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css"/>
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -155,6 +158,44 @@
         <button id="return-to-map-popup">Return to Map</button>
     </div>
 </div>
+
+<div class="hidden" id="debug-modal">
+    <div class="modal-content">
+        <h2>Debug Menu</h2>
+        <div class="debug-section">
+            <h3>Hero Class</h3>
+            <select id="debug-class-select">
+                <option value="">Select a class...</option>
+            </select>
+            <button id="debug-change-class">Change Class</button>
+        </div>
+        <div class="debug-section">
+            <h3>Experience & Gold</h3>
+            <div class="debug-input-group">
+                <label>Add Experience:</label>
+                <input type="number" id="debug-exp-input" min="0" value="1000">
+                <button id="debug-add-exp">Add</button>
+            </div>
+            <div class="debug-input-group">
+                <label>Add Gold:</label>
+                <input type="number" id="debug-gold-input" min="0" value="1000">
+                <button id="debug-add-gold">Add</button>
+            </div>
+        </div>
+        <div class="debug-section">
+            <h3>Quest Progress</h3>
+            <div class="debug-input-group">
+                <label>Quest Step:</label>
+                <input type="number" id="debug-quest-step" min="0" value="1">
+                <button id="debug-set-quest-step">Set</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="debug-close">Close</button>
+        </div>
+    </div>
+</div>
+
 <div class="trade-modal hidden" id="trade-modal">
     <div class="trade-modal-content">
         <div class="trade-modal-header" id="trade-modal-npc-name">Trade with NPC</div>
@@ -265,9 +306,7 @@
     <div id="teamAndBattleContainer-overlay" class="battle-view"> <!-- Added for pause overlay -->
         <div id="teamAndBattleContainer">
             <div id="stage-controls">
-                <button id="decrease-stage"><</button>
                 <div id="battle-stage-display" class="battle-stage-display">Stage 1 of 1</div>
-                <button id="increase-stage">></button>
                 <input id="repeat" type="checkbox">Repeat</input>
                 <button id="flee-battle">Flee</button> <!-- Flee Button -->
             </div>
@@ -525,6 +564,7 @@
     <div style="display: flex; width: 100%; height: 100%; gap: 10px;">
         <!-- Column 1: Hero Portrait & Nav -->
         <div style="flex: 0 0 220px; display: flex; flex-direction: column; gap: 10px; background-color: rgba(26, 20, 16, 0.5); padding: 10px; border-radius: 8px; border: 1px solid #4a3c2b;">
+            <button id="start-map-tour" class="tour-button">Start Map Tour</button>
             <div id="hero-portrait-container">
                 <!-- Hero portrait img can be added here by JS -->
             </div>
@@ -624,6 +664,14 @@
         <div class="statistic-item">
             <span class="statistic-name">Healing Received:</span>
             <span class="statistic-value" id="total-healing-received">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Ranged Damage Dealt:</span>
+            <span class="statistic-value" id="ranged-damage-dealt">0</span>
+        </div>
+        <div class="statistic-item">
+            <span class="statistic-name">Magical Damage Dealt:</span>
+            <span class="statistic-value" id="magical-damage-dealt">0</span>
         </div>
         <div class="statistic-item">
             <span class="statistic-name">Critical Hits:</span>
@@ -727,20 +775,14 @@
                 <div class="iconGroup">
                     <div class="battleSkillIcon" id="passiveSkill1"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
                     <div class="battleSkillIcon" id="passiveSkill2"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
+                </div>
+                <div class="iconGroup">
                     <div class="battleSkillIcon" id="passiveSkill3"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
                     <div class="battleSkillIcon" id="passiveSkill4"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
                 </div>
                 <div class="iconGroup">
                     <div class="battleSkillIcon" id="passiveSkill5"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
                     <div class="battleSkillIcon" id="passiveSkill6"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
-                    <div class="battleSkillIcon" id="passiveSkill7"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
-                    <div class="battleSkillIcon" id="passiveSkill8"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
-                </div>
-                <div class="iconGroup">
-                    <div class="battleSkillIcon" id="passiveSkill9"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
-                    <div class="battleSkillIcon" id="passiveSkill10"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
-                    <div class="battleSkillIcon" id="passiveSkill11"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
-                    <div class="battleSkillIcon" id="passiveSkill12"><img src="Media/UI/defaultSkill.jpeg"><div class="tooltip"></div></div>
                 </div>
             </div>
             <div class="iconRow lowerRow"> <!-- Active Skills -->
@@ -779,7 +821,12 @@
 <script src="Render.js" type="module"></script>
 <script src="Targeting.js" type="module"></script>
 <script src="Area.js" type="module"></script>
-<script src="Battle.js" type="module"></script>
+<script src="battle_controller.js" type="module"></script>
+<script src="battle_outcome.js" type="module"></script>
+<script src="battle_state.js" type="module"></script>
+<script src="battle_ui.js" type="module"></script>
+<script src="team_manager.js" type="module"></script>
+<script src="flee_system.js" type="module"></script>
 <script src="questSystem.js" type="module"></script>
 <script src="questLog.js" type="module"></script>
 <script src="navigation.js" type="module"></script>
@@ -799,6 +846,11 @@
 <script type="module" src="reputationUI.js"></script>
 <script type="module" src="GameState.js"></script>
 <script type="module" src="tutorialOverlay.js"></script>
-
+<script type="module" src="Scripts/checkUntrackedStats.js"></script>
+<script type="module" src="Scripts/checkUntrackedTargeting.js"></script>
+<script type="module" src="Scripts/checkUntrackedEffects.js"></script>
+<script type="module" src="debug.js"></script>
+<script type="module" src="classChange.js"></script>
+<script type="module" src="mapTour.js"></script>
 </body>
 </html>

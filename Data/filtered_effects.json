@@ -1,0 +1,2746 @@
+{
+  "increaseDamageFlat": [
+    {
+      "effect_data": {
+        "id": "increaseDamageFlat"
+      }
+    }
+  ],
+  "applyBuff": [
+    {
+      "effect_data": {
+        "id": "applyBuff",
+        "buffId": "shadowStepBuff",
+        "name": "Shadow Vantaged",
+        "description": "Your next melee attack against this target has +15% crit chance.",
+        "duration": 1,
+        "targetSpecific": true,
+        "modifiers": [
+          {
+            "stat": "critChanceBonusNextAttackVsTarget",
+            "flat": 15
+          }
+        ]
+      }
+    }
+  ],
+  "increaseAccuracy": [
+    {
+      "effect_data": {
+        "id": "increaseAccuracy"
+      }
+    }
+  ],
+  "increaseDodgePercentage": [
+    {
+      "effect_data": {
+        "id": "increaseDodgePercentage",
+        "value": 25,
+        "duration": 2
+      }
+    }
+  ],
+  "reduceAccuracyFlat": [
+    {
+      "effect_data": {
+        "id": "reduceAccuracyFlat",
+        "value": -15,
+        "duration": 2
+      }
+    }
+  ],
+  "lightningDoT": [
+    {
+      "effect_data": {
+        "id": "lightningDoT",
+        "name": "Electrocuted Flames",
+        "description": "Target burns with electrical energy.",
+        "duration": 3,
+        "damagePerTurn": 7,
+        "tickDamageType": "Lightning"
+      }
+    }
+  ],
+  "increaseDamageTakenType": [
+    {
+      "effect_data": {
+        "id": "increaseDamageTakenType",
+        "damageType": "Fire",
+        "value": 15,
+        "duration": 3,
+        "description": "Target becomes more vulnerable to Fire."
+      }
+    }
+  ],
+  "areaStun": [
+    {
+      "effect_data": {
+        "id": "areaStun",
+        "chance": 0.25,
+        "duration": 1,
+        "description": "The explosion has a chance to briefly stun affected enemies."
+      }
+    }
+  ],
+  "applyShockedAccuracyDebuff": [
+    {
+      "effect_data": {
+        "id": "applyShockedAccuracyDebuff",
+        "duration": 2,
+        "value": -10,
+        "description": "Enemies caught in the blast are shocked, reducing their accuracy."
+      }
+    }
+  ],
+  "empowerNextSpellCritDamage": [
+    {
+      "effect_data": {
+        "id": "empowerNextSpellCritDamage",
+        "description": "Overcharges magical circuits, causing the next Fire or Lightning spell to be a guaranteed critical hit with increased damage, but also increases its mana cost slightly.",
+        "spellTypes": [
+          "Fire",
+          "Lightning"
+        ],
+        "critChanceBonus": 1.0,
+        "damageBonusPercentage": 25,
+        "manaCostIncreasePercentage": 10,
+        "duration": 1
+      }
+    }
+  ],
+  "increaseManaRegenFlat": [
+    {
+      "effect_data": {
+        "id": "increaseManaRegenFlat",
+        "value": 10,
+        "duration": 12
+      }
+    }
+  ],
+  "increaseDamageTakenPercentage": [
+    {
+      "effect_data": {
+        "id": "increaseDamageTakenPercentage",
+        "value": 15,
+        "duration": 12
+      }
+    }
+  ],
+  "scaldAccuracyDebuff": [
+    {
+      "effect_data": {
+        "id": "scaldAccuracyDebuff",
+        "name": "Scalded",
+        "description": "Target is scalded, suffering minor continuous damage and reduced accuracy.",
+        "duration": 3,
+        "damagePerTurn": 4,
+        "tickDamageType": "Fire",
+        "statToDebuff": "accuracy",
+        "debuffValue": -10
+      }
+    }
+  ],
+  "createAreaEffect": [
+    {
+      "effect_data": {
+        "id": "createAreaEffect",
+        "zoneId": "scaldingMistZone",
+        "duration": 5,
+        "effectsInZone": [
+          {
+            "id": "DoT",
+            "damagePerTurn": 7,
+            "damageType": "Steam"
+          },
+          {
+            "id": "reduceAccuracyFlatArea",
+            "value": -15,
+            "description": "Mist obscures vision."
+          }
+        ]
+      }
+    }
+  ],
+  "knockUp": [
+    {
+      "effect_data": {
+        "id": "knockUp",
+        "chance": 0.3,
+        "duration": 1
+      }
+    }
+  ],
+  "applyStrongScaldDoT": [
+    {
+      "effect_data": {
+        "id": "applyStrongScaldDoT",
+        "duration": 2,
+        "damagePerTurn": 6,
+        "tickDamageType": "Fire"
+      }
+    }
+  ],
+  "disorientAccuracyDebuff": [
+    {
+      "effect_data": {
+        "id": "disorientAccuracyDebuff",
+        "duration": 2,
+        "value": -10
+      }
+    }
+  ],
+  "delayedBlastOnFireHit": [
+    {
+      "effect_data": {
+        "id": "delayedBlastOnFireHit",
+        "name": "Pressurized",
+        "description": "Target is internally pressurized. Will explode after a short duration or if hit by a Fire spell.",
+        "delay": 3,
+        "blastDamage": 45,
+        "blastDamageType": "Steam",
+        "triggerCondition": "onFireDamageReceived"
+      }
+    }
+  ],
+  "increaseResistance": [
+    {
+      "effect_data": {
+        "id": "increaseResistance",
+        "damageType": "Fire",
+        "value": 30,
+        "duration": 3
+      }
+    }
+  ],
+  "areaPull": [
+    {
+      "effect_data": {
+        "id": "areaPull",
+        "strength": 2
+      }
+    }
+  ],
+  "placeTrapRune": [
+    {
+      "effect_data": {
+        "id": "placeTrapRune",
+        "trapId": "burningRuneTrapInstance",
+        "duration": 10,
+        "trigger": "proximityOrTimeout",
+        "explosionDamage": 30,
+        "explosionDamageType": "Fire",
+        "explosionEffects": [
+          {
+            "id": "burn",
+            "duration": 3,
+            "damagePerTurn": 5
+          }
+        ]
+      }
+    }
+  ],
+  "applyDelayedDamageDebuff": [
+    {
+      "effect_data": {
+        "id": "applyDelayedDamageDebuff",
+        "name": "Explosive Glyph",
+        "description": "An explosive glyph is attached, detonating after a short delay.",
+        "delay": 2,
+        "blastDamage": 42,
+        "blastDamageType": "Fire"
+      }
+    }
+  ],
+  "placeTrapRuneField": [
+    {
+      "effect_data": {
+        "id": "placeTrapRuneField",
+        "trapId": "fireRuneFieldTrapInstance",
+        "duration": 15,
+        "trigger": "proximity",
+        "zoneId": "fireRuneZoneInstance",
+        "zoneDuration": 5,
+        "zoneEffects": [
+          {
+            "id": "DoT",
+            "damagePerTurn": 8,
+            "damageType": "Fire"
+          },
+          {
+            "id": "reduceSpeedPercentageArea",
+            "value": 15
+          }
+        ]
+      }
+    }
+  ],
+  "increaseEffectChance": [
+    {
+      "effect_data": {
+        "id": "increaseEffectChance",
+        "effectIdToBoost": "burn",
+        "value": 0.2,
+        "duration": 10
+      }
+    }
+  ],
+  "createWallEffect": [
+    {
+      "effect_data": {
+        "id": "createWallEffect",
+        "wallId": "runicFireWallInstance",
+        "duration": 6,
+        "damageOnPass": 20,
+        "damageType": "Fire",
+        "effectsOnPass": [
+          {
+            "id": "burn",
+            "duration": 3,
+            "damagePerTurn": 4
+          }
+        ]
+      }
+    }
+  ],
+  "chainEffect": [
+    {
+      "effect_data": {
+        "id": "chainEffect",
+        "maxChains": 3,
+        "chainCondition": "targetIsBurningOrHasRune",
+        "bonusDamageOnChainConditionMet": 10
+      }
+    }
+  ],
+  "pulsingAoeSelf": [
+    {
+      "effect_data": {
+        "id": "pulsingAoeSelf",
+        "numPulses": 4,
+        "interval": 1,
+        "pulseDamage": 18,
+        "pulseDamageType": "Fire",
+        "pulseEffects": [
+          {
+            "id": "burn",
+            "duration": 2,
+            "damagePerTurn": 3,
+            "chance": 0.5
+          }
+        ]
+      }
+    }
+  ],
+  "increaseMagicPowerPercentage": [
+    {
+      "effect_data": {
+        "id": "increaseMagicPowerPercentage",
+        "statSubType": "Fire",
+        "value": 40,
+        "duration": 15
+      }
+    }
+  ],
+  "reduceManaCostPercentage": [
+    {
+      "effect_data": {
+        "id": "reduceManaCostPercentage",
+        "spellType": "Fire",
+        "value": 25,
+        "duration": 15
+      }
+    }
+  ],
+  "empowerPlacedRunes": [
+    {
+      "effect_data": {
+        "id": "empowerPlacedRunes",
+        "runeDamageBonus": 20,
+        "runeDurationBonus": 50,
+        "duration": 15
+      }
+    }
+  ],
+  "bloodCurseDoT": [
+    {
+      "effect_data": {
+        "id": "bloodCurseDoT",
+        "duration": 3,
+        "damagePerTurn": 4,
+        "tickDamageType": "Shadow"
+      }
+    }
+  ],
+  "aoeDamageHealthScaled": [
+    {
+      "effect_data": {
+        "id": "aoeDamageHealthScaled",
+        "baseDamagePerHealthSacrificed": 2.5
+      }
+    }
+  ],
+  "empowerNextFireSpellLifesteal": [
+    {
+      "effect_data": {
+        "id": "empowerNextFireSpellLifesteal",
+        "duration": 1,
+        "damageBonusPercentage": 20,
+        "lifestealPercentage": 30
+      }
+    }
+  ],
+  "explodeOnDeathHealCaster": [
+    {
+      "effect_data": {
+        "id": "explodeOnDeathHealCaster",
+        "name": "Sanguine Immolation",
+        "duration": 5,
+        "explosionDamage": 30,
+        "explosionDamageType": "Fire",
+        "explosionRadius": 3,
+        "healPerEnemyHitPercentage": 3
+      }
+    }
+  ],
+  "rampingFireDoTExplodeOnDeath": [
+    {
+      "effect_data": {
+        "id": "rampingFireDoTExplodeOnDeath",
+        "name": "Boiling Blood",
+        "duration": 5,
+        "initialDamagePerTurn": 3,
+        "damageIncreasePerTurn": 2,
+        "tickDamageType": "Fire",
+        "explosionOnDeathDamage": 50,
+        "explosionOnDeathDamageType": "Fire"
+      }
+    }
+  ],
+  "temporaryInvulnerability": [
+    {
+      "effect_data": {
+        "id": "temporaryInvulnerability",
+        "duration": 3
+      }
+    }
+  ],
+  "lifestealAura": [
+    {
+      "effect_data": {
+        "id": "lifestealAura",
+        "duration": 5,
+        "lifestealPercentage": 50
+      }
+    }
+  ],
+  "secondaryDamage": [
+    {
+      "effect_data": {
+        "id": "secondaryDamage",
+        "damage": 10,
+        "damageType": "Necrotic"
+      }
+    }
+  ],
+  "manaSteal": [
+    {
+      "effect_data": {
+        "id": "manaSteal",
+        "value": 5,
+        "chance": 0.25,
+        "description": "Chance to steal mana."
+      }
+    }
+  ],
+  "summonMinion": [
+    {
+      "effect_data": {
+        "id": "summonMinion",
+        "minionId": "flamingSkeletonWarrior",
+        "count": 2,
+        "duration": 30
+      }
+    }
+  ],
+  "secondaryDamagePerTick": [
+    {
+      "effect_data": {
+        "id": "secondaryDamagePerTick",
+        "damage": 6,
+        "damageType": "Fire"
+      }
+    }
+  ],
+  "reduceHealingReceived": [
+    {
+      "effect_data": {
+        "id": "reduceHealingReceived",
+        "value": 50,
+        "duration": 5,
+        "description": "Reduces healing received by 50%."
+      }
+    }
+  ],
+  "buffOnKill": [
+    {
+      "effect_data": {
+        "id": "buffOnKill",
+        "buffId": "empowerNecromancy",
+        "stat": "magicPower",
+        "subType": "Necrotic",
+        "value": 20,
+        "duration": 10,
+        "description": "If target dies, gain bonus Necromancy spell power."
+      }
+    }
+  ],
+  "summonMinionFromCorpse": [
+    {
+      "effect_data": {
+        "id": "summonMinionFromCorpse",
+        "minionId": "fieryRevenant",
+        "requiresCorpse": true,
+        "duration": 45
+      }
+    }
+  ],
+  "reduceResistanceType": [
+    {
+      "effect_data": {
+        "id": "reduceResistanceType",
+        "damageType": "Fire",
+        "value": -15,
+        "duration": 4
+      }
+    }
+  ],
+  "secondaryPulsingAoeSelf": [
+    {
+      "effect_data": {
+        "id": "secondaryPulsingAoeSelf",
+        "numPulses": 6,
+        "interval": 1,
+        "pulseDamage": 10,
+        "pulseDamageType": "Necrotic"
+      }
+    }
+  ],
+  "healOverTimeSelf": [
+    {
+      "effect_data": {
+        "id": "healOverTimeSelf",
+        "healPerTick": 5,
+        "duration": 6
+      }
+    }
+  ],
+  "buffMinionsInAura": [
+    {
+      "effect_data": {
+        "id": "buffMinionsInAura",
+        "buffId": "lichfireEmpowerment",
+        "value": 20,
+        "stat": "damage",
+        "duration": 6
+      }
+    }
+  ],
+  "applyDebuff": [
+    {
+      "effect_data": {
+        "id": "applyDebuff",
+        "debuffId": "tauntedDebuff",
+        "name": "Taunted",
+        "description": "Must attack the taunter.",
+        "duration": 2,
+        "forceTarget": "Caster"
+      }
+    }
+  ],
+  "increaseThreat": [
+    {
+      "effect_data": {
+        "id": "increaseThreat",
+        "value": 100,
+        "duration": 2
+      }
+    }
+  ],
+  "restoreResource": [
+    {
+      "effect_data": {
+        "id": "restoreResource",
+        "resourceType": "mana",
+        "value": 25
+      }
+    }
+  ],
+  "dispelDebuff": [
+    {
+      "effect_data": {
+        "id": "dispelDebuff",
+        "debuffType": [
+          "Poison",
+          "Bleed"
+        ],
+        "maxStacks": 1,
+        "chance": 0.75
+      }
+    }
+  ],
+  "applyDebuffToType": [
+    {
+      "effect_data": {
+        "id": "applyDebuffToType",
+        "targetType": "Undead",
+        "debuffId": "fear",
+        "name": "Feared",
+        "description": "Chance to flee or skip turn.",
+        "duration": 2,
+        "chance": 0.5
+      }
+    }
+  ],
+  "bonusDamageVsType": [
+    {
+      "effect_data": {
+        "id": "bonusDamageVsType",
+        "type": "Undead",
+        "percentage": 100
+      }
+    }
+  ],
+  "increaseCritChanceSelf": [
+    {
+      "effect_data": {
+        "id": "increaseCritChanceSelf",
+        "value": 15,
+        "duration": 0
+      }
+    }
+  ],
+  "areaDamageOnHit": [
+    {
+      "effect_data": {
+        "id": "areaDamageOnHit",
+        "radius": 1,
+        "damage": 10,
+        "damageType": "Fire",
+        "targetMainOnly": false
+      }
+    }
+  ],
+  "knockback": [
+    {
+      "effect_data": {
+        "id": "knockback",
+        "chance": 0.25,
+        "distance": 1
+      }
+    }
+  ],
+  "restoreResourcesOnMarkedTargetDeath": [
+    {
+      "effect_data": {
+        "id": "restoreResourcesOnMarkedTargetDeath",
+        "staminaAmount": 20,
+        "manaAmount": 15
+      }
+    }
+  ],
+  "createGroundEffect": [
+    {
+      "effect_data": {
+        "id": "createGroundEffect",
+        "zoneId": "moltenPatch",
+        "duration": 2,
+        "effectsInZone": [
+          {
+            "id": "DoT",
+            "damagePerTurn": 8,
+            "damageType": "Fire"
+          }
+        ]
+      }
+    }
+  ],
+  "areaDamage": [
+    {
+      "effect_data": {
+        "id": "areaDamage",
+        "radius": 2,
+        "damage": 20,
+        "damageType": "Earth"
+      }
+    }
+  ],
+  "applyBuffToTarget": [
+    {
+      "effect_data": {
+        "id": "applyBuffToTarget",
+        "buffId": "minorFortitude",
+        "name": "Minor Fortitude",
+        "description": "Target's Vitality increased slightly.",
+        "duration": 3,
+        "modifiers": [
+          {
+            "stat": "vitality",
+            "flat": 3
+          }
+        ]
+      }
+    }
+  ],
+  "applyBuffToAreaAllies": [
+    {
+      "effect_data": {
+        "id": "applyBuffToAreaAllies",
+        "buffId": "blessingOfProtectionAura",
+        "name": "Protective Blessing",
+        "description": "Armor increased for allies in the circle.",
+        "radius": 2,
+        "durationDuringChannel": true,
+        "modifiers": [
+          {
+            "stat": "armor",
+            "flat": 10
+          }
+        ]
+      }
+    }
+  ],
+  "healOverTime": [
+    {
+      "effect_data": {
+        "id": "healOverTime",
+        "name": "Renewing Light",
+        "healPerTick": 10,
+        "duration": 3
+      }
+    }
+  ],
+  "applyAura": [
+    {
+      "effect_data": {
+        "id": "applyAura",
+        "auraId": "lifeAuraPriest",
+        "duration": 10,
+        "targetType": "All Ally",
+        "auraEffects": [
+          {
+            "id": "healOverTimeAreaAlly",
+            "healPerTick": 8,
+            "radius": 3
+          },
+          {
+            "id": "increaseResistanceAura",
+            "resistanceType": "Necrotic",
+            "value": 20,
+            "radius": 3
+          }
+        ]
+      }
+    }
+  ],
+  "revealStealth": [
+    {
+      "effect_data": {
+        "id": "revealStealth"
+      }
+    }
+  ],
+  "cleaveOnKill": [
+    {
+      "effect_data": {
+        "id": "cleaveOnKill",
+        "secondaryTargetCount": 1,
+        "secondaryDamagePercentage": 75
+      }
+    }
+  ],
+  "applyBuffOnParry": [
+    {
+      "effect_data": {
+        "id": "applyBuffOnParry",
+        "buffId": "deflectionSpeed",
+        "name": "Swift Deflection",
+        "description": "Speed increased.",
+        "duration": 1,
+        "modifiers": [
+          {
+            "stat": "speed",
+            "percentage": 15
+          }
+        ]
+      }
+    }
+  ],
+  "allyTeamUpAttack": [
+    {
+      "effect_data": {
+        "id": "allyTeamUpAttack",
+        "allyRange": 2,
+        "selfDamageMultiplier": 1.0,
+        "allyDamageMultiplier": 0.75,
+        "bonusDamageMultiplierIfTargetDebuffed": 1.25
+      }
+    }
+  ],
+  "counterAttack": [
+    {
+      "effect_data": {
+        "id": "counterAttack",
+        "damageMultiplier": 1.5,
+        "weaponUsed": "MainHandOffHand",
+        "damageType": "Slash"
+      }
+    }
+  ],
+  "increaseDodgeFlatOnHit": [
+    {
+      "effect_data": {
+        "id": "increaseDodgeFlatOnHit",
+        "value": 3,
+        "duration": 1
+      }
+    }
+  ],
+  "applyBuffToSelfVsTarget": [
+    {
+      "effect_data": {
+        "id": "applyBuffToSelfVsTarget",
+        "buffId": "duelistAdvantage",
+        "name": "Duelist's Focus",
+        "description": "Deal +20% damage to the challenged target.",
+        "duration": 4,
+        "targetSpecific": true,
+        "modifiers": [
+          {
+            "stat": "damageDealtToTarget",
+            "percentage": 20
+          }
+        ]
+      }
+    }
+  ],
+  "damageSelf": [
+    {
+      "effect_data": {
+        "id": "damageSelf",
+        "damageAmount": 5,
+        "damageType": "Physical"
+      }
+    }
+  ],
+  "ignoreBlockParry": [
+    {
+      "effect_data": {
+        "id": "ignoreBlockParry"
+      }
+    }
+  ],
+  "armorPenetration": [
+    {
+      "effect_data": {
+        "id": "armorPenetration",
+        "percentage": 30
+      }
+    }
+  ],
+  "consumeDebuffForBonus": [
+    {
+      "effect_data": {
+        "id": "consumeDebuffForBonus",
+        "debuffId": "burn",
+        "bonusDamagePerStack": 5,
+        "maxStacksConsumed": 3
+      }
+    }
+  ],
+  "applyShield": [
+    {
+      "effect_data": {
+        "id": "applyShield",
+        "shieldHealth": 40,
+        "duration": 4,
+        "onBreakEffect": {
+          "id": "healTarget",
+          "healAmount": 15
+        }
+      }
+    }
+  ],
+  "revealStealthArea": [
+    {
+      "effect_data": {
+        "id": "revealStealthArea",
+        "radius": 3
+      }
+    }
+  ],
+  "freeze": [
+    {
+      "effect_data": {
+        "id": "freeze",
+        "chance": 0.6,
+        "duration": 1
+      }
+    }
+  ],
+  "knockbackArea": [
+    {
+      "effect_data": {
+        "id": "knockbackArea",
+        "distance": 2,
+        "casterImmune": true
+      }
+    }
+  ],
+  "knockbackLine": [
+    {
+      "effect_data": {
+        "id": "knockbackLine",
+        "distance": 2
+      }
+    }
+  ],
+  "applyBuffToMinion": [
+    {
+      "effect_data": {
+        "id": "applyBuffToMinion",
+        "buffId": "empowerSummonBuff",
+        "name": "Empowered",
+        "description": "Damage and Health increased.",
+        "duration": 5,
+        "modifiers": [
+          {
+            "stat": "damageDealt",
+            "percentage": 30
+          },
+          {
+            "stat": "maxHealth",
+            "percentage": 20
+          }
+        ]
+      }
+    }
+  ],
+  "dismissMinion": [
+    {
+      "effect_data": {
+        "id": "dismissMinion",
+        "manaRefundPercentage": 0.25
+      }
+    }
+  ],
+  "summonMinionConditional": [
+    {
+      "effect_data": {
+        "id": "summonMinionConditional",
+        "successChance": 0.6,
+        "minionIdSuccess": "boundSprite",
+        "durationSuccess": 15,
+        "failureEffect": {
+          "id": "summonHostileMinion",
+          "minionIdFailure": "rogueWisp",
+          "count": 1
+        }
+      }
+    }
+  ],
+  "directMinionTarget": [
+    {
+      "effect_data": {
+        "id": "directMinionTarget"
+      }
+    }
+  ],
+  "sacrificeMinion": [
+    {
+      "effect_data": {
+        "id": "sacrificeMinion",
+        "choice": [
+          "manaRestore",
+          "aoeDamage"
+        ],
+        "manaValue": 30,
+        "aoeDamageValue": 20,
+        "aoeDamageType": "Shadow",
+        "aoeRadius": 1
+      }
+    }
+  ],
+  "swapPositionRandom": [
+    {
+      "effect_data": {
+        "id": "swapPositionRandom",
+        "chance": 0.4
+      }
+    }
+  ],
+  "stealBuff": [
+    {
+      "effect_data": {
+        "id": "stealBuff",
+        "maxBuffTier": 1,
+        "successChanceFormula": "0.7 - (targetMagicControl - casterMagicControl) * 0.01"
+      }
+    }
+  ],
+  "dispelMagicTargeted": [
+    {
+      "effect_data": {
+        "id": "dispelMagicTargeted",
+        "targetTypeChoice": [
+          "EnemyBuff",
+          "AllyDebuff"
+        ],
+        "numEffects": 1,
+        "successChance": 0.85
+      }
+    }
+  ],
+  "silence": [
+    {
+      "effect_data": {
+        "id": "silence",
+        "duration": 1
+      }
+    }
+  ],
+  "teleportAndAttack": [
+    {
+      "effect_data": {
+        "id": "teleportAndAttack",
+        "targetChoice": "NearestEnemyToDestination"
+      }
+    }
+  ],
+  "consumeBleedForDamageAndRefresh": [
+    {
+      "effect_data": {
+        "id": "consumeBleedForDamageAndRefresh",
+        "damageMultiplierOfRemainingDot": 0.5
+      }
+    }
+  ],
+  "triggerAllBleedDamageInstantly": [
+    {
+      "effect_data": {
+        "id": "triggerAllBleedDamageInstantly"
+      }
+    }
+  ],
+  "splashEffect": [
+    {
+      "effect_data": {
+        "id": "splashEffect",
+        "radius": 1,
+        "maxTargets": 1,
+        "effectToApply": {
+          "id": "applyDebuff",
+          "debuffId": "acidBurnArmorSplash",
+          "name": "Acid Splash",
+          "description": "Armor reduced.",
+          "duration": 2,
+          "modifiers": [
+            {
+              "stat": "armor",
+              "flat": -10
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "placeTrap": [
+    {
+      "effect_data": {
+        "id": "placeTrap",
+        "trapId": "poisonTrapInstance",
+        "duration": 10,
+        "trigger": "proximity",
+        "explosionDamage": 15,
+        "explosionDamageType": "Poison",
+        "radius": 1,
+        "explosionEffects": [
+          {
+            "id": "poison",
+            "name": "Trap Poison",
+            "duration": 3,
+            "damagePerTurn": 7,
+            "tickDamageType": "Poison"
+          }
+        ]
+      }
+    }
+  ],
+  "teleportToGroundTarget": [
+    {
+      "effect_data": {
+        "id": "teleportToGroundTarget",
+        "range": 3
+      }
+    }
+  ],
+  "applyDebuffToAreaEnemiesAtOrigin": [
+    {
+      "effect_data": {
+        "id": "applyDebuffToAreaEnemiesAtOrigin",
+        "radius": 1,
+        "debuffId": "blurDebuff",
+        "name": "Blurred",
+        "description": "Accuracy reduced.",
+        "duration": 2,
+        "modifiers": [
+          {
+            "stat": "accuracy",
+            "flat": -15
+          }
+        ]
+      }
+    }
+  ],
+  "moveSelf": [
+    {
+      "effect_data": {
+        "id": "moveSelf",
+        "direction": "backward",
+        "distance": 2
+      }
+    }
+  ],
+  "bleedConditional": [
+    {
+      "effect_data": {
+        "id": "bleedConditional",
+        "name": "Serrated Cut",
+        "duration": 3,
+        "baseDamagePerTurn": 5,
+        "tickDamageType": "Physical",
+        "bonusDamagePerMissingHealthPercentage": 0.1
+      }
+    }
+  ],
+  "maintainStealth": [
+    {
+      "effect_data": {
+        "id": "maintainStealth",
+        "chance": 0.75
+      }
+    }
+  ],
+  "applyBuffSelfOnHit": [
+    {
+      "effect_data": {
+        "id": "applyBuffSelfOnHit",
+        "buffId": "ricochetDodge",
+        "name": "Ricochet Dodge",
+        "description": "Dodge increased.",
+        "stacking": true,
+        "maxStacks": 3,
+        "duration": 2,
+        "modifiers": [
+          {
+            "stat": "dodge",
+            "flat": 10
+          }
+        ]
+      }
+    }
+  ],
+  "areaDamageAtOrigin": [
+    {
+      "effect_data": {
+        "id": "areaDamageAtOrigin",
+        "radius": 1,
+        "effects": [
+          {
+            "id": "damage",
+            "amount": 20,
+            "damageType": "Arcane"
+          },
+          {
+            "id": "applyDebuff",
+            "debuffId": "dazedDebuff",
+            "name": "Dazed",
+            "chance": 0.5,
+            "duration": 1,
+            "modifiers": [
+              {
+                "stat": "accuracy",
+                "flat": -15
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "increaseCritChanceOnCrit": [
+    {
+      "effect_data": {
+        "id": "increaseCritChanceOnCrit",
+        "value": 15,
+        "forNextHitsInSkill": true
+      }
+    }
+  ],
+  "guaranteedCrit": [
+    {
+      "effect_data": {
+        "id": "guaranteedCrit"
+      }
+    }
+  ],
+  "increaseMovementSpeed": [
+    {
+      "effect_data": {
+        "id": "increaseMovementSpeed",
+        "percentage": 30,
+        "duration": 2
+      }
+    }
+  ],
+  "summonPet": [
+    {
+      "effect_data": {
+        "id": "summonPet",
+        "petId": "mirrorImage",
+        "duration": 4,
+        "petAttackDamageMultiplier": 0.35
+      }
+    }
+  ],
+  "summonTemporaryPets": [
+    {
+      "effect_data": {
+        "id": "summonTemporaryPets",
+        "petId": "shadowClone",
+        "count": 2,
+        "petAttackDamage": 40,
+        "petAttackDamageType": "Shadow",
+        "petTargeting": "RandomDifferentEnemies"
+      }
+    }
+  ],
+  "damagePerDotStack": [
+    {
+      "effect_data": {
+        "id": "damagePerDotStack",
+        "dotType": "Bleed",
+        "damagePerStack": 12,
+        "damageType": "Physical"
+      }
+    }
+  ],
+  "consolidateBleeds": [
+    {
+      "effect_data": {
+        "id": "consolidateBleeds",
+        "bonusDamagePerBleed": 10,
+        "newBleedDuration": 4,
+        "newBleedDamageMultiplier": 1.2
+      }
+    }
+  ],
+  "rampingPoisonDoT": [
+    {
+      "effect_data": {
+        "id": "rampingPoisonDoT",
+        "name": "Festering",
+        "duration": 4,
+        "initialDamagePerTurn": 5,
+        "damageIncreasePerTurn": 4,
+        "tickDamageType": "Poison"
+      }
+    }
+  ],
+  "applyDebuffToTarget": [
+    {
+      "effect_data": {
+        "id": "applyDebuffToTarget",
+        "debuffId": "riposteDebuff",
+        "name": "Unbalanced",
+        "description": "Accuracy reduced.",
+        "duration": 1,
+        "modifiers": [
+          {
+            "stat": "accuracy",
+            "flat": -20
+          }
+        ]
+      }
+    }
+  ],
+  "applyBuffSelf": [
+    {
+      "effect_data": {
+        "id": "applyBuffSelf",
+        "buffId": "guaranteedDodgeBuff",
+        "name": "Unseen",
+        "description": "Next attack will be dodged.",
+        "duration": 0,
+        "charges": 1,
+        "guaranteedDodgeNextAttack": true
+      }
+    }
+  ],
+  "summonPetAtLocation": [
+    {
+      "effect_data": {
+        "id": "summonPetAtLocation",
+        "petId": "mirrorDuplicate",
+        "duration": 2,
+        "petHealth": 1,
+        "petTaunt": 500
+      }
+    }
+  ],
+  "damageBonusBasedOnMissingHealth": [
+    {
+      "effect_data": {
+        "id": "damageBonusBasedOnMissingHealth",
+        "maxBonusPercentage": 40
+      }
+    }
+  ],
+  "increaseAttackSpeedOnHit": [
+    {
+      "effect_data": {
+        "id": "increaseAttackSpeedOnHit",
+        "percentage": 5,
+        "duration": 2,
+        "stacking": true
+      }
+    }
+  ],
+  "recoilDamage": [
+    {
+      "effect_data": {
+        "id": "recoilDamage",
+        "percentage": 0.1
+      }
+    }
+  ],
+  "healOnKill": [
+    {
+      "effect_data": {
+        "id": "healOnKill",
+        "healPercentage": 0.1
+      }
+    }
+  ],
+  "fearArea": [
+    {
+      "effect_data": {
+        "id": "fearArea",
+        "duration": 2,
+        "chance": 0.4
+      }
+    }
+  ],
+  "increaseDamagePercentageSelf": [
+    {
+      "effect_data": {
+        "id": "increaseDamagePercentageSelf",
+        "value": 20,
+        "duration": 3
+      }
+    }
+  ],
+  "applyShieldToSelf": [
+    {
+      "effect_data": {
+        "id": "applyShieldToSelf",
+        "shieldHealth": 30,
+        "duration": 2
+      }
+    }
+  ],
+  "applyBuffToSelf": [
+    {
+      "effect_data": {
+        "id": "applyBuffToSelf",
+        "buffId": "riposteArmor",
+        "name": "Riposte Guard",
+        "duration": 1,
+        "modifiers": [
+          {
+            "stat": "armor",
+            "flat": 15
+          }
+        ]
+      }
+    }
+  ],
+  "dispelAllDebuffs": [
+    {
+      "effect_data": {
+        "id": "dispelAllDebuffs",
+        "type": "Magic"
+      }
+    }
+  ],
+  "increaseMaxHealthPercentageTemp": [
+    {
+      "effect_data": {
+        "id": "increaseMaxHealthPercentageTemp",
+        "value": 50,
+        "duration": 5
+      }
+    }
+  ],
+  "instantKill": [
+    {
+      "effect_data": {
+        "id": "instantKill",
+        "maxHealthThresholdPercentage": 0.2,
+        "chance": 0.5,
+        "targetType": "NonBoss"
+      }
+    }
+  ],
+  "resetAllCooldownsOnMarkedTargetDeath": [
+    {
+      "effect_data": {
+        "id": "resetAllCooldownsOnMarkedTargetDeath"
+      }
+    }
+  ],
+  "ignoreDodgeParry": [
+    {
+      "effect_data": {
+        "id": "ignoreDodgeParry"
+      }
+    }
+  ],
+  "applyDebuffToSelf": [
+    {
+      "effect_data": {
+        "id": "applyDebuffToSelf",
+        "debuffId": "exposedDebuff",
+        "name": "Exposed",
+        "duration": 2,
+        "modifiers": [
+          {
+            "stat": "armor",
+            "percentage": -20
+          }
+        ]
+      }
+    }
+  ],
+  "cleaveDamage": [
+    {
+      "effect_data": {
+        "id": "cleaveDamage",
+        "secondaryDamagePercentage": 0.5
+      }
+    }
+  ],
+  "stackingDamageBuffOnConsecutiveUse": [
+    {
+      "effect_data": {
+        "id": "stackingDamageBuffOnConsecutiveUse",
+        "buffId": "momentum",
+        "maxStacks": 3,
+        "damageBonusPerStack": 10,
+        "duration": 3
+      }
+    }
+  ],
+  "applyBuffSelfOnUse": [
+    {
+      "effect_data": {
+        "id": "applyBuffSelfOnUse",
+        "buffId": "tempoBuff",
+        "name": "Tempo",
+        "description": "Tempo Mastery is cheaper and faster to use.",
+        "duration": 3,
+        "modifiers": [
+          {
+            "stat": "skillStaminaCostReduction",
+            "skillId": "tempoMastery",
+            "percentage": 50
+          },
+          {
+            "stat": "skillCooldownReduction",
+            "skillId": "tempoMastery",
+            "flat": 2
+          }
+        ]
+      }
+    }
+  ],
+  "applyBuffToAllies": [
+    {
+      "effect_data": {
+        "id": "applyBuffToAllies",
+        "buffId": "rallyDamage",
+        "name": "Rallied",
+        "duration": 4,
+        "modifiers": [
+          {
+            "stat": "damageDealt",
+            "percentage": 15
+          }
+        ]
+      }
+    }
+  ],
+  "grantTempHealthToAllies": [
+    {
+      "effect_data": {
+        "id": "grantTempHealthToAllies",
+        "amount": 20,
+        "duration": 4
+      }
+    }
+  ],
+  "triggerAllyBasicAttack": [
+    {
+      "effect_data": {
+        "id": "triggerAllyBasicAttack",
+        "allyRange": 2
+      }
+    }
+  ],
+  "interceptNextAttack": [
+    {
+      "effect_data": {
+        "id": "interceptNextAttack",
+        "damageReductionPercentage": 40
+      }
+    }
+  ],
+  "increaseBlockChanceSelf": [
+    {
+      "effect_data": {
+        "id": "increaseBlockChanceSelf",
+        "value": 30,
+        "duration": 0
+      }
+    }
+  ],
+  "interrupt": [
+    {
+      "effect_data": {
+        "id": "interrupt"
+      }
+    }
+  ],
+  "knockdown": [
+    {
+      "effect_data": {
+        "id": "knockdown",
+        "chance": 0.3,
+        "duration": 1
+      }
+    }
+  ],
+  "applyBuffToAlly": [
+    {
+      "effect_data": {
+        "id": "applyBuffToAlly",
+        "allyRange": 2,
+        "buffId": "commandedBuff",
+        "name": "Commanded",
+        "duration": 0,
+        "charges": 1,
+        "modifiers": [
+          {
+            "stat": "damageBonusNextAttack",
+            "percentage": 25
+          }
+        ]
+      }
+    }
+  ],
+  "unstoppableDuringCharge": [
+    {
+      "effect_data": {
+        "id": "unstoppableDuringCharge"
+      }
+    }
+  ],
+  "triggerAllyAttackWithBuff": [
+    {
+      "effect_data": {
+        "id": "triggerAllyAttackWithBuff",
+        "buffId": "commandedStrikeBuff",
+        "buffDuration": 0,
+        "modifiers": [
+          {
+            "stat": "damageBonusNextAttack",
+            "percentage": 30
+          }
+        ]
+      }
+    }
+  ],
+  "grantChoiceBuff": [
+    {
+      "effect_data": {
+        "id": "grantChoiceBuff",
+        "options": [
+          {
+            "buffId": "orderOffense",
+            "name": "Offensive Orders",
+            "duration": 2,
+            "modifiers": [
+              {
+                "stat": "damageDealt",
+                "percentage": 50
+              }
+            ]
+          },
+          {
+            "buffId": "orderDefense",
+            "name": "Defensive Orders",
+            "duration": 2,
+            "modifiers": [
+              {
+                "stat": "damageReduction",
+                "percentage": 50
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "tauntAllEnemies": [
+    {
+      "effect_data": {
+        "id": "tauntAllEnemies",
+        "duration": 2
+      }
+    }
+  ],
+  "damageBonusPerTargetHit": [
+    {
+      "effect_data": {
+        "id": "damageBonusPerTargetHit",
+        "bonusPercentage": 10
+      }
+    }
+  ],
+  "root": [
+    {
+      "effect_data": {
+        "id": "root",
+        "duration": 2
+      }
+    }
+  ],
+  "increaseBlockChancePerTargetHit": [
+    {
+      "effect_data": {
+        "id": "increaseBlockChancePerTargetHit",
+        "value": 5,
+        "duration": 2
+      }
+    }
+  ],
+  "damageBonusBasedOnTargetMaxHealth": [
+    {
+      "effect_data": {
+        "id": "damageBonusBasedOnTargetMaxHealth",
+        "percentageOfMaxHealth": 5
+      }
+    }
+  ],
+  "restoreResourceOnKill": [
+    {
+      "effect_data": {
+        "id": "restoreResourceOnKill",
+        "resourceType": "stamina",
+        "value": 50
+      }
+    }
+  ],
+  "applyBuffOnKill": [
+    {
+      "effect_data": {
+        "id": "applyBuffOnKill",
+        "skillTag": "SingleTargetMelee",
+        "buffId": "headTakerBuff",
+        "name": "Trophy",
+        "duration": 5,
+        "stacking": true,
+        "maxStacks": 3,
+        "modifiers": [
+          {
+            "stat": "damageDealt",
+            "percentage": 20
+          }
+        ]
+      }
+    }
+  ],
+  "extendDurationOnKill": [
+    {
+      "effect_data": {
+        "id": "extendDurationOnKill",
+        "amount": 1
+      }
+    }
+  ],
+  "healAndBuffOnKill": [
+    {
+      "effect_data": {
+        "id": "healAndBuffOnKill",
+        "healPercentage": 0.1,
+        "buffId": "soulHarvest",
+        "name": "Harvested",
+        "duration": 4,
+        "stacking": true,
+        "maxStacks": 3,
+        "modifiers": [
+          {
+            "stat": "damageDealt",
+            "percentage": 10
+          }
+        ]
+      }
+    }
+  ],
+  "fear": [
+    {
+      "effect_data": {
+        "id": "fear",
+        "chance": 0.5,
+        "duration": 2,
+        "maxHealthThresholdPercentage": 0.5
+      }
+    }
+  ],
+  "areaStunOnHit": [
+    {
+      "effect_data": {
+        "id": "areaStunOnHit",
+        "radius": 1,
+        "chance": 0.8,
+        "duration": 1,
+        "excludePrimaryTarget": true
+      }
+    }
+  ],
+  "auraEffect": [
+    {
+      "effect_data": {
+        "id": "auraEffect",
+        "radius": 2,
+        "effectOnEnemies": {
+          "id": "reduceDamageDealtPercentage",
+          "value": 5
+        }
+      }
+    }
+  ],
+  "applyBuffToAreaAlliesAtDestination": [
+    {
+      "effect_data": {
+        "id": "applyBuffToAreaAlliesAtDestination",
+        "radius": 1,
+        "buffId": "chargeSpeed",
+        "name": "Inspired Charge",
+        "duration": 2,
+        "modifiers": [
+          {
+            "stat": "speed",
+            "percentage": 20
+          }
+        ]
+      }
+    }
+  ],
+  "applyBuffToRow": [
+    {
+      "effect_data": {
+        "id": "applyBuffToRow",
+        "row": "Front",
+        "targetType": "Ally",
+        "buffId": "frontlineHold",
+        "name": "Holding the Front",
+        "duration": 4,
+        "modifiers": [
+          {
+            "stat": "damageReduction",
+            "percentage": 20
+          }
+        ]
+      }
+    }
+  ],
+  "areaDebuffOnHit": [
+    {
+      "effect_data": {
+        "id": "areaDebuffOnHit",
+        "radius": 1,
+        "debuffId": "demoralized",
+        "name": "Demoralized",
+        "duration": 3,
+        "modifiers": [
+          {
+            "stat": "damageDealt",
+            "percentage": -15
+          },
+          {
+            "stat": "armor",
+            "percentage": -15
+          }
+        ]
+      }
+    }
+  ],
+  "secondaryAreaDamage": [
+    {
+      "effect_data": {
+        "id": "secondaryAreaDamage",
+        "damage": 15,
+        "damageType": "Fire",
+        "numHits": 3,
+        "randomTargetsInArea": true
+      }
+    }
+  ],
+  "dispelDebuffOnHit": [
+    {
+      "effect_data": {
+        "id": "dispelDebuffOnHit",
+        "debuffType": [
+          "Burn",
+          "Freeze"
+        ]
+      }
+    }
+  ],
+  "createAura": [
+    {
+      "effect_data": {
+        "id": "createAura",
+        "auraId": "absoluteZeroAura",
+        "duration": 5,
+        "radius": 2,
+        "effectsInAura": [
+          {
+            "id": "damageOverTimeAreaEnemy",
+            "damagePerTurn": 10,
+            "damageType": "Ice"
+          },
+          {
+            "id": "applyStackingDebuffOnEnemy",
+            "debuffId": "deepFreeze",
+            "maxStacks": 3,
+            "onMaxStacksEffect": {
+              "id": "freeze",
+              "duration": 2
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "createSpreadingZone": [
+    {
+      "effect_data": {
+        "id": "createSpreadingZone",
+        "zoneId": "forestFireZone",
+        "initialDuration": 5,
+        "spreadChance": 0.3,
+        "effectsInZone": [
+          {
+            "id": "DoT",
+            "damagePerTurn": 25,
+            "damageType": "Fire"
+          }
+        ]
+      }
+    }
+  ],
+  "lifesteal": [
+    {
+      "effect_data": {
+        "id": "lifesteal",
+        "percentage": 0.5
+      }
+    }
+  ],
+  "chainToAllyAndHeal": [
+    {
+      "effect_data": {
+        "id": "chainToAllyAndHeal",
+        "healAmount": 25,
+        "chainCondition": "closestAlly"
+      }
+    }
+  ],
+  "preventDeath": [
+    {
+      "effect_data": {
+        "id": "preventDeath"
+      }
+    }
+  ],
+  "setHealthAndManaPercentage": [
+    {
+      "effect_data": {
+        "id": "setHealthAndManaPercentage",
+        "health": 0.5,
+        "mana": 0.5
+      }
+    }
+  ],
+  "smartTargetDamage": [
+    {
+      "effect_data": {
+        "id": "smartTargetDamage",
+        "target": "nearestEnemy",
+        "amount": 20,
+        "damageType": "Fire"
+      }
+    }
+  ],
+  "smartTargetHeal": [
+    {
+      "effect_data": {
+        "id": "smartTargetHeal",
+        "target": "lowestHpAlly",
+        "amount": 40
+      }
+    }
+  ],
+  "healthTransfer": [
+    {
+      "effect_data": {
+        "id": "healthTransfer",
+        "casterHealthCostPercentage": 0.1,
+        "targetHealMultiplier": 2.0
+      }
+    }
+  ],
+  "areaDamageOnTarget": [
+    {
+      "effect_data": {
+        "id": "areaDamageOnTarget",
+        "radius": 1,
+        "damage": 25,
+        "damageType": "Fire"
+      }
+    }
+  ],
+  "commandMinionToUseSpecialAbility": [
+    {
+      "effect_data": {
+        "id": "commandMinionToUseSpecialAbility",
+        "abilityName": "ElementalBlast"
+      }
+    }
+  ],
+  "healAllMinions": [
+    {
+      "effect_data": {
+        "id": "healAllMinions",
+        "percentage": 0.4
+      }
+    }
+  ],
+  "applyBuffToAllMinions": [
+    {
+      "effect_data": {
+        "id": "applyBuffToAllMinions",
+        "buffId": "primalSpeed",
+        "name": "Primal Surge",
+        "duration": 5,
+        "modifiers": [
+          {
+            "stat": "attackSpeed",
+            "percentage": 30
+          }
+        ]
+      }
+    }
+  ],
+  "fuseTwoMinions": [
+    {
+      "effect_data": {
+        "id": "fuseTwoMinions",
+        "minionTag": "Elemental",
+        "resultMinionId": "primalElemental"
+      }
+    }
+  ],
+  "healCasterPerTargetHit": [
+    {
+      "effect_data": {
+        "id": "healCasterPerTargetHit",
+        "healAmount": 15
+      }
+    }
+  ],
+  "healthCostCurrentPercentage": [
+    {
+      "effect_data": {
+        "id": "healthCostCurrentPercentage",
+        "percentage": 0.2
+      }
+    }
+  ],
+  "resetSkillCooldownsByTag": [
+    {
+      "effect_data": {
+        "id": "resetSkillCooldownsByTag",
+        "skillTags": [
+          "Arcane",
+          "BloodMagic"
+        ],
+        "excludeUltimate": true
+      }
+    }
+  ],
+  "shatterFrozenTarget": [
+    {
+      "effect_data": {
+        "id": "shatterFrozenTarget",
+        "shatterDamagePercentage": 0.25,
+        "shatterRadius": 1
+      }
+    }
+  ],
+  "DoT": [
+    {
+      "effect_data": {
+        "id": "DoT",
+        "damagePerTurn": 15,
+        "damageType": "Ice",
+        "duration": 3
+      }
+    }
+  ],
+  "summonMinionOnKill": [
+    {
+      "effect_data": {
+        "id": "summonMinionOnKill",
+        "minionId": "weakZombie",
+        "chance": 0.5,
+        "duration": 20
+      }
+    }
+  ],
+  "summonMinionPerTargetHit": [
+    {
+      "effect_data": {
+        "id": "summonMinionPerTargetHit",
+        "minionId": "basicSkeleton",
+        "chance": 0.25,
+        "duration": 20
+      }
+    }
+  ],
+  "manaOverTime": [
+    {
+      "effect_data": {
+        "id": "manaOverTime",
+        "manaPerTick": 10,
+        "duration": 4,
+        "conditionalMultiplier": {
+          "condition": "casterIsStationary",
+          "multiplier": 1.5
+        }
+      }
+    }
+  ],
+  "applyShieldToAreaAllies": [
+    {
+      "effect_data": {
+        "id": "applyShieldToAreaAllies",
+        "shieldHealth": 30,
+        "duration": 3
+      }
+    }
+  ],
+  "healBasedOnTargetMissingHealth": [
+    {
+      "effect_data": {
+        "id": "healBasedOnTargetMissingHealth",
+        "percentage": 0.15
+      }
+    }
+  ],
+  "healOverTimeAreaAlly": [
+    {
+      "effect_data": {
+        "id": "healOverTimeAreaAlly",
+        "healPerTick": 12,
+        "duration": 4
+      }
+    }
+  ],
+  "pullAlongLine": [
+    {
+      "effect_data": {
+        "id": "pullAlongLine",
+        "strength": 2
+      }
+    }
+  ],
+  "chainLightningInArea": [
+    {
+      "effect_data": {
+        "id": "chainLightningInArea",
+        "chance": 0.5,
+        "maxChains": 2,
+        "damage": 20
+      }
+    }
+  ],
+  "pullTarget": [
+    {
+      "effect_data": {
+        "id": "pullTarget",
+        "distance": 2
+      }
+    }
+  ],
+  "healAllies": [
+    {
+      "effect_data": {
+        "id": "healAllies",
+        "healAmountFormula": "casterHealthCost * 1.5"
+      }
+    }
+  ],
+  "applyBuffToMinions": [
+    {
+      "effect_data": {
+        "id": "applyBuffToMinions",
+        "buffId": "chillingAuraMinion",
+        "name": "Chilling Aura",
+        "duration": 6,
+        "auraEffects": [
+          {
+            "id": "damageOverTimeAreaEnemy",
+            "damagePerTurn": 8,
+            "damageType": "Ice",
+            "radius": 1
+          }
+        ]
+      }
+    }
+  ],
+  "damageToAllyHeal": [
+    {
+      "effect_data": {
+        "id": "damageToAllyHeal",
+        "percentage": 0.5,
+        "target": "lowestHpAlly"
+      }
+    }
+  ],
+  "restoreResourceToTarget": [
+    {
+      "effect_data": {
+        "id": "restoreResourceToTarget",
+        "resourceType": "mana",
+        "value": 20
+      }
+    }
+  ],
+  "createMovingZone": [
+    {
+      "effect_data": {
+        "id": "createMovingZone",
+        "zoneId": "fireTornadoZone",
+        "duration": 5,
+        "radius": 1,
+        "speed": 2,
+        "effectsInZone": [
+          {
+            "id": "DoT",
+            "damagePerTurn": 20,
+            "damageType": "Fire"
+          },
+          {
+            "id": "pullToCenter",
+            "strength": 1
+          }
+        ]
+      }
+    }
+  ],
+  "periodicDamageArea": [
+    {
+      "effect_data": {
+        "id": "periodicDamageArea",
+        "damage": 25,
+        "damageType": "Ice",
+        "interval": 1,
+        "duration": 3
+      }
+    }
+  ],
+  "damageInLineToTarget": [
+    {
+      "effect_data": {
+        "id": "damageInLineToTarget",
+        "damage": 20,
+        "damageType": "Lightning"
+      }
+    }
+  ],
+  "choiceBuffDebuff": [
+    {
+      "effect_data": {
+        "id": "choiceBuffDebuff",
+        "buff": {
+          "buffId": "tailwind",
+          "name": "Tailwind",
+          "duration": 3,
+          "modifiers": [
+            {
+              "stat": "speed",
+              "percentage": 30
+            }
+          ]
+        },
+        "debuff": {
+          "debuffId": "headwind",
+          "name": "Headwind",
+          "duration": 3,
+          "modifiers": [
+            {
+              "stat": "speed",
+              "percentage": -30
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "delayedAreaDamage": [
+    {
+      "effect_data": {
+        "id": "delayedAreaDamage",
+        "delay": 2,
+        "radius": 1,
+        "damage": 40,
+        "damageType": "Air"
+      }
+    }
+  ],
+  "damageAllEnemies": [
+    {
+      "effect_data": {
+        "id": "damageAllEnemies",
+        "damage": 25,
+        "damageType": "Shadow"
+      }
+    }
+  ],
+  "secondaryDamageAllEnemies": [
+    {
+      "effect_data": {
+        "id": "secondaryDamageAllEnemies",
+        "damage": 25,
+        "damageType": "Lightning"
+      }
+    }
+  ],
+  "heal": [
+    {
+      "effect_data": {
+        "id": "heal",
+        "amount": 20
+      }
+    }
+  ],
+  "healOverTimeAllMinions": [
+    {
+      "effect_data": {
+        "id": "healOverTimeAllMinions",
+        "healPerTick": 10,
+        "duration": 6
+      }
+    }
+  ],
+  "directAllMinionsTarget": [
+    {
+      "effect_data": {
+        "id": "directAllMinionsTarget"
+      }
+    }
+  ],
+  "sacrificeMinionForHeal": [
+    {
+      "effect_data": {
+        "id": "sacrificeMinionForHeal",
+        "healPercentageOfMinionMaxHealth": 0.8
+      }
+    }
+  ],
+  "sacrificeMinionForBuff": [
+    {
+      "effect_data": {
+        "id": "sacrificeMinionForBuff",
+        "buffId": "powerSacrifice",
+        "name": "Sacrificial Power",
+        "duration": 5,
+        "modifiers": [
+          {
+            "stat": "magicPower",
+            "flat": 50
+          }
+        ]
+      }
+    }
+  ],
+  "summonMinionFromEnvironment": [
+    {
+      "effect_data": {
+        "id": "summonMinionFromEnvironment",
+        "minionId": "awakenedTree",
+        "count": 3,
+        "duration": 15
+      }
+    }
+  ],
+  "rootArea": [
+    {
+      "effect_data": {
+        "id": "rootArea",
+        "duration": 3
+      }
+    }
+  ],
+  "healTargetToFull": [
+    {
+      "effect_data": {
+        "id": "healTargetToFull"
+      }
+    }
+  ],
+  "healAreaAllies": [
+    {
+      "effect_data": {
+        "id": "healAreaAllies",
+        "amount": 30
+      }
+    }
+  ],
+  "healthSwap": [
+    {
+      "effect_data": {
+        "id": "healthSwap",
+        "percentage": 0.25
+      }
+    }
+  ],
+  "resetRandomSkillCooldownByTag": [
+    {
+      "effect_data": {
+        "id": "resetRandomSkillCooldownByTag",
+        "skillTag": "Summon"
+      }
+    }
+  ],
+  "burnResource": [
+    {
+      "effect_data": {
+        "id": "burnResource",
+        "resourceType": "mana",
+        "amountPerTick": 15,
+        "duration": 3
+      }
+    }
+  ],
+  "teleportTargetRandomly": [
+    {
+      "effect_data": {
+        "id": "teleportTargetRandomly",
+        "range": 3
+      }
+    }
+  ],
+  "stasis": [
+    {
+      "effect_data": {
+        "id": "stasis",
+        "duration": 4,
+        "damageImmunity": true
+      }
+    }
+  ],
+  "dispelBuffAndDamage": [
+    {
+      "effect_data": {
+        "id": "dispelBuffAndDamage",
+        "numEffects": 1,
+        "bonusDamagePerBuffTier": 10
+      }
+    }
+  ],
+  "knockbackFromPoint": [
+    {
+      "effect_data": {
+        "id": "knockbackFromPoint",
+        "distance": 2
+      }
+    }
+  ],
+  "applyRandomDebuffFromList": [
+    {
+      "effect_data": {
+        "id": "applyRandomDebuffFromList",
+        "debuffs": [
+          {
+            "id": "slow",
+            "duration": 3,
+            "percentage": -40
+          },
+          {
+            "id": "silence",
+            "duration": 2
+          },
+          {
+            "id": "DoT",
+            "damagePerTurn": 15,
+            "duration": 3,
+            "tickDamageType": "Arcane"
+          }
+        ]
+      }
+    }
+  ],
+  "applyShieldToMinion": [
+    {
+      "effect_data": {
+        "id": "applyShieldToMinion",
+        "shieldHealth": 80,
+        "duration": 5
+      }
+    }
+  ],
+  "manaTransfer": [
+    {
+      "effect_data": {
+        "id": "manaTransfer",
+        "casterManaCost": 100,
+        "targetManaGain": 100,
+        "description": "Transfer 100 mana from the caster to the target ally."
+      }
+    }
+  ],
+  "healCaster": [
+    {
+      "effect_data": {
+        "id": "healCaster",
+        "healAmount": 50
+      }
+    }
+  ],
+  "damageOverTimeToTarget": [
+    {
+      "effect_data": {
+        "id": "damageOverTimeToTarget",
+        "damagePerTurn": 20,
+        "duration": 4,
+        "tickDamageType": "Shadow"
+      }
+    }
+  ],
+  "healOverTimeOnTarget": [
+    {
+      "effect_data": {
+        "id": "healOverTimeOnTarget",
+        "healPerTick": 20,
+        "duration": 4
+      }
+    }
+  ],
+  "stealRandomStat": [
+    {
+      "effect_data": {
+        "id": "stealRandomStat",
+        "statChoices": [
+          "strength",
+          "dexterity",
+          "armor"
+        ],
+        "amount": 10,
+        "duration": 4
+      }
+    }
+  ],
+  "createGroundEffectAtTarget": [
+    {
+      "effect_data": {
+        "id": "createGroundEffectAtTarget",
+        "zoneId": "consecratedGroundSmall",
+        "radius": 1,
+        "duration": 3,
+        "effectsInZone": [
+          {
+            "id": "DoT",
+            "damagePerTurn": 15,
+            "damageType": "Holy"
+          }
+        ]
+      }
+    }
+  ],
+  "auraEffectDuringChannel": [
+    {
+      "effect_data": {
+        "id": "auraEffectDuringChannel",
+        "auraId": "wrathChantAura",
+        "radius": 3,
+        "effectsInAura": [
+          {
+            "id": "increaseSkillTagDamageAlly",
+            "skillTag": "Smite",
+            "percentage": 25
+          },
+          {
+            "id": "damageOverTimeAreaEnemy",
+            "damagePerTurn": 10,
+            "damageType": "Holy"
+          }
+        ]
+      }
+    }
+  ],
+  "delayedDamage": [
+    {
+      "effect_data": {
+        "id": "delayedDamage",
+        "delay": 2,
+        "damage": 25,
+        "damageType": "Holy"
+      }
+    }
+  ],
+  "dispelBuff": [
+    {
+      "effect_data": {
+        "id": "dispelBuff",
+        "numEffects": 1,
+        "chance": 0.9
+      }
+    }
+  ],
+  "dispelDebuffInArea": [
+    {
+      "effect_data": {
+        "id": "dispelDebuffInArea",
+        "targetType": "Ally",
+        "numEffects": 1
+      }
+    }
+  ],
+  "banish": [
+    {
+      "effect_data": {
+        "id": "banish",
+        "chance": 0.75
+      }
+    }
+  ],
+  "customSpellEffect": [
+    {
+      "effect_data": {
+        "id": "customSpellEffect",
+        "spellId": "soulBurst",
+        "baseHeal": 30,
+        "baseDamage": 30,
+        "bonusPerSoulbind": 10
+      }
+    }
+  ],
+  "chainHeal": [
+    {
+      "effect_data": {
+        "id": "chainHeal",
+        "maxChains": 2,
+        "healFalloff": 0.7,
+        "chainCondition": "lowestHpAllyInRange"
+      }
+    }
+  ],
+  "rampingAuraHealDuringChannel": [
+    {
+      "effect_data": {
+        "id": "rampingAuraHealDuringChannel",
+        "auraId": "healingChantAura",
+        "radius": 3,
+        "initialHealPerTick": 10,
+        "healIncreasePerTick": 5
+      }
+    }
+  ],
+  "massDispel": [
+    {
+      "effect_data": {
+        "id": "massDispel",
+        "dispelFromEnemies": 1,
+        "dispelFromAllies": 1
+      }
+    }
+  ],
+  "dispelAndHeal": [
+    {
+      "effect_data": {
+        "id": "dispelAndHeal",
+        "baseHeal": 20,
+        "bonusHealPerDebuffTier": 15
+      }
+    }
+  ],
+  "applyBuffToTargets": [
+    {
+      "effect_data": {
+        "id": "applyBuffToTargets",
+        "buffId": "soulLinkHealBuff",
+        "name": "Soul Link",
+        "duration": 5,
+        "shareDamageTakenPercentage": 0.5,
+        "shareHealingReceivedPercentage": 1.0
+      }
+    }
+  ],
+  "applyHoTToTarget": [
+    {
+      "effect_data": {
+        "id": "applyHoTToTarget",
+        "healPerTick": 15,
+        "duration": 4
+      }
+    }
+  ],
+  "delayedHeal": [
+    {
+      "effect_data": {
+        "id": "delayedHeal",
+        "delay": 1,
+        "healAmount": 20
+      }
+    }
+  ],
+  "applyRandomBuffFromList": [
+    {
+      "effect_data": {
+        "id": "applyRandomBuffFromList",
+        "buffs": [
+          {
+            "buffId": "spiritHealBoost",
+            "name": "Spirit's Grace",
+            "duration": 3,
+            "modifiers": [
+              {
+                "stat": "healingDone",
+                "percentage": 50
+              }
+            ]
+          },
+          {
+            "buffId": "spiritManaBoost",
+            "name": "Spirit's Wisdom",
+            "duration": 3,
+            "modifiers": [
+              {
+                "stat": "manaCostReduction",
+                "percentage": 50
+              }
+            ]
+          },
+          {
+            "buffId": "spiritTimeBoost",
+            "name": "Spirit's Celerity",
+            "duration": 3,
+            "modifiers": [
+              {
+                "stat": "cooldownReduction",
+                "percentage": 50
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "averageHealthPercentage": [
+    {
+      "effect_data": {
+        "id": "averageHealthPercentage"
+      }
+    }
+  ],
+  "applyRandomStatBuffToAllies": [
+    {
+      "effect_data": {
+        "id": "applyRandomStatBuffToAllies",
+        "statChoices": [
+          "strength",
+          "dexterity",
+          "magicPower",
+          "vitality"
+        ],
+        "value": 15,
+        "duration": 5
+      }
+    }
+  ],
+  "silenceAllEnemies": [
+    {
+      "effect_data": {
+        "id": "silenceAllEnemies",
+        "duration": 2
+      }
+    }
+  ],
+  "applyShieldToAllies": [
+    {
+      "effect_data": {
+        "id": "applyShieldToAllies",
+        "shieldHealth": 60,
+        "duration": 4
+      }
+    }
+  ],
+  "dispelDoTAndConvertToHeal": [
+    {
+      "effect_data": {
+        "id": "dispelDoTAndConvertToHeal",
+        "debuffType": [
+          "Poison",
+          "Bleed",
+          "Burn"
+        ],
+        "conversionRate": 1.5
+      }
+    }
+  ],
+  "dispelBuffAndChainHeal": [
+    {
+      "effect_data": {
+        "id": "dispelBuffAndChainHeal",
+        "numEffects": 1,
+        "healAmount": 30,
+        "chainCondition": "closestAlly"
+      }
+    }
+  ],
+  "preventSkillTagUse": [
+    {
+      "effect_data": {
+        "id": "preventSkillTagUse",
+        "skillTags": [
+          "Unholy",
+          "Shadow"
+        ],
+        "duration": 3
+      }
+    }
+  ]
+}

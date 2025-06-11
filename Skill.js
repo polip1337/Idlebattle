@@ -1,8 +1,9 @@
 // Skill.js
 import {renderLevelUp, updateMana, updateStamina} from './Render.js';
 import {selectTarget} from './Targeting.js';
-import {battleStarted} from './Battle.js';
-import {battleStatistics, hero as globalHero} from './initialize.js';
+import {battleController, battleStatistics, hero as globalHero} from './initialize.js';
+import EffectClass from './EffectClass.js';
+
 
 class Skill {
     constructor(skillData, effects, element = null) {
@@ -22,7 +23,8 @@ class Skill {
         this.damageType = skillData.damageType;
         this.targetingModes = skillData.targetingModes;
         this.extraTargets = skillData.extraTargets;
-        this.effects = effects;
+        this.targetCount = skillData.targetCount || 1;
+        this.effects = effects || skillData.effects || skillData.effect; // Handle both effects array and single effect
         this.div = element;
         this.repeat = true;
         this.level = 1;
@@ -32,25 +34,57 @@ class Skill {
         this.overlay = null;
         this.boundAnimationEndCallback = null;
         this.needsInitialCooldownKickoff;
+        this.tags = skillData.tags;
+        this.isPassive = skillData.type === "passive";
     }
 
     setElement(element) {
         this.div = element;
     }
 
-    calculateDamage(member) {
+    calculateDamage(member, target) {
         let damage = this.damage * this.baseDamage * member.stats.damage;
-        if (this.damageType === 'physical') {
-            damage += member.stats.strength;
-        } else if (this.damageType === 'magical') {
-            damage += member.stats.magicPower;
+        
+        // Scale damage based on tags
+        if (this.tags.includes('Physical')) {
+            damage *= (1 + member.stats.strength / 100); // Scale with strength
+        } else if (this.tags.includes('Magical')) {
+            damage *= (1 + member.stats.magicPower / 100); // Scale with magic power
         }
+
+        // Check for damage bonuses
+        if (member.damageBonuses && member.damageBonuses.length > 0) {
+            member.damageBonuses.forEach(bonus => {
+                // Handle unconditional bonuses
+                if (!bonus.condition) {
+                    damage *= (1 + bonus.value / 100);
+                    return;
+                }
+
+                // Handle conditional bonuses
+                switch (bonus.condition) {
+                    case 'targetHasDebuffs':
+                        if (target.hasDebuff()) {
+                            damage *= (1 + bonus.value / 100);
+                        }
+                        break;
+                    // Add more conditions here as needed
+                }
+            });
+        }
+        
         return damage;
     }
 
     gainExperience(amount) {
         // Only allow hero team skills to gain experience
         if (this.div && (this.div.closest('#team1')||this.div.closest('#bottomContainer'))) {
+            // For passive skills, only gain exp if they are selected
+            if (this.isPassive) {
+                const isSelected = globalHero && globalHero.selectedSkills.some(s => s && s.id === this.id);
+                if (!isSelected) return;
+            }
+            
             this.experience += amount;
             while (this.experience >= this.experienceToNextLevel) {
                 this.levelUp();
@@ -86,15 +120,53 @@ class Skill {
         battleStatistics.addStaminaSpent(this.staminaCost);
     }
 
+    applyPassiveEffect(member) {
+        if (!this.isPassive) return;
+
+        console.log(`[Skill ${this.name}] Applying passive effect for ${member.name}`);
+        
+        // Handle both single effect and effects array
+        const effectsToApply = Array.isArray(this.effects) ? this.effects : [this.effects];
+        
+        effectsToApply.forEach(effect => {
+            if (!effect) return;
+
+            // Create a proper effect object for EffectClass
+            const effectObject = {
+                name: this.name,
+                type: effect.type || 'passive',
+                subType: effect.subtype || effect.subType,
+                stat: effect.stat,
+                value: effect.value,
+                duration: -1, // Unlimited duration for passives
+                icon: this.icon,
+                stackMode: "refresh", // Passives should refresh rather than stack
+                id: effect.id, // Include effect ID if present
+                condition: effect.condition, // Include condition if present
+                description: effect.description // Include description if present
+            };
+
+            // Apply the effect using EffectClass
+            new EffectClass(member, effectObject);
+        });
+    }
+
     useSkill(member) {
+        // For passive skills, just apply the effect and return
+        if (this.isPassive) {
+            this.applyPassiveEffect(member);
+            return true;
+        }
+
         console.log(`[Skill ${this.name}] useSkill called for ${member.name}`, {
             isHero: member.isHero,
             needsInitialCooldownKickoff: this.needsInitialCooldownKickoff,
             hasDiv: !!this.div,
             hasElement: !!member.element,
-            battleStarted: battleStarted
+            battleStarted: battleController.battleState.battleStarted
         });
 
+        // Handle initial cooldown setup for non-hero skills
         if (this.type === "active" && !member.isHero && this.needsInitialCooldownKickoff) {
             // Initialize skill element if not already set
             if (!this.div && member.element) {
@@ -105,19 +177,17 @@ class Skill {
                 }
             }
 
-            // Start cooldown and mark as initialized
+            // Start initial cooldown for non-hero skills
             if (this.div) {
-                console.log(`[Skill ${this.name}] Starting cooldown for ${member.name}`);
+                console.log(`[Skill ${this.name}] Starting initial cooldown for ${member.name}`);
                 this.startCooldown(member);
                 this.updateCooldownAnimation(member);
                 this.needsInitialCooldownKickoff = false;
                 return true;
-            } else {
-                console.log(`[Skill ${this.name}] No div available for ${member.name}, cannot start cooldown`);
             }
         }
 
-        if (this.type == "active" && battleStarted) {
+        if (this.type == "active" && battleController.battleState.battleStarted) {
             console.log(`[Skill ${this.name}] Checking resources for ${member.name}`, {
                 currentMana: member.currentMana,
                 manaCost: this.manaCost,
@@ -133,7 +203,30 @@ class Skill {
                     this.handleExpGain(member);
                 }
 
-                var targets = selectTarget(member, this.targetingModes[0]);
+                // Handle effect-based targeting
+                let targetingCondition = null;
+                if (this.effects) {
+                    const dispelEffect = Array.isArray(this.effects) 
+                        ? this.effects.find(e => e.id === 'dispelDebuff')
+                        : (this.effects.id === 'dispelDebuff' ? this.effects : null);
+                    
+                    if (dispelEffect && dispelEffect.debuffType) {
+                        targetingCondition = (ally) => ally.hasDebuffName(dispelEffect.debuffType);
+                    }
+                }
+
+                var targets = selectTarget(member, this.targetingModes[0], targetingCondition);
+                
+                // Handle multiple targets for the same effect
+                if (this.targetCount > 1) {
+                    // If we have fewer targets than targetCount, we'll hit the same targets multiple times
+                    const originalTargets = [...targets];
+                    for (let i = 1; i < this.targetCount; i++) {
+                        targets = targets.concat(originalTargets);
+                    }
+                }
+
+                // Handle extra targets with different effects (existing functionality)
                 if (this.extraTargets != undefined) {
                     this.extraTargets.forEach(mode => {
                         targets = targets.concat(selectTarget(member, mode));
@@ -151,7 +244,7 @@ class Skill {
                 console.log(`[Skill ${this.name}] Insufficient resources for ${member.name}`);
                 if (this.repeat && member.isHero) {
                     setTimeout(() => {
-                        if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
+                        if (battleController.battleState.battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
                             const isSelected = globalHero && globalHero.selectedSkills.some(s => s && s.id === this.id);
                             if (isSelected) {
                                 this.useSkill(member);
@@ -292,7 +385,7 @@ class Skill {
         console.log(`[Skill ${this.name}] finishCooldown called for ${member.name}`, {
             wasOnCooldown: this.onCooldown,
             shouldAttemptRepeat,
-            battleStarted,
+            battleStarted: battleController.battleState.battleStarted,
             memberHealth: member.currentHealth
         });
 
@@ -320,13 +413,13 @@ class Skill {
         }
 
         if (shouldAttemptRepeat && wasTrulyOnCooldown &&
-            battleStarted && member && member.currentHealth > 0) {
+            battleController.battleState.battleStarted && member && member.currentHealth > 0) {
 
             let canUse = false;
             if (member.isHero) {
                 const heroInstance = globalHero;
-                if (heroInstance && heroInstance.selectedSkills.some(s => s && s.id === this.id)) {
-                    canUse = true;
+                if (heroInstance && heroInstance.selectedSkills) {
+                    canUse = heroInstance.selectedSkills.some(s => s && s.id === this.id);
                 }
             } else {
                 canUse = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
@@ -339,21 +432,22 @@ class Skill {
             });
 
             if (canUse) {
-                // For companions, we need to check if this is a repeat attempt
+                // For non-hero skills, we need to check if this is the first use after initial cooldown
                 if (!member.isHero && this.needsInitialCooldownKickoff) {
                     this.needsInitialCooldownKickoff = false;
-                    return; // Skip the actual skill use for initial cooldown
+                    this.useSkill(member); // This will trigger the initial cooldown
+                } else {
+                    this.useSkill(member);
                 }
-                this.useSkill(member);
             } else if (this.repeat) {
                 // Add retry mechanism for both hero and non-hero skills when resources are insufficient
                 const retrySkill = (retryCount = 0) => {
-                    if (battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
+                    if (battleController.battleState.battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
                         let canUse = false;
                         if (member.isHero) {
                             const heroInstance = globalHero;
-                            if (heroInstance && heroInstance.selectedSkills.some(s => s && s.id === this.id)) {
-                                canUse = true;
+                            if (heroInstance && heroInstance.selectedSkills) {
+                                canUse = heroInstance.selectedSkills.some(s => s && s.id === this.id);
                             }
                         } else {
                             canUse = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
@@ -361,7 +455,7 @@ class Skill {
 
                         if (canUse) {
                             this.useSkill(member);
-                        } else {
+                        } else if (retryCount < 5) { // Limit retries to prevent infinite loops
                             // If still can't use, retry with increasing delay
                             const delay = Math.min(1000 * (retryCount + 1), 5000); // Cap at 5 seconds
                             setTimeout(() => retrySkill(retryCount + 1), delay);

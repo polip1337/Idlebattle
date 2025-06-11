@@ -1,7 +1,6 @@
-import {nextStage as battleNextStageCmd, repeatStage as battleRepeatStageCmd, startBattle, returnToMap, attemptFlee} from './Battle.js';
+import { BattleController } from './battle_controller.js';
 import Team from './Team.js';
 import Hero from './Hero.js';
-import Companion from './companion.js';
 
 import EvolutionService from './EvolutionService.js';
 import Skill from './Skill.js';
@@ -34,6 +33,8 @@ import { openSaveModal,openLoadModal, setInitializeAndLoadGame as setInitLoadFnF
 import { initializeCompanionUI } from './companionUIManager.js';
 import { handleEarlyGameInit } from './slideshow.js';
 import { openClassChangeModal, initializeClassChange } from './classChange.js';
+import { initializeDebug } from './debug.js';
+import { getFormation } from './battle_controller.js';
 
 
 export let battleStatistics;
@@ -50,6 +51,7 @@ export let allSkillsCache = null;
 export let allItemsCache = null;
 export let allCompanionsData = {};
 export let allHeroClasses = {};
+export let battleController = null; // Add global BattleController instance
 
 
 export const NPC_MEDIA_PATH = "Media/NPC/";
@@ -129,14 +131,30 @@ async function loadClasses() {
     try {
         const classesData = await loadJSON('Data/classes.json');
         const loadedClasses = {};
-        classTiers = classesData['tiers'] || [];
-        const heroClassDefinitions = classesData['classes'] || {};
-        for (const key in heroClassDefinitions) {
-            const heroClassDef = heroClassDefinitions[key];
-            loadedClasses[heroClassDef.id] = {...heroClassDef, skills: heroClassDef.skills || []};
+        
+        // Process each tier
+        for (const tierKey in classesData) {
+            const tierData = classesData[tierKey];
+            if (tierData && tierData.classes) {
+                // Process each class in the tier
+                tierData.classes.forEach(classDef => {
+                    if (classDef.combination) {
+                        // Use the class ID as the key
+                        loadedClasses[classDef.combination] = {
+                            ...classDef,
+                            tier: tierKey,
+                            skills: classDef.skills || []
+                        };
+                    }
+                });
+            }
         }
+        
         return loadedClasses;
-    } catch (error) { console.error("Failed to load classes.json:", error); return { tiers: [], classes: {} }; }
+    } catch (error) { 
+        console.error("Failed to load classes.json:", error); 
+        return {}; 
+    }
 }
 
 async function loadCompanionDefinitions() {
@@ -177,6 +195,9 @@ export async function loadGameData(savedGameState = null) {
 
         team1 = new Team('Team1', 'team1-battle-container');
         team2 = new Team('Team2', 'team2-battle-container');
+        
+        // Initialize BattleController after teams are created
+        battleController = new BattleController();
 
         if (savedGameState) {
             if (!savedGameState.heroData || !savedGameState.mapStateData || !savedGameState.mapStateData.currentMapId) {
@@ -185,10 +206,16 @@ export async function loadGameData(savedGameState = null) {
                 return false;
             }
 
-            const classIdForHero = savedGameState.heroData.classId || 'novice';
-            let heroClassInfo = heroClasses[classIdForHero] || heroClasses['novice'] || Object.values(heroClasses)[0];
+            const classIdForHero = savedGameState.heroData.combination || 'Novice';
+            // Find the class directly from heroClasses using combination
+            let heroClassInfo = Object.values(heroClasses).find(c => c.combination === classIdForHero);
+            // If class not found, fall back to novice
             if (!heroClassInfo) {
-                alert("Critical error: No hero classes available to load hero."); return false;
+                heroClassInfo = Object.values(heroClasses).find(c => c.combination === 'Novice');
+                if (!heroClassInfo) {
+                    alert("Critical error: No hero classes available to load hero."); 
+                    return false;
+                }
             }
             hero = new Hero("Placeholder", heroClassInfo, [], 1, null, null);
             hero.restoreFromData(savedGameState.heroData, heroClasses, allSkillsCache, allItemsCache);
@@ -202,7 +229,6 @@ export async function loadGameData(savedGameState = null) {
 
             renderLevelProgress(hero);
 
-            hero.reselectSkillsAfterLoad();
             if (document.getElementById('heroContent')) {
                 updateStatsDisplay(hero); renderSkills(hero); renderPassiveSkills(hero);
                 initializeCompanionUI();
@@ -239,6 +265,9 @@ export async function loadGameData(savedGameState = null) {
             handleEarlyGameInit();
         }
 
+        // Initialize debug functionality
+        initializeDebug();
+
         return true;
 
     } catch (error) {
@@ -251,25 +280,26 @@ setInitLoadFnForSaveLoad(loadGameData);
 
 
 function createAndInitHero(classes, playerTeamContext, opposingTeamContext) {
-    const baseClassId = 'novice';
-    let baseClassInfo = classes[baseClassId] || Object.values(classes)[0];
-    if (!baseClassInfo) {
-        console.error("Cannot create hero: No classes loaded or 'novice' not found.");
-        alert("Fatal: No classes available to create hero.");
+    // Find the Novice class from tier0
+    const noviceClass = Object.values(classes).find(c => c.name === 'Novice');
+    if (!noviceClass) {
+        console.error("Cannot create hero: Novice class not found.");
+        alert("Fatal: Novice class not available to create hero.");
         return false;
     }
 
-    const heroSkillsInstances = (baseClassInfo.skills || []).map(skillId => {
+    const heroSkillsInstances = (noviceClass.skills || []).map(skillId => {
         const skillData = allSkillsCache[skillId];
         return skillData ? new Skill(skillData, skillData.effects) : null;
     }).filter(Boolean);
 
-    hero = new Hero("Hero", baseClassInfo, heroSkillsInstances, 1, playerTeamContext, opposingTeamContext,true);
+    hero = new Hero("Hero", noviceClass, heroSkillsInstances, 1, playerTeamContext, opposingTeamContext, true);
     hero.placeHeroInFirstAvailableSlot();
 
-
     if (document.getElementById('heroContent')) {
-        updateStatsDisplay(hero); renderSkills(hero); renderPassiveSkills(hero);
+        updateStatsDisplay(hero); 
+        renderSkills(hero); 
+        renderPassiveSkills(hero);
     }
     renderLevelProgress(hero);
     selectInitialSkills();
@@ -292,7 +322,7 @@ function selectInitialSkills() {
     const passiveSkillBoxes = document.querySelectorAll("#passiveSkills .skill-box");
     let passiveSelectedCount = 0;
     hero.skills.forEach(skill => {
-        if (skill.type !== "active" && passiveSelectedCount < 4 && passiveSkillBoxes[passiveSelectedCount]) {
+        if (skill.type !== "active" && passiveSelectedCount < 2 && passiveSkillBoxes[passiveSelectedCount]) {
              const skillBox = Array.from(passiveSkillBoxes).find(sb => sb.id === 'skill-box-' + skill.name.replace(/\s/g, ''));
             if(skillBox) hero.selectSkill(skill, skillBox, true);
             passiveSelectedCount++;
@@ -320,45 +350,53 @@ function initiateBattleLog() {
     }
 }
 
-export function renderTeamMembers(membersToRender, containerId, clearExisting = true) {
-    const teamContainerElement = document.getElementById(containerId);
+export function renderTeamMembers(team1Members, team2Members, containerId, clearExisting = true) {
+    const teamContainerElement = document.getElementById("teamContainer");
     if (!teamContainerElement) {
         return;
     }
     const teamRows = teamContainerElement.querySelectorAll('.team-row');
-    if (teamRows.length < 2) {
+    if (teamRows.length < 4) {
         console.error(`Team rows not found in ${containerId}. HTML structure issue.`);
         return;
     }
 
     if (clearExisting) {
         teamRows[0].innerHTML = ''; teamRows[1].innerHTML = '';
+        teamRows[2].innerHTML = ''; teamRows[3].innerHTML = '';
     }
 
-    membersToRender.forEach((member, index) => {
-        if (!member.isHero) {
-            member.memberId = `${containerId}-member-${member.companionId || member.classId || 'unknown'}-${index}`;
-        } else {
-            member.memberId = `hero-${containerId}`;
+    // Create empty slots for each row (4 slots per row)
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            const emptySlot = document.createElement('div');
+            emptySlot.className = 'member empty-slot';
+            emptySlot.id = `${containerId}-empty-slot-${i}-${j}`;
+            teamRows[i].appendChild(emptySlot);
         }
-    });
+    }
 
-    membersToRender.forEach(member => {
-        const targetRowIndex = (member.position === "Back") ? 1 : 0;
-        let rowElement = teamRows[targetRowIndex];
+    // Get the formation instance
+    const formation = getFormation();
+    if (!formation) {
+        console.warn("Formation not initialized");
+        return;
+    }
 
-        if (rowElement.children.length >= 4) {
-            const otherRowIndex = (targetRowIndex === 0) ? 1 : 0;
-            if (teamRows[otherRowIndex].children.length < 4) {
-                rowElement = teamRows[otherRowIndex];
-            } else {
-                console.warn(`Cannot place ${member.name} in ${containerId}, both rows are full.`);
-                return;
-            }
-        }
+    // Get all characters from both teams
+    const allCharacters = [...team1Members, ...team2Members];
+
+    // Render each character in their formation position
+    allCharacters.forEach(member => {
+        const pos = formation.getCharacterPosition(member);
+        if (!pos) return;
+
+        const rowElement = teamRows[pos.row];
+        const emptySlot = rowElement.querySelector(`.empty-slot:nth-child(${pos.col + 1})`);
+        if (!emptySlot) return;
 
         const memberElement = member.isHero ? renderHero(member) : renderMember(member);
-        rowElement.appendChild(memberElement);
+        emptySlot.parentNode.replaceChild(memberElement, emptySlot);
 
         if (typeof member.initializeDOMElements === 'function') {
             member.initializeDOMElements();
@@ -372,7 +410,6 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
                     const skillElement = memberElement.querySelector("#" + skillDivId);
                     if (skillElement) {
                         skill.setElement(skillElement);
-                        // Reset overlay reference to ensure we get a fresh one
                         skill.overlay = null;
                     }
                 }
@@ -382,8 +419,6 @@ export function renderTeamMembers(membersToRender, containerId, clearExisting = 
         updateHealth(member); updateMana(member); updateStamina(member);
     });
 }
-
-
 function initiateEventListeners() {
     const navButtonMappings = {
         'heroContentNavButton': 'heroContent', 'mapNavButton': 'map',
@@ -408,8 +443,8 @@ function initiateEventListeners() {
     }
     document.getElementById('loadNavButton').addEventListener('click', openLoadModal);
 
-    document.getElementById('repeat-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); battleRepeatStageCmd(); });
-    document.getElementById('nextStage-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); battleNextStageCmd(); });
+    document.getElementById('repeat-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); repeatStage(); });
+    document.getElementById('nextStage-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); nextStage(); });
     document.getElementById('return-to-map-popup')?.addEventListener('click', () => { hidePopupForBattleActions(); returnToMap(); });
 
     const fleeButton = document.getElementById('flee-battle');
@@ -445,6 +480,27 @@ function handleGlobalKeyDown(event) {
         const activeTab = document.querySelector('.tabcontent.active');
         if (activeTab && activeTab.id === 'battlefield') {
             togglePause();
+        }
+    }
+
+    // Handle skill keybindings (1-0 and -)
+    if (hero && hero.selectedSkills) {
+        const keyToSkillIndex = {
+            'Digit1': 0, 'Digit2': 1, 'Digit3': 2, 'Digit4': 3,
+            'Digit5': 4, 'Digit6': 5, 'Digit7': 6, 'Digit8': 7,
+            'Digit9': 8, 'Digit0': 9, 'Minus': 10
+        };
+
+        const skillIndex = keyToSkillIndex[event.code];
+        if (skillIndex !== undefined && skillIndex < hero.selectedSkills.length) {
+            const skill = hero.selectedSkills[skillIndex];
+            if (skill && skill.type === "active") {
+                // Simulate click on the skill element
+                const skillElement = document.querySelector(`#skill${skillIndex + 1}`);
+                if (skillElement) {
+                    skillElement.click();
+                }
+            }
         }
     }
 }
@@ -487,5 +543,37 @@ function togglePause() {
             else member.startSkills();
         }
     });
+}
+
+export function nextStage() {
+    if (battleController) {
+        battleController.nextStage();
+    }
+}
+
+export function repeatStage() {
+    if (battleController) {
+        battleController.repeatStage();
+    }
+}
+
+export function startBattle(poi, dialogueOptions, stageNum) {
+    if (battleController) {
+        return battleController.startBattle(poi, dialogueOptions, stageNum);
+    }
+}
+
+export function returnToMap() {
+    if (battleController) {
+        battleController.stopBattle(false);
+    }
+    openTab({ currentTarget: document.getElementById('mapNavButton') }, 'map');
+    refreshMapElements();
+}
+
+export function attemptFlee() {
+    if (battleController && battleController.fleeSystem) {
+        battleController.fleeSystem.attemptFlee();
+    }
 }
 

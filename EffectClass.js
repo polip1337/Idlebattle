@@ -1,29 +1,59 @@
-import {mobsClasses, renderTeamMembers, hero, battleStatistics} from './initialize.js';
+import { mobsClasses, renderTeamMembers, hero, battleStatistics } from './initialize.js';
 import Member from './Member.js'
-import {deepCopy} from './Render.js';
-
+import { deepCopy } from './Render.js';
+import {updateHealth,updateMana,updateStamina} from './Render.js';
 class EffectClass {
-    constructor(target, effect) {
+    constructor(target, effect, caster = null) { // Caster can be passed for effects like Taunt
         this.effect = deepCopy(effect);
         this.target = target;
+        this.caster = caster; // Store the caster
         this.originalValue = 0;
+        this.originalStats = {};
         this.timer = null;
         this.startTime = null;
         this.remainingTime = null;
-        this.render = true;
-        if (effect.stackMode == "duration" && this.isAlreadyApplied(effect, target)) {
+        this.render = true; // Most effects should be rendered unless they are instant one-offs
+        this.isPassive = effect.duration === -1;
+        this.isPaused = false;
+        this.pauseStartTime = null;
+        if(!this.effect.icon)
+            if(this.effect.type =="buff"){
+                this.effect.icon = "Media/UI/buff.svg"
+            }
+            else{
+                this.effect.icon = "Media/UI/debuff.svg"
+            }
+
+        // One-shot effects that don't need timers or rendering
+        if (['CooldownReduction', 'RestoreResource', 'Steal', 'Teleport', 'Summon'].includes(this.effect.subType)) {
+            this.render = false;
+        }
+
+        if (this.isPassive) {
+            // For passive effects, just apply and don't set up timers
+            this.applyEffect(effect);
+            if (this.render && this.effect.icon) {
+                this.renderBuff();
+                this.updateTooltip();
+            }
+        } else if (effect.stackMode === "duration" && this.isAlreadyApplied(effect, target)) {
             this.extendTimer(effect.duration);
-        } else if (effect.stackMode == "refresh" && this.isAlreadyApplied(effect, target)) {
+        } else if (effect.stackMode === "refresh" && this.isAlreadyApplied(effect, target)) {
             this.refreshTimer();
         } else {
             this.applyEffect(effect);
-            if (this.render) {
+            if (this.render ) {
+
                 this.renderBuff();
+            }
+            if (this.effect.duration > 0) { // Only start timers for effects with a positive duration
                 this.startTimer();
                 this.startTooltipTimer();
+            } else { // Handle instant (duration: 0) effects
+                if (!this.render) this.remove(); // If not rendered, remove immediately after applying.
             }
-
         }
+        this.target.effects.push(this);
     }
 
     renderBuff() {
@@ -37,368 +67,589 @@ class EffectClass {
         this.element.appendChild(icon);
         this.element.appendChild(this.tooltip);
         document.querySelector(`#${this.target.memberId} .effects`).appendChild(this.element);
-
     }
 
     startTimer() {
-        this.startTime = Date.now(); // Record the start time
+        if (this.isPassive || this.isPaused || this.effect.duration <= 0) return;
+
+        this.startTime = Date.now();
         this.timer = setTimeout(() => {
             this.remove();
-        }, this.effect.duration * 1000); // Convert duration to milliseconds
+        }, this.effect.duration * 1000);
 
-        this.updateTooltip(); // Update tooltip initially
+        this.updateTooltip();
     }
 
     getTimeLeft() {
-        if (this.timer === null) {
-            return 0; // No timer set, return 0
+        if (this.timer === null || this.isPassive) {
+            return Infinity; // Passives don't have a time limit
         }
-        const elapsed = (Date.now() - this.startTime) / 1000; // Time elapsed in seconds
-        const timeLeft = this.effect.duration - elapsed; // Calculate remaining time
-        return timeLeft > 0 ? timeLeft : 0; // Ensure time left is non-negative
+        if (this.effect.duration === 0) {
+            return 0;
+        }
+        const elapsed = (Date.now() - this.startTime) / 1000;
+        const timeLeft = this.effect.duration - elapsed;
+        return timeLeft > 0 ? timeLeft : 0;
     }
 
     extendTimer(additionalTime) {
         var otherEffect = this.getAlreadyApplied(this.effect, this.target);
-        const timeLeft = otherEffect.getTimeLeft();
+        if (!otherEffect) return;
 
-        otherEffect.effect.duration = timeLeft + additionalTime; // Add the additional time
-        otherEffect.startTime = Date.now(); // Reset the start time
-        otherEffect.setTimer(otherEffect.effect.duration); // Restart the timer with the new duration
-        otherEffect.updateTooltip(); // Update the tooltip
+        const timeLeft = otherEffect.getTimeLeft();
+        otherEffect.effect.duration = timeLeft + additionalTime;
+        otherEffect.startTime = Date.now();
+        otherEffect.setTimer(otherEffect.effect.duration);
+        otherEffect.updateTooltip();
     }
 
     refreshTimer() {
         var otherEffect = this.getAlreadyApplied(this.effect, this.target);
-        otherEffect.startTime = Date.now(); // Reset the start time
-        otherEffect.setTimer(otherEffect.effect.duration); // Restart the timer with the new duration
-        otherEffect.updateTooltip(); // Update the tooltip
+        if (!otherEffect) return;
+
+        otherEffect.startTime = Date.now();
+        otherEffect.setTimer(otherEffect.effect.duration);
+        otherEffect.updateTooltip();
     }
 
     setTimer(duration) {
         if (this.timer !== null) {
             clearTimeout(this.timer);
         }
-
+        if (duration <= 0) {
+            this.remove();
+            return;
+        }
         this.timer = setTimeout(() => {
             this.remove();
-        }, duration * 1000); // Convert duration to milliseconds
+        }, duration * 1000);
     }
 
     isAlreadyApplied(effect, target) {
-        const existingEffect = target.effects.find(e => e.effect.name === effect.name);
-        return existingEffect !== undefined;
+        return target.effects.some(e => e.effect.id === effect.id);
     }
 
     getAlreadyApplied(effect, target) {
-        const existingEffect = target.effects.find(e => e.effect.name === effect.name);
-        return existingEffect;
+        return target.effects.find(e => e.effect.id === effect.id);
     }
 
     startTooltipTimer() {
-        this.timerInterval = setInterval(() => {
+        if (this.isPassive || this.isPaused || this.effect.duration <= 0) return;
 
+        this.tooltipInterval = setInterval(() => {
             this.updateTooltip();
         }, 1000);
     }
 
-    applyEffect(effect) {
-        switch (this.effect.subType) {
-            case 'Barrier':
-                this.target.barrier = this.value; // Custom property to handle barrier status
-                break;
-            case 'Blind':
-                // Logic for Blind effect
-                break;
-            case 'Blight':
-                this.createBlightInterval(this.value);
-                break;
-            case 'Bleed':
-            case 'Burn':
-            case 'Poison':
-            case 'WildfireBurn':
-                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
-                break;
-            case 'Charm':
-                // Logic for Charm effect
-                break;
-            case 'Clone':
-                // Logic for Clone effect
-                break;
-            case 'Confusion':
-                // Logic for Confusion effect
-                break;
-            case 'Corrupt':
-                this.corruptInterval = setInterval(() => {
-                    this.target.stats.strength -= 1; // Decrease strength over time
-                    this.target.stats.speed -= 1; // Decrease strength over time
-                    this.target.stats.dexterity -= 1; // Decrease strength over time
-                    this.target.stats.health -= 1; // Decrease strength over time
-                }, 1000);
-                break;
-            case 'Curse':
-                // Logic for Curse effect
-                break;
-            case 'Disarm':
-                this.target.disarmed = true; // Custom property to handle disarm status
-                break;
-            case 'Enrage':
-                this.target.stats.strength += this.value; // Increase strength
-                this.target.stats.dodge -= this.value; // Decrease defense
-                break;
-            case 'Entrap':
-                this.target.entrap = true; // Custom property to handle entrap status
-                break;
-            case 'Fear':
-                // Logic for Fear effect
-                break;
-            case 'flatChange':
-                this.target.stats[this.effect.stat] += this.effect.value;
-                console.log("Applied flat change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
-
-                break;
-            case 'heal':
-                this.target.healDamage(this.effect.value);
-                break;
-            case 'Hex':
-                // Logic for Hex effect
-                break;
-            case 'Hexproof':
-                this.target.hexproof = true; // Custom property to handle hexproof status
-                break;
-            case 'decreaseCooldown':
-                this.render = false;
-
-                this.target.skills.forEach(skill => {
-
-                    if (skill.onCooldown) {
-                        if (skill.effects != undefined && skill.effects.subType == 'decreaseCooldown') {
-
-                        } else {
-                            console.log("Decreasing cooldown on skill: " + skill.name);
-
-                            skill.reduceCooldown(this.effect.value, this.target);
-                        }
+    applyEffect() {
+        // Shared logic for modifier-based effects
+        if (this.effect.modifiers) {
+            this.effect.modifiers.forEach(modifier => {
+                const stat = modifier.stat;
+                if (typeof this.target.stats[stat] !== 'undefined') {
+                    // Store original value only if it hasn't been stored yet for this effect instance
+                    if (typeof this.originalStats[stat] === 'undefined') {
+                        this.originalStats[stat] = this.target.stats[stat];
                     }
-                    {
-                        console.log(skill.name + " is not on cooldown");
+                    if (modifier.flat) {
+                        this.target.stats[stat] += modifier.flat;
+                    }
+                    if (modifier.percentage) {
+                        const baseValue = this.originalStats[stat];
+                        this.target.stats[stat] += baseValue * (modifier.percentage / 100);
+                    }
+                    console.log("STAT CHANGE" + stat + ": OLD: " +this.originalStats[stat] + ". NEW: " + this.target.stats[stat]);
 
+                } else {
+                    console.warn(`Stat '${stat}' not found on target '${this.target.name}' for effect '${this.effect.name}'.`);
+                }
+            });
+        }
+
+        switch (this.effect.subType) {
+            case 'Modifiers':
+                // Handled by the shared logic above
+                break;
+
+            case 'AreaEffect':
+                console.log(`'${this.effect.name}' (AreaEffect) triggered. Zone placement logic is handled by the game engine.`);
+                break;
+
+            case 'DoT':
+                // Also handles the DoT part of composite effects like 'scaldedDebuff'
+                if (this.effect.value > 0) {
+                    this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+                }
+                break;
+
+            case 'flatChange':
+                const stat = this.effect.stat;
+                if (typeof this.target.stats[stat] !== 'undefined') {
+                    this.originalStats[stat] = this.target.stats[stat];
+                    this.target.stats[stat] += this.effect.value;
+                }
+                break;
+
+            case 'AreaDebuff':
+                // This effect applies another effect. Assumes the parent skill/ability handles targeting the area.
+               /* const effectToApply = allEffects[this.effect.effectToApply];
+                if (effectToApply) {
+                    new EffectClass(this.target, effectToApply, this.caster);
+                } else {
+                    console.warn(`Effect to apply '${this.effect.effectToApply}' not found.`);
+                }
+                this.render = false; // The main effect doesn't render, the sub-effect does.*/
+                break;
+
+            case 'DelayedDamage':
+                // The damage is dealt upon removal/expiration in revertEffect. Nothing to do here.
+                break;
+
+            case 'CooldownReduction':
+                this.target.skills.forEach(skill => {
+                    if (skill.onCooldown) {
+                        skill.reduceCooldown(this.effect.value, this.target);
                     }
                 });
                 break;
-            case 'Invisibility':
-                this.target.invisible = true; // Custom property to handle invisibility status
-                break;
-            case 'Life Drain':
-                this.createLifeDrainInterval(this.value);
-                break;
-            case 'Lifesteal':
-                this.target.lifesteal = this.value; // Custom property to handle lifesteal status
-                break;
-            case 'Mana Burn':
-                // Logic for Mana Burn effect
-                break;
-            case 'Mana Drain':
-                this.createManaDrainInterval(this.value);
-                break;
-            case 'Mark':
-                this.target.marked = true; // Custom property to handle mark status
-                break;
-            case 'Paralyze':
-                // Logic for Paralyze effect
-                break;
-            case 'Petrify':
-                // Logic for Petrify effect
-                break;
-            case 'percentChange':
-                this.target.stats[this.effect.stat] += this.effect.value * this.target.stats[this.effect.stat] / 100;
-                console.log("applied percentage change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
+
+            case 'Fear':
+                if (Math.random() < this.effect.chance) {
+                    this.target.stopSkills(); // Pauses skill cooldowns
+                    console.log(`${this.target.name} is feared and skips their turn.`);
+                }
                 break;
 
-            case 'Purify':
-                this.removeNegativeEffects(); // Method to remove negative effects
+            case 'percentChange':
+                const percStat = this.effect.stat;
+                if (typeof this.target.stats[percStat] !== 'undefined') {
+                    this.originalStats[percStat] = this.target.stats[percStat];
+                    this.target.stats[percStat] *= (1 + this.effect.value / 100);
+                }
                 break;
+
+            case 'Vulnerability':
+                const resStat = `${this.effect.damageType.toLowerCase()}Resistance`;
+                this.originalStats[resStat] = this.target.stats[resStat] || 0;
+                this.target.stats[resStat] = (this.target.stats[resStat] || 0) - this.effect.value;
+                break;
+
+            case 'Invisibility':
+                this.target.invisible = true;
+                break;
+
+            case 'ManaShield':
+                // The damage calculation logic in Member.js would need to check for this effect.
+                this.target.manaShieldActive = true;
+                this.target.manaShieldRatio = this.effect.absorbPercentage;
+                break;
+
+            case 'GuaranteedDodge':
+                this.target.hasGuaranteedDodge = true;
+                break;
+
             case 'Regen':
                 this.createHealOverTimeInterval(this.effect.value, this.target);
                 break;
-            case 'Reflect':
-                this.target.reflect = this.value; // Custom property to handle reflect status
+
+            case 'RestoreResource':
+                if (this.effect.resourceType === 'mana') {
+                    const oldMana = this.target.currentMana;
+                    this.target.currentMana = Math.min(this.target.stats.mana, this.target.currentMana + this.effect.value);
+                    const actualManaRestored = this.target.currentMana - oldMana;
+                    if (this.target.isHero && actualManaRestored > 0) {
+                        battleStatistics.addManaRegenerated(actualManaRestored);
+                    }
+                    updateMana(this.target);
+                } else if (this.effect.resourceType === 'stamina') {
+                    const oldStamina = this.target.currentStamina;
+                    this.target.currentStamina = Math.min(this.target.stats.stamina, this.target.currentStamina + this.effect.value);
+                    const actualStaminaRestored = this.target.currentStamina - oldStamina;
+                    if (this.target.isHero && actualStaminaRestored > 0) {
+                        battleStatistics.addStaminaRegenerated(actualStaminaRestored);
+                    }
+                    updateStamina(this.target);
+                } else if (this.effect.resourceType === 'health') {
+                    const oldHealth = this.target.currentHealth;
+                    this.target.currentHealth = Math.min(this.target.maxHealth, this.target.currentHealth + this.effect.value);
+                    const actualHealthRestored = this.target.currentHealth - oldHealth;
+                    if (this.target.isHero && actualHealthRestored > 0) {
+                        battleStatistics.addTotalHealingReceived(actualHealthRestored);
+                    }
+                    updateHealth(this.target);
+                }
                 break;
-            case 'Silence':
-                // Logic for Silence effect
+
+            case 'Steal':
+                if (this.caster && this.caster.isHero) {
+                    this.caster.addGold(this.effect.value);
+                    console.log(`${this.caster.name} steals ${this.effect.value} gold from ${this.target.name}.`);
+                }
                 break;
-            case 'Sleep':
-                // Logic for Sleep effect
+
+            case 'stealth':
+                this.target.invisible = true;
+                // Modifier logic is handled by shared code at the top.
                 break;
-            case 'summon':
-                this.summon(this.target, this.effect.who, this.effect.limit);
-                break;
+
             case 'Stun':
                 this.target.stopSkills();
                 break;
+
+            case 'Summon':
+                this.summon(this.target, this.effect.who, this.effect.limit);
+                break;
+
             case 'Taunt':
-                // Logic for Taunt effect
-                break;
-            case 'DoT':
-            case 'Bleed':
-            case 'Burn':
-            case 'Poison':
-            case 'WildfireBurn':
-                this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
-                break;
-            case 'delayedDamage':
-                // Store the damage value for later use in revertEffect
-                this.originalValue = this.effect.value;
-                // Check if hero has the Mistwalker Amulet equipped
-                if (hero.equipment.amuletSlot && hero.equipment.amuletSlot.id === 'mistwalkerAmulet') {
-                    console.log(`${this.target.name} is protected by the Mistwalker Amulet`);
-                    this.render = false;
-                    return;
+                if (this.caster) {
+                    this.target.forcedTarget = this.caster;
+                } else {
+                    // Fallback for when caster isn't passed, though it should be.
+                    this.target.forcedTarget = this.caster; // "Caster"
+                    console.warn(`Taunt applied to ${this.target.name} without a specific caster reference.`);
                 }
-                // Don't apply damage immediately - it will be applied in revertEffect if the target stays in combat
                 break;
+
+            case 'Teleport':
+                console.log(`'${this.effect.name}' (Teleport) triggered. Position change is handled by game engine.`);
+                break;
+
+            case 'Trap':
+                console.log(`'${this.effect.name}' (Trap) triggered. Trap placement is handled by game engine.`);
+                break;
+
+            case 'EmpowerNextSpell':
+                this.target.empoweredSpell = {
+                    spellTypes: this.effect.spellTypes,
+                    critChanceBonus: this.effect.critChanceBonus,
+                    damageBonusPercentage: this.effect.damageBonusPercentage,
+                    manaCostIncreasePercentage: this.effect.manaCostIncreasePercentage,
+                };
+                break;
+
+            case 'Dispel':
+                if (this.effect.debuffType) {
+                    // Find and remove all specified debuffs
+                    const debuffsToRemove = this.target.effects.filter(effect => 
+                        this.effect.debuffType.includes(effect.effect.name) && effect.effect.type === 'debuff'
+                    );
+                    debuffsToRemove.forEach(debuff => debuff.remove());
+                }
+                break;
+
+            case 'critChanceBonusNextAttackVsTarget':
+                // Store the caster for later verification
+                this.target.critChanceBonusNextAttackVsTarget = {
+                    bonus: this.effect.modifiers.find(m => m.stat === 'critChanceBonusNextAttackVsTarget').flat,
+                    caster: this.caster
+                };
+                break;
+
+            case 'damageBonusVsDebuffed':
+                if (!this.target.damageBonuses) {
+                    this.target.damageBonuses = [];
+                }
+                this.target.damageBonuses.push({
+                    value: this.effect.value,
+                    condition: 'targetHasDebuffs',
+                    id: this.effect.id
+                });
+                break;
+
+            case 'buffResistanceFlat':
+                // Initialize resistances array if it doesn't exist
+                if (!this.target.stats.resistances) {
+                    this.target.stats.resistances = {};
+                }
+                // Store original value
+                const resType = `${this.effect.damageType.toLowerCase()}`;
+
+                this.originalStats.resistances = this.originalStats.resistances || {};
+                this.originalStats.resistances[resType] = this.target.stats.resistances[resType] || 0;
+                // Apply the flat resistance bonus
+                this.target.stats.resistances[resType] = (this.target.stats.resistances[resType] || 0) + this.effect.value;
+                break;
+
+            case 'onCritTrigger':
+                // Initialize the onCritTriggers array if it doesn't exist
+                if (!this.target.onCritTriggers) {
+                    this.target.onCritTriggers = [];
+                }
+                // Store the trigger effect
+                this.target.onCritTriggers.push({
+                    effectId: this.effect.effectId,
+                    buffData: this.effect.buffData,
+                    caster: this.caster
+                });
+                break;
+
 
             default:
-                console.log(`${this.effect.type},${this.effect.subType} effect not implemented yet.`);
+                console.warn(`Effect subType '${this.effect.subType}' from '${this.effect.name}' is not implemented.`);
         }
-    }
-
-    createDamageOverTimeInterval(damage, damageType, target) {
-        this.interval = setInterval(() => {
-            const finalDamage = target.calculateFinalDamage(damage, damageType);
-            target.takeDamage(finalDamage);
-            if (target.isHero) {
-                battleStatistics.addDamageReceived(damageType, finalDamage);
-                battleStatistics.dotDamage += finalDamage;
-            }
-            this.updateTooltip();
-        }, 1000);
-        //console.log("This Interval id:" + this.interval + damageType);
-    }
-
-    createHealOverTimeInterval(heal, target) {
-        this.interval = setInterval(() => {
-            target.healDamage(heal);
-            this.updateTooltip();
-        }, 1000);
-    }
-
-
-    summon(target, who, limit) {
-        if (target.summons < limit) {
-            var member = new Member(this.deepCopy(mobsClasses[who].name),
-                this.deepCopy(mobsClasses[who].class),
-                this.deepCopy(mobsClasses[who].skills),
-                target.level);
-            member.initialize(target.opposingTeam, target.team, target.team.length + 1);
-            renderTeamMembers([member], 'team2', false);
-            member.skills.forEach(skill => {
-                skill.useSkill(member);
-            });
-
-            target.team.addMembers([member]);
-            target.summons += 1;
-        } else {
-
-        }
-
     }
 
     revertEffect() {
+        // Shared logic for reverting modifiers
+        if (this.effect.modifiers) {
+            this.effect.modifiers.forEach(modifier => {
+                const stat = modifier.stat;
+                if (typeof this.originalStats[stat] !== 'undefined') {
+                    this.target.stats[stat] = this.originalStats[stat];
+                }
+            });
+        }
+
         switch (this.effect.subType) {
-            case 'Barrier':
-                this.target.barrier = 0;
-                break;
-            case 'Blight':
-            case 'Bleed':
-            case 'Burn':
-            case 'Corrupt':
-            case 'Life Drain':
-            case 'Mana Drain':
-            case 'Poison':
-            case 'Regen':
-            case 'WildfireBurn':
-
-                clearInterval(this.interval);
-                //  console.log("Clearing:" + this.interval + this.effect.damageType);
+            case 'Modifiers':
+                // Handled by shared logic above
                 break;
 
-            case 'Disarm':
-                this.target.disarmed = false;
+            case 'AreaEffect':
+                // No state to revert
                 break;
-            case 'Enrage':
-                this.target.stats.strength -= this.value;
-                this.target.stats.defense += this.value;
+
+            case 'DoT':
+                if (this.interval) clearInterval(this.interval);
                 break;
+
             case 'flatChange':
-                this.target.stats[this.effect.stat] -= this.effect.value;
-                console.log("Applied flat change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
+                const stat = this.effect.stat;
+                if (typeof this.originalStats[stat] !== 'undefined') {
+                    this.target.stats[stat] = this.originalStats[stat];
+                }
                 break;
-            case 'percentChange':
-                this.target.stats[this.effect.stat] = this.target.stats[this.effect.stat] / (1 + (this.effect.value / 100));
-                console.log("applied percentage change on " + this.effect.stat + ". New value: " + this.target.stats[this.effect.stat]);
+
+            case 'AreaDebuff':
+                // No state on this effect to revert; the applied sub-effect will revert on its own.
                 break;
-            case 'Stun':
+
+            case 'DelayedDamage':
+                const finalDamage = this.target.calculateFinalDamage(this.effect.value, this.effect.damageType);
+                this.target.takeDamage(finalDamage);
+                break;
+
+            case 'CooldownReduction':
+                // One-shot effect, no revert needed
+                break;
+
+            case 'Fear':
                 this.target.startSkills();
+                break;
+
+            case 'percentChange':
+                const percStat = this.effect.stat;
+                if (typeof this.originalStats[percStat] !== 'undefined') {
+                    this.target.stats[percStat] = this.originalStats[percStat];
+                }
+                break;
+
+            case 'Vulnerability':
+                if (this.originalStats.resistances && this.originalStats.resistances[this.effect.damageType] !== undefined) {
+                    this.target.stats.resistances[this.effect.damageType] = this.originalStats.resistances[this.effect.damageType];
+                }
                 break;
 
             case 'Invisibility':
                 this.target.invisible = false;
                 break;
-            case 'Hexproof':
-                this.target.hexproof = false;
+
+            case 'ManaShield':
+                this.target.manaShieldActive = false;
+                this.target.manaShieldRatio = 0;
                 break;
-            case 'Entrap':
-                this.target.entrap = false;
+
+            case 'GuaranteedDodge':
+                this.target.hasGuaranteedDodge = false;
                 break;
-            case 'delayedDamage':
-                // Only deal damage if the target stayed in combat for the full duration
-                const effectsDiv = document.querySelectorAll('#team1 .effects .debuff div');
-                const hasDeadlyFog = Array.from(effectsDiv).some(effect =>
-                                    effect.textContent.includes('Deadly Fog:'));
-                if(hasDeadlyFog){
-                    const finalDamage = this.target.calculateFinalDamage(this.originalValue, this.effect.damageType);
-                    this.target.takeDamage(finalDamage);
+
+            case 'Regen':
+                if (this.interval) clearInterval(this.interval);
+                break;
+
+            case 'RestoreResource':
+            case 'Steal':
+                // One-shot effects, no revert needed
+                break;
+
+            case 'stealth':
+                this.target.invisible = false;
+                // Modifier reversion is handled by shared logic above.
+                break;
+
+            case 'Stun':
+                this.target.startSkills();
+                break;
+
+            case 'Summon':
+            case 'Teleport':
+            case 'Trap':
+                // One-shot or engine-handled effects, no state to revert on the member
+                break;
+
+            case 'Taunt':
+                if (this.target.forcedTarget === this.caster || this.target.forcedTarget === "Caster") {
+                    this.target.forcedTarget = null;
                 }
-
                 break;
-            // Revert logic for other effects as necessary
-            default:
-                console.log(`${this.effect.type}, ${this.effect.subType} effect revert not implemented yet.`);
-        }
 
+            case 'EmpowerNextSpell':
+                // This effect is typically consumed by a spell, which would call .remove().
+                // If it expires by duration, clear the empowerment flag.
+                if (this.target.empoweredSpell) {
+                    this.target.empoweredSpell = null;
+                }
+                break;
+
+            case 'Dispel':
+                // No state to revert for dispel effects
+                break;
+
+            case 'TargetSpecificCritBonus':
+                // Clear the target-specific crit bonus
+                this.target.critChanceBonusNextAttackVsTarget = null;
+                break;
+
+            case 'damageBonusVsDebuffed':
+                if (this.target.damageBonuses) {
+                    this.target.damageBonuses = this.target.damageBonuses.filter(bonus => bonus.id !== this.effect.id);
+                }
+                break;
+
+            case 'buffResistanceFlat':
+                const resType = `${this.effect.damageType.toLowerCase()}`;
+
+                if (this.originalStats.resistances && this.originalStats.resistances[resType] !== undefined) {
+                    this.target.stats.resistances[resType] = this.originalStats.resistances[resType];
+                }
+                break;
+
+            case 'onCritTrigger':
+                // Remove this effect's critical hit trigger
+                if (this.target.onCritTriggers) {
+                    this.target.onCritTriggers = this.target.onCritTriggers.filter(
+                        trigger => trigger.caster !== this.caster
+                    );
+                }
+                break;
+
+            default:
+                // No warning needed here as it would have been caught in applyEffect
+        }
+    }
+
+
+    createDamageOverTimeInterval(damage, damageType, target) {
+        this.interval = setInterval(() => {
+            const finalDamage = target.calculateFinalDamage(damage, damageType);
+            target.takeDamage(finalDamage);
+
+        }, 1000);
+    }
+
+    createHealOverTimeInterval(heal, target) {
+        this.interval = setInterval(() => {
+            target.healDamage(heal);
+
+        }, 1000);
+    }
+
+    summon(caster, who, limit) {
+        const currentSummons = caster.team.members.filter(m => m.isSummon && m.summoner === caster).length;
+        if (currentSummons < limit) {
+            const mobData = mobsClasses[who];
+            if (!mobData) {
+                console.error(`Summon failed: Mob data for '${who}' not found.`);
+                return;
+            }
+            var member = new Member(mobData.name, mobData, mobData.skills, caster.level);
+            member.initialize(caster.opposingTeam, caster.team, caster.team.members.length + 1);
+            member.isSummon = true;
+            member.summoner = caster; // Link summon to its caster
+            renderTeamMembers([member], caster.team.id, false);
+            member.startSkills();
+
+            caster.team.addMembers([member]);
+        } else {
+            console.log(`${caster.name} cannot summon more ${who}, limit of ${limit} reached.`);
+        }
     }
 
     updateTooltip() {
-        const timeLeft = Math.floor(this.getTimeLeft());
-        this.tooltip.textContent = `${this.effect.name}: ${timeLeft} seconds left`; // Update tooltip content
+        if (!this.tooltip) return;
+        let tooltipText = `<b>${this.effect.name}</b>`;
+        if (this.effect.description) {
+            tooltipText += `<br>${this.effect.description}`;
+        }
+        if (!this.isPassive && this.effect.duration > 0) {
+            const timeLeft = Math.ceil(this.getTimeLeft());
+            tooltipText += `<br><i>${timeLeft}s remaining</i>`;
+        }
+        this.tooltip.innerHTML = tooltipText;
     }
 
     remove() {
-        clearTimeout(this.timer);
-        clearInterval(this.timerInterval);
+        if (!this.isPassive) {
+            clearTimeout(this.timer);
+            if (this.tooltipInterval) clearInterval(this.tooltipInterval);
+            if (this.interval) clearInterval(this.interval);
+        }
         this.revertEffect();
         const index = this.target.effects.indexOf(this);
         if (index !== -1) {
             this.target.effects.splice(index, 1);
-        }// Revert the effect when the buff expires
-        if(this.element) this.element.remove();
+        }
+        if (this.element) this.element.remove();
     }
 
-    deepCopy(obj) {
-        if (obj === null || typeof obj !== 'object') {
-            return obj;
+    // Pause/Unpause logic remains the same as it's generic timer management
+    pause() {
+        if (this.isPassive || this.isPaused) return;
+
+        this.isPaused = true;
+        this.pauseStartTime = Date.now();
+
+        if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
         }
-        if (Array.isArray(obj)) {
-            return obj.map(item => this.deepCopy(item));
+        if (this.tooltipInterval) {
+            clearInterval(this.tooltipInterval);
+            this.tooltipInterval = null;
         }
-        const copy = {};
-        for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                copy[key] = this.deepCopy(obj[key]);
-            }
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
         }
-        return copy;
+    }
+
+    unpause() {
+        if (this.isPassive || !this.isPaused) return;
+
+        const pauseDurationMs = Date.now() - this.pauseStartTime;
+        if (this.startTime) {
+            this.startTime += pauseDurationMs;
+        }
+
+        this.isPaused = false;
+
+        if (!this.isPassive && this.effect.duration > 0) {
+            const timeLeft = this.getTimeLeft();
+            this.setTimer(timeLeft);
+            this.startTooltipTimer();
+        }
+
+        if (this.effect.subType === 'Regen') {
+            this.createHealOverTimeInterval(this.effect.value, this.target);
+        } else if (['DoT'].includes(this.effect.subType)) {
+            this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+        }
+    }
+
+    // This is called by the Member's attack logic
+    handleStealthAttack() {
+            this.remove();
+
     }
 }
 

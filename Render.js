@@ -314,7 +314,58 @@ export function updateStatsDisplay(heroInstance) { // Renamed parameter
     renderBattleConsumableBar(heroInstance);
 
 }
+export function renderBattleConsumableBar(heroInstance) {
+    const barContainer = document.getElementById('battleConsumableBar');
+    if (!barContainer) {
+        return;
+    }
+    barContainer.innerHTML = ''; // Clear previous items
 
+    for (let i = 0; i < heroInstance.consumableToolbar.length; i++) {
+        const item = heroInstance.consumableToolbar[i];
+        const slotDiv = document.createElement('div');
+        slotDiv.classList.add('battle-consumable-slot');
+        slotDiv.dataset.slotType = "battleConsumableSlot"; // For drop handler identification
+        slotDiv.dataset.slotIndex = i;
+
+        slotDiv.removeEventListener('dragstart', handleDragStart);
+        slotDiv.removeEventListener('dragover', handleDragOver);
+        slotDiv.removeEventListener('drop', handleDrop);
+        slotDiv.removeEventListener('dblclick', handleBattleConsumableDoubleClick);
+        slotDiv.onmouseenter = null;
+        slotDiv.onmouseleave = null;
+
+        if (item) {
+            slotDiv.dataset.itemId = item.id;
+            slotDiv.dataset.itemSource = "battleConsumableBar"; // Source when dragging FROM this slot
+            slotDiv.draggable = true;
+
+            const img = document.createElement('img');
+            img.src = item.icon;
+            img.alt = item.name;
+            img.draggable = false; // Image itself is not draggable, the slotDiv is
+
+            const tooltip = createItemTooltipElement(item);
+            slotDiv.appendChild(img);
+            slotDiv.appendChild(tooltip);
+
+            slotDiv.addEventListener('dragstart', handleDragStart);
+            slotDiv.addEventListener('dblclick', handleBattleConsumableDoubleClick);
+
+            slotDiv.onmouseenter = (event) => showGeneralTooltip(event, tooltip);
+            slotDiv.onmouseleave = () => hideGeneralTooltip(tooltip);
+        } else {
+            slotDiv.draggable = false;
+            delete slotDiv.dataset.itemId;
+            delete slotDiv.dataset.itemSource;
+        }
+        // Always allow dropping onto battle consumable bar slots
+        slotDiv.addEventListener('dragover', handleDragOver);
+        slotDiv.addEventListener('drop', handleDrop);
+
+        barContainer.appendChild(slotDiv);
+    }
+}
 export function renderSkills(heroInstance) {
     const container = document.querySelector(`#activeSkills`);
     if (!container) return;
@@ -437,7 +488,7 @@ export function createPortrait(member) {
     portraitDiv.className = 'memberPortrait'; // This is the main container for portrait and bars
 
     const img = document.createElement('img');
-    img.src = member.class.portrait || 'Media/UI/defaultPortrait.png'; // Fallback portrait
+    img.src = 'Media/default_portrait.png';
     img.alt = member.name;
     img.className = 'memberPortraitImage';
 
@@ -945,58 +996,6 @@ function handleDrop(event) {
     draggedItemElement = null;
 }
 
-export function renderBattleConsumableBar(heroInstance) {
-    const barContainer = document.getElementById('battleConsumableBar');
-    if (!barContainer) {
-        return;
-    }
-    barContainer.innerHTML = ''; // Clear previous items
-
-    for (let i = 0; i < heroInstance.consumableToolbar.length; i++) {
-        const item = heroInstance.consumableToolbar[i];
-        const slotDiv = document.createElement('div');
-        slotDiv.classList.add('battle-consumable-slot');
-        slotDiv.dataset.slotType = "battleConsumableSlot"; // For drop handler identification
-        slotDiv.dataset.slotIndex = i;
-
-        slotDiv.removeEventListener('dragstart', handleDragStart);
-        slotDiv.removeEventListener('dragover', handleDragOver);
-        slotDiv.removeEventListener('drop', handleDrop);
-        slotDiv.removeEventListener('dblclick', handleBattleConsumableDoubleClick);
-        slotDiv.onmouseenter = null;
-        slotDiv.onmouseleave = null;
-
-        if (item) {
-            slotDiv.dataset.itemId = item.id;
-            slotDiv.dataset.itemSource = "battleConsumableBar"; // Source when dragging FROM this slot
-            slotDiv.draggable = true;
-
-            const img = document.createElement('img');
-            img.src = item.icon;
-            img.alt = item.name;
-            img.draggable = false; // Image itself is not draggable, the slotDiv is
-
-            const tooltip = createItemTooltipElement(item);
-            slotDiv.appendChild(img);
-            slotDiv.appendChild(tooltip);
-
-            slotDiv.addEventListener('dragstart', handleDragStart);
-            slotDiv.addEventListener('dblclick', handleBattleConsumableDoubleClick);
-
-            slotDiv.onmouseenter = (event) => showGeneralTooltip(event, tooltip);
-            slotDiv.onmouseleave = () => hideGeneralTooltip(tooltip);
-        } else {
-            slotDiv.draggable = false;
-            delete slotDiv.dataset.itemId;
-            delete slotDiv.dataset.itemSource;
-        }
-        // Always allow dropping onto battle consumable bar slots
-        slotDiv.addEventListener('dragover', handleDragOver);
-        slotDiv.addEventListener('drop', handleDrop);
-
-        barContainer.appendChild(slotDiv);
-    }
-}
 
 // Named handler for double click on battle bar consumables
 function handleBattleConsumableDoubleClick(event) {

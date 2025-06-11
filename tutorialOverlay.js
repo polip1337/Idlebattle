@@ -1,3 +1,4 @@
+import mapTour from './mapTour.js';
 // Tutorial overlay configuration
 const TUTORIAL_SCREENS = {
     'map': {
@@ -21,47 +22,28 @@ const TUTORIAL_SCREENS = {
 class TutorialOverlay {
     constructor() {
         this.visitedScreens = {};
-        this.createOverlayContainer();
-        this.setupEventListeners();
     }
 
-    createOverlayContainer() {
-        this.overlayContainer = document.createElement('div');
-        this.overlayContainer.className = 'tutorial-overlay hidden';
-        this.overlayContainer.innerHTML = '<img src="" alt="Tutorial Overlay">';
-        document.body.appendChild(this.overlayContainer);
-    }
 
-    setupEventListeners() {
-        this.overlayContainer.addEventListener('click', () => {
-            this.hideOverlay();
-        });
-    }
 
     showOverlay(screenId) {
         if (!TUTORIAL_SCREENS[screenId]) return;
         
-        const screen = TUTORIAL_SCREENS[screenId];
         if (this.visitedScreens[screenId]) return;
+        mapTour.startTour();
 
-        const img = this.overlayContainer.querySelector('img');
-        img.src = screen.image;
-        this.overlayContainer.classList.remove('hidden');
-        
-        // Mark screen as visited
+
         this.visitedScreens[screenId] = true;
     }
 
     hideOverlay() {
         this.overlayContainer.classList.add('hidden');
     }
-
     checkAndShowTutorial(screenId) {
         if (!this.visitedScreens[screenId]) {
             this.showOverlay(screenId);
         }
     }
-
     // New methods for save/load integration
     getSerializableData() {
         return {

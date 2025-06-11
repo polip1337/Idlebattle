@@ -1,0 +1,81 @@
+/* Custom styling for the map tour */
+.driver-popover {
+    background-color: rgba(26, 20, 16, 0.95) !important;
+    border: 1px solid #4a3c2b !important;
+    color: #e0d3c3 !important;
+    font-family: inherit !important;
+    max-width: 300px !important;
+}
+
+.driver-popover-title {
+    color: #ffd700 !important;
+    font-size: 1.2em !important;
+    margin-bottom: 8px !important;
+}
+
+.driver-popover-description {
+    color: #e0d3c3 !important;
+    font-size: 1em !important;
+    line-height: 1.4 !important;
+}
+
+.driver-popover-footer {
+    border-top: 1px solid #4a3c2b !important;
+    padding-top: 10px !important;
+    margin-top: 10px !important;
+}
+
+.driver-popover-progress-text {
+    color: #e0d3c3 !important;
+}
+
+.driver-popover-btn {
+    background-color: #4a3c2b !important;
+    color: #e0d3c3 !important;
+    border: 1px solid #6b5b4a !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease !important;
+}
+
+.driver-popover-btn:hover {
+    background-color: #6b5b4a !important;
+    color: #ffd700 !important;
+}
+
+.driver-popover-btn.driver-disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+.driver-popover-arrow {
+    border-color: #4a3c2b !important;
+}
+
+.driver-popover-arrow::after {
+    border-color: rgba(26, 20, 16, 0.95) !important;
+}
+
+/* Tour button styling */
+.tour-button {
+    background-color: #4a3c2b;
+    color: #e0d3c3;
+    border: 1px solid #6b5b4a;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.tour-button:hover {
+    background-color: #6b5b4a;
+    color: #ffd700;
+    transform: translateY(-1px);
+}
+
+.tour-button:active {
+    transform: translateY(1px);
+} 

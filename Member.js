@@ -8,7 +8,7 @@ class Member {
 
         this.name = name;
         this.classType = classInfo.name;
-        this.classId = classInfo.id;
+        this.classId = classInfo.combina;
         this.class = classInfo; // This should be the raw class definition object
         this.team = team;
         this.opposingTeam = opposingTeam;
@@ -21,7 +21,15 @@ class Member {
         this.position = this.positions ? this.positions[0] : "Front";
         this.dead = false;
         this.goldDrop = classInfo.goldDrop || 0;
-
+        this.isSummon = false; // New field to track if this member is a summon
+        this.forcedTarget = null; // Add forced target property
+        this.damageBonuses = [];
+        // Initialize critical hit stats if not present
+        if (!this.stats.critChance) this.stats.critChance = 5; // Base 5% crit chance
+        if (!this.stats.critDamageMultiplier) this.stats.critDamageMultiplier = 2.0; // 200% damage on crit
+        if (!this.stats.blockChance) this.stats.blockChance = 5; // Base 5% block chance
+        this.stats.toHit = 0;
+        this.stats.toDodge = 0;
         this.currentHealth = this.stats.vitality * 10;
         this.maxHealth = this.stats.vitality * 10;
         this.currentMana = this.stats.mana;
@@ -145,7 +153,34 @@ class Member {
             console.log("Self targeted");
             return true;
         }
+
+        // Check for guaranteed dodge
+        if (defender.hasGuaranteedDodge) {
+            battleLog.log(`${defender.name} dodged the attack with Phased!`);
+            battleStatistics.addSuccessfulDodge();
+            defender.hasGuaranteedDodge = false; // Remove the dodge after use
+            
+            // Remove the GuaranteedDodge effect
+            const dodgeEffect = defender.effects.find(effect => effect.effect.subType === 'GuaranteedDodge');
+            if (dodgeEffect) {
+                dodgeEffect.remove();
+            }
+            
+            return false;
+        }
+
         var hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1) + this.stats.accuracy - defender.stats.dodge;
+        
+        // Add source's toHit modifiers from effects
+        if (this.stats.toHit != undefined) {
+                hitChance += this.stats.toHit;
+            }
+
+        // Subtract defender's toHit modifiers from effects
+        if (defender.stats.toDodge != undefined) {
+            hitChance += defender.stats.toDodge;
+        }
+
         if (skillModifier != undefined) {
             hitChance += skillModifier;
         }
@@ -160,36 +195,129 @@ class Member {
     }
 
     performAttack(member, target, skill, isHero = false) {
-        if (this.calculateHitChance(target, skill.toHit)) {
+        // Handle forced target if set
+        const actualTarget = this.forcedTarget || target;
+
+       
+
+        // Check if target is on the same team
+        if (actualTarget.team === this.team) {
+            // Always apply healing to allies
+             // Handle effects that apply to both allies and enemies
             if (skill.effects) {
-                new EffectClass(target, skill.effects);
+                new EffectClass(actualTarget, skill.effects, this);
                 skill.gainExperience(10); // Award experience for effect application
             }
-
-            if (skill.damageType && skill.damage != 0) {
-                const damage = skill.calculateDamage(this);
-                const finalDamage = target.calculateFinalDamage(damage, skill.damageType);
-
-                target.takeDamage(finalDamage);
-                if (this.isHero) { // Check if the attacker is the hero
-                    skill.gainExperience(finalDamage);
-                    battleStatistics.addDamageDealt(skill.damageType, finalDamage);
-                }
-                if (target.isHero) { // Check if the target is the hero
-                    battleStatistics.addDamageReceived(skill.damageType, finalDamage);
-                }
-
-                battleLog.log(this.name + ` used ${skill.name} on ${target.name} dealing ` + finalDamage + ' damage.');
-            }
             if (skill.heal) {
-                skill.gainExperience(skill.heal);
-                target.healDamage(skill.heal);
-                battleLog.log(target.name + ' Healed for ' + skill.heal);
+                const healAmount = skill.heal;
+                actualTarget.healDamage(healAmount);
+                skill.gainExperience(healAmount);
+                battleLog.log(`${this.name} used ${skill.name} to heal ${actualTarget.name} for ${healAmount} health.`);
+            }
+        } else {
+            // For enemies, check hit chance before applying damage
+            if (this.calculateHitChance(actualTarget, skill.toHit)) {
+                 // Handle effects that apply to both allies and enemies
+                if (skill.effects) {
+                    new EffectClass(actualTarget, skill.effects, this);
+                    skill.gainExperience(10); // Award experience for effect application
+                }
+                if (skill.damageType && skill.damage != 0) {
+                    const damage = skill.calculateDamage(this,actualTarget);
+                    const finalDamage = actualTarget.calculateFinalDamage(damage, skill.damageType,this);
+
+                    // Track simultaneous hits for multi-target skills
+                    if (skill.targetCount && skill.targetCount > 1) {
+                        battleStatistics.addEnemiesHitSimultaneously(skill.targetCount);
+                    }
+
+                    // Track minion damage
+                    if (this.isSummon) {
+                        battleStatistics.addDamageBySummons(finalDamage);
+                    }
+                    this.effects
+                        .filter(effect => effect.effect.id === 'stealth')
+                        .forEach(effect => effect.handleStealthAttack());
+
+                    actualTarget.takeDamage(finalDamage);
+                    if (this.isHero) { // Check if the attacker is the hero
+                        skill.gainExperience(finalDamage);
+                        battleStatistics.addDamageDealt(skill.damageType, finalDamage, skill.tags || []);
+                    }
+                    if (actualTarget.isHero) { // Check if the target is the hero
+                        battleStatistics.addDamageReceived(skill.damageType, finalDamage);
+                    }
+
+                    battleLog.log(this.name + ` used ${skill.name} on ${actualTarget.name} dealing ` + finalDamage + ' damage.');
+                }
             }
         }
     }
 
-    calculateFinalDamage(damage, damageType) {
+    calculateFinalDamage(damage, damageType,attacker = null) {
+        // Check for critical hit first
+        const isCrit = this.checkCriticalHit(attacker);
+        if (isCrit) {
+            damage *= this.stats.critDamageMultiplier;
+            battleLog.log(`${this.name} landed a critical hit!`);
+            if (this.isHero) {
+                battleStatistics.addCriticalHit(damage);
+            }
+
+            // Handle onCritTrigger effects
+            if (this.onCritTriggers && this.onCritTriggers.length > 0) {
+                this.onCritTriggers.forEach(trigger => {
+                    // Create the effect based on the trigger data
+                    const effectData = {
+                        id: trigger.effectId,
+                        ...trigger.buffData,
+                        caster: trigger.caster
+                    };
+                    new EffectClass(this, effectData, trigger.caster);
+                });
+            }
+
+            // Trigger OnCriticalHit effects
+            if (this.onCriticalHitEffects && this.onCriticalHitEffects.length > 0) {
+                this.onCriticalHitEffects.forEach(trigger => {
+                    // Apply each effect in the trigger's effects array
+                    if (Array.isArray(trigger.effects)) {
+                        trigger.effects.forEach(effect => {
+                            new EffectClass(this, effect, trigger.caster);
+                        });
+                    } else {
+                        new EffectClass(this, trigger.effects, trigger.caster);
+                    }
+                });
+            }
+        }
+
+        // Handle mana shield damage first if active
+        if (this.manaShieldActive) {
+            const manaDamage = damage; // Full damage to mana
+            const manaCost = Math.ceil(manaDamage * (this.manaShieldRatio)); // Convert damage to mana cost
+            
+            if (this.currentMana >= manaCost) {
+                this.currentMana -= manaCost;
+                if (this.isHero) {
+                    battleStatistics.addManaUsed(manaCost);
+                }
+                updateMana(this);
+                battleLog.log(`${this.name}'s mana shield absorbed ${manaDamage} damage, costing ${manaCost} mana.`);
+                return 0; // No health damage taken
+            } else {
+                // Not enough mana to fully absorb
+                const remainingDamage = Math.ceil(damage * (1 - (this.currentMana / manaCost)));
+                this.currentMana = 0;
+                if (this.isHero) {
+                    battleStatistics.addManaUsed(this.currentMana);
+                }
+                updateMana(this);
+                battleLog.log(`${this.name}'s mana shield was depleted, taking ${remainingDamage} damage.`);
+                damage = remainingDamage;
+            }
+        }
+
         if (damageType != 'Bleed') {
             damage = this.applyBlock(damage);
             damage = this.applyArmor(damage);
@@ -228,6 +356,19 @@ class Member {
 
     takeDamage(damage) {
         if (!this.dead) {
+            // Track overkill damage
+            if (this.currentHealth < damage && !this.isHero) {
+                const overkillAmount = damage - this.currentHealth;
+                battleStatistics.addOverkillDamage(overkillAmount);
+            }
+
+            // Track lifesteal
+            if (this.lifesteal && !this.isHero) {
+                const healthStolen = Math.floor(damage * (this.lifesteal / 100));
+                battleStatistics.addHealthStolen(healthStolen);
+                this.healDamage(healthStolen);
+            }
+
             this.currentHealth -= damage;
             if (this.currentHealth < 0) {
                 this.currentHealth = 0; // Ensure health doesn't go negative before death check
@@ -291,7 +432,7 @@ class Member {
         if (this.isHero && updateHeroUI) { // Only update UI if it's the hero and flag is true
             updateExpBarText(this.classType + " Level: " + this.level);
              if (evolutionService && [2, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096].includes(this.level)) {
-                evolutionService.levelThresholdReached();
+                //evolutionService.levelThresholdReached();
             }
             updateHealth(this);
             updateMana(this);
@@ -323,14 +464,14 @@ class Member {
     handleRegeneration() {
         if (this.currentHealth <= 0) return;
 
-        const manaRegenAmount = this.stats.manaRegen || 0;
+        const manaRegenAmount = this.stats.manaRegen || 1;
         if (this.currentMana < this.stats.mana) {
             this.currentMana = Math.min(this.stats.mana, this.currentMana + manaRegenAmount);
             if (this.isHero && manaRegenAmount > 0) battleStatistics.addManaRegenerated(manaRegenAmount);
             updateMana(this);
         }
 
-        const staminaRegenAmount = Math.floor(0.1 * this.stats.vitality) || 0;
+        const staminaRegenAmount = Math.floor(0.1 * this.stats.vitality) || 1;
         if (this.currentStamina < this.stats.stamina) {
             this.currentStamina = Math.min(this.stats.stamina, this.currentStamina + staminaRegenAmount);
             if (this.isHero && staminaRegenAmount > 0) battleStatistics.addStaminaRegenerated(staminaRegenAmount);
@@ -352,7 +493,7 @@ class Member {
             return {
                 name: this.name,
                 classType: this.classType, // Used to find base definition on load
-                classId: this.classId,
+                combination: this.combination,
                 level: this.level,
                 currentHealth: this.currentHealth,
                 currentMana: this.currentMana,
@@ -389,10 +530,17 @@ class Member {
 
             this.experience = data.experience || 0;
             this.experienceToLevel = data.experienceToLevel || 100;
+             if (this.constructor.name === 'Companion') {
+                            return;
+            }
+            // Skip skill progression for companions
+            if (this.constructor.name === 'Companion') {
+                return;
+            }
 
             // If non-heroes have skill progression (uncommon for standard mobs)
             if (data.skillProgression && data.skillProgression.length > 0 && allSkillsLookup) {
-                const baseSkillsFromClass = allMobClasses[this.classId].skills.map(skillId => deepCopy(allSkillsLookup[skillId]));
+                const baseSkillsFromClass = allMobClasses[this.combination].skills.map(skillId => deepCopy(allSkillsLookup[skillId]));
                 this.skills = baseSkillsFromClass.map(baseSkillData => {
                      const skillInstance = new Skill(baseSkillData, baseSkillData.effects);
                      const savedProg = data.skillProgression.find(sp => sp.name === skillInstance.name);
@@ -412,13 +560,48 @@ class Member {
                 }
             }
 
-
             // Note: For most enemy members, their `memberId`, `team`, `opposingTeam`, `element`
             // would be re-initialized when they are added to a battle/stage.
             // This `restoreFromData` would primarily be for stats and health if saved mid-combat.
         }
 
+    checkCriticalHit(attacker) {
+        // Base crit chance is 5% + 0.1% per point of dexterity
+        let critChance = this.stats.critChance;
 
+        // Check for target-specific crit bonus
+        if (this.critChanceBonusNextAttackVsTarget) {
+            const bonus = this.critChanceBonusNextAttackVsTarget;
+            // Only apply the bonus if this is the original caster
+            if (bonus.caster == attacker) {
+                critChance += bonus.bonus;
+                // Remove the effect after use
+                const effect = this.effects.find(e =>
+                    e.effect.modifiers && 
+                    e.effect.modifiers.some(m => m.stat === 'critChanceBonusNextAttackVsTarget')
+                );
+                if (effect) {
+                    effect.remove();
+                }
+            }
+        }
+
+        return Math.random() * 100 < critChance;
+    }
+
+    hasDebuffName(debuffNames) {
+        if (!Array.isArray(debuffNames)) {
+            debuffNames = [debuffNames];
+        }
+        return this.effects.some(effect => 
+            effect.effect.type === 'debuff' &&
+            debuffNames.includes(effect.effect.name)
+        );
+    }
+
+    hasDebuff() {
+        return this.effects.some(effect => effect.effect.type === 'debuff');
+    }
 }
 
 export default Member;
