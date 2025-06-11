@@ -1,4 +1,6 @@
 import { openTab } from './navigation.js';
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 class MapTour {
     constructor() {
@@ -55,11 +57,6 @@ class MapTour {
         ];
     }
 
-    async initialize() {
-        // Dynamically import Drive.js
-        const driver = await import('https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js');
-        this.driver = driver.default;
-    }
 
     startTour() {
         if (!this.driver) {
