@@ -5,6 +5,7 @@ import { battleController } from './initialize.js';
 import { team1, team2, battleLog, hero } from './initialize.js'; // No more stage/area specific imports from initialize for map UI
 import { questSystem } from './questSystem.js';
 import { renderHero, updateHealth, updateMana, updateStamina, updateHeroMapStats } from './Render.js';
+import mapTour from './mapTour.js';
 
 
 export let mapsData = null;
@@ -371,6 +372,16 @@ export function initializeMap() {
     expBarClass1El = document.getElementById('exp-bar-class1');
     expBarClass2El = document.getElementById('exp-bar-class2');
     expBarClass3El = document.getElementById('exp-bar-class3');
+
+    // Initialize the map tour
+    mapTour.initialize().then(() => {
+        const tourButton = document.getElementById('start-map-tour');
+        if (tourButton) {
+            tourButton.addEventListener('click', () => {
+                mapTour.startTour();
+            });
+        }
+    });
 
     // Start regeneration interval (every 2 seconds)
     if (window.regenerationInterval) {

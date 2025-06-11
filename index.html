@@ -26,6 +26,7 @@
     <link href="style/announcements.css" rel="stylesheet" type="text/css">
     <link href="style/reputation.css" rel="stylesheet" type="text/css">
     <link href="style/tutorialOverlay.css" rel="stylesheet" type="text/css">
+    <link href="style/mapTour.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="home-screen active" id="home-screen">
@@ -561,6 +562,7 @@
     <div style="display: flex; width: 100%; height: 100%; gap: 10px;">
         <!-- Column 1: Hero Portrait & Nav -->
         <div style="flex: 0 0 220px; display: flex; flex-direction: column; gap: 10px; background-color: rgba(26, 20, 16, 0.5); padding: 10px; border-radius: 8px; border: 1px solid #4a3c2b;">
+            <button id="start-map-tour" class="tour-button">Start Map Tour</button>
             <div id="hero-portrait-container">
                 <!-- Hero portrait img can be added here by JS -->
             </div>
@@ -847,5 +849,6 @@
 <script type="module" src="Scripts/checkUntrackedEffects.js"></script>
 <script type="module" src="debug.js"></script>
 <script type="module" src="classChange.js"></script>
+<script type="module" src="mapTour.js"></script>
 </body>
 </html>
