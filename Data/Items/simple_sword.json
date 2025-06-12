@@ -2,6 +2,7 @@
     "id": "simple_sword_001",
     "name": "Simple Sword",
     "type": "weapon",
+    "tags": ["sword", "melee"],
     "slot": "weaponSlot",
     "icon": "Media/Items/Weapons/sword_common.svg",
     "description": "A basic sword, better than fists.",

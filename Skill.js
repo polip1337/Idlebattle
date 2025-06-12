@@ -62,13 +62,11 @@ class Skill {
                 }
 
                 // Handle conditional bonuses
-                switch (bonus.condition) {
-                    case 'targetHasDebuffs':
-                        if (target.hasDebuff()) {
-                            damage *= (1 + bonus.value / 100);
-                        }
-                        break;
-                    // Add more conditions here as needed
+                if (typeof bonus.condition === 'function') {
+                    // Execute the condition function
+                    if (bonus.condition(member, target)) {
+                        damage *= (1 + bonus.value / 100);
+                    }
                 }
             });
         }
@@ -131,23 +129,13 @@ class Skill {
         effectsToApply.forEach(effect => {
             if (!effect) return;
 
-            // Create a proper effect object for EffectClass
-            const effectObject = {
-                name: this.name,
-                type: effect.type || 'passive',
-                subType: effect.subtype || effect.subType,
-                stat: effect.stat,
-                value: effect.value,
-                duration: -1, // Unlimited duration for passives
-                icon: this.icon,
-                stackMode: "refresh", // Passives should refresh rather than stack
-                id: effect.id, // Include effect ID if present
-                condition: effect.condition, // Include condition if present
-                description: effect.description // Include description if present
-            };
-
+            effect.name = this.name;
+            effect.icon = this.icon;
+            effect.description = this.description;
+            effect.duration = -1;
+            effect.type = "buff";
             // Apply the effect using EffectClass
-            new EffectClass(member, effectObject);
+            new EffectClass(member, effect);
         });
     }
 

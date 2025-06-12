@@ -5,6 +5,15 @@ import {updateHealth,updateMana,updateStamina} from './Render.js';
 class EffectClass {
     constructor(target, effect, caster = null) { // Caster can be passed for effects like Taunt
         this.effect = deepCopy(effect);
+        this.name = effect.name;
+        this.subType = effect.subType;
+        this.stat = effect.stat;
+        this.value = effect.value;
+        this.duration = effect.duration;
+        this.icon = effect.icon;
+        this.stackMode = effect.stackMode;
+        this.id = effect.id;
+        this.condition = effect.condition;
         this.target = target;
         this.caster = caster; // Store the caster
         this.originalValue = 0;
@@ -356,18 +365,47 @@ class EffectClass {
                 });
                 break;
 
+            case 'damageBonusConditional':
+                if (!this.target.damageBonuses) {
+                    this.target.damageBonuses = [];
+                }
+                // Convert string function to actual function if needed
+                let conditionFunc = this.effect.condition;
+                if (typeof this.effect.condition === 'string') {
+                    try {
+                        conditionFunc = new Function('member', 'target', `return ${this.effect.condition}`);
+                    } catch (e) {
+                        console.error('Error parsing condition function:', e);
+                        conditionFunc = () => false;
+                    }
+                }
+                this.target.damageBonuses.push({
+                    value: this.effect.value,
+                    condition: conditionFunc,
+                    id: this.effect.id
+                });
+                break;
+
             case 'buffResistanceFlat':
                 // Initialize resistances array if it doesn't exist
                 if (!this.target.stats.resistances) {
                     this.target.stats.resistances = {};
                 }
-                // Store original value
-                const resType = `${this.effect.damageType.toLowerCase()}`;
-
+                // Store original values
                 this.originalStats.resistances = this.originalStats.resistances || {};
-                this.originalStats.resistances[resType] = this.target.stats.resistances[resType] || 0;
-                // Apply the flat resistance bonus
-                this.target.stats.resistances[resType] = (this.target.stats.resistances[resType] || 0) + this.effect.value;
+                
+                // Handle both single resistance and array of resistances
+                const resistances = Array.isArray(this.effect.damageType) ? this.effect.damageType : [this.effect.damageType];
+                const values = Array.isArray(this.effect.value) ? this.effect.value : [this.effect.value];
+                
+                // If values array is shorter than resistances array, use the last value for remaining resistances
+                resistances.forEach((resType, index) => {
+                    const resTypeLower = resType.toLowerCase();
+                    const value = values[Math.min(index, values.length - 1)];
+                    this.originalStats.resistances[resTypeLower] = this.target.stats.resistances[resTypeLower] || 0;
+                    // Apply the flat resistance bonus
+                    this.target.stats.resistances[resTypeLower] = (this.target.stats.resistances[resTypeLower] || 0) + value;
+                });
                 break;
 
             case 'onCritTrigger':
@@ -383,6 +421,16 @@ class EffectClass {
                 });
                 break;
 
+            case 'equipmentStatBonus':
+                // Store original item stat bonuses
+                this.originalStats.itemStatBonuses = deepCopy(this.target.itemStatBonuses || {});
+                
+                // Apply percentage bonus to all equipment stats
+                for (const stat in this.target.itemStatBonuses) {
+                    const bonus = this.target.itemStatBonuses[stat] * (this.effect.value / 100);
+                    this.target.stats[stat] = (this.target.stats[stat] || 0) + bonus;
+                }
+                break;
 
             default:
                 console.warn(`Effect subType '${this.effect.subType}' from '${this.effect.name}' is not implemented.`);
@@ -517,10 +565,15 @@ class EffectClass {
                 break;
 
             case 'buffResistanceFlat':
-                const resType = `${this.effect.damageType.toLowerCase()}`;
-
-                if (this.originalStats.resistances && this.originalStats.resistances[resType] !== undefined) {
-                    this.target.stats.resistances[resType] = this.originalStats.resistances[resType];
+                // Revert all affected resistances
+                if (this.originalStats.resistances) {
+                    const resistances = Array.isArray(this.effect.damageType) ? this.effect.damageType : [this.effect.damageType];
+                    resistances.forEach(resType => {
+                        const resTypeLower = resType.toLowerCase();
+                        if (this.originalStats.resistances[resTypeLower] !== undefined) {
+                            this.target.stats.resistances[resTypeLower] = this.originalStats.resistances[resTypeLower];
+                        }
+                    });
                 }
                 break;
 
@@ -530,6 +583,15 @@ class EffectClass {
                     this.target.onCritTriggers = this.target.onCritTriggers.filter(
                         trigger => trigger.caster !== this.caster
                     );
+                }
+                break;
+
+            case 'equipmentStatBonus':
+                // Revert stats to original values
+                if (this.originalStats.itemStatBonuses) {
+                    for (const stat in this.originalStats.itemStatBonuses) {
+                        this.target.stats[stat] = this.originalStats.itemStatBonuses[stat];
+                    }
                 }
                 break;
 
@@ -581,6 +643,31 @@ class EffectClass {
         if (this.effect.description) {
             tooltipText += `<br>${this.effect.description}`;
         }
+
+        // Add modifier information for passive skills
+        if (this.isPassive && this.effect.modifiers) {
+            tooltipText += '<br><br>Effects:';
+            this.effect.modifiers.forEach(modifier => {
+                const stat = modifier.stat;
+                let modifierText = '';
+                
+                if (modifier.flat) {
+                    const sign = modifier.flat > 0 ? '+' : '';
+                    modifierText += `${sign}${modifier.flat} ${stat}`;
+                }
+                
+                if (modifier.percentage) {
+                    if (modifierText) modifierText += ', ';
+                    const sign = modifier.percentage > 0 ? '+' : '';
+                    modifierText += `${sign}${modifier.percentage}% ${stat}`;
+                }
+                
+                if (modifierText) {
+                    tooltipText += `<br>${modifierText}`;
+                }
+            });
+        }
+
         if (!this.isPassive && this.effect.duration > 0) {
             const timeLeft = Math.ceil(this.getTimeLeft());
             tooltipText += `<br><i>${timeLeft}s remaining</i>`;

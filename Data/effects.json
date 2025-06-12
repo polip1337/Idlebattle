@@ -605,8 +605,12 @@
     "id": "damageBonusVsDebuffed",
     "duration": -1
   },
-  "damageBonusVsDebuffed": {
-    "id": "damageBonusVsDebuffed",
-    "duration": -1
+  "changeStats": {
+    "id": "changeStats",
+    "subType": "Modifiers"
+  },
+  "buffResistanceFlat": {
+    "id": "buffResistanceFlat",
+    "subType": "buffResistanceFlat"
   }
 }
