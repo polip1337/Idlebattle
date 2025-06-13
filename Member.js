@@ -1,11 +1,17 @@
+// Member.js
 import {deepCopy, updateExp, updateExpBarText, updateHealth, updateMana, updateStamina} from './Render.js';
 import {battleLog, battleStatistics, evolutionService, hero, allSkillsCache} from './initialize.js';
 import EffectClass from './EffectClass.js';
 import Skill from './Skill.js';
 
+// Helper function for structured logging
+function logCombatEvent(type, data) {
+    const timestamp = new Date().toISOString();
+    console.log(`[COMBAT_LOG] [${timestamp}] [${type}]`, data);
+}
+
 class Member {
     constructor(name, classInfo, skillsSource, level = 1, team = null, opposingTeam = null, isHero = false) {
-
         this.name = name;
         this.classType = classInfo.name;
         this.classId = classInfo.combina;
@@ -28,6 +34,7 @@ class Member {
         if (!this.stats.critChance) this.stats.critChance = 5; // Base 5% crit chance
         if (!this.stats.critDamageMultiplier) this.stats.critDamageMultiplier = 2.0; // 200% damage on crit
         if (!this.stats.blockChance) this.stats.blockChance = 5; // Base 5% block chance
+        if (!this.stats.manaCostReduction) this.stats.manaCostReduction = 0; // Base 0% mana cost reduction
         this.stats.toHit = 0;
         this.stats.toDodge = 0;
         this.currentHealth = this.stats.vitality * 10;
@@ -35,7 +42,8 @@ class Member {
         this.currentMana = this.stats.mana;
         this.currentStamina = this.stats.stamina;
 
-        this.effects = [];
+        // Single source of truth for effects
+        this.effectsMap = new Map(); // Maps effectId -> { effect: EffectClass, type: 'active'|'passive'|'item', source: skill|item }
 
         // Skill instantiation logic
         if (Array.isArray(skillsSource) && skillsSource.length > 0) {
@@ -65,6 +73,16 @@ class Member {
         for (let i = 0; i < initialLevel; i++) { // Loop up to the original desired level
             this.levelUp(false); // Pass false to prevent UI updates during initial setup for non-hero
         }
+
+        this.onSkillUseTriggers = []; // Add this line after other initializations
+        this.onGettingHitTriggers = []; // Initialize onGettingHitTriggers
+
+        logCombatEvent('MEMBER_CREATED', {
+            memberName: this.name,
+            classType: this.classType,
+            initialLevel: initialLevel,
+            isHero: this.isHero,
+        });
     }
 
     initialize(team1, team2, memberId) {
@@ -154,39 +172,61 @@ class Member {
             return true;
         }
 
-        // Check for guaranteed dodge
-        if (defender.hasGuaranteedDodge) {
+        // Check for guaranteed dodge using effectsMap
+        if (defender.getEffects().some(effect => effect.effect.subType === 'GuaranteedDodge')) {
             battleLog.log(`${defender.name} dodged the attack with Phased!`);
             battleStatistics.addSuccessfulDodge();
-            defender.hasGuaranteedDodge = false; // Remove the dodge after use
-            
-            // Remove the GuaranteedDodge effect
-            const dodgeEffect = defender.effects.find(effect => effect.effect.subType === 'GuaranteedDodge');
+            // Find and remove the GuaranteedDodge effect
+            const dodgeEffect = defender.getEffects().find(effect => effect.effect.subType === 'GuaranteedDodge');
             if (dodgeEffect) {
+                logCombatEvent('EFFECT_CONSUMED', {
+                    effectId: dodgeEffect.id,
+                    effectName: dodgeEffect.name,
+                    target: defender.name,
+                    reason: 'GuaranteedDodge used'
+                });
                 dodgeEffect.remove();
             }
-            
+            logCombatEvent('HIT_CHANCE_EVALUATION', {
+                attacker: this.name,
+                defender: defender.name,
+                skillModifier: skillModifier,
+                outcome: 'Dodged',
+                reason: 'GuaranteedDodge active'
+            });
             return false;
         }
 
-        var hitChance = 80 + Math.floor(this.stats.dexterity * 0.1) - Math.floor(defender.stats.dexterity * 0.1) + this.stats.accuracy - defender.stats.dodge;
-        
-        // Add source's toHit modifiers from effects
-        if (this.stats.toHit != undefined) {
-                hitChance += this.stats.toHit;
-            }
+        const accuracy = this.getEffectiveStat('accuracy');
+        const defenderDodge = defender.getEffectiveStat('dodge');
+        const toHit = this.getEffectiveStat('toHit') || 0;
+        const toDodge = defender.getEffectiveStat('toDodge') || 0;
 
-        // Subtract defender's toHit modifiers from effects
-        if (defender.stats.toDodge != undefined) {
-            hitChance += defender.stats.toDodge;
-        }
+        var hitChance = 80 + Math.floor(this.getEffectiveStat('dexterity') * 0.1) -
+                       Math.floor(defender.getEffectiveStat('dexterity') * 0.1) +
+                       accuracy - defenderDodge + toHit + toDodge;
 
         if (skillModifier != undefined) {
             hitChance += skillModifier;
         }
 
         const randomNumber = Math.floor(Math.random() * 101);
-        if (randomNumber <= hitChance) {
+        const hitResult = randomNumber <= hitChance;
+
+        logCombatEvent('HIT_CHANCE_EVALUATION', {
+            attacker: this.name,
+            defender: defender.name,
+            skillModifier: skillModifier,
+            accuracyStat: accuracy,
+            defenderDodgeStat: defenderDodge,
+            toHitStat: toHit,
+            toDodgeStat: toDodge,
+            calculatedHitChance: hitChance,
+            randomNumber: randomNumber,
+            outcome: hitResult ? 'Hit' : 'Miss',
+        });
+
+        if (hitResult) {
             return true;
         }
         battleLog.log(this.name + " Missed " + defender.name + "! Hit chance was: " + hitChance + '%');
@@ -194,11 +234,56 @@ class Member {
         return false;
     }
 
+    _processOnSkillUseTriggers(skill, actualTarget) {
+        const onSkillUseTriggers = this.getEffects().filter(effect =>
+            effect.effect.subType === 'onSkillUseTrigger' || effect.effect.subType === 'stealth'
+        );
+
+        if (onSkillUseTriggers && onSkillUseTriggers.length > 0) {
+            onSkillUseTriggers.forEach(effectInstance => {
+                const trigger = effectInstance.effect; // The value property holds the trigger data
+                // Check if the trigger condition is met
+                let shouldTrigger = true;
+                if (trigger.condition) {
+                    if(trigger.condition == true) {
+                        shouldTrigger = true;
+                    } else {
+                        try {
+                            const conditionFunc = typeof trigger.condition === 'string'
+                                ? new Function('skill', `return ${trigger.condition}`)
+                                : trigger.condition;
+                            shouldTrigger = conditionFunc(skill);
+                        } catch (e) {
+                            console.error('Error evaluating trigger condition:', e);
+                            shouldTrigger = false;
+                        }
+                    }
+                }
+
+                // Only proceed if condition is met and random chance succeeds
+                if (shouldTrigger && Math.random() < trigger.chance) {
+                    // Create the effect based on the trigger data
+                    const effectData = {
+                        id: trigger.effectId,
+                        ...trigger.effectData,
+                        caster: this
+                    };
+                    new EffectClass(actualTarget, effectData, this);
+                    // If this trigger is for removal, remove the original trigger effect after use
+                    if (trigger.remove) {
+                        effectInstance.remove();
+                    }
+                }
+            });
+        }
+    }
+
     performAttack(member, target, skill, isHero = false) {
         // Handle forced target if set
         const actualTarget = this.forcedTarget || target;
 
-       
+        // Process onSkillUse triggers BEFORE the attack
+        const skillUseEffectsToRemove = this._processOnSkillUseTriggers(skill, actualTarget);
 
         // Check if target is on the same team
         if (actualTarget.team === this.team) {
@@ -233,11 +318,10 @@ class Member {
 
                     // Track minion damage
                     if (this.isSummon) {
-                        battleStatistics.addDamageBySummons(finalDamage);
+                        if (this.caster && this.caster.isHero) {
+                            battleStatistics.addDamageBySummons(finalDamage);
+                        }
                     }
-                    this.effects
-                        .filter(effect => effect.effect.id === 'stealth')
-                        .forEach(effect => effect.handleStealthAttack());
 
                     actualTarget.takeDamage(finalDamage);
                     if (this.isHero) { // Check if the attacker is the hero
@@ -252,51 +336,64 @@ class Member {
                 }
             }
         }
+        if(skillUseEffectsToRemove && skillUseEffectsToRemove.length > 0) { 
+            skillUseEffectsToRemove.forEach(effect => effect.remove());
+        }
     }
 
-    calculateFinalDamage(damage, damageType,attacker = null) {
+    calculateFinalDamage(damage, damageType, attacker = null) {
+        let currentDamage = damage;
+        logCombatEvent('FINAL_DAMAGE_CALC_START', {
+            target: this.name,
+            initialDamage: damage,
+            damageType: damageType,
+            attacker: attacker ? attacker.name : 'Unknown',
+        });
+
         // Check for critical hit first
         const isCrit = this.checkCriticalHit(attacker);
         if (isCrit) {
-            damage *= this.stats.critDamageMultiplier;
+            currentDamage *= this.getEffectiveStat('critDamageMultiplier');
             battleLog.log(`${this.name} landed a critical hit!`);
             if (this.isHero) {
-                battleStatistics.addCriticalHit(damage);
+                battleStatistics.addCriticalHit(currentDamage);
             }
+            logCombatEvent('FINAL_CRITICAL_HIT_APPLIED', {
+                target: this.name,
+                attacker: attacker ? attacker.name : 'Unknown',
+                critMultiplier: this.getEffectiveStat('critDamageMultiplier'),
+                damageAfterCrit: currentDamage,
+            });
 
             // Handle onCritTrigger effects
-            if (this.onCritTriggers && this.onCritTriggers.length > 0) {
-                this.onCritTriggers.forEach(trigger => {
-                    // Create the effect based on the trigger data
+            const onCritEffect = this.getEffects().find(effect => effect.effect.subType === 'onCritTrigger');
+            if (onCritEffect) {
+                const trigger = onCritEffect.effect.value;
+                if (trigger) {
                     const effectData = {
                         id: trigger.effectId,
                         ...trigger.buffData,
                         caster: trigger.caster
                     };
-                    new EffectClass(this, effectData, trigger.caster);
-                });
-            }
-
-            // Trigger OnCriticalHit effects
-            if (this.onCriticalHitEffects && this.onCriticalHitEffects.length > 0) {
-                this.onCriticalHitEffects.forEach(trigger => {
-                    // Apply each effect in the trigger's effects array
-                    if (Array.isArray(trigger.effects)) {
-                        trigger.effects.forEach(effect => {
-                            new EffectClass(this, effect, trigger.caster);
-                        });
-                    } else {
-                        new EffectClass(this, trigger.effects, trigger.caster);
-                    }
-                });
+                    logCombatEvent('FINAL_EFFECT_TRIGGERED_ON_CRIT', {
+                        triggerEffectId: onCritEffect.id,
+                        triggerEffectName: onCritEffect.name,
+                        target: this.name,
+                        appliedEffectId: effectData.id,
+                        appliedEffectName: effectData.name || 'Unnamed Triggered Effect',
+                    });
+                    new EffectClass(this, effectData, trigger.caster, skill);
+                }
             }
         }
 
         // Handle mana shield damage first if active
-        if (this.manaShieldActive) {
-            const manaDamage = damage; // Full damage to mana
-            const manaCost = Math.ceil(manaDamage * (this.manaShieldRatio)); // Convert damage to mana cost
-            
+        const manaShieldEffect = this.getEffects().find(effect => effect.effect.subType === 'ManaShield');
+        if (manaShieldEffect) {
+            const manaShieldRatio = manaShieldEffect.effect.ratio || 0;
+            const manaDamage = parseFloat(Number(currentDamage).toFixed(2));;
+            const manaCost = Math.ceil(manaDamage * manaShieldRatio);
+
             if (this.currentMana >= manaCost) {
                 this.currentMana -= manaCost;
                 if (this.isHero) {
@@ -304,30 +401,78 @@ class Member {
                 }
                 updateMana(this);
                 battleLog.log(`${this.name}'s mana shield absorbed ${manaDamage} damage, costing ${manaCost} mana.`);
-                return 0; // No health damage taken
+                logCombatEvent('FINAL_MANA_SHIELD_ABSORBED', {
+                    target: this.name,
+                    manaShieldEffectId: manaShieldEffect.id,
+                    damageAbsorbed: manaDamage,
+                    manaCost: manaCost,
+                    remainingMana: this.currentMana,
+                });
+                return 0;
             } else {
-                // Not enough mana to fully absorb
-                const remainingDamage = Math.ceil(damage * (1 - (this.currentMana / manaCost)));
+                const manaAbsorbedPartial = this.currentMana / manaShieldRatio;
+                const remainingDamage = Math.ceil(currentDamage - manaAbsorbedPartial);
+                const manaConsumed = this.currentMana;
                 this.currentMana = 0;
                 if (this.isHero) {
-                    battleStatistics.addManaUsed(this.currentMana);
+                    battleStatistics.addManaUsed(manaConsumed);
                 }
                 updateMana(this);
                 battleLog.log(`${this.name}'s mana shield was depleted, taking ${remainingDamage} damage.`);
-                damage = remainingDamage;
+                logCombatEvent('MANA_SHIELD_DEPLETED', {
+                    target: this.name,
+                    manaShieldEffectId: manaShieldEffect.id,
+                    damageAbsorbed: manaAbsorbedPartial,
+                    manaConsumed: manaConsumed,
+                    remainingDamageToHealth: remainingDamage,
+                });
+                currentDamage = remainingDamage;
             }
         }
 
         if (damageType != 'Bleed') {
-            damage = this.applyBlock(damage);
-            damage = this.applyArmor(damage);
+            const damageBeforeBlock = currentDamage;
+            currentDamage = this.applyBlock(currentDamage);
+            if (currentDamage !== damageBeforeBlock) {
+                 logCombatEvent('FINAL_DAMAGE_BLOCKED', {
+                    target: this.name,
+                    damageBeforeBlock: damageBeforeBlock,
+                    damageAfterBlock: currentDamage,
+                });
+            }
+            const damageBeforeArmor = currentDamage;
+            currentDamage = this.applyArmor(currentDamage);
+             if (currentDamage !== damageBeforeArmor) {
+                 logCombatEvent('FINAL_DAMAGE_ARMOR_REDUCED', {
+                    target: this.name,
+                    damageBeforeArmor: damageBeforeArmor,
+                    damageAfterArmor: currentDamage,
+                    armorStat: this.getEffectiveStat('armor')
+                });
+            }
         }
-        damage = this.applyResistance(damage, damageType);
-        return Math.floor(damage);
+        const damageBeforeResistance = currentDamage;
+        currentDamage = this.applyResistance(currentDamage, damageType);
+        if (currentDamage !== damageBeforeResistance) {
+            logCombatEvent('FINAL_DAMAGE_RESISTED', {
+                target: this.name,
+                damageType: damageType,
+                damageBeforeResistance: damageBeforeResistance,
+                damageAfterResistance: currentDamage,
+                resistanceStat: this.getEffectiveStat(`${damageType.toLowerCase()}Resistance`),
+            });
+        }
+
+        logCombatEvent('FINAL_DAMAGE_CALC_FINAL', {
+            target: this.name,
+            finalDamage: Math.floor(currentDamage),
+        });
+        return Math.floor(currentDamage);
     }
 
     applyBlock(damage) {
-        if (Math.random() * 100 < this.stats.blockChance) {
+        const blockChance = this.getEffectiveStat('blockChance');
+        if (Math.random() * 100 < blockChance) {
             battleStatistics.addSuccessfulBlock();
             battleLog.log(`${this.name} blocked part of the attack!`);
             return damage * 0.5;
@@ -336,30 +481,47 @@ class Member {
     }
 
     applyArmor(damage) {
-        return Math.max(0, damage - this.stats.armor);
+        const armor = this.getEffectiveStat('armor');
+        return Math.max(0, damage - armor);
     }
 
     applyResistance(damage, damageType) {
-        const resistance = this.stats.resistances[damageType] || 0;
+        const resistance = this.getEffectiveStat(`${damageType.toLowerCase()}Resistance`) || 0;
         const reducedDamage = damage * (1 - resistance / 100);
         return reducedDamage;
     }
 
     healDamage(heal) {
         const actualHeal = Math.min(heal, this.maxHealth - this.currentHealth);
+        const healthBefore = this.currentHealth;
         this.currentHealth += actualHeal;
         if (this.isHero) {
             battleStatistics.addTotalHealingReceived(actualHeal);
         }
         updateHealth(this);
+        logCombatEvent('HEALTH_HEALED', {
+            target: this.name,
+            amount: heal,
+            actualHeal: actualHeal,
+            healthBefore: healthBefore,
+            healthAfter: this.currentHealth,
+            maxHealth: this.maxHealth,
+        });
     }
 
     takeDamage(damage) {
         if (!this.dead) {
+            const healthBefore = this.currentHealth;
             // Track overkill damage
             if (this.currentHealth < damage && !this.isHero) {
                 const overkillAmount = damage - this.currentHealth;
                 battleStatistics.addOverkillDamage(overkillAmount);
+                logCombatEvent('OVERKILL_DAMAGE', {
+                    target: this.name,
+                    damageReceived: damage,
+                    currentHealth: healthBefore,
+                    overkillAmount: overkillAmount,
+                });
             }
 
             // Track lifesteal
@@ -367,26 +529,112 @@ class Member {
                 const healthStolen = Math.floor(damage * (this.lifesteal / 100));
                 battleStatistics.addHealthStolen(healthStolen);
                 this.healDamage(healthStolen);
+                logCombatEvent('LIFESTEAL_OCCURRED', {
+                    source: this.name,
+                    damageDealt: damage,
+                    lifestealPercentage: this.lifesteal,
+                    healthStolen: healthStolen,
+                });
             }
 
             this.currentHealth -= damage;
             if (this.currentHealth < 0) {
                 this.currentHealth = 0; // Ensure health doesn't go negative before death check
             }
+
+            logCombatEvent('DAMAGE_TAKEN', {
+                target: this.name,
+                damageAmount: damage,
+                healthBefore: healthBefore,
+                healthAfter: this.currentHealth,
+            });
+
             if (this.currentHealth <= 0) {
                 this.handleDeath();
             }
+
+            // Handle onGettingHitTrigger effects
+            const onGettingHitTriggers = this.getEffects().filter(effect => effect.effect.subType === 'onGettingHitTrigger');
+            if (onGettingHitTriggers && onGettingHitTriggers.length > 0) {
+                logCombatEvent('EFFECT_TRIGGER_CHECK', {
+                    triggerType: 'onGettingHitTrigger',
+                    target: this.name,
+                    damageTaken: damage,
+                    numTriggers: onGettingHitTriggers.length,
+                });
+                onGettingHitTriggers.forEach(effectInstance => {
+                    const trigger = effectInstance.effect;
+                    let chanceSucceeded = true;
+                    let randomRoll = null;
+
+                    if(trigger.chance != undefined) {
+                        randomRoll = Math.random();
+                        chanceSucceeded = randomRoll < trigger.chance;
+                    } 
+
+                    logCombatEvent('EFFECT_TRIGGER_CHANCE_EVALUATED', {
+                        effectId: effectInstance.id,
+                        effectName: effectInstance.name,
+                        target: this.name,
+                        triggerChance: trigger.chance,
+                        randomRoll: randomRoll,
+                        chanceSucceeded: chanceSucceeded,
+                        hasChanceCheck: trigger.chance != undefined
+                    });
+
+                    if (chanceSucceeded) {
+                        const effectData = {
+                            id: trigger.effectId,
+                            ...trigger.effectData,
+                            caster: trigger.caster
+                        };
+                        logCombatEvent('EFFECT_TRIGGERED_AND_APPLIED', {
+                            triggerEffectId: effectInstance.id,
+                            triggerEffectName: effectInstance.name,
+                            caster: trigger.caster ? trigger.caster.name : 'Unknown',
+                            target: this.name,
+                            appliedEffectId: effectData.id,
+                            appliedEffectName: effectData.name || 'Unnamed Effect',
+                            removeOriginalTrigger: trigger.remove || false,
+                        });
+                        if (trigger.remove) {
+                            effectInstance.remove();
+                        }
+                    } else {
+                        logCombatEvent('EFFECT_TRIGGER_FAILED', {
+                            triggerEffectId: effectInstance.id,
+                            triggerEffectName: effectInstance.name,
+                            target: this.name,
+                            reason: `ChanceSucceeded: ${chanceSucceeded}`,
+                        });
+                    }
+                });
+            }
+
             updateHealth(this);
         }
     }
 
     handleDeath() {
+        logCombatEvent('MEMBER_DEATH', {
+            memberName: this.name,
+            isHero: this.isHero,
+            currentHealth: this.currentHealth, // Should be 0
+        });
+
         this.currentHealth = 0;
         if (this.element) {
             this.element.querySelector(".memberPortrait img").src = "Media/UI/dead.jpg";
         }
         this.dead = true;
         this.stopSkills();
+        // Remove all active effects upon death
+        Array.from(this.effectsMap.values()).forEach(entry => {
+            if (entry.type === 'active') { // Only remove active effects, keep passives for now
+                entry.effect.remove();
+            }
+        });
+
         if (!this.isHero) { // Only hero gains exp from mob deaths
             hero.gainExperience(this.class.experience || 0); // Ensure experience exists
             battleStatistics.addEnemyDefeated(this.classType);
@@ -397,23 +645,54 @@ class Member {
     }
 
     stopSkills() {
+        logCombatEvent('SKILLS_PAUSED', { memberName: this.name });
         this.skills.forEach(skill => {
             skill.pause(this);
+        });
+        // Pause all active effects
+        this.effectsMap.forEach(entry => {
+            if (entry.type === 'active') {
+                entry.effect.pause();
+            }
         });
     }
 
     startSkills() {
+        logCombatEvent('SKILLS_UNPAUSED', { memberName: this.name });
         this.skills.forEach(skill => {
             skill.unpause(this);
+        });
+        // Unpause all active effects
+        this.effectsMap.forEach(entry => {
+            if (entry.type === 'active') {
+                entry.effect.unpause();
+            }
         });
     }
 
     levelUp(updateHeroUI = true) { // Added updateHeroUI flag
+        const oldLevel = this.level;
         this.level++;
+        logCombatEvent('MEMBER_LEVEL_UP', {
+            memberName: this.name,
+            oldLevel: oldLevel,
+            newLevel: this.level,
+            isHero: this.isHero,
+        });
+
         if (this.statsPerLevel) {
             for (const stat in this.statsPerLevel) {
                 if (this.stats.hasOwnProperty(stat) && this.statsPerLevel.hasOwnProperty(stat)) {
+                    const oldValue = this.stats[stat];
                     this.stats[stat] += this.statsPerLevel[stat];
+                    logCombatEvent('STAT_GAINED_ON_LEVEL_UP', {
+                        memberName: this.name,
+                        level: this.level,
+                        statName: stat,
+                        oldValue: oldValue,
+                        newValue: this.stats[stat],
+                        gainPerLevel: this.statsPerLevel[stat],
+                    });
                 }
             }
         }
@@ -422,8 +701,26 @@ class Member {
 
         // Recalculate max mana/stamina based on base from class and per level stats
         if (this.class && this.class.stats) { // Ensure this.class.stats exists
+            const oldMana = this.stats.mana;
+            const oldStamina = this.stats.stamina;
+
             this.stats.mana = (this.class.stats.mana || 0) + ((this.statsPerLevel?.mana || 0) * (this.level -1));
             this.stats.stamina = (this.class.stats.stamina || 0) + ((this.statsPerLevel?.stamina || 0) * (this.level -1));
+
+            logCombatEvent('MAX_RESOURCES_UPDATED', {
+                memberName: this.name,
+                level: this.level,
+                statName: 'mana',
+                oldValue: oldMana,
+                newValue: this.stats.mana,
+            });
+            logCombatEvent('MAX_RESOURCES_UPDATED', {
+                memberName: this.name,
+                level: this.level,
+                statName: 'stamina',
+                oldValue: oldStamina,
+                newValue: this.stats.stamina,
+            });
         }
         this.currentMana = this.stats.mana;
         this.currentStamina = this.stats.stamina;
@@ -454,7 +751,16 @@ class Member {
 
     gainExperience(exp) {
         if (!this.isHero) return; // Only hero gains experience this way
+        const oldExp = this.experience;
         this.experience += exp;
+        logCombatEvent('EXPERIENCE_GAINED', {
+            memberName: this.name,
+            amount: exp,
+            expBefore: oldExp,
+            expAfter: this.experience,
+            expToNextLevel: this.experienceToLevel,
+        });
+
         if (this.experience >= this.experienceToLevel) {
             this.levelUp(); // Hero always updates UI on level up
         }
@@ -464,26 +770,38 @@ class Member {
     handleRegeneration() {
         if (this.currentHealth <= 0) return;
 
-        const manaRegenAmount = this.stats.manaRegen || 1;
-        if (this.currentMana < this.stats.mana) {
-            this.currentMana = Math.min(this.stats.mana, this.currentMana + manaRegenAmount);
+        const manaRegenAmount = this.getEffectiveStat('manaRegen',false) || 1;
+        if (this.currentMana < this.getEffectiveStat('mana',false)) {
+            const manaBefore = this.currentMana;
+            this.currentMana = Math.min(this.getEffectiveStat('mana',false), this.currentMana + manaRegenAmount);
             if (this.isHero && manaRegenAmount > 0) battleStatistics.addManaRegenerated(manaRegenAmount);
             updateMana(this);
+            logCombatEvent('MANA_REGENERATED', {
+                memberName: this.name,
+                amount: manaRegenAmount,
+                manaBefore: manaBefore,
+                manaAfter: this.currentMana,
+                maxMana: this.getEffectiveStat('mana'),
+            });
         }
 
-        const staminaRegenAmount = Math.floor(0.1 * this.stats.vitality) || 1;
-        if (this.currentStamina < this.stats.stamina) {
-            this.currentStamina = Math.min(this.stats.stamina, this.currentStamina + staminaRegenAmount);
+        const staminaRegenAmount = Math.floor(0.1 * this.getEffectiveStat('vitality',false)) || 1;
+        if (this.currentStamina < this.getEffectiveStat('stamina',false)) {
+            const staminaBefore = this.currentStamina;
+            this.currentStamina = Math.min(this.getEffectiveStat('stamina',false), this.currentStamina + staminaRegenAmount);
             if (this.isHero && staminaRegenAmount > 0) battleStatistics.addStaminaRegenerated(staminaRegenAmount);
             updateStamina(this);
+
         }
 
         // Health regen (if any, e.g. 1% of vitality)
-        const healthRegenAmount = parseFloat((0.01 * this.stats.vitality).toFixed(2)) || 0;
+        const healthRegenAmount = parseFloat((0.01 * this.getEffectiveStat('vitality',false)).toFixed(2)) || 0;
         if (this.currentHealth < this.maxHealth && healthRegenAmount > 0) {
+             const healthBefore = this.currentHealth;
              this.currentHealth = Math.min(this.maxHealth, this.currentHealth + healthRegenAmount);
              this.currentHealth = parseFloat(this.currentHealth.toFixed(2));
              updateHealth(this);
+
         }
     }
         // --- SERIALIZATION (IF NEEDED FOR NON-HERO MEMBERS) ---
@@ -510,8 +828,23 @@ class Member {
                     experience: s.experience,
                     experienceToNextLevel: s.experienceToNextLevel,
                     baseDamage: s.baseDamage,
+                    repeat: s.repeat // Add repeat property
                 })) : [], // Non-heroes typically don't have skill progression saved this way
                 // No selected skills for non-heroes usually
+                // Effects should also be serialized if they need to persist across saves
+                effects: Array.from(this.effectsMap.values()).map(entry => ({
+                    id: entry.effect.id,
+                    name: entry.effect.name,
+                    subType: entry.effect.subType,
+                    stat: entry.effect.stat,
+                    value: entry.effect.value,
+                    duration: entry.effect.duration,
+                    icon: entry.effect.icon,
+                    stackMode: entry.effect.stackMode,
+                    type: entry.type,
+                    isPassive: entry.effect.isPassive,
+                    // Include any other properties of EffectClass that are essential for recreation
+                })),
             };
         }
 
@@ -546,6 +879,10 @@ class Member {
                      const savedProg = data.skillProgression.find(sp => sp.name === skillInstance.name);
                      if (savedProg) {
                          skillInstance.applySavedState(savedProg);
+                         // Explicitly set repeat from saved data if it exists, otherwise keep default
+                         if (savedProg.hasOwnProperty('repeat')) {
+                             skillInstance.repeat = savedProg.repeat;
+                         }
                      }
                      return skillInstance;
                 });
@@ -560,47 +897,557 @@ class Member {
                 }
             }
 
+         
+
             // Note: For most enemy members, their `memberId`, `team`, `opposingTeam`, `element`
             // would be re-initialized when they are added to a battle/stage.
             // This `restoreFromData` would primarily be for stats and health if saved mid-combat.
         }
 
     checkCriticalHit(attacker) {
-        // Base crit chance is 5% + 0.1% per point of dexterity
-        let critChance = this.stats.critChance;
+        // Start with base crit chance from attacker's stats
+        let critChance = attacker.stats.critChance;
+        logCombatEvent('CRIT_CHANCE_EVALUATION', {
+            target: this.name,
+            baseCritChance: critChance,
+            attacker: attacker ? attacker.name : 'Unknown',
+        });
 
-        // Check for target-specific crit bonus
-        if (this.critChanceBonusNextAttackVsTarget) {
-            const bonus = this.critChanceBonusNextAttackVsTarget;
-            // Only apply the bonus if this is the original caster
-            if (bonus.caster == attacker) {
-                critChance += bonus.bonus;
-                // Remove the effect after use
-                const effect = this.effects.find(e =>
-                    e.effect.modifiers && 
-                    e.effect.modifiers.some(m => m.stat === 'critChanceBonusNextAttackVsTarget')
-                );
-                if (effect) {
-                    effect.remove();
-                }
+        // Apply crit chance modifiers from attacker's active effects
+        attacker.getEffects().forEach(effectInstance => {
+            if (effectInstance.effect.modifiers) {
+                effectInstance.effect.modifiers.forEach(modifier => {
+                    if (modifier.stat === 'critChance') {
+                        const oldCritChance = critChance;
+                        if (modifier.flat) {
+                            critChance += modifier.flat;
+                        }
+                        if (modifier.percentage) {
+                            critChance *= (1 + modifier.percentage / 100);
+                        }
+                        logCombatEvent('STAT_MODIFIED_BY_EFFECT', {
+                            memberName: attacker.name,
+                            statName: 'critChance',
+                            effectName: effectInstance.name,
+                            modifierType: modifier.flat ? 'flat' : (modifier.percentage ? 'percentage' : 'unknown'),
+                            modifierValue: modifier.flat || modifier.percentage,
+                            oldValue: oldCritChance,
+                            newValue: critChance,
+                        });
+                    }
+                });
             }
-        }
+        });
 
-        return Math.random() * 100 < critChance;
+        // Apply crit resistance from target's effects
+        let critResistance = 0;
+        this.getEffects().forEach(effectInstance => {
+            if (effectInstance.effect.modifiers) {
+                effectInstance.effect.modifiers.forEach(modifier => {
+                    if (modifier.stat === 'critResistance') {
+                        if (modifier.flat) {
+                            critResistance += modifier.flat;
+                        }
+                        if (modifier.percentage) {
+                            critResistance += critChance * (modifier.percentage / 100);
+                        }
+                        logCombatEvent('CRIT_RESISTANCE_APPLIED', {
+                            memberName: this.name,
+                            effectName: effectInstance.name,
+                            modifierType: modifier.flat ? 'flat' : 'percentage',
+                            modifierValue: modifier.flat || modifier.percentage,
+                            totalResistance: critResistance,
+                        });
+                    }
+                });
+            }
+        });
+
+        // Apply resistance to final crit chance
+        critChance = Math.max(0, critChance - critResistance);
+
+        const randomRoll = Math.random() * 100;
+        const isCritResult = randomRoll < critChance;
+        logCombatEvent('CRIT_CHANCE_OUTCOME', {
+            target: this.name,
+            attacker: attacker.name,
+            finalCritChance: critChance,
+            critResistance: critResistance,
+            randomRoll: randomRoll,
+            isCriticalHit: isCritResult,
+        });
+        return isCritResult;
     }
 
     hasDebuffName(debuffNames) {
         if (!Array.isArray(debuffNames)) {
             debuffNames = [debuffNames];
         }
-        return this.effects.some(effect => 
-            effect.effect.type === 'debuff' &&
-            debuffNames.includes(effect.effect.name)
+        return Array.from(this.effectsMap.values()).some(entry =>
+            entry.effect.type === 'debuff' &&
+            debuffNames.includes(entry.effect.name)
         );
     }
 
     hasDebuff() {
-        return this.effects.some(effect => effect.effect.type === 'debuff');
+        return Array.from(this.effectsMap.values()).some(entry => entry.effect.type === 'debuff');
+    }
+
+    applyPassiveEffect(skill) {
+        if (!skill.isPassive) {
+            logCombatEvent('PASSIVE_APPLY_SKIPPED', {
+                memberName: this.name,
+                skillName: skill.name,
+                reason: 'Skill is not marked as passive'
+            });
+            return;
+        }
+
+        // Check if this specific passive effect is already applied
+        const existingPassive = Array.from(this.effectsMap.values())
+            .find(entry => entry.type === 'passive' && entry.source?.id === skill.id);
+
+        if (existingPassive) {
+            logCombatEvent('PASSIVE_ALREADY_ACTIVE', {
+                memberName: this.name,
+                skillName: skill.name,
+                effectId: existingPassive.effect.id,
+                effectName: existingPassive.effect.name,
+            });
+            return;
+        }
+
+        logCombatEvent('PASSIVE_EFFECT_TRIGGERED', {
+            memberName: this.name,
+            skillName: skill.name,
+            skillId: skill.id,
+            description: skill.description,
+        });
+
+        // Create and store the effect instance in effectsMap
+        // The EffectClass constructor will call addEffect internally
+        new EffectClass(this, skill.effects, this, skill); // Caster is 'this' for self-applied passives
+
+        logCombatEvent('PASSIVE_EFFECT_APPLIED', {
+            memberName: this.name,
+            skillName: skill.name,
+            skillId: skill.id,
+            appliedEffectName: skill.effects?.name || skill.name, // Use skill name as effect name if not specified
+            appliedEffectId: skill.effects?.id,
+            sourceType: 'passive_skill',
+        });
+    }
+
+    removePassiveSkill(skillId) {
+        const skillIndex = this.skills.findIndex(skill => skill.id === skillId);
+        if (skillIndex !== -1) {
+            // Get and remove the effect instance from effectsMap
+            const effectEntry = Array.from(this.effectsMap.values()).find(entry => entry.type === 'passive' && entry.source?.id === skillId);
+            if (effectEntry) {
+                logCombatEvent('PASSIVE_EFFECT_REMOVED', {
+                    memberName: this.name,
+                    skillId: skillId,
+                    effectId: effectEntry.effect.id,
+                    effectName: effectEntry.effect.name,
+                    reason: 'Skill removed from member'
+                });
+                effectEntry.effect.remove(); // This will handle all cleanup including damage bonuses
+            } else {
+                logCombatEvent('PASSIVE_EFFECT_NOT_FOUND_FOR_REMOVAL', {
+                    memberName: this.name,
+                    skillId: skillId,
+                    reason: 'No matching effect entry found in effectsMap for skill ID.'
+                });
+            }
+            this.skills.splice(skillIndex, 1);
+        } else {
+            logCombatEvent('PASSIVE_SKILL_NOT_FOUND_FOR_REMOVAL', {
+                memberName: this.name,
+                skillId: skillId,
+                reason: 'Skill not found in member\'s skill list.'
+            });
+        }
+    }
+
+    // New getEffectiveStat implementation to iterate through effectsMap
+    getEffectiveStat(statName, log = true) {
+        let baseValue = this.stats[statName] || 0;
+        let currentValue = baseValue;
+
+        if (log) {
+            logCombatEvent('STAT_CALC_START', {
+                memberName: this.name,
+                statName: statName,
+                baseValue: baseValue,
+            });
+        }
+
+        this.effectsMap.forEach(entry => {
+            const effect = entry.effect.effect;
+            if (effect.modifiers) {
+                effect.modifiers.forEach(modifier => {
+                    if (modifier.stat === statName) {
+                        const valueBeforeModifier = currentValue;
+                        if (modifier.flat) {
+                            currentValue += modifier.flat;
+                        }
+                        if (modifier.percentage) {
+                            currentValue *= (1 + modifier.percentage / 100);
+                        }
+                        if (log) {
+                            logCombatEvent('STAT_MODIFIED_BY_EFFECT', {
+                                memberName: this.name,
+                                statName: statName,
+                                effectName: entry.effect.name,
+                                effectId: entry.effect.id,
+                                modifierType: modifier.flat ? 'flat' : (modifier.percentage ? 'percentage' : 'unknown'),
+                                modifierValue: modifier.flat || modifier.percentage,
+                                valueBeforeModifier: valueBeforeModifier,
+                                valueAfterModifier: currentValue,
+                                sourceEffectType: entry.type,
+                                sourceSkillId: entry.source ? entry.source.id : 'N/A',
+                            });
+                        }
+                    }
+                });
+            }
+            // Handle specific effect types that might modify stats (e.g., Vulnerability)
+            if (effect.subType === 'Vulnerability' && `${effect.damageType.toLowerCase()}Resistance` === statName) {
+                const valueBeforeModifier = currentValue;
+                currentValue -= effect.value;
+                if (log) {
+                    logCombatEvent('STAT_MODIFIED_BY_EFFECT', {
+                        memberName: this.name,
+                        statName: statName,
+                        effectName: entry.effect.name,
+                        effectId: entry.effect.id,
+                        modifierType: 'vulnerability_debuff',
+                        modifierValue: effect.value,
+                        valueBeforeModifier: valueBeforeModifier,
+                        valueAfterModifier: currentValue,
+                        sourceEffectType: entry.type,
+                        sourceSkillId: entry.source ? entry.source.id : 'N/A',
+                        damageType: effect.damageType,
+                    });
+                }
+            }
+             // Handle 'flatChange' and 'percentChange' which directly modify a stat
+            if (effect.subType === 'flatChange' && effect.stat === statName) {
+                const valueBeforeModifier = currentValue;
+                currentValue += effect.value;
+                if (log) {
+                    logCombatEvent('STAT_MODIFIED_BY_EFFECT', {
+                        memberName: this.name,
+                        statName: statName,
+                        effectName: entry.effect.name,
+                        effectId: entry.effect.id,
+                        modifierType: 'flatChange',
+                        modifierValue: effect.value,
+                        valueBeforeModifier: valueBeforeModifier,
+                        valueAfterModifier: currentValue,
+                        sourceEffectType: entry.type,
+                        sourceSkillId: entry.source ? entry.source.id : 'N/A',
+                    });
+                }
+            }
+            if (effect.subType === 'percentChange' && effect.stat === statName) {
+                const valueBeforeModifier = currentValue;
+                currentValue *= (1 + effect.value / 100);
+                if (log) {
+                    logCombatEvent('STAT_MODIFIED_BY_EFFECT', {
+                        memberName: this.name,
+                        statName: statName,
+                        effectName: entry.effect.name,
+                        effectId: entry.effect.id,
+                        modifierType: 'percentChange',
+                        modifierValue: effect.value,
+                        valueBeforeModifier: valueBeforeModifier,
+                        valueAfterModifier: currentValue,
+                        sourceEffectType: entry.type,
+                        sourceSkillId: entry.source ? entry.source.id : 'N/A',
+                    });
+                }
+            }
+        });
+        if (log) {
+            logCombatEvent('STAT_CALC_END', {
+                memberName: this.name,
+                statName: statName,
+                finalValue: currentValue,
+            });
+        }
+        return currentValue;
+    }
+
+    getEffectiveResistance(damageType) {
+        // Start with base resistance from stats
+        let baseResistance = this.stats[`${damageType.toLowerCase()}Resistance`] || 0;
+        let totalResistance = baseResistance;
+
+        logCombatEvent('RESISTANCE_CALC_START', {
+            memberName: this.name,
+            damageType: damageType,
+            baseResistance: baseResistance
+        });
+
+        this.effectsMap.forEach(entry => {
+            const effect = entry.effect.effect;
+            
+            // Handle buffResistanceFlat effects (like Battle Hardened)
+            if (effect.subType === 'buffResistanceFlat' && Array.isArray(effect.damageType)) {
+                const damageTypeIndex = effect.damageType.indexOf(damageType);
+                if (damageTypeIndex !== -1 && Array.isArray(effect.value)) {
+                    const resistanceValue = effect.value[damageTypeIndex];
+                    const valueBeforeModifier = totalResistance;
+                    totalResistance += resistanceValue;
+                    
+                    logCombatEvent('RESISTANCE_MODIFIED_BY_EFFECT', {
+                        memberName: this.name,
+                        damageType: damageType,
+                        effectName: entry.effect.name,
+                        effectId: entry.effect.id,
+                        modifierType: 'flat',
+                        modifierValue: resistanceValue,
+                        valueBeforeModifier: valueBeforeModifier,
+                        valueAfterModifier: totalResistance,
+                        sourceEffectType: entry.type,
+                        sourceSkillId: entry.source ? entry.source.id : 'N/A'
+                    });
+                }
+            }
+            
+            // Handle vulnerability effects
+            if (effect.subType === 'Vulnerability' && effect.damageType === damageType) {
+                const valueBeforeModifier = totalResistance;
+                totalResistance -= effect.value;
+                
+                logCombatEvent('RESISTANCE_MODIFIED_BY_EFFECT', {
+                    memberName: this.name,
+                    damageType: damageType,
+                    effectName: entry.effect.name,
+                    effectId: entry.effect.id,
+                    modifierType: 'vulnerability',
+                    modifierValue: -effect.value,
+                    valueBeforeModifier: valueBeforeModifier,
+                    valueAfterModifier: totalResistance,
+                    sourceEffectType: entry.type,
+                    sourceSkillId: entry.source ? entry.source.id : 'N/A'
+                });
+            }
+
+            // Handle general resistance modifiers from effect.modifiers
+            if (effect.modifiers) {
+                effect.modifiers.forEach(modifier => {
+                    if (modifier.stat === `${damageType.toLowerCase()}Resistance`) {
+                        const valueBeforeModifier = totalResistance;
+                        if (modifier.flat) {
+                            totalResistance += modifier.flat;
+                        }
+                        if (modifier.percentage) {
+                            totalResistance *= (1 + modifier.percentage / 100);
+                        }
+                        
+                        logCombatEvent('RESISTANCE_MODIFIED_BY_EFFECT', {
+                            memberName: this.name,
+                            damageType: damageType,
+                            effectName: entry.effect.name,
+                            effectId: entry.effect.id,
+                            modifierType: modifier.flat ? 'flat' : 'percentage',
+                            modifierValue: modifier.flat || modifier.percentage,
+                            valueBeforeModifier: valueBeforeModifier,
+                            valueAfterModifier: totalResistance,
+                            sourceEffectType: entry.type,
+                            sourceSkillId: entry.source ? entry.source.id : 'N/A'
+                        });
+                    }
+                });
+            }
+        });
+
+        logCombatEvent('RESISTANCE_CALC_END', {
+            memberName: this.name,
+            damageType: damageType,
+            finalResistance: totalResistance
+        });
+
+        return totalResistance;
+    }
+
+    checkEffectResistance(effectType, caster = null) {
+        // Get the resistance for this effect type
+        const resistance = this.getEffectiveResistance(effectType);
+        
+        logCombatEvent('EFFECT_RESISTANCE_CHECK', {
+            target: this.name,
+            effectType: effectType,
+            resistance: resistance,
+            caster: caster ? caster.name : 'Unknown'
+        });
+
+        // Base chance to resist is the resistance value
+        let resistChance = resistance;
+
+        // If there's a caster, we can factor in their effect penetration if they have any
+        if (caster) {
+            const penetration = caster.getEffectiveStat('effectPenetration') || 0;
+            resistChance = Math.max(0, resistChance - penetration);
+            
+            logCombatEvent('EFFECT_PENETRATION_APPLIED', {
+                target: this.name,
+                caster: caster.name,
+                penetration: penetration,
+                adjustedResistChance: resistChance
+            });
+        }
+
+        // Roll for resistance
+        const roll = Math.random() * 100;
+        const resisted = roll < resistChance;
+
+        logCombatEvent('EFFECT_RESISTANCE_OUTCOME', {
+            target: this.name,
+            effectType: effectType,
+            resistChance: resistChance,
+            roll: roll,
+            resisted: resisted
+        });
+
+        return resisted;
+    }
+
+    // `hasEffectState` and `getEffectState` now check specific effect properties
+    hasEffectState(stateName) {
+        // This method will now check if an effect with a certain 'state' or 'subType' is present
+        // You'll need to define how 'states' map to effect properties
+        switch (stateName) {
+            case 'hasGuaranteedDodge':
+                return Array.from(this.effectsMap.values()).some(entry => entry.effect.effect.subType === 'GuaranteedDodge');
+            case 'manaShieldActive':
+                return Array.from(this.effectsMap.values()).some(entry => entry.effect.effect.subType === 'ManaShield');
+            case 'onCritTrigger':
+                return Array.from(this.effectsMap.values()).some(entry => entry.effect.effect.subType === 'onCritTrigger');
+            case 'hasStealth': // New state for stealth
+                return Array.from(this.effectsMap.values()).some(entry => entry.effect.effect.subType === 'stealth');
+            default:
+                return false;
+        }
+    }
+
+    getEffectState(stateName) {
+        // This method will retrieve the value of a specific 'state' from an effect
+        switch (stateName) {
+            case 'hasGuaranteedDodge':
+                const dodgeEffect = Array.from(this.effectsMap.values()).find(entry => entry.effect.effect.subType === 'GuaranteedDodge');
+                return dodgeEffect ? dodgeEffect.effect.effect.value : null;
+            case 'manaShieldActive':
+                const manaShield = Array.from(this.effectsMap.values()).find(entry => entry.effect.effect.subType === 'ManaShield');
+                return manaShield ? manaShield.effect.effect.value : null; // Return the ratio
+            case 'onCritTrigger':
+                const onCrit = Array.from(this.effectsMap.values()).find(entry => entry.effect.effect.subType === 'onCritTrigger');
+                return onCrit ? onCrit.effect.effect.value : null;
+            case 'hasStealth':
+                const stealth = Array.from(this.effectsMap.values()).find(entry => entry.effect.effect.subType === 'stealth');
+                return stealth ? stealth.effect.effect.value : null;
+            default:
+                return null;
+        }
+    }
+
+    // These methods are no longer directly setting states or modifiers.
+    // EffectClass instances handle their own state and modifier application upon creation/removal.
+    // They are kept as stubs for now, but their usage context should be revisited in EffectClass.
+    setEffectState(stateName, value, effectId) {
+        // This method's logic is largely handled by the EffectClass constructor and its applyEffect method.
+        // For 'GuaranteedDodge', the EffectClass itself needs to manage its presence in effectsMap.
+        console.warn(`Member.setEffectState(${stateName}, ${value}, ${effectId}) is deprecated. Manage states via EffectClass instances.`);
+    }
+
+    removeEffectState(stateName, effectId) {
+        // This method's logic is largely handled by the EffectClass's remove method.
+        console.warn(`Member.removeEffectState(${stateName}, ${effectId}) is deprecated. Manage states via EffectClass instances.`);
+    }
+
+    // handleOnCritTrigger is now integrated into calculateFinalDamage
+    // applyPassiveSkill is now integrated into applyPassiveEffect
+
+    getEffects() {
+        return Array.from(this.effectsMap.values()).map(entry => entry.effect);
+    }
+
+    hasEffect(effectId) {
+        return this.effectsMap.has(effectId);
+    }
+
+    getEffect(effectId) {
+        return this.effectsMap.get(effectId)?.effect;
+    }
+
+    addEffect(effectInstance, type = 'active', source = null) {
+        // Handle multiple effects from a skill
+        if (Array.isArray(effectInstance)) {
+            effectInstance.forEach(effect => {
+                this.addEffect(effect, type, source);
+            });
+            return;
+        }
+
+        // Check if this is an effect that can be resisted
+        if (effectInstance.effect.type === 'debuff') {
+            // Check resistance before adding the effect
+            if (this.checkEffectResistance(effectInstance.effect.subType || effectInstance.effect.type, source)) {
+                battleLog.log(`${this.name} resisted the ${effectInstance.name || effectInstance.effect.subType || effectInstance.effect.type} effect!`);
+                logCombatEvent('EFFECT_RESISTED', {
+                    target: this.name,
+                    effectId: effectInstance.id,
+                    effectName: effectInstance.name || effectInstance.effect.subType || effectInstance.effect.type,
+                    source: source ? source.name : 'Unknown'
+                });
+                return; // Don't add the effect if resisted
+            }
+        }
+
+        this.effectsMap.set(effectInstance.id, { effect: effectInstance, type, source });
+        logCombatEvent('EFFECT_ADDED', {
+            memberName: this.name,
+            effectId: effectInstance.id,
+            effectName: effectInstance.name,
+            effectType: type,
+            source: source ? (source.name || source.id) : 'N/A',
+            duration: effectInstance.effect.duration,
+        });
+    }
+
+    removeEffect(effectId) {
+        const effectEntry = this.effectsMap.get(effectId);
+        if (effectEntry) {
+            this.effectsMap.delete(effectId);
+            logCombatEvent('EFFECT_REMOVED', {
+                memberName: this.name,
+                effectId: effectId,
+                effectName: effectEntry.effect.name,
+                effectType: effectEntry.type,
+                source: effectEntry.source ? (effectEntry.source.name || effectEntry.source.id) : 'N/A',
+                reason: 'Direct removal call',
+            });
+        } else {
+            logCombatEvent('EFFECT_REMOVAL_FAILED', {
+                memberName: this.name,
+                effectId: effectId,
+                reason: 'Effect not found in effectsMap',
+            });
+        }
+    }
+
+    getEffectsByType(type) {
+        return Array.from(this.effectsMap.values())
+            .filter(entry => entry.type === type)
+            .map(entry => entry.effect);
+    }
+
+    getEffectsBySource(source) {
+        return Array.from(this.effectsMap.values())
+            .filter(entry => entry.source === source)
+            .map(entry => entry.effect);
     }
 }
 

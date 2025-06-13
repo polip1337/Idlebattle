@@ -342,9 +342,9 @@
     "name": "Mana Shield",
     "type": "buff",
     "subType": "ManaShield",
-    "description": "Absorbs 50% of damage taken as Mana loss.",
+    "description": "Damage taken is substracted from your mana first.",
     "duration": 6,
-    "absorbPercentage": 1
+    "ratio": 2
   },
   "poison": {
     "id": "poison",
@@ -457,16 +457,18 @@
     "id": "shadowVantage",
     "name": "Shadow Vantaged",
     "type": "debuff",
-    "subType": "critChanceBonusNextAttackVsTarget",
+    "subType": "onGettingHitTrigger",
     "description": "Your next melee attack against this target has +15% crit chance.",
     "duration": 10,
     "targetSpecific": true,
+    "remove": true,
     "modifiers": [
       {
-        "stat": "critChanceBonusNextAttackVsTarget",
-        "flat": 15
+        "stat": "critResistance",
+        "flat": -15
       }
     ]
+    
   },
   "shieldBlockBuff": {
     "id": "shieldBlockBuff",
@@ -498,7 +500,9 @@
     "id": "stealth",
     "name": "Stealth",
     "type": "buff",
-    "subType": "Modifiers",
+    "subType": "onSkillUseTrigger",
+    "condition": true,
+    "remove": true,
     "duration": 5,
     "stackMode": "refresh",
     "icon": "Media/UI/stealth.svg",
@@ -605,12 +609,38 @@
     "id": "damageBonusVsDebuffed",
     "duration": -1
   },
-  "changeStats": {
-    "id": "changeStats",
-    "subType": "Modifiers"
-  },
   "buffResistanceFlat": {
     "id": "buffResistanceFlat",
     "subType": "buffResistanceFlat"
+  },
+  "manaCostReduction": {
+    "id": "manaCostReduction",
+    "name": "Mana Cost Reduction",
+    "type": "buff",
+    "subType": "Modifiers",
+    "description": "Reduces the mana cost of spells.",
+    "duration": -1,
+    "modifiers": [
+      {
+        "stat": "manaCostReduction",
+        "flat": 0
+      }
+    ]
+  },
+  "arcaneFocusEffect": {
+    "id": "arcaneFocusEffect",
+    "name": "Arcane Focus",
+    "type": "passive",
+    "subType": "damageBonusConditional",
+    "value": 20,
+    "condition": "skill.tags && skill.tags.includes('Arcane')",
+    "duration": -1,
+    "modifiers": [
+      {
+        "stat": "manaCostReduction",
+        "flat": -2
+      }
+    ]
   }
+
 }

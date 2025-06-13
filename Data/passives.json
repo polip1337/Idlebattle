@@ -75,17 +75,15 @@
     "id": "healingAura",
     "name": "Healing Aura",
     "type": "passive",
-    "damage": 0,
-    "manaCost": 0,
-    "cooldown": 0,
-    "damageType": "None",
-    "effects": {
-      "type": "passive",
-      "subType": "auraHeal",
-      "value": 5
-    },
     "description": "Continuously heals all allies in range.",
-    "targetingModes": ["All Team"],
+    "effects": {
+      "id": "healingAura",
+      "subType": "aura",
+      "targetResource": "health",
+      "value": 2,
+      "targetingMode": "All Ally",
+      "description": "Heals all allies every second."
+    },
     "icon": "Media/Skills/Passive/HealingAura.jpg",
     "tags": ["Aura", "Buff", "Heal", "Passive", "Team"]
   },
@@ -158,7 +156,7 @@
       {
         "id": "damageBonusVsDebuffed",
         "name": "Opportunist",
-        "condition": "target.effects.some(e => e.effect.type === 'debuff')",
+        "condition": "target.hasDebuff()",
         "subType": "damageBonusConditional",
         "value": 10,
         "description": "Deal 10% increased damage to enemies suffering from negative status effects (e.g., stun, bleed, poison)."
@@ -259,7 +257,9 @@
     "type": "passive",
     "description": "Your innate connection to magical energies is stronger, boosting your overall spell power.",
     "effects": {
-      "id": "changeStats",
+      "id": "spellPower_changeStats",
+      "subType": "Modifiers",
+
       "modifiers": [
         {
           "stat": "magicPower",
@@ -312,17 +312,7 @@
     "type": "passive",
     "description": "Intense concentration on the arcane arts enhances the power and efficiency of your Arcane spells.",
     "effects": {
-      "id": "changeStats",
-      "modifiers": [
-        {
-          "stat": "arcaneDamageBonus",
-          "percentage": 8
-        },
-        {
-          "stat": "arcaneManaCostReduction",
-          "percentage": 5
-        }
-      ]
+      "id": "arcaneFocusEffect"
     },
     "icon": "Media/Skills/Passive/arcane_focus.png",
     "tags": ["Arcane", "Buff", "Damage", "Magic", "Mana", "Passive"]
@@ -331,24 +321,26 @@
     "id": "divineGrace",
     "name": "Divine Grace",
     "type": "passive",
-    "effects": [
-      {
-        "type": "passive",
-        "subType": "buffHealingDonePercentage",
-        "value": 10,
-        "description": "Increases all healing done by 10%."
-      },
-      {
-        "type": "passive",
-        "subType": "chanceToApplyMinorBuffOnHeal",
-        "buffId": "blessedAegis",
-        "chance": 0.15,
-        "buffValue": 5,
-        "buffDuration": 2,
-        "description": "Your healing spells have a 15% chance to also grant a minor protective blessing (Armor +5 for 2 turns)."
-      }
-    ],
     "description": "A touch of divine favor enhances your healing abilities and occasionally bestows a minor protective blessing on those you mend.",
+    "effects": {
+      "id": "onSkillUseTrigger",
+      "subType": "onSkillUseTrigger",
+      "chance": 0.15,
+      "condition": "skill.heal > 0",
+      "effectId": "blessedAegis",
+      "effectData": {
+        "name": "Blessed Aegis",
+        "type": "buff",
+        "subType": "Modifiers",
+        "duration": 5,
+        "modifiers": [
+          {
+            "stat": "armor",
+            "flat": 5
+          }
+        ]
+      }
+    },
     "icon": "Media/Skills/Passive/divine_grace.png",
     "tags": ["Buff", "Healing", "Holy", "Passive", "Proc"]
   },
@@ -356,16 +348,14 @@
     "id": "holyMight",
     "name": "Holy Might",
     "type": "passive",
-    "effects": [
-      {
-        "type": "passive",
-        "subType": "buffDamagePercentage",
-        "damageType": "Holy",
-        "value": 12,
-        "description": "Increases damage dealt by Holy spells and effects by 12%."
-      }
-    ],
     "description": "Your divine power infuses your offensive spells, increasing their Holy damage.",
+    "effects": {
+      "id": "damageBonusConditional",
+      "subType": "damageBonusConditional",
+      "value": 12,
+      "condition": "skill.damageType === 'Holy'",
+      "description": "Increases Holy damage by 12%"
+    },
     "icon": "Media/Skills/Passive/holy_might.png",
     "tags": ["Buff", "Damage", "Holy", "Magic", "Passive"]
   },
@@ -373,29 +363,13 @@
     "id": "faithUnwavering",
     "name": "Faith Unwavering",
     "type": "passive",
-    "effects": [
-      {
-        "type": "passive",
-        "subType": "buffResistanceFlat",
-        "statusEffectType": "Fear",
-        "value": 30
-      },
-      {
-        "type": "passive",
-        "subType": "buffResistanceFlat",
-        "statusEffectType": "Charm",
-        "value": 20
-      },
-      {
-        "type": "passive",
-        "subType": "buffEffectivenessWhenLowResource",
-        "resourceType": "Mana",
-        "thresholdPercentage": 0.25,
-        "bonusPercentage": 10,
-        "description": "Spells are 10% more effective when below 25% Mana."
-      }
-    ],
     "description": "Your steadfast faith makes you highly resistant to fear and charm, and empowers your abilities when your spiritual reserves are low.",
+    "effects": {
+      "id": "buffResistanceFlat",
+      "subType": "buffResistanceFlat",
+      "damageType": ["Fear", "Charm"],
+      "value": [30, 20]
+    },
     "icon": "Media/Skills/Passive/faith_unwavering.png",
     "tags": ["Buff", "Conditional", "Mental", "Passive", "Resistance"]
   }

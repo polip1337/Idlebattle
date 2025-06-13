@@ -47,6 +47,7 @@ class Hero extends Member {
             [null, null, null, null]  // Back row (index 1)
         ];
         this.maxPartySize = 8; // Including hero
+
     }
 
     // --- COMPANION METHODS --- NEW
@@ -208,6 +209,15 @@ class Hero extends Member {
         this.partyFormation[targetRow][targetCol] = memberInstance;
         memberInstance.position = (targetRow === 0) ? 'Front' : 'Back';
 
+        // Update battle formation if it exists
+        const formation = window.getFormation?.();
+        if (formation) {
+            formation.moveCharacter(memberInstance, targetRow, targetCol);
+            if (currentOccupant && sourceRow !== -1 && sourceCol !== -1) {
+                formation.moveCharacter(currentOccupant, sourceRow, sourceCol);
+            }
+        }
+
         console.log(`Moved ${memberInstance.name} to [${targetRow},${targetCol}]`);
         if (typeof window.renderCompanionPartyFormation === 'function') {
             window.renderCompanionPartyFormation(this);
@@ -363,19 +373,16 @@ class Hero extends Member {
     _applyItemEffects(item) {
         if (!item || !item.effects || item.effects.length === 0) return;
         item.effects.forEach(effectData => {
-            const effectInstance = new EffectClass(this, effectData);
-            this.itemEffects.push({itemOriginId: item.id, effect: effectInstance});
+            const effectInstance = new EffectClass(this, effectData, this);
+            this.addEffect(effectInstance, 'item', item);
         });
     }
 
     _unapplyItemEffects(item) {
         if (!item || !item.effects || item.effects.length === 0) return;
-        this.itemEffects = this.itemEffects.filter(trackedEffect => {
-            if (trackedEffect.itemOriginId === item.id) {
-                trackedEffect.effect.remove(); 
-                return false; 
-            }
-            return true;
+        const itemEffects = this.getEffectsBySource(item);
+        itemEffects.forEach(effect => {
+            effect.remove();
         });
     }
 
@@ -792,10 +799,8 @@ class Hero extends Member {
         selectSkill(skill, skillBox, isPassive = false) {
         const selectedSkillsArray = isPassive ? this.selectedPassiveSkills : this.selectedSkills;
         const maxSkills = isPassive ? 2 : 4; // Max skills of one type (active/passive) hero can select for BAR
-        // This logic is for the skill BAR, not the list of all learnable skills.
 
         const existingSkillIndex = selectedSkillsArray.findIndex(s => s === skill);
-
         const skillBarUpdateMethod = isPassive ? updatePassiveSkillBar : updateSkillBar;
 
         if (existingSkillIndex === -1) { // Skill not currently in the bar
@@ -811,19 +816,31 @@ class Hero extends Member {
                     }
                     skillBox.classList.add('selected'); // Visual feedback on skill list
                     added = true;
+                   
                     break;
                 }
             }
             if (!added) {
-                 console.log(`Skill bar for ${isPassive ? 'passive' : 'active'} skills is full. Cannot add ${skill.name}.`);
-                 // Optionally, remove the 'selected' class from the skillBox if it was added optimistically
-                 skillBox.classList.remove('selected');
+                console.log(`Skill bar for ${isPassive ? 'passive' : 'active'} skills is full. Cannot add ${skill.name}.`);
+                skillBox.classList.remove('selected');
             }
-        } else { // Skill is in the bar, remove it (deselect)
-            selectedSkillsArray[existingSkillIndex] = null; // Remove from bar slot
-            skillBox.classList.remove('selected'); // Visual feedback on skill list
+        } else {
+            // Skill is being deselected
+            selectedSkillsArray[existingSkillIndex] = null;
+            skillBox.classList.remove('selected');
+            
+            // If it's a passive skill, remove all effects from this skill
+            if (isPassive && skill.isPassive) {
+                if (Array.isArray(skill.effects)) {
+                    skill.effects.forEach(effect => {
+                        this.removeEffect(effect.id);
+                    });
+                } else if (skill.effects) {
+                    this.removeEffect(skill.effects.id);
+                }
+            }
         }
-        skillBarUpdateMethod(selectedSkillsArray); // Update the actual skill bar UI
+        skillBarUpdateMethod(selectedSkillsArray);
     }
         triggerRepeatSkills() {
             const activeSelectedSkills = this.selectedSkills.filter(skill => skill && skill.type === "active");
@@ -867,5 +884,7 @@ class Hero extends Member {
             }
             return false;
         }
+
+
 }
 export default Hero;

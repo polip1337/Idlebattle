@@ -17,7 +17,7 @@ export class FleeSystem {
     
     calculateFleeChance() {
         const avgPlayerPartyDex = this.team1.members.reduce(
-            (sum, member) => sum + (member.stats.dexterity || 0), 0
+            (sum, member) => sum + (member.getEffectiveStat('dexterity') || 0), 0
         ) / this.team1.members.length || 0;
 
         const aliveEnemies = this.team2.getAllAliveMembers();

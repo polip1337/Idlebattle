@@ -71,7 +71,7 @@ export class BattleController {
             // Pause all effects when battle is paused
             if (isPaused) {
                 [...team1.members, ...team2.members].forEach(member => {
-                    member.effects.forEach(effect => effect.pause());
+                    member.getEffects().forEach(effect => effect.pause());
                 });
             }
             return;
@@ -79,7 +79,7 @@ export class BattleController {
 
         // Unpause all effects when battle resumes
         [...team1.members, ...team2.members].forEach(member => {
-            member.effects.forEach(effect => effect.unpause());
+            member.getEffects().forEach(effect => effect.unpause());
         });
 
         this.teamManager.handleTeamRegeneration();

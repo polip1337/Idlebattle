@@ -569,7 +569,6 @@ export function handleOutOfCombatRegeneration() {
     }
 
     // Always update the hero portrait and sidebar
-    renderHeroPortrait();
     _updateHeroMapSidebar(hero);
     updateHeroMapStats(hero);
 }

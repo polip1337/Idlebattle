@@ -4,6 +4,11 @@ import {selectTarget} from './Targeting.js';
 import {battleController, battleStatistics, hero as globalHero} from './initialize.js';
 import EffectClass from './EffectClass.js';
 
+// Helper function for structured logging (duplicated for self-containment, but ideally shared)
+function logCombatEvent(type, data) {
+    const timestamp = new Date().toISOString();
+    console.log(`[COMBAT_LOG] [${timestamp}] [${type}]`, data);
+}
 
 class Skill {
     constructor(skillData, effects, element = null) {
@@ -36,6 +41,13 @@ class Skill {
         this.needsInitialCooldownKickoff;
         this.tags = skillData.tags;
         this.isPassive = skillData.type === "passive";
+
+        logCombatEvent('SKILL_INITIALIZED', {
+            skillName: this.name,
+            skillId: this.id,
+            skillType: this.type,
+            isPassive: this.isPassive,
+        });
     }
 
     setElement(element) {
@@ -43,34 +55,114 @@ class Skill {
     }
 
     calculateDamage(member, target) {
-        let damage = this.damage * this.baseDamage * member.stats.damage;
+        let damage = this.damage * this.baseDamage * member.getEffectiveStat('damage');
         
+        logCombatEvent('SKILL_DAMAGE_CALC_START', {
+            skillName: this.name,
+            member: member.name,
+            target: target.name,
+            baseSkillDamage: this.damage,
+            skillBaseDamageMultiplier: this.baseDamage,
+            memberDamageStat: member.getEffectiveStat('damage'),
+            initialCalculatedDamage: damage,
+        });
+
         // Scale damage based on tags
         if (this.tags.includes('Physical')) {
-            damage *= (1 + member.stats.strength / 100); // Scale with strength
+            const oldDamage = damage;
+            damage *= (1 + member.getEffectiveStat('strength') / 100); // Scale with strength
+            logCombatEvent('SKILL_DAMAGE_SCALED', {
+                skillName: this.name,
+                member: member.name,
+                scalingStat: 'strength',
+                statValue: member.getEffectiveStat('strength'),
+                oldDamage: oldDamage,
+                newDamage: damage,
+                tag: 'Physical',
+            });
         } else if (this.tags.includes('Magical')) {
-            damage *= (1 + member.stats.magicPower / 100); // Scale with magic power
+            const oldDamage = damage;
+            damage *= (1 + member.getEffectiveStat('magicPower') / 100); // Scale with magic power
+            logCombatEvent('SKILL_DAMAGE_SCALED', {
+                skillName: this.name,
+                member: member.name,
+                scalingStat: 'magicPower',
+                statValue: member.getEffectiveStat('magicPower'),
+                oldDamage: oldDamage,
+                newDamage: damage,
+                tag: 'Magical',
+            });
         }
 
-        // Check for damage bonuses
-        if (member.damageBonuses && member.damageBonuses.length > 0) {
-            member.damageBonuses.forEach(bonus => {
-                // Handle unconditional bonuses
-                if (!bonus.condition) {
-                    damage *= (1 + bonus.value / 100);
-                    return;
-                }
+        // Check for damage modifiers from effects
+        const damageModifiers = member.getEffects().filter(effect => 
+            (effect.effect.subType === 'damageBonusConditional' ));
 
-                // Handle conditional bonuses
-                if (typeof bonus.condition === 'function') {
-                    // Execute the condition function
-                    if (bonus.condition(member, target)) {
-                        damage *= (1 + bonus.value / 100);
+        if (damageModifiers.length > 0) {
+            logCombatEvent('SKILL_DAMAGE_BONUS_CHECK', {
+                skillName: this.name,
+                member: member.name,
+                numModifiers: damageModifiers.length,
+            });
+
+            damageModifiers.forEach(effectInstance => {
+ 
+                // Handle damageBonusConditional effects
+                if (effectInstance.effect.subType === 'damageBonusConditional') {
+                    const oldDamage = damage;
+                    let modifierApplied = false;
+
+                    try {
+                        // Handle string conditions (like "target.hasDebuff()")
+                        if (typeof effectInstance.effect.condition === 'string') {
+                            const conditionFunc = new Function('member', 'target', 'skill', `return ${effectInstance.effect.condition}`);
+                            if (conditionFunc(member,target,this)) {
+                                damage *= (1 + effectInstance.effect.value / 100);
+                                modifierApplied = true;
+                            }
+                        }
+                        // Handle function conditions
+                        else if (typeof effectInstance.effect.condition === 'function') {
+                            if (effectInstance.effect.condition(target)) {
+                                damage *= (1 + effectInstance.effect.value / 100);
+                                modifierApplied = true;
+                            }
+                        }
+                        // Handle boolean conditions (always true)
+                        else if (effectInstance.effect.condition === true) {
+                            damage *= (1 + effectInstance.effect.value / 100);
+                            modifierApplied = true;
+                        }
+
+                        if (modifierApplied) {
+                            logCombatEvent('SKILL_DAMAGE_CONDITIONAL_APPLIED', {
+                                skillName: this.name,
+                                member: member.name,
+                                effectName: effectInstance.name,
+                                effectId: effectInstance.id,
+                                bonusValue: effectInstance.effect.value,
+                                oldDamage: oldDamage,
+                                newDamage: damage,
+                                condition: effectInstance.effect.condition.toString(),
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Error evaluating damageBonusConditional condition:', e);
+                        logCombatEvent('SKILL_DAMAGE_CONDITIONAL_ERROR', {
+                            skillName: this.name,
+                            member: member.name,
+                            effectName: effectInstance.name,
+                            error: e.message,
+                        });
                     }
                 }
             });
         }
-        
+        logCombatEvent('SKILL_DAMAGE_CALC_END', {
+            skillName: this.name,
+            member: member.name,
+            finalCalculatedDamage: damage,
+        });
         return damage;
     }
 
@@ -80,18 +172,45 @@ class Skill {
             // For passive skills, only gain exp if they are selected
             if (this.isPassive) {
                 const isSelected = globalHero && globalHero.selectedSkills.some(s => s && s.id === this.id);
-                if (!isSelected) return;
+                if (!isSelected) {
+                    logCombatEvent('SKILL_EXP_GAIN_SKIPPED', {
+                        skillName: this.name,
+                        reason: 'Passive skill not selected',
+                        amount: amount,
+                    });
+                    return;
+                }
             }
             
+            const oldExperience = this.experience;
             this.experience += amount;
+            logCombatEvent('SKILL_EXPERIENCE_GAINED', {
+                skillName: this.name,
+                amount: amount,
+                expBefore: oldExperience,
+                expAfter: this.experience,
+                expToNextLevel: this.experienceToNextLevel,
+            });
+
             while (this.experience >= this.experienceToNextLevel) {
                 this.levelUp();
                 renderLevelUp(this);
             }
+        } else {
+            logCombatEvent('SKILL_EXP_GAIN_SKIPPED', {
+                skillName: this.name,
+                reason: 'Not a hero skill or associated with UI element',
+                amount: amount,
+            });
         }
     }
 
     levelUp() {
+        const oldLevel = this.level;
+        const oldExpToNextLevel = this.experienceToNextLevel;
+        const oldBaseDamage = this.baseDamage;
+        const oldEffectValue = this.effects && typeof this.effects.value === 'number' ? this.effects.value : null;
+
         this.experience -= this.experienceToNextLevel;
         this.level += 1;
         this.experienceToNextLevel = Math.floor(this.experienceToNextLevel * 1.5);
@@ -99,64 +218,144 @@ class Skill {
         if (this.effects && typeof this.effects.value === 'number') {
             this.effects.value = Math.floor(this.effects.value * 1.05);
         }
+
+        logCombatEvent('SKILL_LEVEL_UP', {
+            skillName: this.name,
+            oldLevel: oldLevel,
+            newLevel: this.level,
+            expRemaining: this.experience,
+            oldExpToNextLevel: oldExpToNextLevel,
+            newExpToNextLevel: this.experienceToNextLevel,
+            oldBaseDamage: oldBaseDamage,
+            newBaseDamage: this.baseDamage,
+            oldEffectValue: oldEffectValue,
+            newEffectValue: this.effects && typeof this.effects.value === 'number' ? this.effects.value : 'N/A',
+        });
     }
 
     handleSkillCost(member) {
-        console.log(member.name + " MANA before:" +member.currentMana +" COST:" +this.manaCost)
+        logCombatEvent('SKILL_COST_BEFORE', {
+            skillName: this.name,
+            member: member.name,
+            manaBefore: member.currentMana,
+            staminaBefore: member.currentStamina,
+            manaCost: this.manaCost,
+            staminaCost: this.staminaCost,
+        });
+
         member.currentMana -= this.manaCost;
         member.currentStamina -= this.staminaCost;
-        console.log(member.name + " MANA After:" +member.currentMana )
+
+        logCombatEvent('SKILL_COST_AFTER', {
+            skillName: this.name,
+            member: member.name,
+            manaAfter: member.currentMana,
+            staminaAfter: member.currentStamina,
+        });
 
         updateMana(member);
         updateStamina(member);
-        console.log(member.name + " MANA render:" +member.currentMana )
     }
 
     handleExpGain(member) {
         battleStatistics.addSkillUsage(this.name);
         battleStatistics.addManaSpent(this.manaCost);
         battleStatistics.addStaminaSpent(this.staminaCost);
+        logCombatEvent('SKILL_STATS_UPDATE', {
+            skillName: this.name,
+            member: member.name,
+            manaSpent: this.manaCost,
+            staminaSpent: this.staminaCost,
+        });
     }
 
     applyPassiveEffect(member) {
-        if (!this.isPassive) return;
+        if (!this.isPassive) {
+            logCombatEvent('PASSIVE_APPLY_SKIPPED', {
+                skillName: this.name,
+                member: member.name,
+                reason: 'Skill is not marked as passive'
+            });
+            return;
+        }
 
-        console.log(`[Skill ${this.name}] Applying passive effect for ${member.name}`);
+        // Check if this specific passive effect is already applied
+        const existingPassive = Array.from(member.effectsMap.values())
+            .find(entry => entry.type === 'passive' && entry.source?.id === this.id);
+
+        if (existingPassive) {
+            logCombatEvent('PASSIVE_ALREADY_ACTIVE', {
+                skillName: this.name,
+                member: member.name,
+                effectId: existingPassive.effect.id,
+                effectName: existingPassive.effect.name,
+            });
+            return;
+        }
+
+        logCombatEvent('PASSIVE_EFFECT_TRIGGERED', {
+            skillName: this.name,
+            skillId: this.id,
+            member: member.name,
+            description: this.description,
+        });
         
         // Handle both single effect and effects array
         const effectsToApply = Array.isArray(this.effects) ? this.effects : [this.effects];
         
         effectsToApply.forEach(effect => {
-            if (!effect) return;
+            if (!effect) {
+                logCombatEvent('PASSIVE_EFFECT_SKIPPED', {
+                    skillName: this.name,
+                    member: member.name,
+                    reason: 'Effect data is null/undefined',
+                });
+                return;
+            }
 
-            effect.name = this.name;
-            effect.icon = this.icon;
-            effect.description = this.description;
-            effect.duration = -1;
-            effect.type = "buff";
+            // Ensure properties are set on the effect data before passing to EffectClass
+            effect.name = effect.name || this.name;
+            effect.icon = effect.icon || this.icon;
+            effect.description = effect.description || this.description;
+            effect.duration = effect.duration !== undefined ? effect.duration : -1; // Default to -1 for passive
+            effect.type = effect.type || "buff"; // Default to buff for passive effects
+
+            logCombatEvent('PASSIVE_EFFECT_APPLIED_DETAIL', {
+                skillName: this.name,
+                member: member.name,
+                effectName: effect.name,
+                effectId: effect.id,
+                effectDuration: effect.duration,
+                effectType: effect.type,
+                // Include specific modifiers if they exist
+                modifiers: effect.modifiers ? JSON.stringify(effect.modifiers) : 'None',
+            });
             // Apply the effect using EffectClass
-            new EffectClass(member, effect);
+            new EffectClass(member, effect, member, this); // Caster is member, source is skill
         });
     }
 
     useSkill(member) {
         // For passive skills, just apply the effect and return
         if (this.isPassive) {
+            logCombatEvent('SKILL_USE_PASSIVE_TRIGGERED', {
+                skillName: this.name,
+                member: member.name,
+            });
             this.applyPassiveEffect(member);
             return true;
         }
 
-        console.log(`[Skill ${this.name}] useSkill called for ${member.name}`, {
+        logCombatEvent('SKILL_USE_ATTEMPTED', {
+            skillName: this.name,
+            member: member.name,
             isHero: member.isHero,
-            needsInitialCooldownKickoff: this.needsInitialCooldownKickoff,
-            hasDiv: !!this.div,
-            hasElement: !!member.element,
-            battleStarted: battleController.battleState.battleStarted
+            onCooldown: this.onCooldown,
+            battleStarted: battleController.battleState.battleStarted,
         });
 
         // Handle initial cooldown setup for non-hero skills
         if (this.type === "active" && !member.isHero && this.needsInitialCooldownKickoff) {
-            // Initialize skill element if not already set
             if (!this.div && member.element) {
                 const skillDivId = member.memberId + "Skill" + this.name.replace(/\s/g, '');
                 const skillElement = member.element.querySelector("#" + skillDivId);
@@ -165,9 +364,11 @@ class Skill {
                 }
             }
 
-            // Start initial cooldown for non-hero skills
             if (this.div) {
-                console.log(`[Skill ${this.name}] Starting initial cooldown for ${member.name}`);
+                logCombatEvent('SKILL_INITIAL_COOLDOWN_START', {
+                    skillName: this.name,
+                    member: member.name,
+                });
                 this.startCooldown(member);
                 this.updateCooldownAnimation(member);
                 this.needsInitialCooldownKickoff = false;
@@ -176,15 +377,20 @@ class Skill {
         }
 
         if (this.type == "active" && battleController.battleState.battleStarted) {
-            console.log(`[Skill ${this.name}] Checking resources for ${member.name}`, {
+            logCombatEvent('SKILL_RESOURCE_CHECK', {
+                skillName: this.name,
+                member: member.name,
                 currentMana: member.currentMana,
                 manaCost: this.manaCost,
                 currentStamina: member.currentStamina,
-                staminaCost: this.staminaCost
+                staminaCost: this.staminaCost,
             });
 
             if (this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina) {
-                console.log(`[Skill ${this.name}] Resources sufficient, executing skill for ${member.name}`);
+                logCombatEvent('SKILL_CAST_SUCCESS', {
+                    skillName: this.name,
+                    member: member.name,
+                });
                 this.startCooldown(member);
                 this.handleSkillCost(member);
                 if (member.isHero) {
@@ -221,15 +427,29 @@ class Skill {
                     })
                 }
 
-                console.log(`[Skill ${this.name}] Selected targets:`, targets.map(t => t.name));
+                logCombatEvent('SKILL_TARGETS_SELECTED', {
+                    skillName: this.name,
+                    member: member.name,
+                    targets: targets.map(t => t.name),
+                    targetCount: this.targetCount,
+                    extraTargetsModes: this.extraTargets,
+                });
+
                 targets.forEach(target => {
                     member.performAttack(member, target, this);
                 });
-                console.log(member.name + " MANA End:" +member.currentMana )
                 return true;
 
             } else {
-                console.log(`[Skill ${this.name}] Insufficient resources for ${member.name}`);
+                logCombatEvent('SKILL_CAST_FAILED', {
+                    skillName: this.name,
+                    member: member.name,
+                    reason: 'Insufficient Resources',
+                    currentMana: member.currentMana,
+                    manaCost: this.manaCost,
+                    currentStamina: member.currentStamina,
+                    staminaCost: this.staminaCost,
+                });
                 if (this.repeat && member.isHero) {
                     setTimeout(() => {
                         if (battleController.battleState.battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
@@ -249,16 +469,19 @@ class Skill {
     pause() {
         if (this.type == "active" && this.div && this.overlay && !this.overlay.classList.contains('hidden')) {
             this.overlay.classList.add('paused');
+            logCombatEvent('SKILL_PAUSED', { skillName: this.name });
         }
     }
 
     unpause() {
         if (this.type == "active" && this.div && this.overlay && this.overlay.classList.contains('paused')) {
             this.overlay.classList.remove('paused');
+            logCombatEvent('SKILL_UNPAUSED', { skillName: this.name });
         }
     }
 
     heroStopSkill() {
+        logCombatEvent('SKILL_STOPPED_BY_HERO', { skillName: this.name });
         if (this.overlay && this.boundAnimationEndCallback) {
             this.overlay.removeEventListener('animationend', this.boundAnimationEndCallback);
             this.boundAnimationEndCallback = null;
@@ -281,6 +504,11 @@ class Skill {
         this.cooldownStartTime = Date.now();
         this.remainingDuration = this.cooldown;
         this.onCooldown = true; // Mark as on cooldown
+        logCombatEvent('SKILL_COOLDOWN_STARTED', {
+            skillName: this.name,
+            member: member.name,
+            cooldownDuration: this.cooldown,
+        });
         if (this.div) {
             this.updateCooldownAnimation(member);
         } else if (this.cooldown === 0) { // Handle non-visual 0 CD skills immediately
@@ -291,10 +519,17 @@ class Skill {
     reduceCooldown(amount, member) {
         // Only reduce if actually on cooldown and has a remaining duration.
         if (!this.onCooldown || this.remainingDuration <= 0) {
+            logCombatEvent('COOLDOWN_REDUCTION_SKIPPED', {
+                skillName: this.name,
+                member: member.name,
+                reason: 'Not on cooldown or no remaining duration',
+                currentCooldown: this.remainingDuration,
+            });
             return;
         }
 
         const wasOnCooldownState = this.onCooldown; // Should be true here
+        const oldRemainingDuration = this.remainingDuration;
 
         // Calculate how much time has "conceptually" passed due to the reduction
         const effectiveElapsedTimeReduction = amount;
@@ -305,6 +540,13 @@ class Skill {
             this.cooldownStartTime += amount * 1000;
         }
 
+        logCombatEvent('SKILL_COOLDOWN_REDUCED', {
+            skillName: this.name,
+            member: member.name,
+            reductionAmount: amount,
+            oldRemainingDuration: oldRemainingDuration,
+            newRemainingDuration: this.remainingDuration,
+        });
 
         if (this.remainingDuration <= 0) {
             this.remainingDuration = 0;
@@ -321,60 +563,66 @@ class Skill {
     updateCooldownAnimation(member) {
         if (!this.div) return;
 
-        // Always try to get a fresh reference to the overlay
         this.overlay = this.div.querySelector(".cooldown-overlay");
         if (!this.overlay) {
             console.warn(`[Skill ${this.name}] No cooldown overlay found for ${member.name}`);
             return;
         }
 
-        // Clear previous listener and animation
         if (this.boundAnimationEndCallback) {
             this.overlay.removeEventListener('animationend', this.boundAnimationEndCallback);
             this.boundAnimationEndCallback = null;
         }
 
-        // Reset overlay state
         this.overlay.style.animation = '';
         this.overlay.classList.remove('hidden', 'paused');
         this.overlay.offsetHeight; // Force reflow
 
-        // If not on cooldown or duration is zero, finish (handles cleanup)
         if (!this.onCooldown || this.remainingDuration <= 0) {
-            this.finishCooldown(member, false); // Don't attempt repeat if called in this state
+            logCombatEvent('COOLDOWN_ANIMATION_SKIPPED', {
+                skillName: this.name,
+                member: member.name,
+                reason: 'Not on cooldown or duration <= 0',
+                onCooldown: this.onCooldown,
+                remainingDuration: this.remainingDuration,
+            });
+            this.finishCooldown(member, false);
             return;
         }
 
         this.boundAnimationEndCallback = () => {
-            // When animation ends, repeat if this.repeat is true AND it was genuinely on cooldown
             this.finishCooldown(member, this.repeat && this.onCooldown);
         };
         this.overlay.addEventListener('animationend', this.boundAnimationEndCallback, { once: true });
 
         this.div.classList.add('disabled');
         
-        // Set initial height based on remaining duration
         const remainingPercentage = Math.max(0, (this.remainingDuration / this.cooldown) * 100);
         this.overlay.style.height = `${remainingPercentage}%`;
 
-        // Force another reflow to ensure height is applied before animation
         this.overlay.offsetHeight;
 
-        // Only apply animation if there's a duration
         if (this.remainingDuration > 0) {
             this.overlay.style.animation = `fill ${this.remainingDuration}s linear forwards`;
+            logCombatEvent('COOLDOWN_ANIMATION_STARTED', {
+                skillName: this.name,
+                member: member.name,
+                duration: this.remainingDuration,
+                initialPercentage: remainingPercentage,
+            });
         } else {
-            // Fallback: if somehow duration is 0 here, ensure cleanup
             this.finishCooldown(member, false);
         }
     }
 
     finishCooldown(member, shouldAttemptRepeat = false) {
-        console.log(`[Skill ${this.name}] finishCooldown called for ${member.name}`, {
+        logCombatEvent('SKILL_COOLDOWN_FINISHED', {
+            skillName: this.name,
+            member: member.name,
             wasOnCooldown: this.onCooldown,
-            shouldAttemptRepeat,
+            shouldAttemptRepeat: shouldAttemptRepeat,
             battleStarted: battleController.battleState.battleStarted,
-            memberHealth: member.currentHealth
+            memberHealth: member.currentHealth,
         });
 
         const wasTrulyOnCooldown = this.onCooldown;
@@ -384,12 +632,10 @@ class Skill {
             this.boundAnimationEndCallback = null;
         }
 
-        // Reset cooldown state variables
         this.remainingDuration = 0;
         this.cooldownStartTime = null;
         this.onCooldown = false;
 
-        // Visual cleanup
         if (this.overlay) {
            this.overlay.classList.add('hidden');
            this.overlay.style.animation = '';
@@ -413,47 +659,79 @@ class Skill {
                 canUse = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
             }
 
-            console.log(`[Skill ${this.name}] Attempting repeat for ${member.name}`, {
-                canUse,
+            logCombatEvent('SKILL_REPEAT_ATTEMPT', {
+                skillName: this.name,
+                member: member.name,
+                canUseImmediately: canUse,
                 isHero: member.isHero,
-                hasResources: this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina
+                hasResources: this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina,
             });
 
             if (canUse) {
-                // For non-hero skills, we need to check if this is the first use after initial cooldown
                 if (!member.isHero && this.needsInitialCooldownKickoff) {
                     this.needsInitialCooldownKickoff = false;
-                    this.useSkill(member); // This will trigger the initial cooldown
+                    this.useSkill(member);
                 } else {
                     this.useSkill(member);
                 }
             } else if (this.repeat) {
-                // Add retry mechanism for both hero and non-hero skills when resources are insufficient
                 const retrySkill = (retryCount = 0) => {
                     if (battleController.battleState.battleStarted && member.currentHealth > 0 && !this.onCooldown && this.repeat) {
-                        let canUse = false;
+                        let canUseRetry = false;
                         if (member.isHero) {
                             const heroInstance = globalHero;
                             if (heroInstance && heroInstance.selectedSkills) {
-                                canUse = heroInstance.selectedSkills.some(s => s && s.id === this.id);
+                                canUseRetry = heroInstance.selectedSkills.some(s => s && s.id === this.id);
                             }
                         } else {
-                            canUse = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
+                            canUseRetry = this.manaCost <= member.currentMana && this.staminaCost <= member.currentStamina;
                         }
 
-                        if (canUse) {
+                        if (canUseRetry) {
+                            logCombatEvent('SKILL_RETRY_SUCCESS', {
+                                skillName: this.name,
+                                member: member.name,
+                                retryCount: retryCount,
+                            });
                             this.useSkill(member);
-                        } else if (retryCount < 5) { // Limit retries to prevent infinite loops
-                            // If still can't use, retry with increasing delay
-                            const delay = Math.min(1000 * (retryCount + 1), 5000); // Cap at 5 seconds
+                        } else if (retryCount < 5) {
+                            logCombatEvent('SKILL_RETRY_FAILED', {
+                                skillName: this.name,
+                                member: member.name,
+                                retryCount: retryCount,
+                                reason: 'Resources still insufficient',
+                            });
+                            const delay = Math.min(1000 * (retryCount + 1), 5000);
                             setTimeout(() => retrySkill(retryCount + 1), delay);
+                        } else {
+                             logCombatEvent('SKILL_RETRY_ABORTED', {
+                                skillName: this.name,
+                                member: member.name,
+                                retryCount: retryCount,
+                                reason: 'Max retries reached',
+                            });
                         }
+                    } else {
+                        logCombatEvent('SKILL_RETRY_ABORTED', {
+                            skillName: this.name,
+                            member: member.name,
+                            reason: 'Battle ended, member dead, or skill no longer repeatable/on cooldown',
+                        });
                     }
                 };
 
-                // Start the retry chain
                 setTimeout(() => retrySkill(0), 1000);
             }
+        } else {
+            logCombatEvent('SKILL_REPEAT_SKIPPED', {
+                skillName: this.name,
+                member: member.name,
+                reason: 'Conditions not met for repeat attempt',
+                shouldAttemptRepeat: shouldAttemptRepeat,
+                wasTrulyOnCooldown: wasTrulyOnCooldown,
+                battleStarted: battleController.battleState.battleStarted,
+                memberHealth: member.currentHealth,
+            });
         }
     }
 
@@ -462,9 +740,16 @@ class Skill {
         this.experience = data.experience || 0;
         this.experienceToNextLevel = data.experienceToNextLevel || 100;
         this.baseDamage = data.baseDamage || this.baseDamage;
+        // Only set repeat if it exists in the data, otherwise keep the default value
         if (data.hasOwnProperty('repeat')) {
             this.repeat = data.repeat;
         }
+        logCombatEvent('SKILL_STATE_RESTORED', {
+            skillName: this.name,
+            level: this.level,
+            experience: this.experience,
+            repeat: this.repeat
+        });
     }
 }
 

@@ -211,8 +211,8 @@ function displayCompanionDetails(member) {
         <p><em>${member.description || 'No description.'}</em></p>
         <hr>
         <p>HP: ${Math.round(member.currentHealth)} / ${member.maxHealth}</p>
-        <p>Mana: ${member.currentMana} / ${member.stats.mana}</p>
-        <p>Stamina: ${member.currentStamina} / ${member.stats.stamina}</p>
+        <p>Mana: ${member.currentMana} / ${member.getEffectiveStat('mana')}</p>
+        <p>Stamina: ${member.currentStamina} / ${member.getEffectiveStat('stamina')}</p>
         <p>XP: ${member.experience} / ${member.experienceToLevel}
             <div class="companion-stat-xp-bar">
                 <div class="progress" style="width:${(member.experience / member.experienceToLevel) * 100}%"></div>
@@ -220,13 +220,13 @@ function displayCompanionDetails(member) {
         </p>
         <h5>Base Stats:</h5>
         <ul class="comp-stats-list">
-            <li>Strength: ${member.stats.strength}</li>
-            <li>Speed: ${member.stats.speed}</li>
-            <li>Dexterity: ${member.stats.dexterity}</li>
-            <li>Vitality: ${member.stats.vitality}</li>
-            ${member.stats.magicPower ? `<li>Magic Power: ${member.stats.magicPower}</li>` : ''}
-            <li>Armor: ${member.stats.armor || 0}</li>
-            <li>Dodge: ${member.stats.dodge || 0}</li>
+            <li>Strength: ${member.getEffectiveStat('strength')}</li>
+            <li>Speed: ${member.getEffectiveStat('speed')}</li>
+            <li>Dexterity: ${member.getEffectiveStat('dexterity')}</li>
+            <li>Vitality: ${member.getEffectiveStat('vitality')}</li>
+            <li>Vitality: ${member.getEffectiveStat('magicPower')}</li>
+            <li>Armor: ${member.getEffectiveStat('armor') || 0}</li>
+            <li>Dodge: ${member.getEffectiveStat('dodge') || 0}</li>
         </ul>
         <h5>Skills:</h5>
         ${skillsHTML}

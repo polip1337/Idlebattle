@@ -13,7 +13,7 @@ class Item {
         this.description = itemData.description;
         this.rarity = itemData.rarity || "common";
         this.value = itemData.value || 0;
-
+        this.tags = itemData.tags || [];
         this.stats = itemData.stats ? deepCopy(itemData.stats) : {};
         // Effects should be an array of effect definition objects
         this.effects = itemData.effects ? deepCopy(itemData.effects) : [];

@@ -255,8 +255,8 @@ export function updateMemberTooltip(member) { // Renamed from updateTooltip
     tooltip.innerHTML = `
         <strong>${member.name}</strong> (${member.classType} Lvl ${member.level})
         <p>Health: ${Math.round(member.currentHealth)}/${member.maxHealth}</p>
-        <p>Mana: ${member.currentMana}/${member.stats.mana}</p>
-        <p>Stamina: ${member.currentStamina}/${member.stats.stamina}</p>
+        <p>Mana: ${member.currentMana}/${member.getEffectiveStat('mana')}</p>
+        <p>Stamina: ${member.currentStamina}/${member.getEffectiveStat('stamina')}</p>
     `;
 }
 
@@ -264,7 +264,7 @@ export function updateMana(member) {
     if (!member || !member.element) return;
     const manaOverlay = member.element.querySelector('.mana-overlay');
     if (!manaOverlay) return;
-    const manaPercentage = ((member.stats.mana > 0 ? member.currentMana / member.stats.mana : 0) * 100) + '%';
+    const manaPercentage = ((member.getEffectiveStat('mana') > 0 ? member.currentMana / member.getEffectiveStat('mana') : 0) * 100) + '%';
     manaOverlay.style.setProperty('--mana-percentage', manaPercentage);
     updateMemberTooltip(member);
 }
@@ -273,7 +273,7 @@ export function updateStamina(member) {
     if (!member || !member.element) return;
     const staminaOverlay = member.element.querySelector('.stamina-overlay');
     if (!staminaOverlay) return;
-    const staminaPercentage = ((member.stats.stamina > 0 ? member.currentStamina / member.stats.stamina : 0) * 100) + '%';
+    const staminaPercentage = ((member.getEffectiveStat('stamina') > 0 ? member.currentStamina / member.getEffectiveStat('stamina') : 0) * 100) + '%';
     staminaOverlay.style.setProperty('--stamina-percentage', staminaPercentage);
     updateMemberTooltip(member);
 }
@@ -293,18 +293,18 @@ export function updateStatsDisplay(heroInstance) { // Renamed parameter
     // Display Stats
     heroStatsDiv.innerHTML = `
         <h2>Statistics</h2>
-        <p>Strength: <span id="heroStrength">${heroInstance.stats.strength}</span></p>
-        <p>Speed: <span id="heroSpeed">${heroInstance.stats.speed}</span></p>
-        <p>Dexterity: <span id="heroDexterity">${heroInstance.stats.dexterity}</span></p>
-        <p>Vitality: <span id="heroVitality">${heroInstance.stats.vitality}</span></p>
-        <p>Magic Power: <span id="heroMagicPower">${heroInstance.stats.magicPower}</span></p>
-        <p>Mana: <span id="heroMana">${heroInstance.currentMana}/${heroInstance.stats.mana}</span></p>
-        <p>Mana Regen: <span id="heroManaRegen">${heroInstance.stats.manaRegen}</span></p>
-        <p>Magic Control: <span id="heroMagicControl">${heroInstance.stats.magicControl}</span></p>
+        <p>Strength: <span id="heroStrength">${heroInstance.getEffectiveStat('strength')}</span></p>
+        <p>Speed: <span id="heroSpeed">${heroInstance.getEffectiveStat('speed')}</span></p>
+        <p>Dexterity: <span id="heroDexterity">${heroInstance.getEffectiveStat('dexterity')}</span></p>
+        <p>Vitality: <span id="heroVitality">${heroInstance.getEffectiveStat('vitality')}</span></p>
+        <p>Magic Power: <span id="heroMagicPower">${heroInstance.getEffectiveStat('magicPower')}</span></p>
+        <p>Mana: <span id="heroMana">${heroInstance.currentMana}/${heroInstance.getEffectiveStat('mana')}</span></p>
+        <p>Mana Regen: <span id="heroManaRegen">${heroInstance.getEffectiveStat('manaRegen')}</span></p>
+        <p>Magic Control: <span id="heroMagicControl">${heroInstance.getEffectiveStat('magicControl')}</span></p>
         <p>Gold: <span id="heroGold">${heroInstance.gold}</span></p>
-        <p>Armor: <span id="heroArmor">${heroInstance.stats.armor || 0}</span></p>
-        <p>Dodge: <span id="heroDodge">${heroInstance.stats.dodge || 0}</span></p>
-        <p>Accuracy: <span id="heroAccuracy">${heroInstance.stats.accuracy || 0}</span></p>
+        <p>Armor: <span id="heroArmor">${heroInstance.getEffectiveStat('armor') || 0}</span></p>
+        <p>Dodge: <span id="heroDodge">${heroInstance.getEffectiveStat('dodge') || 0}</span></p>
+        <p>Accuracy: <span id="heroAccuracy">${heroInstance.getEffectiveStat('accuracy') || 0}</span></p>
     `;
 
     // Call item related rendering
@@ -645,15 +645,24 @@ export function openEvolutionModal(heroInstance) {
     modal.style.display = 'block';
 }
 
-export function deepCopy(obj) {
+export function deepCopy(obj, seen = new WeakMap()) {
     if (obj === null || typeof obj !== 'object') return obj;
     if (obj instanceof Date) return new Date(obj);
     if (obj instanceof RegExp) return new RegExp(obj);
-    if (Array.isArray(obj)) return obj.map(item => deepCopy(item));
+    if (seen.has(obj)) return seen.get(obj);
+    if (Array.isArray(obj)) {
+        const arrCopy = [];
+        seen.set(obj, arrCopy);
+        obj.forEach((item, i) => {
+            arrCopy[i] = deepCopy(item, seen);
+        });
+        return arrCopy;
+    }
     const copy = {};
+    seen.set(obj, copy);
     for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            copy[key] = deepCopy(obj[key]);
+            copy[key] = deepCopy(obj[key], seen);
         }
     }
     return copy;

@@ -1,81 +1,109 @@
+// EffectClass.js
 import { mobsClasses, renderTeamMembers, hero, battleStatistics } from './initialize.js';
 import Member from './Member.js'
 import { deepCopy } from './Render.js';
 import {updateHealth,updateMana,updateStamina} from './Render.js';
+import { selectTarget } from './Targeting.js';
 class EffectClass {
-    constructor(target, effect, caster = null) { // Caster can be passed for effects like Taunt
-        this.effect = deepCopy(effect);
+    constructor(target, effect, caster = null, skill = null) {
+        this.effect = deepCopy(effect); // Stores the original effect data
         this.name = effect.name;
+        this.type = effect.type;
         this.subType = effect.subType;
         this.stat = effect.stat;
         this.value = effect.value;
         this.duration = effect.duration;
         this.icon = effect.icon;
         this.stackMode = effect.stackMode;
-        this.id = effect.id;
+        this.id = effect.id || Math.random().toString(36).substring(2, 9); // Ensure unique ID
         this.condition = effect.condition;
         this.target = target;
-        this.caster = caster; // Store the caster
-        this.originalValue = 0;
-        this.originalStats = {};
+        this.caster = caster;
+        this.skill = skill;
         this.timer = null;
         this.startTime = null;
         this.remainingTime = null;
-        this.render = true; // Most effects should be rendered unless they are instant one-offs
-        this.isPassive = effect.duration === -1;
+        this.render = true;
+        if(skill && skill.type === "passive") {
+            this.isPassive = true;
+        } else {
+            this.isPassive = false;
+        }
         this.isPaused = false;
         this.pauseStartTime = null;
-        if(!this.effect.icon)
-            if(this.effect.type =="buff"){
-                this.effect.icon = "Media/UI/buff.svg"
-            }
-            else{
-                this.effect.icon = "Media/UI/debuff.svg"
-            }
 
-        // One-shot effects that don't need timers or rendering
-        if (['CooldownReduction', 'RestoreResource', 'Steal', 'Teleport', 'Summon'].includes(this.effect.subType)) {
-            this.render = false;
+        if(!this.effect.icon) {
+            this.effect.icon = this.effect.type === "buff" ? "Media/UI/buff.svg" : "Media/UI/debuff.svg";
         }
 
+        // One-shot effects that don't need timers or rendering
+        if (['CooldownReduction', 'RestoreResource', 'Steal', 'Summon', 'Dispel'].includes(this.effect.subType)) {
+            this.render = false;
+            this.applyEffectLogic(skill); // Changed from applyEffect to avoid confusion with the method below
+            return; // Don't store in memory, just apply and return
+        }
+
+        // Handle passive effects
         if (this.isPassive) {
-            // For passive effects, just apply and don't set up timers
-            this.applyEffect(effect);
+            // For passive effects, we want to apply them immediately and keep them active
+            this.effect.type ="buff";
+            this.effect.name = this.skill.name;
+            this.effect.description = this.skill.description;
+            this.effect.icon = this.skill.icon;
+
+            this.applyEffectLogic(skill);
             if (this.render && this.effect.icon) {
                 this.renderBuff();
                 this.updateTooltip();
             }
-        } else if (effect.stackMode === "duration" && this.isAlreadyApplied(effect, target)) {
-            this.extendTimer(effect.duration);
-        } else if (effect.stackMode === "refresh" && this.isAlreadyApplied(effect, target)) {
-            this.refreshTimer();
-        } else {
-            this.applyEffect(effect);
-            if (this.render ) {
+            this.target.addEffect(this, 'passive', this.skill); // Add to effectsMap
+            return;
+        }
 
+        // Handle non-passive effects
+        if (effect.stackMode === "duration" && this.target.hasEffect(this.id)) { // Use target.hasEffect
+            this.extendTimer(effect.duration);
+            this.target.addEffect(this, 'active', this.skill); // Still add it if it's new
+        } else if (effect.stackMode === "refresh" && this.target.hasEffect(this.id)) { // Use target.hasEffect
+            this.refreshTimer();
+            this.target.addEffect(this, 'active', this.skill); // Still add it if it's new
+        } else {
+            this.applyEffectLogic(skill); // Changed from applyEffect
+            if (this.render) {
                 this.renderBuff();
             }
-            if (this.effect.duration > 0) { // Only start timers for effects with a positive duration
+            if (this.effect.duration > 0) {
                 this.startTimer();
                 this.startTooltipTimer();
-            } else { // Handle instant (duration: 0) effects
-                if (!this.render) this.remove(); // If not rendered, remove immediately after applying.
+            } else if (!this.render) {
+                this.remove();
             }
+            this.target.addEffect(this, 'active', this.skill); // Add to effectsMap
         }
-        this.target.effects.push(this);
     }
 
     renderBuff() {
+        // Create effects container if it doesn't exist
+        let effectsContainer = document.querySelector(`#${this.target.memberId} .effects`);
+        if (!effectsContainer) {
+            effectsContainer = document.createElement('div');
+            effectsContainer.classList.add('effects');
+            document.querySelector(`#${this.target.memberId}`).appendChild(effectsContainer);
+        }
+
         this.element = document.createElement('div');
         var icon = document.createElement('img');
         icon.src = this.effect.icon;
         this.element.classList.add(this.effect.type);
-        this.tooltip = document.createElement('div'); // Create tooltip element
-        this.tooltip.classList.add('effectTooltip'); // Add tooltip class
+        this.tooltip = document.createElement('div');
+        this.tooltip.classList.add('effectTooltip');
 
         this.element.appendChild(icon);
         this.element.appendChild(this.tooltip);
-        document.querySelector(`#${this.target.memberId} .effects`).appendChild(this.element);
+        effectsContainer.appendChild(this.element);
+
+        // Update tooltip immediately
+        this.updateTooltip();
     }
 
     startTimer() {
@@ -102,9 +130,11 @@ class EffectClass {
     }
 
     extendTimer(additionalTime) {
-        var otherEffect = this.getAlreadyApplied(this.effect, this.target);
-        if (!otherEffect) return;
+        // Find the existing effect instance in the target's effectsMap
+        const existingEffectEntry = this.target.effectsMap.get(this.id);
+        if (!existingEffectEntry) return;
 
+        const otherEffect = existingEffectEntry.effect; // Get the EffectClass instance
         const timeLeft = otherEffect.getTimeLeft();
         otherEffect.effect.duration = timeLeft + additionalTime;
         otherEffect.startTime = Date.now();
@@ -113,9 +143,11 @@ class EffectClass {
     }
 
     refreshTimer() {
-        var otherEffect = this.getAlreadyApplied(this.effect, this.target);
-        if (!otherEffect) return;
+        // Find the existing effect instance in the target's effectsMap
+        const existingEffectEntry = this.target.effectsMap.get(this.id);
+        if (!existingEffectEntry) return;
 
+        const otherEffect = existingEffectEntry.effect; // Get the EffectClass instance
         otherEffect.startTime = Date.now();
         otherEffect.setTimer(otherEffect.effect.duration);
         otherEffect.updateTooltip();
@@ -135,11 +167,11 @@ class EffectClass {
     }
 
     isAlreadyApplied(effect, target) {
-        return target.effects.some(e => e.effect.id === effect.id);
+        return target.hasEffect(effect.id);
     }
 
     getAlreadyApplied(effect, target) {
-        return target.effects.find(e => e.effect.id === effect.id);
+        return target.getEffect(effect.id);
     }
 
     startTooltipTimer() {
@@ -150,461 +182,84 @@ class EffectClass {
         }, 1000);
     }
 
-    applyEffect() {
-        // Shared logic for modifier-based effects
-        if (this.effect.modifiers) {
-            this.effect.modifiers.forEach(modifier => {
-                const stat = modifier.stat;
-                if (typeof this.target.stats[stat] !== 'undefined') {
-                    // Store original value only if it hasn't been stored yet for this effect instance
-                    if (typeof this.originalStats[stat] === 'undefined') {
-                        this.originalStats[stat] = this.target.stats[stat];
-                    }
-                    if (modifier.flat) {
-                        this.target.stats[stat] += modifier.flat;
-                    }
-                    if (modifier.percentage) {
-                        const baseValue = this.originalStats[stat];
-                        this.target.stats[stat] += baseValue * (modifier.percentage / 100);
-                    }
-                    console.log("STAT CHANGE" + stat + ": OLD: " +this.originalStats[stat] + ". NEW: " + this.target.stats[stat]);
+    // This method contains the actual logic for applying the effect's impact
+    applyEffectLogic(skill = null) {
 
-                } else {
-                    console.warn(`Stat '${stat}' not found on target '${this.target.name}' for effect '${this.effect.name}'.`);
-                }
-            });
-        }
 
+        // Handle effect-specific logic that directly modifies member properties or triggers intervals
         switch (this.effect.subType) {
-            case 'Modifiers':
-                // Handled by the shared logic above
-                break;
-
-            case 'AreaEffect':
-                console.log(`'${this.effect.name}' (AreaEffect) triggered. Zone placement logic is handled by the game engine.`);
-                break;
-
             case 'DoT':
-                // Also handles the DoT part of composite effects like 'scaldedDebuff'
+            case 'Bleed':
                 if (this.effect.value > 0) {
-                    this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
+                    this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType || 'Physical', this.target);
                 }
                 break;
 
-            case 'flatChange':
-                const stat = this.effect.stat;
-                if (typeof this.target.stats[stat] !== 'undefined') {
-                    this.originalStats[stat] = this.target.stats[stat];
-                    this.target.stats[stat] += this.effect.value;
+            case 'RestoreResource':
+                this.handleResourceRestore();
+                break;
+
+            case 'Steal':
+                if (this.caster && this.caster.isHero) {
+                    this.caster.addGold(this.effect.value);
                 }
                 break;
 
-            case 'AreaDebuff':
-                // This effect applies another effect. Assumes the parent skill/ability handles targeting the area.
-               /* const effectToApply = allEffects[this.effect.effectToApply];
-                if (effectToApply) {
-                    new EffectClass(this.target, effectToApply, this.caster);
-                } else {
-                    console.warn(`Effect to apply '${this.effect.effectToApply}' not found.`);
-                }
-                this.render = false; // The main effect doesn't render, the sub-effect does.*/
+            case 'Stun':
+                this.target.stopSkills();
+                // The 'stunned' state is now implicitly handled by `target.stopSkills()` and `target.startSkills()`
+                // and the presence of a 'Stun' effect in the effectsMap.
                 break;
 
-            case 'DelayedDamage':
-                // The damage is dealt upon removal/expiration in revertEffect. Nothing to do here.
+            case 'Taunt':
+                if (this.caster) {
+                    // The 'forcedTarget' property on the target member is set by this effect.
+                    this.target.forcedTarget = this.caster;
+                }
                 break;
 
             case 'CooldownReduction':
-                this.target.skills.forEach(skill => {
-                    if (skill.onCooldown) {
-                        skill.reduceCooldown(this.effect.value, this.target);
-                    }
-                });
-                break;
-
-            case 'Fear':
-                if (Math.random() < this.effect.chance) {
-                    this.target.stopSkills(); // Pauses skill cooldowns
-                    console.log(`${this.target.name} is feared and skips their turn.`);
+                if (this.target.isHero) {
+                    // For hero, only reduce cooldowns of selected skills
+                    this.target.selectedSkills.forEach(selectedSkill => {
+                        if (selectedSkill && selectedSkill.onCooldown && selectedSkill !== this.skill) {
+                            selectedSkill.reduceCooldown(this.effect.value, this.target);
+                        }
+                    });
+                } else {
+                    // For non-hero targets, reduce all cooldowns except the source skill
+                    this.target.skills.forEach(skill => {
+                        if (skill.onCooldown && skill !== this.skill) {
+                            skill.reduceCooldown(this.effect.value, this.target);
+                        }
+                    });
                 }
                 break;
 
-            case 'percentChange':
-                const percStat = this.effect.stat;
-                if (typeof this.target.stats[percStat] !== 'undefined') {
-                    this.originalStats[percStat] = this.target.stats[percStat];
-                    this.target.stats[percStat] *= (1 + this.effect.value / 100);
-                }
+            case 'aura':
+                this.startAuraEffect();
                 break;
 
-            case 'Vulnerability':
-                const resStat = `${this.effect.damageType.toLowerCase()}Resistance`;
-                this.originalStats[resStat] = this.target.stats[resStat] || 0;
-                this.target.stats[resStat] = (this.target.stats[resStat] || 0) - this.effect.value;
+            case 'Summon':
+                this.summon(this.caster, this.effect.who, this.effect.limit);
                 break;
 
-            case 'Invisibility':
-                this.target.invisible = true;
-                break;
-
-            case 'ManaShield':
-                // The damage calculation logic in Member.js would need to check for this effect.
-                this.target.manaShieldActive = true;
-                this.target.manaShieldRatio = this.effect.absorbPercentage;
-                break;
-
-            case 'GuaranteedDodge':
-                this.target.hasGuaranteedDodge = true;
+            case 'Dispel':
+                this.handleDispel();
                 break;
 
             case 'Regen':
                 this.createHealOverTimeInterval(this.effect.value, this.target);
                 break;
 
-            case 'RestoreResource':
-                if (this.effect.resourceType === 'mana') {
-                    const oldMana = this.target.currentMana;
-                    this.target.currentMana = Math.min(this.target.stats.mana, this.target.currentMana + this.effect.value);
-                    const actualManaRestored = this.target.currentMana - oldMana;
-                    if (this.target.isHero && actualManaRestored > 0) {
-                        battleStatistics.addManaRegenerated(actualManaRestored);
-                    }
-                    updateMana(this.target);
-                } else if (this.effect.resourceType === 'stamina') {
-                    const oldStamina = this.target.currentStamina;
-                    this.target.currentStamina = Math.min(this.target.stats.stamina, this.target.currentStamina + this.effect.value);
-                    const actualStaminaRestored = this.target.currentStamina - oldStamina;
-                    if (this.target.isHero && actualStaminaRestored > 0) {
-                        battleStatistics.addStaminaRegenerated(actualStaminaRestored);
-                    }
-                    updateStamina(this.target);
-                } else if (this.effect.resourceType === 'health') {
-                    const oldHealth = this.target.currentHealth;
-                    this.target.currentHealth = Math.min(this.target.maxHealth, this.target.currentHealth + this.effect.value);
-                    const actualHealthRestored = this.target.currentHealth - oldHealth;
-                    if (this.target.isHero && actualHealthRestored > 0) {
-                        battleStatistics.addTotalHealingReceived(actualHealthRestored);
-                    }
-                    updateHealth(this.target);
-                }
-                break;
-
-            case 'Steal':
-                if (this.caster && this.caster.isHero) {
-                    this.caster.addGold(this.effect.value);
-                    console.log(`${this.caster.name} steals ${this.effect.value} gold from ${this.target.name}.`);
-                }
-                break;
-
-            case 'stealth':
-                this.target.invisible = true;
-                // Modifier logic is handled by shared code at the top.
-                break;
-
-            case 'Stun':
-                this.target.stopSkills();
-                break;
-
-            case 'Summon':
-                this.summon(this.target, this.effect.who, this.effect.limit);
-                break;
-
-            case 'Taunt':
-                if (this.caster) {
-                    this.target.forcedTarget = this.caster;
-                } else {
-                    // Fallback for when caster isn't passed, though it should be.
-                    this.target.forcedTarget = this.caster; // "Caster"
-                    console.warn(`Taunt applied to ${this.target.name} without a specific caster reference.`);
-                }
-                break;
-
-            case 'Teleport':
-                console.log(`'${this.effect.name}' (Teleport) triggered. Position change is handled by game engine.`);
-                break;
-
-            case 'Trap':
-                console.log(`'${this.effect.name}' (Trap) triggered. Trap placement is handled by game engine.`);
-                break;
-
-            case 'EmpowerNextSpell':
-                this.target.empoweredSpell = {
-                    spellTypes: this.effect.spellTypes,
-                    critChanceBonus: this.effect.critChanceBonus,
-                    damageBonusPercentage: this.effect.damageBonusPercentage,
-                    manaCostIncreasePercentage: this.effect.manaCostIncreasePercentage,
-                };
-                break;
-
-            case 'Dispel':
-                if (this.effect.debuffType) {
-                    // Find and remove all specified debuffs
-                    const debuffsToRemove = this.target.effects.filter(effect => 
-                        this.effect.debuffType.includes(effect.effect.name) && effect.effect.type === 'debuff'
-                    );
-                    debuffsToRemove.forEach(debuff => debuff.remove());
-                }
-                break;
-
-            case 'critChanceBonusNextAttackVsTarget':
-                // Store the caster for later verification
-                this.target.critChanceBonusNextAttackVsTarget = {
-                    bonus: this.effect.modifiers.find(m => m.stat === 'critChanceBonusNextAttackVsTarget').flat,
-                    caster: this.caster
-                };
-                break;
-
-            case 'damageBonusVsDebuffed':
-                if (!this.target.damageBonuses) {
-                    this.target.damageBonuses = [];
-                }
-                this.target.damageBonuses.push({
-                    value: this.effect.value,
-                    condition: 'targetHasDebuffs',
-                    id: this.effect.id
-                });
-                break;
-
-            case 'damageBonusConditional':
-                if (!this.target.damageBonuses) {
-                    this.target.damageBonuses = [];
-                }
-                // Convert string function to actual function if needed
-                let conditionFunc = this.effect.condition;
-                if (typeof this.effect.condition === 'string') {
-                    try {
-                        conditionFunc = new Function('member', 'target', `return ${this.effect.condition}`);
-                    } catch (e) {
-                        console.error('Error parsing condition function:', e);
-                        conditionFunc = () => false;
-                    }
-                }
-                this.target.damageBonuses.push({
-                    value: this.effect.value,
-                    condition: conditionFunc,
-                    id: this.effect.id
-                });
-                break;
-
-            case 'buffResistanceFlat':
-                // Initialize resistances array if it doesn't exist
-                if (!this.target.stats.resistances) {
-                    this.target.stats.resistances = {};
-                }
-                // Store original values
-                this.originalStats.resistances = this.originalStats.resistances || {};
-                
-                // Handle both single resistance and array of resistances
-                const resistances = Array.isArray(this.effect.damageType) ? this.effect.damageType : [this.effect.damageType];
-                const values = Array.isArray(this.effect.value) ? this.effect.value : [this.effect.value];
-                
-                // If values array is shorter than resistances array, use the last value for remaining resistances
-                resistances.forEach((resType, index) => {
-                    const resTypeLower = resType.toLowerCase();
-                    const value = values[Math.min(index, values.length - 1)];
-                    this.originalStats.resistances[resTypeLower] = this.target.stats.resistances[resTypeLower] || 0;
-                    // Apply the flat resistance bonus
-                    this.target.stats.resistances[resTypeLower] = (this.target.stats.resistances[resTypeLower] || 0) + value;
-                });
-                break;
-
-            case 'onCritTrigger':
-                // Initialize the onCritTriggers array if it doesn't exist
-                if (!this.target.onCritTriggers) {
-                    this.target.onCritTriggers = [];
-                }
-                // Store the trigger effect
-                this.target.onCritTriggers.push({
-                    effectId: this.effect.effectId,
-                    buffData: this.effect.buffData,
-                    caster: this.caster
-                });
-                break;
-
-            case 'equipmentStatBonus':
-                // Store original item stat bonuses
-                this.originalStats.itemStatBonuses = deepCopy(this.target.itemStatBonuses || {});
-                
-                // Apply percentage bonus to all equipment stats
-                for (const stat in this.target.itemStatBonuses) {
-                    const bonus = this.target.itemStatBonuses[stat] * (this.effect.value / 100);
-                    this.target.stats[stat] = (this.target.stats[stat] || 0) + bonus;
-                }
-                break;
-
             default:
-                console.warn(`Effect subType '${this.effect.subType}' from '${this.effect.name}' is not implemented.`);
+                 console.warn(`Effect subType '${this.effect.subType}' from '${this.effect.name}' is not directly applied here.`);
         }
     }
-
-    revertEffect() {
-        // Shared logic for reverting modifiers
-        if (this.effect.modifiers) {
-            this.effect.modifiers.forEach(modifier => {
-                const stat = modifier.stat;
-                if (typeof this.originalStats[stat] !== 'undefined') {
-                    this.target.stats[stat] = this.originalStats[stat];
-                }
-            });
-        }
-
-        switch (this.effect.subType) {
-            case 'Modifiers':
-                // Handled by shared logic above
-                break;
-
-            case 'AreaEffect':
-                // No state to revert
-                break;
-
-            case 'DoT':
-                if (this.interval) clearInterval(this.interval);
-                break;
-
-            case 'flatChange':
-                const stat = this.effect.stat;
-                if (typeof this.originalStats[stat] !== 'undefined') {
-                    this.target.stats[stat] = this.originalStats[stat];
-                }
-                break;
-
-            case 'AreaDebuff':
-                // No state on this effect to revert; the applied sub-effect will revert on its own.
-                break;
-
-            case 'DelayedDamage':
-                const finalDamage = this.target.calculateFinalDamage(this.effect.value, this.effect.damageType);
-                this.target.takeDamage(finalDamage);
-                break;
-
-            case 'CooldownReduction':
-                // One-shot effect, no revert needed
-                break;
-
-            case 'Fear':
-                this.target.startSkills();
-                break;
-
-            case 'percentChange':
-                const percStat = this.effect.stat;
-                if (typeof this.originalStats[percStat] !== 'undefined') {
-                    this.target.stats[percStat] = this.originalStats[percStat];
-                }
-                break;
-
-            case 'Vulnerability':
-                if (this.originalStats.resistances && this.originalStats.resistances[this.effect.damageType] !== undefined) {
-                    this.target.stats.resistances[this.effect.damageType] = this.originalStats.resistances[this.effect.damageType];
-                }
-                break;
-
-            case 'Invisibility':
-                this.target.invisible = false;
-                break;
-
-            case 'ManaShield':
-                this.target.manaShieldActive = false;
-                this.target.manaShieldRatio = 0;
-                break;
-
-            case 'GuaranteedDodge':
-                this.target.hasGuaranteedDodge = false;
-                break;
-
-            case 'Regen':
-                if (this.interval) clearInterval(this.interval);
-                break;
-
-            case 'RestoreResource':
-            case 'Steal':
-                // One-shot effects, no revert needed
-                break;
-
-            case 'stealth':
-                this.target.invisible = false;
-                // Modifier reversion is handled by shared logic above.
-                break;
-
-            case 'Stun':
-                this.target.startSkills();
-                break;
-
-            case 'Summon':
-            case 'Teleport':
-            case 'Trap':
-                // One-shot or engine-handled effects, no state to revert on the member
-                break;
-
-            case 'Taunt':
-                if (this.target.forcedTarget === this.caster || this.target.forcedTarget === "Caster") {
-                    this.target.forcedTarget = null;
-                }
-                break;
-
-            case 'EmpowerNextSpell':
-                // This effect is typically consumed by a spell, which would call .remove().
-                // If it expires by duration, clear the empowerment flag.
-                if (this.target.empoweredSpell) {
-                    this.target.empoweredSpell = null;
-                }
-                break;
-
-            case 'Dispel':
-                // No state to revert for dispel effects
-                break;
-
-            case 'TargetSpecificCritBonus':
-                // Clear the target-specific crit bonus
-                this.target.critChanceBonusNextAttackVsTarget = null;
-                break;
-
-            case 'damageBonusVsDebuffed':
-                if (this.target.damageBonuses) {
-                    this.target.damageBonuses = this.target.damageBonuses.filter(bonus => bonus.id !== this.effect.id);
-                }
-                break;
-
-            case 'buffResistanceFlat':
-                // Revert all affected resistances
-                if (this.originalStats.resistances) {
-                    const resistances = Array.isArray(this.effect.damageType) ? this.effect.damageType : [this.effect.damageType];
-                    resistances.forEach(resType => {
-                        const resTypeLower = resType.toLowerCase();
-                        if (this.originalStats.resistances[resTypeLower] !== undefined) {
-                            this.target.stats.resistances[resTypeLower] = this.originalStats.resistances[resTypeLower];
-                        }
-                    });
-                }
-                break;
-
-            case 'onCritTrigger':
-                // Remove this effect's critical hit trigger
-                if (this.target.onCritTriggers) {
-                    this.target.onCritTriggers = this.target.onCritTriggers.filter(
-                        trigger => trigger.caster !== this.caster
-                    );
-                }
-                break;
-
-            case 'equipmentStatBonus':
-                // Revert stats to original values
-                if (this.originalStats.itemStatBonuses) {
-                    for (const stat in this.originalStats.itemStatBonuses) {
-                        this.target.stats[stat] = this.originalStats.itemStatBonuses[stat];
-                    }
-                }
-                break;
-
-            default:
-                // No warning needed here as it would have been caught in applyEffect
-        }
-    }
-
 
     createDamageOverTimeInterval(damage, damageType, target) {
         this.interval = setInterval(() => {
-            const finalDamage = target.calculateFinalDamage(damage, damageType);
-            target.takeDamage(finalDamage);
+            target.takeDamage(damage);
 
         }, 1000);
     }
@@ -644,29 +299,48 @@ class EffectClass {
             tooltipText += `<br>${this.effect.description}`;
         }
 
-        // Add modifier information for passive skills
-        if (this.isPassive && this.effect.modifiers) {
+        // Add modifier information
+        if (this.effect.modifiers) {
             tooltipText += '<br><br>Effects:';
             this.effect.modifiers.forEach(modifier => {
                 const stat = modifier.stat;
                 let modifierText = '';
-                
+
                 if (modifier.flat) {
                     const sign = modifier.flat > 0 ? '+' : '';
                     modifierText += `${sign}${modifier.flat} ${stat}`;
                 }
-                
+
                 if (modifier.percentage) {
                     if (modifierText) modifierText += ', ';
                     const sign = modifier.percentage > 0 ? '+' : '';
                     modifierText += `${sign}${modifier.percentage}% ${stat}`;
                 }
-                
+
                 if (modifierText) {
                     tooltipText += `<br>${modifierText}`;
                 }
             });
         }
+        // Add specific effect types that act like modifiers
+        if (this.effect.subType === 'Vulnerability') {
+            tooltipText += `<br>Vulnerability to ${this.effect.damageType}: ${this.effect.value}%`;
+        }
+        if (this.effect.subType === 'ManaShield') {
+            tooltipText += `<br>Mana Shield: Absorbs ${this.effect.value * 100}% of incoming damage as mana cost.`;
+        }
+        if (this.effect.subType === 'GuaranteedDodge') {
+            tooltipText += `<br>Guaranteed Dodge on next attack.`;
+        }
+        if (this.effect.subType === 'EmpowerNextSpell') {
+            tooltipText += `<br>Next spell has +${this.effect.critChanceBonus}% Crit Chance, +${this.effect.damageBonusPercentage}% Damage, +${this.effect.manaCostIncreasePercentage}% Mana Cost.`;
+        }
+        if (this.effect.subType === 'damageBonusConditional') {
+            tooltipText += `<br>Conditional Damage Bonus: ${this.effect.value}%`;
+        }
+        
+       
+
 
         if (!this.isPassive && this.effect.duration > 0) {
             const timeLeft = Math.ceil(this.getTimeLeft());
@@ -680,16 +354,51 @@ class EffectClass {
             clearTimeout(this.timer);
             if (this.tooltipInterval) clearInterval(this.tooltipInterval);
             if (this.interval) clearInterval(this.interval);
+            if (this.auraInterval) clearInterval(this.auraInterval);
         }
-        this.revertEffect();
-        const index = this.target.effects.indexOf(this);
-        if (index !== -1) {
-            this.target.effects.splice(index, 1);
+
+        // Handle effect-specific cleanup that needs to reverse changes
+        switch (this.effect.subType) {
+            case 'Stun':
+                // Only start skills if no other stun effects are active
+                const remainingStunEffects = this.target.getEffects().filter(e => e.effect.subType === 'Stun' && e.id !== this.id);
+                if (remainingStunEffects.length === 0) {
+                    this.target.startSkills();
+                }
+                break;
+            case 'Taunt':
+                // Only clear forcedTarget if this was the active taunt
+                if (this.target.forcedTarget === this.caster) {
+                    this.target.forcedTarget = null;
+                }
+                break;
+            case 'ManaShield':
+                // No specific cleanup needed, as `calculateFinalDamage` checks for presence
+                break;
+            case 'GuaranteedDodge':
+                 // No specific cleanup needed, as `calculateHitChance` checks for presence
+                break;
+            case 'EmpowerNextSpell':
+                // No specific cleanup needed, consumed on use
+                break;
+             case 'stealth':
+                // No specific cleanup needed, consumed on use
+                break;
+             case 'onSkillUseTrigger':
+                // No specific cleanup needed, removed when triggered or duration expires
+                break;
+             case 'onGettingHitTrigger':
+                // No specific cleanup needed, removed when triggered or duration expires
+                break;
         }
+
+        // Remove from effects map on the target
+        this.target.removeEffect(this.id);
+
+        // Remove from DOM
         if (this.element) this.element.remove();
     }
 
-    // Pause/Unpause logic remains the same as it's generic timer management
     pause() {
         if (this.isPassive || this.isPaused) return;
 
@@ -728,15 +437,77 @@ class EffectClass {
 
         if (this.effect.subType === 'Regen') {
             this.createHealOverTimeInterval(this.effect.value, this.target);
-        } else if (['DoT'].includes(this.effect.subType)) {
+        } else if (['DoT', 'Bleed'].includes(this.effect.subType)) {
             this.createDamageOverTimeInterval(this.effect.value, this.effect.damageType, this.target);
         }
     }
 
-    // This is called by the Member's attack logic
-    handleStealthAttack() {
-            this.remove();
+    handleResourceRestore() {
+        if (this.effect.resourceType === 'mana') {
+            const oldMana = this.target.currentMana;
+            this.target.currentMana = Math.min(this.target.stats.mana, this.target.currentMana + this.effect.value);
+            const actualManaRestored = this.target.currentMana - oldMana;
+            if (this.target.isHero && actualManaRestored > 0) {
+                battleStatistics.addManaRegenerated(actualManaRestored);
+            }
+            updateMana(this.target);
+        } else if (this.effect.resourceType === 'stamina') {
+            const oldStamina = this.target.currentStamina;
+            this.target.currentStamina = Math.min(this.target.stats.stamina, this.target.currentStamina + this.effect.value);
+            const actualStaminaRestored = this.target.currentStamina - oldStamina;
+            if (this.target.isHero && actualStaminaRestored > 0) {
+                battleStatistics.addStaminaRegenerated(actualStaminaRestored);
+            }
+            updateStamina(this.target);
+        } else if (this.effect.resourceType === 'health') {
+            const oldHealth = this.target.currentHealth;
+            this.target.currentHealth = Math.min(this.target.maxHealth, this.target.currentHealth + this.effect.value);
+            const actualHealthRestored = this.target.currentHealth - oldHealth;
+            if (this.target.isHero && actualHealthRestored > 0) {
+                battleStatistics.addTotalHealingReceived(actualHealthRestored);
+            }
+            updateHealth(this.target);
+        }
+    }
 
+    handleDispel() {
+        if (this.effect.debuffType) {
+            // Get all debuffs from the target's effectsMap that match the dispel type
+            const debuffsToRemove = Array.from(this.target.effectsMap.values()).filter(entry =>
+                entry.effect.type === 'debuff' && this.effect.debuffType.includes(entry.effect.name)
+            );
+            debuffsToRemove.forEach(entry => entry.effect.remove()); // Call remove on the EffectClass instance
+        } else if (this.effect.buffType) {
+            // Similarly for buffs
+            const buffsToRemove = Array.from(this.target.effectsMap.values()).filter(entry =>
+                entry.effect.type === 'buff' && this.effect.buffType.includes(entry.effect.name)
+            );
+            buffsToRemove.forEach(entry => entry.effect.remove());
+        }
+    }
+
+    startAuraEffect() {
+        this.auraInterval = setInterval(() => {
+            let targets = [];
+            if (this.effect.targetingMode) {
+                targets = selectTarget(this.target, this.effect.targetingMode);
+            } else {
+                // If no specific targeting mode, assume it affects allies or enemies based on aura type
+                // For auras, typically it affects own team members if not specified
+                targets = this.target.team.getAllAliveMembers();
+            }
+
+            targets.forEach(member => {
+                if (!member.dead) {
+                    if (this.effect.value && this.effect.targetResource === 'health') {
+                        member.healDamage(this.effect.value);
+                    }
+                    if (this.effect.effectToApply) {
+                        new EffectClass(member, this.effect.effectToApply, this.target, this.skill);
+                    }
+                }
+            });
+        }, 1000);
     }
 }
 
