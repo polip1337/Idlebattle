@@ -209,13 +209,13 @@ async function handleTalk(poi) {
     }
 }
 
-function handleTavern(poi) {
+async function handleTavern(poi) {
     currentLocation = poi.name;
     renderPOIs();
     battleLog.log(`Visiting tavern: ${poi.name}`);
     const cost = poi.cost || 0;
-    // Consider using showCustomConfirm for consistency if desired, but native confirm is fine here.
-    if (confirm(`Rest at ${poi.name} for ${cost} gold?`)) {
+    const confirmed = await window.showCustomConfirm(`Rest at ${poi.name} for ${cost} gold?`);
+    if (confirmed) {
         if (hero.spendGold(cost)) {
             hero.currentHealth = hero.maxHealth;
             hero.currentMana = hero.stats.mana;
@@ -229,6 +229,7 @@ function handleTavern(poi) {
             alert(`Not enough gold. You need ${cost} gold.`);
         }
     }
+    isProcessingPoiClick = false; // Reset the flag after handling the tavern
 }
 
 function renderPOIs() {
@@ -289,7 +290,7 @@ function renderPOIs() {
                 } else if (clickedPoiData.type === 'dialogue') {
                     await handleTalk(clickedPoiData);
                 } else if (clickedPoiData.type === 'tavern') {
-                    handleTavern(clickedPoiData);
+                    await handleTavern(clickedPoiData);
                 }
                 // For synchronous handlers (travel, tavern) or async handlers that don't manage
                 // isProcessingPoiClick themselves, the finally block below will reset it.

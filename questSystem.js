@@ -9,14 +9,16 @@ export class QuestSystem {
         this.activeQuests = new Set(); // Track active quest IDs
         this.maps = null; // Store maps.json data
         this.questFiles = [
-            'Idlebattle/Data/quests/hollowreach/stage1/fogscarHeist.js',
-            'Idlebattle/Data/quests/hollowreach/stage1/mistwalkerSecret.js',
-            'Idlebattle/Data/quests/hollowreach/stage1/proofForTheWeave.js',
-            'Idlebattle/Data/quests/hollowreach/stage1/driftkinsTest.js',
-            'Idlebattle/Data/quests/hollowreach/stage1/embercladsTrial.js',
-            'Idlebattle/Data/quests/hollowreach/stage1/hollowsCache.js',
-            'Idlebattle/Data/quests/hollowreach/stage1/ossuaryRelic.js',
-            'Idlebattle/Data/quests/hollowreach/stage1/docksAccess.js'
+            '/Data/quests/hollowreach/stage1/fogscarHeist.js',
+            '/Data/quests/hollowreach/stage1/mistwalkerSecret.js',
+            '/Data/quests/hollowreach/stage1/proofForTheWeave.js',
+            '/Data/quests/hollowreach/stage1/driftkinsTest.js',
+            '/Data/quests/hollowreach/stage1/embercladsTrial.js',
+            '/Data/quests/hollowreach/stage1/hollowsCache.js',
+            '/Data/quests/hollowreach/stage1/ossuaryRelic.js',
+            '/Data/quests/hollowreach/stage1/sylvaraFogTest.js',
+            '/Data/quests/hollowreach/stage1/jorensCompass.js',
+            '/Data/quests/hollowreach/stage1/docksAccess.js'
         ];
     }
 

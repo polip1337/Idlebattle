@@ -16,7 +16,15 @@ export default {
                 {
                     text: "I need your skills for an expedition through the fog.",
                     nextId: "expedition",
-                    conditions: [{ type: "questActive", questId: "great_crossing" }]
+                    conditions: [{ type: "questActive", questId: "great_crossing" }],
+                    hideWhenUnavailable: true
+                },
+                {
+                    text: "Compass calibration.",
+                    action: [
+                        { type: "openDialogue", npcId: "joren_halfhand", dialogueId: "compass_calibration" }
+                    ],
+                    nextId: null
                 },
                 {
                     text: "Just passing through. Goodbye.",

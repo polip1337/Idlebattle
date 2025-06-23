@@ -347,11 +347,6 @@
         "y": 45.00,
         "icon": "Media/map/poi-foggy-path.jpg",
         "type": "combat",
-        "dialogueNpcId": "sylvara_tidewalker",
-        "combatStartDialogueId": "wolf_encounter",
-        "combatEndWinDialogueId": "wolfDefeated",
-        "combatEndFleeDialogueId": "wolfEvaded",
-        "showDialogueOnce": true,
         "requirements": {
           "quests": ["driftkinsTest"]
         }

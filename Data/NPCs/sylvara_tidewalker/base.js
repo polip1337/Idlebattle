@@ -9,22 +9,31 @@ export default {
                     nextId: "driftkin"
                 },
                 {
-                    text: "I need a portal shard from [Vortex Reach|vortex_reach|Maelstrom].",
-                    nextId: "shard_ask",
-                    conditions: [{ type: "skill", stat: "Agility", value: 8 }]
-                },
-                {
                     text: "Will you join my expedition?",
                     nextId: "expedition",
-                    conditions: [{ type: "questActive", questId: "great_crossing" }]
+                    conditions: [{ type: "questActive", questId: "great_crossing" }],
+                    hideWhenUnavailable: true
+
                 },
                 {
                     text: "What’s the deal with the fog? It feels... alive.",
                     nextId: "fog_lore"
                 },
                 {
-                    text: "What do you know about the Mistwalker Amulet?",
-                    nextId: "amulet"
+                    text: "I need the Driftkin to help me. I want to get into the Ashen Archive.",
+                    nextId: "ashenArchive",
+                    conditions: [{ type: 'questActive', questId: 'mistwalkerSecret'},
+                                 { type: 'questActive', questId: 'sylvaraFogTest', negate:true}
+                    ],
+                    hideWhenUnavailable: true
+
+                },
+                {
+                    text: "I beat your test.",
+                    nextId: "test_success",
+                    conditions: [{ type: 'questStep', questId: 'sylvaraFogTest', stepIndex: 1 }],
+                    hideWhenUnavailable: true
+
                 },
                 {
                     text: "How do you get along with Hollowreach?",
@@ -281,62 +290,35 @@ export default {
             ]
         },
         {
-            id: "amulet",
-            text: "The Mistwalker Amulet? Now that’s a name I haven’t heard in a while. Old Driftkin tale says it lets you walk the fog like solid ground, no barge needed. Last I heard, they all got destroyed hundreds of years ago. You chasing fairy tales, or you got a lead on that thing? Careful—relics like that draw [Pulsefinders|pulsefinders|Fog cult] like moths.",
+            id: "ashenArchive",
+            text: "The Ashen Archive, huh? You’re chasing ghosts in a place that’s been dust for centuries, stranger. Driftkin don’t just hand out favors for city-dwellers sniffing after old ruins. You want our help? Prove you’re not some weakling who’ll choke in the fog. I’ve got a little test in mind—think you can handle it, or you just here to waste my air?",
             options: [
                 {
-                    text: "I’ve got a lead. Can you help me navigate to it?",
-                    nextId: "quest_tease"
-                },
-                {
-                    text: "Just curious. I’m leaving.",
-                    nextId: null
-                }
-            ]
-        },
-        {
-            id: "shard_ask",
-            text: "A portal shard from [Vortex Reach|vortex_reach|Maelstrom]? That’s no small ask. Those shards glow like stars, but they’re buried in a storm that’ll rip your bones apart. You got the nerve to chase one, or you just talking big? I’m not your nanny, but I’ll point you the way—if you’re worth my time. What’s your plan?",
-            options: [
-                {
-                    text: "I’m ready. Show me the way to the shard.",
-                    nextId: "quest_tease"
-                },
-                {
-                    text: "Why’s Vortex Reach so dangerous?",
-                    nextId: "vortex_danger"
-                },
-                {
-                    text: "I’ll pass for now.",
-                    nextId: null
-                }
-            ]
-        },
-        {
-            id: "vortex_danger",
-            text: "Dangerous? [Vortex Reach|vortex_reach|Fog maelstrom] is where the fog goes feral. Winds that crush steel, gravity that flips you upside down, and [Pulsefinders|pulsefinders|Cult lunatics] prowling for blood. Shards there are worth a fortune, but most who hunt ‘em end up as fog-wraiths. You still think you’ve got what it takes, or you just wasting my breath?",
-            options: [
-                {
-                    text: "I’m in. Tell me how to get that shard.",
-                    nextId: "quest_tease"
-                },
-                {
-                    text: "Too risky. I’m out.",
-                    nextId: null
-                }
-            ]
-        },
-        {
-            id: "quest_tease",
-            text: "You want to navigate the fog? Got that fire in your eyes, thinking you can outrun the [fog|fog|Living storm]. Alright, I’m game. There’s a portal shard in [Vortex Reach|vortex_reach|Maelstrom], but it’s no stroll. Take one of the barges, slip past the [Pulsefinders|pulsefinders|Fog cult], and maybe you’ll snag it. Sink my barge, though, and I’ll feed you to the fog myself. Deal?",
-            options: [
-                {
-                    text: "Deal. I’m getting that shard.",
+                    text: "I’ll take your test. What’s it about?",
                     nextId: null,
-                    action: { type: "startQuest", questId: "barge_over_the_brink" }
+                    action: { type: "startQuest", questId: "sylvaraFogTest" }
                 },
                 {
-                    text: "Not worth the risk. I’m out.",
+                    text: "Why should I jump through hoops for you?",
+                    nextId: "archive_motivation"
+                },
+                {
+                    text: "Sounds too dangerous. I’m out.",
+                    nextId: null
+                }
+            ]
+        },
+        {
+            id: "archive_motivation",
+            text: "Why? ‘Cause the Ashen Archive ain’t safe. We’d be sticking our necks out, dodging [Pulsefinders|pulsefinders|Fog cult] and worse to get you there. You want Driftkin to risk our barges and blood, you gotta show you’re worth the trouble. So, you in, or you gonna scurry back to Hollowreach?",
+            options: [
+                {
+                    text: "Alright, I’ll do your test.",
+                    nextId: null,
+                    action: { type: "startQuest", questId: "sylvaraFogTest" }
+                },
+                {
+                    text: "Forget it. I’ll find another way.",
                     nextId: null
                 }
             ]
@@ -352,6 +334,51 @@ export default {
                 },
                 {
                     text: "I’ll find another way.",
+                    nextId: null
+                }
+            ]
+        },
+        {
+            id: "archive_success",
+            text: "Well, I’ll be fog-damned. You crawled through that test and came out breathing. Not bad, stranger—maybe you’ve got some Driftkin spark in you after all. Ready for the second test?",
+            options: [
+                {
+                    text: "I’m ready. What’s the next test?",
+                    nextId: "second_test"
+                },
+                {
+                    text: "Another test? You serious? How many of these are there?",
+                    nextId: "test_count"
+                }
+            ]
+        },
+        {
+            id: "test_count",
+            text: "Ha! You thought one little jaunt through the fog would seal the deal? Nah, stranger, we Driftkin don’t trust easy. Three tests to prove you’re worth our blood and barges for that [Ashen Archive|ashen_archive|Lost library] run. You’ve got one down, two to go. Don’t look so sour—most don’t even survive the first. Ready for number two, or you gonna whine some more?",
+            options: [
+                {
+                    text: "Fine, I’ll do the second test. What is it?",
+                    nextId: "second_test"
+                },
+                {
+                    text: "Three tests? That’s ridiculous. I’m out.",
+                    nextId: null
+                }
+            ]
+        },
+        {
+            id: "second_test",
+            text: "Good. You’re not folding yet—maybe there’s hope for you. Second test’s with Joren Halfhand, our gear-tinker. He’s been cursing up a storm trying to calibrate a fog compass. Dunno what is twitchier he or that compass. Help him get it steady, and you’re one step closer to us risking our necks for your Archive. Don’t break his gear, or you’ll wish the fog ate you first.",
+            options: [
+                {
+                    text: "I’ll help Joren with the compass.",
+                    nextId: null,
+                    action: [
+                        { type: "startQuest", questId: "jorensCompass" }
+                    ]
+                },
+                {
+                    text: "I need to think about this one.",
                     nextId: null
                 }
             ]

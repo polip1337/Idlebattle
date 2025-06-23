@@ -2,13 +2,24 @@
   "name": "idlebattle",
   "version": "1.0.0",
   "type": "module",
-  "description": "",
-  "main": "your_main_file.js",
+  "description": "RPG Battle Game - Desktop Edition",
+  "main": "electron/main.js",
   "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
     "test": "mocha \"tests/**/*.test.mjs\"",
     "test:db": "node tests/run-tests.js"
   },
-  "keywords": [],
+  "keywords": [
+    "rpg",
+    "game",
+    "electron",
+    "desktop"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -17,11 +28,44 @@
     "@babel/preset-env": "^7.27.2",
     "@babel/register": "^7.27.1",
     "chai": "^4.5.0",
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3",
     "mocha": "^10.8.2",
     "sinon": "^15.0.0",
     "vitest": "^3.1.4"
   },
   "dependencies": {
     "driver.js": "^1.3.6"
+  },
+  "build": {
+    "appId": "com.idlebattle.app",
+    "productName": "RPG Battle",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/**/*",
+      "!dist/**/*",
+      "!.git/**/*",
+      "!tests/**/*",
+      "!Scripts/**/*",
+      "!functions/**/*",
+      "!*.md",
+      "!firebase.json",
+      "!.firebaserc"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "Media/UI/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "Media/UI/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "Media/UI/icon.png"
+    }
   }
 }

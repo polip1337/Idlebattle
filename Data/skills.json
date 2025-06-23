@@ -1099,7 +1099,7 @@
     "manaCost": 0,
     "cooldown": 3,
     "description": "A standard sword slash.",
-    "icon": "Media/Skills/Warrior/basic_slash.png",
+    "icon": "Media/Skills/Tier1/Warrior/slash.png",
     "effects": null,
     "targetingModes": ["Random Front"],
     "tags": ["Active", "Melee", "Physical", "Single Target", "Slash", "Stamina"]
@@ -1113,7 +1113,7 @@
     "manaCost": 0,
     "cooldown": 7,
     "description": "Raise your shield, significantly increasing block chance and armor for a short duration.",
-    "icon": "Media/Skills/Warrior/shield_block.png",
+    "icon": "Media/Skills/Tier1/Warrior/shieldBlock.png",
     "effects": [
       {
         "id": "shieldBlockBuff"
@@ -1132,7 +1132,7 @@
     "manaCost": 0,
     "cooldown": 6,
     "description": "A mighty blow that deals high physical damage.",
-    "icon": "Media/Skills/Warrior/power_strike.png",
+    "icon": "Media/Skills/Tier1/Warrior/powerStrike.png",
     "effects": null,
     "targetingModes": ["Random Front"],
     "tags": ["Active", "Blunt", "Melee", "Physical", "Single Target", "Stamina"]
@@ -1147,7 +1147,7 @@
     "manaCost": 0,
     "cooldown": 10,
     "description": "Charge at an enemy, dealing minor damage and potentially stunning them.",
-    "icon": "Media/Skills/Warrior/charge.png",
+    "icon": "Media/Skills/Tier1/Warrior/charge.png",
     "effects": [
       {
         "id": "stun",
@@ -1168,7 +1168,7 @@
     "manaCost": 0,
     "cooldown": 8,
     "description": "Swing your weapon in a wide arc, hitting up to 2 enemies in front.",
-    "icon": "Media/Skills/Warrior/cleave.png",
+    "icon": "Media/Skills/Tier1/Warrior/cleave.png",
     "targetingModes": ["Front Row Spread"],
     "maxTargets": 2,
     "tags": ["Active", "AoE", "Melee", "Physical", "Slash", "Stamina"]
@@ -1182,7 +1182,7 @@
     "manaCost": 0,
     "cooldown": 12,
     "description": "Provoke an enemy, forcing them to attack you for a short duration and increasing your threat.",
-    "icon": "Media/Skills/Warrior/taunt.png",
+    "icon": "Media/Skills/Tier1/Warrior/taunt.png",
     "effects": [
       {
         "id": "tauntedDebuff"
@@ -1204,7 +1204,7 @@
     "manaCost": 0,
     "cooldown": 10,
     "description": "Adopt a defensive posture, increasing armor and block chance but slightly reducing damage output.",
-    "icon": "Media/Skills/Warrior/defensive_stance.png",
+    "icon": "Media/Skills/Tier1/Warrior/defensiveStance.png",
     "effects": [
       {
         "id": "defensiveStanceBuff"
@@ -1223,7 +1223,7 @@
     "manaCost": 0,
     "cooldown": 9,
     "description": "A vicious strike aimed to damage and weaken the target's armor.",
-    "icon": "Media/Skills/Warrior/rend_armor.png",
+    "icon": "Media/Skills/Tier1/Warrior/rendArmor.png",
     "effects": [
       {
         "id": "armorRendDebuff"

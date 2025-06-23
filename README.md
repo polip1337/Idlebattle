@@ -121,7 +121,7 @@ An orc storyteller who roams Ironspire Bridge, trading tales for food. A former
 acquaintance of Taryn’s, he’s wise but manipulative, hiding knowledge of the portal  
 collapse.
 
-## Side Quests
+## Quests
 
 ### 0. Intro Quest: The Fogscar Heist (Unaligned, Combat Tutorial)
 **Objective**:  

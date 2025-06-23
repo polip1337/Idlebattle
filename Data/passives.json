@@ -198,7 +198,7 @@
         "description": "Deal 10% increased damage with melee weapons."
       }
     ],
-    "icon": "Media/Skills/Passive/weapon_mastery.png",
+    "icon": "Media/Skills/Tier1/Warrior/weaponMastery.png",
     "tags": ["Accuracy", "Buff", "Damage", "Melee", "Passive"]
   },
   "toughness": {
@@ -219,7 +219,7 @@
         }
       ]
     },
-    "icon": "Media/Skills/Passive/toughness.png",
+    "icon": "Media/Skills/Passive/AgilityBoost.jpg",
     "tags": ["Buff", "Defense", "Health", "Passive"]
   },
   "armorExpertise": {
@@ -233,7 +233,7 @@
       "value": 10,
       "description": "Increases all equipment stat bonuses by 10%."
     },
-    "icon": "Media/Skills/Passive/armor_expertise.png",
+    "icon": "Media/Skills/Passive/Camouflage.jpg",
     "tags": ["Armor", "Buff", "Defense", "Passive"]
   },
   "battleHardened": {
@@ -248,7 +248,7 @@
       "value": [25, 15],
       "description": "Increases Fear resistance by 25% and Stun resistance by 15%."
     },
-    "icon": "Media/Skills/Passive/battle_hardened.png",
+    "icon": "Media/Skills/Passive/QuickReflexes.jpg",
     "tags": ["Control", "Mental", "Passive", "Resistance"]
   },
   "spellPower": {

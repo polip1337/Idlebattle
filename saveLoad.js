@@ -14,6 +14,9 @@ const MAX_SLOTS = 9;
 const SAVE_KEY_PREFIX = 'rpgBattleSave_slot_';
 let currentMode = 'save';
 
+// Check if running in Electron
+const isElectron = typeof window !== 'undefined' && window.electronAPI;
+
 const saveLoadModal = document.getElementById('save-load-modal');
 const saveLoadTitle = document.getElementById('save-load-title');
 const slotsContainer = document.getElementById('save-load-slots-container');
@@ -102,12 +105,14 @@ function getGameState() {
         mapStateData: mapState,
         reputationData: reputationSystem ? reputationSystem.getSerializableData() : null,
         tutorialData: tutorialOverlay.getSerializableData(),
-        gameVersion: '0.1.2'
+        gameVersion: '0.1.2',
+        platform: isElectron ? 'electron' : 'browser'
     };
     return gameState;
 }
 
-export function saveGame(slotIndex, isAutosave = false) {
+// Enhanced save function that works with both browser and Electron
+export async function saveGame(slotIndex, isAutosave = false) {
     try {
         const gameState = getGameState();
         if (!gameState) {
@@ -117,7 +122,20 @@ export function saveGame(slotIndex, isAutosave = false) {
             if (!isAutosave) alert(msg);
             return;
         }
-        localStorage.setItem(`${SAVE_KEY_PREFIX}${slotIndex}`, JSON.stringify(gameState));
+
+        if (isElectron) {
+            // Use Electron's file system for saving
+            const result = await window.electronAPI.saveGame(gameState);
+            if (result.success) {
+                console.log(`Game saved to Electron file system: ${result.filePath}`);
+            } else {
+                throw new Error(result.error);
+            }
+        } else {
+            // Use browser localStorage
+            localStorage.setItem(`${SAVE_KEY_PREFIX}${slotIndex}`, JSON.stringify(gameState));
+            console.log(`Game saved to localStorage slot ${slotIndex + 1}`);
+        }
 
         if (isAutosave) {
             console.log(`Successfully autosaved to Slot ${slotIndex + 1}.`);
@@ -144,14 +162,41 @@ export function saveGame(slotIndex, isAutosave = false) {
     }
 }
 
+// Enhanced load function that works with both browser and Electron
 export async function loadGame(slotIndex) {
     try {
-        const savedStateJSON = localStorage.getItem(`${SAVE_KEY_PREFIX}${slotIndex}`);
-        if (!savedStateJSON) {
-            alert("No data in this slot.");
-            return false;
+        let savedGameState;
+
+        if (isElectron) {
+            // Use Electron's file system for loading
+            const result = await window.electronAPI.loadGame();
+            if (!result.success) {
+                alert("No save files found or error loading saves.");
+                return false;
+            }
+            
+            if (result.saves && result.saves.length > 0) {
+                // For now, load the most recent save
+                const mostRecentSave = result.saves[0];
+                const loadResult = await window.electronAPI.loadSaveFile(mostRecentSave.path);
+                if (!loadResult.success) {
+                    alert("Failed to load save file.");
+                    return false;
+                }
+                savedGameState = loadResult.data;
+            } else {
+                alert("No save files found.");
+                return false;
+            }
+        } else {
+            // Use browser localStorage
+            const savedStateJSON = localStorage.getItem(`${SAVE_KEY_PREFIX}${slotIndex}`);
+            if (!savedStateJSON) {
+                alert("No data in this slot.");
+                return false;
+            }
+            savedGameState = JSON.parse(savedStateJSON);
         }
-        const savedGameState = JSON.parse(savedStateJSON);
 
         if (!savedGameState.heroData ||
             !savedGameState.mapStateData ||
@@ -201,8 +246,8 @@ function formatTimestamp(isoString) {
     return date.toLocaleString();
 }
 
-function handleClearAction(slotIndex) {
-    if (confirm(`Are you sure you want to clear save data in Slot ${slotIndex + 1}?`)) {
+async function handleClearAction(slotIndex) {
+    if (await window.showCustomConfirm(`Are you sure you want to clear save data in Slot ${slotIndex + 1}?`)) {
         localStorage.removeItem(`${SAVE_KEY_PREFIX}${slotIndex}`);
         console.log(`Save data cleared for slot ${slotIndex + 1}`);
         populateSlots();
@@ -234,9 +279,9 @@ function handleExportAction(slotIndex) {
     }
 }
 
-function handleImportAction(slotIndex, slotHasData) {
-    if (slotHasData && !confirm(`Slot ${slotIndex + 1} contains data. Overwrite?`)) return;
-    if (!slotHasData && !confirm(`Import file into empty Slot ${slotIndex + 1}?`)) return;
+async function handleImportAction(slotIndex, slotHasData) {
+    if (slotHasData && !(await window.showCustomConfirm(`Slot ${slotIndex + 1} contains data. Overwrite?`))) return;
+    if (!slotHasData && !(await window.showCustomConfirm(`Import file into empty Slot ${slotIndex + 1}?`))) return;
 
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -263,17 +308,15 @@ function handleImportAction(slotIndex, slotHasData) {
             };
             reader.readAsText(file);
         }
-        if (document.body.contains(fileInput)) { // Check if still in body before removing
+        if (document.body.contains(fileInput)) {
            document.body.removeChild(fileInput);
         }
     };
     document.body.appendChild(fileInput);
     fileInput.click();
-    // No need to remove fileInput here if it auto-removes onchange or we want to keep it for retry,
-    // but typically good to clean up. Removed it inside onchange after processing.
 }
 
-function populateSlots() {
+async function populateSlots() {
     if (!slotsContainer) return;
     slotsContainer.innerHTML = '';
     for (let i = 0; i < MAX_SLOTS; i++) {
@@ -325,7 +368,7 @@ function populateSlots() {
         const importButton = document.createElement('button');
         importButton.textContent = 'Import';
         importButton.classList.add('import-button');
-        importButton.onclick = (event) => { event.stopPropagation(); handleImportAction(i, !!slotData); };
+        importButton.onclick = async (event) => { event.stopPropagation(); await handleImportAction(i, !!slotData); };
         actionsContainer.appendChild(importButton);
 
         const exportButton = document.createElement('button');
@@ -339,14 +382,14 @@ function populateSlots() {
         clearButton.textContent = 'Clear';
         clearButton.classList.add('clear-button');
         clearButton.disabled = !slotData;
-        clearButton.onclick = (event) => { event.stopPropagation(); if(slotData) handleClearAction(i); };
+        clearButton.onclick = async (event) => { event.stopPropagation(); if(slotData) await handleClearAction(i); };
         actionsContainer.appendChild(clearButton);
 
         slotElement.appendChild(actionsContainer);
 
         slotElement.addEventListener('click', async () => {
             if (currentMode === 'save') {
-                if (slotData && !confirm('Overwrite existing save?')) return;
+                if (slotData && !(await window.showCustomConfirm('Overwrite existing save?'))) return;
                 saveGame(i);
             } else if (currentMode === 'load') {
                 if (slotData) {
